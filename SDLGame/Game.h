@@ -2,7 +2,8 @@
 #ifndef __Game__
 #define __Game__
 
-#include "SDL.h"
+#include <SDL.h>
+#include "TextureManager.h"
 
 class Game
 {
@@ -15,7 +16,7 @@ public:
 	bool init(const char* title, int xpos, int ypos, int width, int height, bool fullscreen);
 
 	void render();
-	void tick() {}
+	void tick();
 	void handleEvents();
 	void clean();
 
@@ -32,6 +33,9 @@ private:
 	SDL_Rect m_destinationRectangle; // another rectangle
 
 	bool m_bRunning;
+	
+	int m_currentFrame;
+	TextureManager m_textureManager;
 };
 
 #endif /* defined(__Game__) */

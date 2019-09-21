@@ -25,24 +25,15 @@ bool Game::init(const char* title, int xpos, int ypos, int width, int height, bo
 			if (m_pRenderer != 0) // render init success
 			{
 				std::cout << "renderer creation success\n";
-				SDL_SetRenderDrawColor(m_pRenderer, 
+				SDL_SetRenderDrawColor(m_pRenderer,
 					255, 255, 255, 255);
 
-				SDL_Surface* pTempSurface = SDL_LoadBMP("assets/demongirl.bmp");
-
-				m_pTexture = SDL_CreateTextureFromSurface(m_pRenderer, pTempSurface);
-
-				SDL_FreeSurface(pTempSurface);
-				SDL_QueryTexture(m_pTexture, NULL, NULL, &m_sourceRectangle.w, &m_sourceRectangle.h);
-
-				m_destinationRectangle.x = m_sourceRectangle.x = 0;
-				m_destinationRectangle.y = m_sourceRectangle.y = 0;
-				m_destinationRectangle.w = m_sourceRectangle.w;
-				m_destinationRectangle.h = m_sourceRectangle.h;
+				m_textureManager.load("assets/demongirl.bmp", "demongirl", m_pRenderer);
+				m_textureManager.load("assets/sonic_test.png", "animate", m_pRenderer);
 			}
 			else
 			{
-				std::cout << "redner init fail\n";
+				std::cout << "render init fail\n";
 				return false; // renderer init fail
 			}
 		}
@@ -63,8 +54,17 @@ bool Game::init(const char* title, int xpos, int ypos, int width, int height, bo
 void Game::render()
 {
 	SDL_RenderClear(m_pRenderer); // clear the renderer to draw color
-	SDL_RenderCopyEx(m_pRenderer, m_pTexture, &m_sourceRectangle, &m_destinationRectangle, 0, 0, SDL_FLIP_HORIZONTAL); // pass in the horizontal flip
+	
+	m_textureManager.draw("demongirl", 0, 0, 173, 241, m_pRenderer);
+	
+	m_textureManager.drawFrame("animate", 300, 300, 40, 40, 1, m_currentFrame, m_pRenderer);
+
 	SDL_RenderPresent(m_pRenderer); // draw to the screen
+}
+
+void Game::tick()
+{
+	m_currentFrame = int(((SDL_GetTicks() / 100) % 8));
 }
 
 void Game::handleEvents()
