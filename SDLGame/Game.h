@@ -13,15 +13,15 @@ public:
 	~Game() {}
 
 	// simply set the running variable to true
-	bool init(const char* title, int xpos, int ypos, int width, int height, bool fullscreen);
+	bool Init(const char* title, int xpos, int ypos, int width, int height, bool fullscreen);
 
-	void render();
-	void tick();
-	void handleEvents();
-	void clean();
+	void Draw();
+	void Think();
+	void HandleEvents();
+	void Destroy();
 
 	// a function to access the private running variable
-	bool running() { return m_bRunning; }
+	bool IsRunning() { return m_bRunning; }
 
 private:
 
@@ -35,7 +35,6 @@ private:
 	bool m_bRunning;
 	
 	int m_currentFrame;
-	TextureManager m_textureManager;
 };
 
 #endif /* defined(__Game__) */

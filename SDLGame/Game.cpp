@@ -1,7 +1,8 @@
 #include "Game.h"
+#include "TextureManager.h"
 #include <iostream>
 
-bool Game::init(const char* title, int xpos, int ypos, int width, int height, bool fullscreen)
+bool Game::Init(const char* title, int xpos, int ypos, int width, int height, bool fullscreen)
 {
 	// attempt to initalize SDL
 	if (SDL_Init(SDL_INIT_EVERYTHING) == 0)
@@ -28,8 +29,23 @@ bool Game::init(const char* title, int xpos, int ypos, int width, int height, bo
 				SDL_SetRenderDrawColor(m_pRenderer,
 					255, 255, 255, 255);
 
-				m_textureManager.load("assets/demongirl.bmp", "demongirl", m_pRenderer);
-				m_textureManager.load("assets/sonic_test.png", "animate", m_pRenderer);
+				// m_textureManager.load("assets/demongirl.bmp", "demongirl", m_pRenderer);
+				// m_textureManager.load("assets/sonic_test.png", "animate", m_pRenderer);
+
+				if (!TextureManager::TheTextureManager::Instance()->load("assets/demongirl.bmp", "demongirl", m_pRenderer))
+				{
+					return false;
+				}
+
+				if (!TextureManager::TheTextureManager::Instance()->load("assets/P6290084.JPG", "rhys", m_pRenderer))
+				{
+					return false;
+				}
+
+				if (!TextureManager::TheTextureManager::Instance()->load("assets/sonic_test.png", "animate", m_pRenderer))
+				{
+					return false;
+				}
 			}
 			else
 			{
@@ -51,23 +67,23 @@ bool Game::init(const char* title, int xpos, int ypos, int width, int height, bo
 	return false;
 }
 
-void Game::render()
+void Game::Draw()
 {
 	SDL_RenderClear(m_pRenderer); // clear the renderer to draw color
 	
-	m_textureManager.draw("demongirl", 0, 0, 173, 241, m_pRenderer);
-	
-	m_textureManager.drawFrame("animate", 300, 300, 40, 40, 1, m_currentFrame, m_pRenderer);
+	// TextureManager::TheTextureManager::Instance()->draw("demongirl", 0, 0, 173, 241, m_pRenderer);
+	TextureManager::TheTextureManager::Instance()->draw("rhys", 0, 0, 640, 480, m_pRenderer);
+	TextureManager::TheTextureManager::Instance()->drawFrame("animate", 300, 300, 40, 40, 1, m_currentFrame, m_pRenderer);
 
 	SDL_RenderPresent(m_pRenderer); // draw to the screen
 }
 
-void Game::tick()
+void Game::Think()
 {
 	m_currentFrame = int(((SDL_GetTicks() / 100) % 8));
 }
 
-void Game::handleEvents()
+void Game::HandleEvents()
 {
 	SDL_Event event;
 	if (SDL_PollEvent(&event))
@@ -84,7 +100,7 @@ void Game::handleEvents()
 	}
 }
 
-void Game::clean()
+void Game::Destroy()
 {
 	std::cout << "cleaning game\n";
 	SDL_DestroyWindow(m_pWindow);
