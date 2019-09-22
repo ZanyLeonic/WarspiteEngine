@@ -13,5 +13,8 @@ void Player::OnThink()
 	//m_x = 10;
 	//m_y = 20;
 	m_currentFrame = int(((SDL_GetTicks() / 100) % 8));
-	m_x -= 1;
+
+	m_acceleration.SetX(1); 
+
+	SDLGameObject::OnThink();
 }
