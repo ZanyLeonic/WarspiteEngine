@@ -5,17 +5,6 @@ Player::Player()
 {
 }
 
-void Player::Load(int x, int y, int width, int height, std::string textureID)
-{
-	GameObject::Load(x, y, width, height, textureID);
-}
-
-void Player::Draw(SDL_Renderer* pRenderer)
-{
-	GameObject::Draw(pRenderer);
-	std::cout << "Player::Draw()";
-}
-
 void Player::OnThink(float pDeltaTime)
 {
 	//GameObject::OnThink();
@@ -24,10 +13,4 @@ void Player::OnThink(float pDeltaTime)
 	//m_y = 20;
 	m_currentFrame = int(((SDL_GetTicks() / 100) % 8));
 	m_x -= 1;
-}
-
-void Player::Destroy()
-{
-	GameObject::Destroy();
-	std::cout << "Player::Destroy()";
 }

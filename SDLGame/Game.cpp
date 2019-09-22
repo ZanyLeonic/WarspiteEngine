@@ -29,25 +29,35 @@ bool Game::Init(const char* title, int xpos, int ypos, int width, int height, bo
 				SDL_SetRenderDrawColor(m_pRenderer,
 					255, 255, 255, 255);
 
-				// m_textureManager.load("assets/demongirl.bmp", "demongirl", m_pRenderer);
-				// TextureManager::Instance()->load("assets/sonic_test.png", "animate", m_pRenderer);
-				m_bo.Load(100, 100, 40, 40, "animate");
-				m_player.Load(300, 300, 40, 40, "animate");
+				m_bo = new GameObject();
+				m_player = new Player();
+				m_enemy = new Enemy();
 
-				if (!TextureManager::TheTextureManager::Instance()->load("assets/demongirl.bmp", "demongirl", m_pRenderer))
-				{
-					return false;
-				}
+				//if (!TextureManager::TheTextureManager::Instance()->load("assets/demongirl.bmp", "demongirl", m_pRenderer))
+				//{
+				//	return false;
+				//}
 
-				if (!TextureManager::TheTextureManager::Instance()->load("assets/P6290084.JPG", "rhys", m_pRenderer))
-				{
-					return false;
-				}
+				//if (!TextureManager::TheTextureManager::Instance()->load("assets/P6290084.JPG", "rhys", m_pRenderer))
+				//{
+				//	return false;
+				//}
 
 				if (!TextureManager::TheTextureManager::Instance()->load("assets/sonic_test.png", "animate", m_pRenderer))
 				{
 					return false;
 				}
+
+				// m_textureManager.load("assets/demongirl.bmp", "demongirl", m_pRenderer);
+				// TextureManager::Instance()->load("assets/sonic_test.png", "animate", m_pRenderer);
+				m_bo->Load(100, 100, 40, 40, "animate");
+				m_player->Load(300, 300, 40, 40, "animate");
+				m_enemy->Load(0, 0, 40, 40, "animate");
+				
+				m_gameObjects.push_back(m_bo);
+				m_gameObjects.push_back(m_player);
+				m_gameObjects.push_back(m_enemy);
+				
 			}
 			else
 			{
@@ -76,8 +86,12 @@ void Game::Draw()
 	// TextureManager::TheTextureManager::Instance()->draw("demongirl", 0, 0, 173, 241, m_pRenderer);
 	// TextureManager::TheTextureManager::Instance()->draw("rhys", 0, 0, 640, 480, m_pRenderer);
 	// TextureManager::TheTextureManager::Instance()->drawFrame("animate", 300, 300, 40, 40, 1, m_currentFrame, m_pRenderer);
-	m_bo.Draw(m_pRenderer);
-	m_player.Draw(m_pRenderer);
+	
+	for (std::vector<GameObject*>::size_type i = 0; i != m_gameObjects.size();
+		i++)
+	{
+		m_gameObjects[i]->Draw(m_pRenderer);
+	}
 
 	SDL_RenderPresent(m_pRenderer); // draw to the screen
 }
@@ -85,8 +99,11 @@ void Game::Draw()
 void Game::OnThink()
 {
 	// m_currentFrame = int(((SDL_GetTicks() / 100) % 8));
-	m_bo.OnThink(0);
-	m_player.OnThink(0);
+	for (std::vector<GameObject*>::size_type i = 0; i != m_gameObjects.size();
+		i++)
+	{
+		m_gameObjects[i]->OnThink(0);
+	}
 }
 
 void Game::HandleEvents()

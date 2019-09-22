@@ -7,6 +7,7 @@
 #include "GameObject.h"
 #include "Player.h"
 #include <vector>
+#include "Enemy.h"
 
 class Game
 {
@@ -41,8 +42,9 @@ private:
 
 	std::vector<GameObject*> m_gameObjects;
 
-	GameObject m_bo;
-	Player m_player;
+	GameObject* m_bo;
+	Player* m_player;
+	Enemy* m_enemy;
 };
 
 #endif /* defined(__Game__) */
