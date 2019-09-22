@@ -2,14 +2,14 @@
 #ifndef __Enemy__
 #define __Enemy__
 
-#include "GameObject.h"
+#include "SDLGameObject.h"
 
-class Enemy : public GameObject
+class Enemy : public SDLGameObject
 {
 public:
-	Enemy();
+	Enemy(ObjectParams* pParams);
 
-	void OnThink(float pDeltaTime);
+	void OnThink();
 
 };
 

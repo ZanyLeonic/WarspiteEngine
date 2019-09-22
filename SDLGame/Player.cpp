@@ -1,11 +1,12 @@
 #include "Player.h"
 #include <iostream>
 
-Player::Player()
+Player::Player(const ObjectParams* pParams)
+	: SDLGameObject(pParams)
 {
 }
 
-void Player::OnThink(float pDeltaTime)
+void Player::OnThink()
 {
 	//GameObject::OnThink();
 	//std::cout << "Player::OnThink()";

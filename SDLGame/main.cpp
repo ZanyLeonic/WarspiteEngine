@@ -5,20 +5,25 @@ Game* g_game = 0;
 
 int main(int argc, char* argv[])
 {
-	g_game = new Game();
-
-	g_game->Init("Chapter 1", 100, 100, 640, 480, false);
-	//g_game->init("Chapter 1", 100, 100, 640, 580, SDL_WINDOW_FULLSCREEN);
-
-	while (g_game->IsRunning())
+	std::cout << "Attempting Game initialization...\n";
+	if (Game::Instance()->Init("Chapter 1", 100, 100, 640, 480, false))
 	{
-		g_game->HandleEvents();
-		g_game->OnThink();
-		g_game->Draw();
+		while (Game::Instance()->IsRunning())
+		{
+			Game::Instance()->HandleEvents();
+			Game::Instance()->OnThink();
+			Game::Instance()->Draw();
 
-		SDL_Delay(10);
+			SDL_Delay(10);
+		}
 	}
-	g_game->Destroy();
+	else
+	{
+		std::cout << "Game Init failed! - " << SDL_GetError() << "\n";
+		return -1;
+	}
+	std::cout << "Cleaning up...\n";
+	Game::Instance()->Destroy();
 
 	return 0;
 }

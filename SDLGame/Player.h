@@ -2,15 +2,15 @@
 #ifndef __Player__
 #define __Player__
 
-#include "GameObject.h"
+#include "SDLGameObject.h"
 #include <string.h>
 
-class Player : public GameObject
+class Player : public SDLGameObject
 {
 public:
-	Player();
+	Player(const ObjectParams* pParams);
 
-	void OnThink(float pDeltaTime);
+	void OnThink();
 };
 
 #endif /* defined(__Player__) */

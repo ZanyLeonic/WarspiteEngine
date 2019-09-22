@@ -1,13 +1,14 @@
 #include "Enemy.h"
 
-Enemy::Enemy()
+Enemy::Enemy(ObjectParams* pParams)
+	: SDLGameObject(pParams)
 {
 }
 
-void Enemy::OnThink(float pDeltaTime)
+void Enemy::OnThink()
 {
 	m_y += 1;  
 	m_x += 1;  
-	m_currentFrame = int(((SDL_GetTicks() / 100) % 80.0.0.));
+	m_currentFrame = int(((SDL_GetTicks() / 100) % 8));
 }
 
