@@ -30,7 +30,9 @@ bool Game::Init(const char* title, int xpos, int ypos, int width, int height, bo
 					255, 255, 255, 255);
 
 				// m_textureManager.load("assets/demongirl.bmp", "demongirl", m_pRenderer);
-				// m_textureManager.load("assets/sonic_test.png", "animate", m_pRenderer);
+				// TextureManager::Instance()->load("assets/sonic_test.png", "animate", m_pRenderer);
+				m_bo.Load(100, 100, 40, 40, "animate");
+				m_player.Load(300, 300, 40, 40, "animate");
 
 				if (!TextureManager::TheTextureManager::Instance()->load("assets/demongirl.bmp", "demongirl", m_pRenderer))
 				{
@@ -72,15 +74,19 @@ void Game::Draw()
 	SDL_RenderClear(m_pRenderer); // clear the renderer to draw color
 	
 	// TextureManager::TheTextureManager::Instance()->draw("demongirl", 0, 0, 173, 241, m_pRenderer);
-	TextureManager::TheTextureManager::Instance()->draw("rhys", 0, 0, 640, 480, m_pRenderer);
-	TextureManager::TheTextureManager::Instance()->drawFrame("animate", 300, 300, 40, 40, 1, m_currentFrame, m_pRenderer);
+	// TextureManager::TheTextureManager::Instance()->draw("rhys", 0, 0, 640, 480, m_pRenderer);
+	// TextureManager::TheTextureManager::Instance()->drawFrame("animate", 300, 300, 40, 40, 1, m_currentFrame, m_pRenderer);
+	m_bo.Draw(m_pRenderer);
+	m_player.Draw(m_pRenderer);
 
 	SDL_RenderPresent(m_pRenderer); // draw to the screen
 }
 
-void Game::Think()
+void Game::OnThink()
 {
-	m_currentFrame = int(((SDL_GetTicks() / 100) % 8));
+	// m_currentFrame = int(((SDL_GetTicks() / 100) % 8));
+	m_bo.OnThink(0);
+	m_player.OnThink(0);
 }
 
 void Game::HandleEvents()

@@ -4,6 +4,9 @@
 
 #include <SDL.h>
 #include "TextureManager.h"
+#include "GameObject.h"
+#include "Player.h"
+#include <vector>
 
 class Game
 {
@@ -16,7 +19,7 @@ public:
 	bool Init(const char* title, int xpos, int ypos, int width, int height, bool fullscreen);
 
 	void Draw();
-	void Think();
+	void OnThink();
 	void HandleEvents();
 	void Destroy();
 
@@ -35,6 +38,11 @@ private:
 	bool m_bRunning;
 	
 	int m_currentFrame;
+
+	std::vector<GameObject*> m_gameObjects;
+
+	GameObject m_bo;
+	Player m_player;
 };
 
 #endif /* defined(__Game__) */

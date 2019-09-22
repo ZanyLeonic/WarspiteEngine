@@ -13,8 +13,10 @@ int main(int argc, char* argv[])
 	while (g_game->IsRunning())
 	{
 		g_game->HandleEvents();
-		g_game->Think();
+		g_game->OnThink();
 		g_game->Draw();
+
+		SDL_Delay(10);
 	}
 	g_game->Destroy();
 
