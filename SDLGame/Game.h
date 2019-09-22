@@ -4,6 +4,7 @@
 
 #include <SDL.h>
 #include "TextureManager.h"
+#include "InputHandler.h"
 #include "GameObject.h"
 #include "Player.h"
 #include <vector>
@@ -26,7 +27,6 @@ private:
 	~Game() {}
 	
 	static Game* s_pInstance;
-	typedef Game TheGame;
 
 public:
 
@@ -37,6 +37,7 @@ public:
 	void OnThink();
 	void HandleEvents();
 	void Destroy();
+	void Quit();
 
 	// a function to access the private running variable
 	bool IsRunning() { return m_bRunning; }
@@ -56,5 +57,6 @@ private:
 
 	std::vector<GameObject*> m_gameObjects;
 };
+typedef Game TheGame;
 
 #endif /* defined(__Game__) */

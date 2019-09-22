@@ -1,11 +1,14 @@
 #include "Game.h"
 #include "TextureManager.h"
+#include "InputHandler.h"
 #include <iostream>
 
 Game* Game::s_pInstance = 0;
 
 bool Game::Init(const char* title, int xpos, int ypos, int width, int height, bool fullscreen)
 {
+	TheInputHandler::Instance()->InitialiseJoysticks();
+
 	// attempt to initalize SDL
 	if (SDL_Init(SDL_INIT_EVERYTHING) == 0)
 	{
@@ -31,7 +34,7 @@ bool Game::Init(const char* title, int xpos, int ypos, int width, int height, bo
 				SDL_SetRenderDrawColor(m_pRenderer,
 					255, 255, 255, 255);
 
-				if (!TextureManager::TheTextureManager::Instance()->Load("assets/sonic_test.png", "animate", m_pRenderer))
+				if (!TheTextureManager::Instance()->Load("assets/sonic_test.png", "animate", m_pRenderer))
 				{
 					return false;
 				}
@@ -84,25 +87,21 @@ void Game::OnThink()
 
 void Game::HandleEvents()
 {
-	SDL_Event event;
-	if (SDL_PollEvent(&event))
-	{
-		switch (event.type)
-		{
-		case SDL_QUIT:
-			m_bRunning = false;
-			break;
-
-		default:
-			break;
-		}
-	}
+	InputHandler::Instance()->OnThink();
 }
 
 void Game::Destroy()
 {
 	std::cout << "cleaning game\n";
+
+	InputHandler::Instance()->Destroy();
+
 	SDL_DestroyWindow(m_pWindow);
 	SDL_DestroyRenderer(m_pRenderer);
 	SDL_Quit();
+}
+
+void Game::Quit()
+{
+	m_bRunning = false;
 }
