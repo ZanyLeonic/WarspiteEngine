@@ -21,6 +21,24 @@ void Player::OnThink()
 
 void Player::HandleInput()
 {
+	Vector2D* vec = TheInputHandler::Instance()->GetMousePosition();
+
+	m_velocity = (*vec - m_position) / 100;
+
+	if (TheInputHandler::Instance()->GetMouseButtonState(LEFT))
+	{
+		m_velocity.SetX(1);
+	}
+
+	if (InputHandler::Instance()->IsKeyDown(SDL_SCANCODE_LEFT))
+	{
+		m_velocity.SetX(-2);
+	}
+	if (InputHandler::Instance()->IsKeyDown(SDL_SCANCODE_RIGHT))
+	{
+		m_velocity.SetX(2);
+	}
+
 	if (TheInputHandler::Instance()->JoysticksInitialised())
 	{
 		if (TheInputHandler::Instance()->GetButtonState(0, 3)) 

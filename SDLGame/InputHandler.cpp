@@ -23,6 +23,8 @@ void InputHandler::OnThink()
 			Game::Instance()->Quit();
 		}
 
+		m_keystates = (Uint8*)SDL_GetKeyboardState(0);
+
 		if (e.type == SDL_MOUSEBUTTONDOWN)
 		{
 			if (e.button.button == SDL_BUTTON_LEFT)
@@ -57,6 +59,12 @@ void InputHandler::OnThink()
 			{
 				m_mouseButtonStates[RIGHT] = false;
 			}
+		}
+
+		if (e.type == SDL_MOUSEMOTION)
+		{
+			m_mousePosition->SetX(e.motion.x);
+			m_mousePosition->SetY(e.motion.y);
 		}
 
 		if (e.type == SDL_JOYBUTTONDOWN)
@@ -229,4 +237,21 @@ int InputHandler::GetYAxis(int joy, int stick)
 		}
 	}
 	return 0;
+}
+
+bool InputHandler::IsKeyDown(SDL_Scancode key)
+{
+	if (m_keystates != 0)
+	{
+		if (m_keystates[key] == 1)
+		{
+			return true;
+		}
+		else
+		{
+			return false;
+		}
+	}
+
+	return false;
 }
