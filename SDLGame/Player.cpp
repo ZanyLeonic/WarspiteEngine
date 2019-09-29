@@ -1,5 +1,6 @@
 #include "Player.h"
 #include "InputHandler.h"
+#include "Game.h"
 #include <iostream>
 
 Player::Player(const ObjectParams* pParams)
@@ -28,6 +29,20 @@ void Player::HandleInput()
 	if (TheInputHandler::Instance()->GetMouseButtonState(LEFT))
 	{
 		m_velocity.SetX(1);
+	}
+
+	if (InputHandler::Instance()->IsKeyDown(SDL_SCANCODE_F))
+	{
+		if (windowMode == true)
+		{
+			SDL_SetWindowFullscreen(Game::Instance()->GetWindow(), 0);
+			windowMode = false;
+		}
+		else
+		{
+			SDL_SetWindowFullscreen(Game::Instance()->GetWindow(), SDL_WINDOW_FULLSCREEN);
+			windowMode = true;
+		}
 	}
 
 	if (InputHandler::Instance()->IsKeyDown(SDL_SCANCODE_LEFT))

@@ -43,6 +43,7 @@ public:
 	bool IsRunning() { return m_bRunning; }
 
 	SDL_Renderer* GetRenderer() const { return m_pRenderer; }
+	SDL_Window* GetWindow() const { return m_pWindow; }
 
 private:
 

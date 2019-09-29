@@ -16,6 +16,8 @@ public:
 
 private:
 	void HandleInput();
+
+	bool windowMode = false;
 };
 
 #endif /* defined(__Player__) */
