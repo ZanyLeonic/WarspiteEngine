@@ -50,6 +50,22 @@ private:
 	InputHandler();
 	~InputHandler();
 
+	// private functions to handle the different event types
+
+	// handle keyboard events
+	void onKeyDown();
+	void onKeyUp();
+
+	// handle mouse events
+	void onMouseMove(SDL_Event& event);
+	void onMouseButtonDown(SDL_Event& event);
+	void onMouseButtonUp(SDL_Event& event);
+
+	// handle joystick events
+	void onJoystickAxisMove(SDL_Event& event);
+	void onJoystickButtonDown(SDL_Event& event);
+	void onJoystickButtonUp(SDL_Event& event);
+
 	std::vector<SDL_Joystick*> m_joysticks;
 	bool m_bJoysticksInitialised;
 
