@@ -11,6 +11,7 @@ int main(int argc, char* argv[])
 	Uint32 frameStart, frameTime;
 
 	std::cout << "Attempting Game initialization...\n";
+	std::cout << "Target FPS is " << FPS << " FPS\n";
 	if (Game::Instance()->Init("Chapter 1", 100, 100, 640, 480, false))
 	{
 		while (Game::Instance()->IsRunning())
@@ -33,7 +34,7 @@ int main(int argc, char* argv[])
 	}
 	else
 	{
-		std::cout << "Game Init failed! - " << SDL_GetError() << "\n";
+		std::cout << "Engine Error (Game Init failed!) - " << SDL_GetError() << "\n";
 		return -1;
 	}
 	std::cout << "Cleaning up...\n";

@@ -25,7 +25,7 @@ bool Game::Init(const char* title, int xpos, int ypos, int width, int height, bo
 
 		if (m_pWindow != 0)
 		{
-			std::cout << "window creation success\n";
+			std::cout << "Window creation success\n";
 			m_pRenderer = SDL_CreateRenderer(m_pWindow, -1, 0);
 
 			if (m_pRenderer != 0) // render init success
@@ -44,7 +44,7 @@ bool Game::Init(const char* title, int xpos, int ypos, int width, int height, bo
 			}
 			else
 			{
-				std::cout << "render init fail\n";
+				std::cout << "Render init fail\n";
 				return false; // renderer init fail
 			}
 		}
@@ -54,7 +54,7 @@ bool Game::Init(const char* title, int xpos, int ypos, int width, int height, bo
 			return false; // SDL init fail
 		}
 
-		std::cout << "init success\n";
+		std::cout << "Init success\n";
 		m_bRunning = true; // everything inited successfully, start the main loop
 
 		return true;
@@ -92,7 +92,7 @@ void Game::HandleEvents()
 
 void Game::Destroy()
 {
-	std::cout << "cleaning game\n";
+	std::cout << "Cleaning Game instance...\n";
 
 	InputHandler::Instance()->Destroy();
 
