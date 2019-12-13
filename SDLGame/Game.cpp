@@ -34,6 +34,9 @@ bool Game::Init(const char* title, int xpos, int ypos, int width, int height, bo
 				SDL_SetRenderDrawColor(m_pRenderer,
 					255, 255, 255, 255);
 
+				m_pGameStateManager = new GameStateManager();
+				m_pGameStateManager->ModifyState(new UIGameState());
+
 				if (!TheTextureManager::Instance()->Load("assets/sonic_test.png", "animate", m_pRenderer))
 				{
 					return false;
@@ -88,6 +91,11 @@ void Game::OnThink()
 void Game::HandleEvents()
 {
 	InputHandler::Instance()->OnThink();
+
+	if (InputHandler::Instance()->IsKeyDown(SDL_SCANCODE_RETURN))
+	{
+		m_pGameStateManager->ModifyState(new PlayState());
+	}
 }
 
 void Game::Destroy()
