@@ -23,6 +23,22 @@ void GameStateManager::PopState()
 	}
 }
 
+void GameStateManager::Draw()
+{
+	if (!m_GameStates.empty())
+	{
+		m_GameStates.back()->Draw();
+	}
+}
+
+void GameStateManager::OnThink()
+{
+	if (!m_GameStates.empty())
+	{
+		m_GameStates.back()->OnThink();
+	}
+}
+
 void GameStateManager::ModifyState(GameState* pState)
 {
 	if (!m_GameStates.empty())

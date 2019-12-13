@@ -14,6 +14,9 @@ public:
 
 	void PopState();
 
+	void Draw();
+	void OnThink();
+
 private:
 	std::vector<GameState*> m_GameStates;
 };
