@@ -35,7 +35,7 @@ bool Game::Init(const char* title, int xpos, int ypos, int width, int height, bo
 					255, 255, 255, 255);
 
 				m_pGameStateManager = new GameStateManager();
-				m_pGameStateManager->ModifyState(new UIGameState());
+				m_pGameStateManager->ModifyState(new MenuGameState());
 
 				if (!TheTextureManager::Instance()->Load("assets/sonic_test.png", "animate", m_pRenderer))
 				{
@@ -69,23 +69,14 @@ void Game::Draw()
 {
 	SDL_RenderClear(m_pRenderer); // clear the renderer to draw color
 	
-	for (std::vector<GameObject*>::size_type i = 0; i != m_gameObjects.size();
-		i++)
-	{
-		m_gameObjects[i]->Draw();
-	}
+	m_pGameStateManager->Draw();
 
 	SDL_RenderPresent(m_pRenderer); // draw to the screen
 }
 
 void Game::OnThink()
 {
-	// m_currentFrame = int(((SDL_GetTicks() / 100) % 8));
-	for (std::vector<GameObject*>::size_type i = 0; i != m_gameObjects.size();
-		i++)
-	{
-		m_gameObjects[i]->OnThink();
-	}
+	m_pGameStateManager->OnThink();
 }
 
 void Game::HandleEvents()
@@ -103,6 +94,7 @@ void Game::Destroy()
 	std::cout << "Cleaning Game instance...\n";
 
 	InputHandler::Instance()->Destroy();
+	m_pGameStateManager->PopState();
 
 	SDL_DestroyWindow(m_pWindow);
 	SDL_DestroyRenderer(m_pRenderer);

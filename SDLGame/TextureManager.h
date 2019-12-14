@@ -33,6 +33,8 @@ public:
 	void DrawFrame(std::string id, int x, int y, int width, int height,
 		int currentRow, int currentFrame, SDL_Renderer* pRenderer, SDL_RendererFlip flip = SDL_FLIP_NONE);
 
+	void Remove(std::string id);
+
 	std::map<std::string, SDL_Texture*> m_textureMap;
 };
 typedef TextureManager TheTextureManager;

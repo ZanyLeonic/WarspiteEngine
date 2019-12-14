@@ -10,7 +10,7 @@
 #include <vector>
 #include "Enemy.h"
 #include "GameStateManager.h"
-#include "UIGameState.h"
+#include "MenuGameState.h"
 #include "PlayState.h"
 
 class Game

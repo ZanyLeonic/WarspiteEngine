@@ -3,8 +3,10 @@
 #define __UI_GAMESTATE_H__
 
 #include "GameState.h"
+#include "GameObject.h"
+#include <vector>
 
-class UIGameState : public GameState
+class MenuGameState : public GameState
 {
 public:
 	virtual void OnThink();
@@ -17,6 +19,8 @@ public:
 
 private:
 	static const std::string s_UIID;
+
+	std::vector<GameObject*> m_GameObjects;
 };
 
 #endif
