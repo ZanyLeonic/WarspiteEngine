@@ -1,5 +1,5 @@
 # File generated at : 20:44:43, Sun 29 Sep 
-# Converted Project : /home/kurisu/SDLGame/SDLGame/SDLGame.vcxproj
+# Converted Project : /home/kurisu/WarspiteGame/WarspiteGame/WarspiteGame.vcxproj
 cmake_minimum_required(VERSION 3.0.0 FATAL_ERROR)
 
 ##################### Variables ############################
@@ -9,7 +9,7 @@ cmake_minimum_required(VERSION 3.0.0 FATAL_ERROR)
 # Project
 get_filename_component(PROJECT_DIR "${CMAKE_CURRENT_SOURCE_DIR}" ABSOLUTE)
 set(DEPENDENCIES_DIR ${PROJECT_DIR}/dependencies)
-set(PROJECT_NAME SDLGame)
+set(PROJECT_NAME WarspiteGame)
 
 
 # Outputs
@@ -59,7 +59,7 @@ set(SRC_FILES
     ./main.cpp
     ./ObjectParams.h
     ./Player.cpp
-    ./SDLGameObject.cpp
+    ./WarspiteGameObject.cpp
     ./TextureManager.cpp
 )
 source_group("Sources" FILES ${SRC_FILES})
@@ -71,7 +71,7 @@ set(HEADERS_FILES
     Game.h
     InputHandler.h
     Player.h
-    SDLGameObject.h
+    WarspiteGameObject.h
     TextureManager.h
     Vector2D.h
 )
