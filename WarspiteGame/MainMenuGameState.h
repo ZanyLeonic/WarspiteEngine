@@ -6,7 +6,7 @@
 #include "GameObject.h"
 #include <vector>
 
-class MenuGameState : public GameState
+class MainMenuGameState : public GameState
 {
 public:
 	virtual void OnThink();
@@ -19,6 +19,9 @@ public:
 
 private:
 	static const std::string s_UIID;
+
+	static void s_menuToPlay();
+	static void s_exitFromMenu();
 
 	std::vector<GameObject*> m_GameObjects;
 };

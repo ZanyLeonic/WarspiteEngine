@@ -48,7 +48,7 @@
     <ClCompile Include="Button.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="MenuGameState.cpp">
+    <ClCompile Include="MainMenuGameState.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -89,7 +89,7 @@
     <ClInclude Include="Button.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="MenuGameState.h">
+    <ClInclude Include="MainMenuGameState.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

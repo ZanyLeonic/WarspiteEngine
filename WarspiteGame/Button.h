@@ -8,7 +8,7 @@ class Button : public SDLGameObject
 {
 public:
 
-	Button(const ObjectParams* pParams, void (*clickCallback)());
+	Button(const ObjectParams* pParams, void (*onclick)());
 
 	virtual void Draw();
 	virtual void OnThink();

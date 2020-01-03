@@ -1,12 +1,12 @@
-#include "MenuGameState.h"
+#include "MainMenuGameState.h"
 #include "TextureManager.h"
 #include "Game.h"
 #include "Button.h"
 #include <iostream>
 
-const std::string MenuGameState::s_UIID = "MENU";
+const std::string MainMenuGameState::s_UIID = "MENU";
 
-void MenuGameState::OnThink()
+void MainMenuGameState::OnThink()
 {
 	for (int i = 0; i < m_GameObjects.size(); i++)
 	{
@@ -14,7 +14,7 @@ void MenuGameState::OnThink()
 	}
 }
 
-void MenuGameState::Draw()
+void MainMenuGameState::Draw()
 {
 	for (int i = 0; i < m_GameObjects.size(); i++)
 	{
@@ -22,7 +22,7 @@ void MenuGameState::Draw()
 	}
 }
 
-bool MenuGameState::OnPlay()
+bool MainMenuGameState::OnPlay()
 {
 	if (!TextureManager::Instance()->Load("assets/PlayButton.png",
 		"playbutton", Game::Instance()->GetRenderer()))
@@ -36,17 +36,14 @@ bool MenuGameState::OnPlay()
 		return false;
 	}
 
-	GameObject* button1 = new Button(new ObjectParams(100, 100, 100, 32, "playbutton"));
-	GameObject* button2 = new Button(new ObjectParams(100, 300, 100, 32, "exitbutton"));
-
-	m_GameObjects.push_back(button1);
-	m_GameObjects.push_back(button2);
+	m_GameObjects.push_back(new Button(new ObjectParams(100, 100, 100, 32, "playbutton"), s_menuToPlay));
+	m_GameObjects.push_back(new Button(new ObjectParams(100, 300, 100, 32, "exitbutton"), s_exitFromMenu));
 
 	std::cout << "Entered MenuGameState\n";
 	return true;
 }
 
-bool MenuGameState::OnEnd()
+bool MainMenuGameState::OnEnd()
 {
 	for (int i = 0; i < m_GameObjects.size(); i++)
 	{
@@ -60,4 +57,16 @@ bool MenuGameState::OnEnd()
 
 	std::cout << "Exiting MenuGameState\n";
 	return true;
+}
+
+void MainMenuGameState::s_menuToPlay()
+{
+	std::cout << "Play button clicked\n";
+	Game::Instance()->GetStateManager()->ModifyState(new PlayState());
+}
+
+void MainMenuGameState::s_exitFromMenu()
+{
+	std::cout << "Exit button clicked\n";
+	Game::Instance()->Quit();
 }

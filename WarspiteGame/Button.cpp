@@ -1,8 +1,8 @@
 #include "Button.h"
 #include "InputHandler.h"
 
-Button::Button(const ObjectParams* pParams) :
-	SDLGameObject(pParams)
+Button::Button(const ObjectParams* pParams, void (*onclick)()) :
+	SDLGameObject(pParams), m_OnClick(onclick)
 {
 	m_currentFrame = NO_HOVER; // Frame 0
 }
@@ -24,12 +24,17 @@ void Button::OnThink()
 		&& pMousePos->GetY() < (m_position.GetY() + m_height)
 		&& pMousePos->GetY() > m_position.GetY())
 	{
-		m_currentFrame = HOVER;
-
 		// Have they pressed down on the button while within the boundaries?
-		if (InputHandler::Instance()->GetMouseButtonState(LEFT))
+		if (InputHandler::Instance()->GetMouseButtonState(LEFT) && m_bReleased)
 		{
 			m_currentFrame = PRESSED;
+			m_OnClick(); // call the callback noooow!
+			m_bReleased = false;
+		}
+		else if (!InputHandler::Instance()->GetMouseButtonState(LEFT))
+		{
+			m_bReleased = true;
+			m_currentFrame = HOVER;
 		}
 	}
 	else

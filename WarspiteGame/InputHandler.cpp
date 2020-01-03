@@ -110,7 +110,7 @@ void InputHandler::InitialiseJoysticks()
 		m_bJoysticksInitialised = true;
 
 		std::cout << "Initialised " << m_joysticks.size() <<
-			" joystick(s)";
+			" joystick(s)\n";
 	}
 	else
 	{

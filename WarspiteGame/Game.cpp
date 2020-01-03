@@ -35,7 +35,7 @@ bool Game::Init(const char* title, int xpos, int ypos, int width, int height, bo
 					255, 255, 255, 255);
 
 				m_pGameStateManager = new GameStateManager();
-				m_pGameStateManager->ModifyState(new MenuGameState());
+				m_pGameStateManager->ModifyState(new MainMenuGameState());
 
 				if (!TheTextureManager::Instance()->Load("assets/sonic_test.png", "animate", m_pRenderer))
 				{
@@ -69,6 +69,7 @@ void Game::Draw()
 {
 	SDL_RenderClear(m_pRenderer); // clear the renderer to draw color
 	
+	// Call the current GameState functionality via the GameStateManager.
 	m_pGameStateManager->Draw();
 
 	SDL_RenderPresent(m_pRenderer); // draw to the screen
@@ -76,6 +77,7 @@ void Game::Draw()
 
 void Game::OnThink()
 {
+	// Call the current GameState functionality via the GameStateManager.
 	m_pGameStateManager->OnThink();
 }
 

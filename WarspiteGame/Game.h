@@ -10,7 +10,7 @@
 #include <vector>
 #include "Enemy.h"
 #include "GameStateManager.h"
-#include "MenuGameState.h"
+#include "MainMenuGameState.h"
 #include "PlayState.h"
 
 class Game
@@ -47,6 +47,7 @@ public:
 
 	SDL_Renderer* GetRenderer() const { return m_pRenderer; }
 	SDL_Window* GetWindow() const { return m_pWindow; }
+	GameStateManager* GetStateManager() const { return m_pGameStateManager; }
 
 private:
 

@@ -12,7 +12,7 @@ int main(int argc, char* argv[])
 
 	std::cout << "Attempting Game initialization...\n";
 	std::cout << "Target FPS is " << FPS << " FPS\n";
-	if (Game::Instance()->Init("Chapter 1", 100, 100, 640, 480, false))
+	if (Game::Instance()->Init("Engine", 100, 100, 640, 480, false))
 	{
 		while (Game::Instance()->IsRunning())
 		{
