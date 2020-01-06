@@ -61,9 +61,6 @@ private:
 	SDL_Rect m_destinationRectangle; // another rectangle
 
 	bool m_bRunning;
-
-	std::vector<GameObject*> m_gameObjects;
 };
-typedef Game TheGame;
 
 #endif /* defined(__Game__) */

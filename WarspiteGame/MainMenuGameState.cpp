@@ -24,6 +24,8 @@ void MainMenuGameState::Draw()
 
 bool MainMenuGameState::OnPlay()
 {
+	m_GameObjects.clear();
+
 	if (!TextureManager::Instance()->Load("assets/PlayButton.png",
 		"playbutton", Game::Instance()->GetRenderer()))
 	{

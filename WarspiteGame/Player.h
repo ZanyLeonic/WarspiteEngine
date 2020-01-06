@@ -17,7 +17,10 @@ public:
 private:
 	void HandleInput();
 
-	bool windowMode = false;
+	bool moving = false;
+
+	bool moveUp = false;
+	bool moveRight = false;
 };
 
 #endif /* defined(__Player__) */

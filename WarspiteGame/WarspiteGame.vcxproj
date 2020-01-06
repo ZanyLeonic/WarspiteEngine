@@ -85,6 +85,10 @@
     <LibraryPath>C:\SDL\SDL2-2.0.10\lib\x86;C:\SDL\SDL2_image-2.0.5\lib\x86;$(LibraryPath)</LibraryPath>
     <IncludePath>C:\SDL\SDL2-2.0.10\include;C:\SDL\SDL2_image-2.0.5\include;$(IncludePath)</IncludePath>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <IncludePath>C:\SDL\SDL2-2.0.10\include;C:\SDL\SDL2_image-2.0.5\include;$(IncludePath)</IncludePath>
+    <LibraryPath>C:\SDL\SDL2-2.0.10\lib\x64;C:\SDL\SDL2_image-2.0.5\lib\x64;$(LibraryPath)</LibraryPath>
+  </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>

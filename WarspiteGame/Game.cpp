@@ -36,14 +36,6 @@ bool Game::Init(const char* title, int xpos, int ypos, int width, int height, bo
 
 				m_pGameStateManager = new GameStateManager();
 				m_pGameStateManager->ModifyState(new MainMenuGameState());
-
-				if (!TheTextureManager::Instance()->Load("assets/sonic_test.png", "animate", m_pRenderer))
-				{
-					return false;
-				}
-
-				m_gameObjects.push_back(new Player(new ObjectParams(100, 100, 40, 40, "animate")));
-				m_gameObjects.push_back(new Enemy(new ObjectParams(100, 100, 40, 40, "animate")));
 			}
 			else
 			{

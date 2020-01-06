@@ -25,7 +25,7 @@ protected:
 	// Holds the callback to trigger on events
 	void (*m_OnClick)();
 
-	bool m_bReleased;
+	bool m_bReleased = true;
 };
 
 #endif

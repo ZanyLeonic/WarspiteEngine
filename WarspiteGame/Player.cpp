@@ -15,46 +15,64 @@ void Player::OnThink()
 
 	HandleInput();
 
-	m_currentFrame = int(((SDL_GetTicks() / 100) % 8));
+	m_currentFrame = 0;
+
+	if (moving)
+	{
+		//switch (m_currentFrame)
+		//{
+		//case 0:
+		//	m_currentFrame = 1;
+		//	break;
+		//case 1:
+		//	m_currentFrame = 2;
+		//	break;
+		//case 2:
+		//	m_currentFrame = 3;
+		//	break;
+		//}
+		m_currentFrame = int(((SDL_GetTicks() / 150) % 3));
+	}
 
 	SDLGameObject::OnThink();
 }
 
 void Player::HandleInput()
 {
-	Vector2D* vec = TheInputHandler::Instance()->GetMousePosition();
-
-	m_velocity = (*vec - m_position) / 100;
-
-	if (TheInputHandler::Instance()->GetMouseButtonState(LEFT))
+	if (InputHandler::Instance()->IsKeyDown(SDL_SCANCODE_UP))
 	{
-		m_velocity.SetX(1);
+		m_position.SetY(m_position.GetY() - 1);
+		// m_velocity.SetY(-0.5);
+		m_currentRow = 2;
+		moving = true;
+	}
+	else if (InputHandler::Instance()->IsKeyDown(SDL_SCANCODE_DOWN))
+	{
+		m_position.SetY(m_position.GetY() + 1);
+		// m_velocity.SetY(0.5);
+		m_currentRow =1;
+		moving = true;
+	}
+	else if (InputHandler::Instance()->IsKeyDown(SDL_SCANCODE_LEFT))
+	{
+		m_position.SetX(m_position.GetX() - 1);
+		// m_velocity.SetX(-0.5);
+		m_currentRow = 3;
+		moving = true;
+	}
+	else if (InputHandler::Instance()->IsKeyDown(SDL_SCANCODE_RIGHT))
+	{
+		m_position.SetX(m_position.GetX() + 1);
+		// m_velocity.SetX(0.5);
+		m_currentRow = 4;
+		moving = true;
+	}
+	else
+	{
+		moving = false;
 	}
 
-	if (InputHandler::Instance()->IsKeyDown(SDL_SCANCODE_F))
-	{
-		if (windowMode == true)
-		{
-			SDL_SetWindowFullscreen(Game::Instance()->GetWindow(), 0);
-			windowMode = false;
-		}
-		else
-		{
-			SDL_SetWindowFullscreen(Game::Instance()->GetWindow(), SDL_WINDOW_FULLSCREEN);
-			windowMode = true;
-		}
-	}
-
-	if (InputHandler::Instance()->IsKeyDown(SDL_SCANCODE_LEFT))
-	{
-		m_velocity.SetX(-2);
-	}
-	if (InputHandler::Instance()->IsKeyDown(SDL_SCANCODE_RIGHT))
-	{
-		m_velocity.SetX(2);
-	}
-
-	if (TheInputHandler::Instance()->JoysticksInitialised())
+	/*if (TheInputHandler::Instance()->JoysticksInitialised())
 	{
 		if (TheInputHandler::Instance()->GetButtonState(0, 3)) 
 		{ 
@@ -84,5 +102,5 @@ void Player::HandleInput()
 		{
 			m_velocity.SetX(1 * TheInputHandler::Instance()->GetYAxis(0, 2));
 		}
-	}
+	}*/
 }
