@@ -6,6 +6,8 @@
 Player::Player(const ObjectParams* pParams)
 	: SDLGameObject(pParams)
 {
+	InputHandler::Instance()->AddActionKeyDown(SDL_SCANCODE_C, std::bind(&Player::KeyDown, this));
+	InputHandler::Instance()->AddActionKeyUp(SDL_SCANCODE_C, std::bind(&Player::KeyUp, this));
 }
 
 void Player::OnThink()
@@ -35,6 +37,16 @@ void Player::OnThink()
 	}
 
 	SDLGameObject::OnThink();
+}
+
+void Player::KeyDown()
+{
+	std::cout << "Key has been pressed down!\n";
+}
+
+void Player::KeyUp()
+{
+	std::cout << "Key has been released!\n";
 }
 
 void Player::HandleInput()

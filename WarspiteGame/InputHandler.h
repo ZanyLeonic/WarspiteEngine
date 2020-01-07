@@ -4,6 +4,8 @@
 
 #include <SDL.h>
 #include <vector>
+#include <map>
+#include <functional>
 #include "Vector2D.h"
 
 enum MouseButtons
@@ -12,6 +14,8 @@ enum MouseButtons
 	MIDDLE = 1,
 	RIGHT = 2
 };
+
+typedef std::function<void()> KeyCallback;
 
 class InputHandler
 {
@@ -37,6 +41,9 @@ public:
 
 	bool GetButtonState(int joy, int buttonNumber) { return m_buttonStates[joy][buttonNumber]; }
 	bool GetMouseButtonState(int buttonNumber) { return m_mouseButtonStates[buttonNumber]; }
+
+	void AddActionKeyDown(SDL_Scancode key, KeyCallback callBack);
+	void AddActionKeyUp(SDL_Scancode key, KeyCallback callBack);
 
 	bool IsKeyDown(SDL_Scancode key);
 
@@ -66,11 +73,18 @@ private:
 	void onJoystickButtonDown(SDL_Event& event);
 	void onJoystickButtonUp(SDL_Event& event);
 
+	static void keyDownTest();
+
 	std::vector<SDL_Joystick*> m_joysticks;
 	bool m_bJoysticksInitialised;
 
 	std::vector<std::pair<Vector2D*, Vector2D*>> m_joystickValues;
 	std::vector<std::vector<bool>> m_buttonStates;
+
+	std::map<SDL_Scancode, KeyCallback> m_keyDownCallbacks;
+	std::map<SDL_Scancode, KeyCallback> m_keyUpCallbacks;
+
+	std::map<SDL_Scancode, bool> m_keyReleased;
 
 	std::vector<bool> m_mouseButtonStates;
 

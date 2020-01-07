@@ -6,6 +6,8 @@ InputHandler* InputHandler::s_pInstance = 0;
 
 InputHandler::InputHandler()
 {
+	m_keyDownCallbacks[SDL_SCANCODE_F1] = keyDownTest;
+
 	for (int i = 0; i < 3; i++)
 	{
 		m_mouseButtonStates.push_back(false);
@@ -149,6 +151,24 @@ int InputHandler::GetYAxis(int joy, int stick)
 	return 0;
 }
 
+void InputHandler::AddActionKeyDown(SDL_Scancode key, KeyCallback callBack)
+{
+	if (!m_keyReleased[key])
+	{
+		m_keyReleased[key] = true;
+	}
+	m_keyDownCallbacks[key] = callBack;
+}
+
+void InputHandler::AddActionKeyUp(SDL_Scancode key, KeyCallback callBack)
+{
+	if (!m_keyReleased[key])
+	{
+		m_keyReleased[key] = true;
+	}
+	m_keyUpCallbacks[key] = callBack;
+}
+
 bool InputHandler::IsKeyDown(SDL_Scancode key)
 {
 	if (m_keystates != 0)
@@ -169,11 +189,41 @@ bool InputHandler::IsKeyDown(SDL_Scancode key)
 void InputHandler::onKeyDown()
 {
 	m_keystates = (Uint8*)SDL_GetKeyboardState(0);
+
+	if (m_keyDownCallbacks.size() != 0)
+	{
+		std::map<SDL_Scancode, KeyCallback>::iterator it;
+
+		for (it = m_keyDownCallbacks.begin(); it != m_keyDownCallbacks.end(); it++)
+		{
+			if (m_keystates[it->first] == 1
+				&& m_keyReleased[it->first] == true)
+			{
+				m_keyReleased[it->first] = false;
+				it->second();
+			}
+		}
+	}
 }
 
 void InputHandler::onKeyUp()
 {
 	m_keystates = (Uint8*)SDL_GetKeyboardState(0);
+
+	if (m_keyUpCallbacks.size() != 0)
+	{
+		std::map<SDL_Scancode, KeyCallback>::iterator it;
+
+		for (it = m_keyUpCallbacks.begin(); it != m_keyUpCallbacks.end(); it++)
+		{
+			if (m_keystates[it->first] == 0 
+				&& m_keyReleased[it->first] == false)
+			{
+				m_keyReleased[it->first] = true;
+				it->second();
+			}
+		}
+	}
 }
 
 void InputHandler::onMouseMove(SDL_Event& event)
@@ -302,4 +352,9 @@ void InputHandler::onJoystickButtonUp(SDL_Event& event)
 	int whichOne = event.jaxis.which;
 
 	m_buttonStates[whichOne][event.jbutton.button] = false;
+}
+
+void InputHandler::keyDownTest()
+{
+	std::cout << "Key has been pressed down!";
 }

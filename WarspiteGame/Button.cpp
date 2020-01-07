@@ -42,6 +42,11 @@ void Button::OnThink()
 		// reset yourself
 		m_currentFrame = NO_HOVER;
 	}
+
+	if (InputHandler::Instance()->IsKeyDown(SDL_SCANCODE_1))
+	{
+		std::cout << pMousePos;
+	}
 }
 
 void Button::Destroy()

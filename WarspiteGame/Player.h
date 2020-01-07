@@ -14,6 +14,9 @@ public:
 
 	void OnThink();
 
+	void KeyDown();
+	void KeyUp();
+
 private:
 	void HandleInput();
 

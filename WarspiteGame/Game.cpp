@@ -76,11 +76,6 @@ void Game::OnThink()
 void Game::HandleEvents()
 {
 	InputHandler::Instance()->OnThink();
-
-	if (InputHandler::Instance()->IsKeyDown(SDL_SCANCODE_RETURN))
-	{
-		m_pGameStateManager->ModifyState(new PlayState());
-	}
 }
 
 void Game::Destroy()
