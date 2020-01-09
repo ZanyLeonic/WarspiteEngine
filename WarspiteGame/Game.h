@@ -60,7 +60,7 @@ private:
 	SDL_Rect m_sourceRectangle; // the first rectangle
 	SDL_Rect m_destinationRectangle; // another rectangle
 
-	bool m_bRunning;
+	bool m_bRunning = false;
 };
 
 #endif /* defined(__Game__) */

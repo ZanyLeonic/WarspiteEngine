@@ -1,10 +1,16 @@
 #include "Button.h"
 #include "InputHandler.h"
 
-Button::Button(const ObjectParams* pParams, void (*onclick)()) :
-	SDLGameObject(pParams), m_OnClick(onclick)
+Button::Button(const ObjectParams* pParams,
+	ButtonCallback onClick, ButtonCallback onEnter, ButtonCallback onLeave) :
+	SDLGameObject(pParams), m_OnClick(onClick), m_OnEnter(onEnter), m_OnLeave(onLeave)
 {
 	m_currentFrame = NO_HOVER; // Frame 0
+
+	// Initial callbacks
+	if(m_OnClick == nullptr)  m_OnClick = std::bind(&Button::onClick, this);
+	if (m_OnEnter == nullptr) m_OnEnter = std::bind(&Button::onEnter, this);
+	if (m_OnLeave == nullptr) m_OnLeave = std::bind(&Button::onLeave, this);
 }
 
 void Button::Draw()
@@ -35,18 +41,33 @@ void Button::OnThink()
 		{
 			m_bReleased = true;
 			m_currentFrame = HOVER;
+			m_OnEnter();
 		}
 	}
-	else
+	else if (m_currentFrame != NO_HOVER)
 	{
 		// reset yourself
 		m_currentFrame = NO_HOVER;
+		m_OnLeave();
 	}
+}
 
-	if (InputHandler::Instance()->IsKeyDown(SDL_SCANCODE_1))
-	{
-		std::cout << pMousePos;
-	}
+void Button::onClick()
+{
+	// default for the callback
+	return;
+}
+
+void Button::onEnter()
+{
+	// default for the callback
+	return;
+}
+
+void Button::onLeave()
+{
+	// default for the callback
+	return;
 }
 
 void Button::Destroy()
