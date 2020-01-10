@@ -4,7 +4,7 @@
 Game* g_game = 0;
 
 const int FPS = 62;
-const int DELAY_TIME = 1000.0f / FPS;
+const int DELAY_TIME = 1000 / FPS;
 
 int main(int argc, char* argv[])
 {

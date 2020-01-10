@@ -24,6 +24,9 @@ private:
 
 	bool moveUp = false;
 	bool moveRight = false;
+
+	int timeLeft = 0;
+	const int moveStep = 10;
 };
 
 #endif /* defined(__Player__) */

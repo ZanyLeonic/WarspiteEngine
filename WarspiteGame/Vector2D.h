@@ -14,7 +14,7 @@ public:
 	void SetX(float x) { m_x = x; }
 	void SetY(float y) { m_y = y; }
 
-	float Length() { return sqrt((m_x * m_x) + (m_y * m_y)); }
+	float Length() { return sqrt(pow(m_x, 2) + pow(m_y, 2)); }
 	void Normalize()
 	{
 		float l = Length();
@@ -81,6 +81,19 @@ public:
 		m_y /= scalar;
 
 		return *this;
+	}
+};
+
+static class WarspiteMath
+{
+public:
+	// Linear interpolates between two points (v1 and v2) by the value of t [0-1]
+	inline static Vector2D Lerp(Vector2D v1, Vector2D v2, double t)
+	{
+		return Vector2D(
+			(1 - t) * v1.GetX() + t * v2.GetX(), // X
+			(1 - t) * v1.GetY() + t * v2.GetY()  // Y
+		);
 	}
 };
 

@@ -36,8 +36,8 @@ public:
 	void InitialiseJoysticks();
 	bool JoysticksInitialised() { return m_bJoysticksInitialised; }
 
-	int GetXAxis(int joy, int stick);
-	int GetYAxis(int joy, int stick);
+	float GetXAxis(int joy, int stick);
+	float GetYAxis(int joy, int stick);
 
 	bool GetButtonState(int joy, int buttonNumber) { return m_buttonStates[joy][buttonNumber]; }
 	bool GetMouseButtonState(int buttonNumber) { return m_mouseButtonStates[buttonNumber]; }

@@ -53,12 +53,12 @@ private:
 
 	GameStateManager* m_pGameStateManager;
 
-	SDL_Window* m_pWindow;
-	SDL_Renderer* m_pRenderer;
+	SDL_Window* m_pWindow = nullptr;
+	SDL_Renderer* m_pRenderer = nullptr;
 
-	SDL_Texture* m_pTexture; // the new SDL_Texture variable
-	SDL_Rect m_sourceRectangle; // the first rectangle
-	SDL_Rect m_destinationRectangle; // another rectangle
+	SDL_Texture* m_pTexture = nullptr; // the new SDL_Texture variable
+	SDL_Rect m_sourceRectangle = {}; // the first rectangle
+	SDL_Rect m_destinationRectangle = {}; // another rectangle
 
 	bool m_bRunning = false;
 };

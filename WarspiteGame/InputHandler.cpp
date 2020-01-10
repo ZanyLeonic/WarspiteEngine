@@ -120,7 +120,7 @@ void InputHandler::InitialiseJoysticks()
 	}
 }
 
-int InputHandler::GetXAxis(int joy, int stick)
+float InputHandler::GetXAxis(int joy, int stick)
 {
 	if (m_joystickValues.size() > 0) {
 		if (stick == 1)
@@ -135,7 +135,7 @@ int InputHandler::GetXAxis(int joy, int stick)
 	return 0;
 }
 
-int InputHandler::GetYAxis(int joy, int stick)
+float InputHandler::GetYAxis(int joy, int stick)
 {
 	if (m_joystickValues.size() > 0)
 	{
@@ -228,8 +228,8 @@ void InputHandler::onKeyUp()
 
 void InputHandler::onMouseMove(SDL_Event& event)
 {
-	m_mousePosition->SetX(event.motion.x);
-	m_mousePosition->SetY(event.motion.y);
+	m_mousePosition->SetX((float)event.motion.x);
+	m_mousePosition->SetY((float)event.motion.y);
 }
 
 void InputHandler::onMouseButtonDown(SDL_Event& event)
