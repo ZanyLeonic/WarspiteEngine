@@ -10,6 +10,7 @@ void MainMenuGameState::OnThink()
 {
 	for (int i = 0; i < m_GameObjects.size(); i++)
 	{
+		if (stopTick) return;
 		m_GameObjects[i]->OnThink();
 	}
 }
@@ -24,7 +25,7 @@ void MainMenuGameState::Draw()
 
 bool MainMenuGameState::OnPlay()
 {
-	m_GameObjects.clear();
+	// m_GameObjects.clear();
 
 	if (!TextureManager::Instance()->Load("assets/PlayButton.png",
 		"playbutton", Game::Instance()->GetRenderer()))
@@ -38,8 +39,8 @@ bool MainMenuGameState::OnPlay()
 		return false;
 	}
 
-	m_GameObjects.push_back(new Button(new ObjectParams(100, 100, 100, 32, "playbutton"), s_menuToPlay));
-	m_GameObjects.push_back(new Button(new ObjectParams(100, 300, 100, 32, "exitbutton"), s_exitFromMenu));
+	m_GameObjects.push_back(new Button(new ObjectParams(200, 80, 100, 32, "playbutton"), s_menuToPlay));
+	m_GameObjects.push_back(new Button(new ObjectParams(200, 120, 100, 32, "exitbutton"), s_exitFromMenu));
 
 	std::cout << "Entered MenuGameState\n";
 	return true;
@@ -56,6 +57,8 @@ bool MainMenuGameState::OnEnd()
 		->Remove("playbutton");
 	TextureManager::Instance()
 		->Remove("exitbutton");
+
+	stopTick = true;
 
 	std::cout << "Exiting MenuGameState\n";
 	return true;

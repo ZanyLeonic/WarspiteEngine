@@ -1,13 +1,12 @@
 #pragma once
-#ifndef __UI_GAMESTATE_H__
-#define __UI_GAMESTATE_H__
+#ifndef __UI_PLAYSTATE_H__
+#define __UI_PLAYSTATE_H__
 
 #include "GameState.h"
 #include "GameObject.h"
 #include <vector>
 
-class MainMenuGameState : public GameState
-{
+class PauseState : public GameState {
 public:
 	virtual void OnThink();
 	virtual void Draw();
@@ -17,13 +16,11 @@ public:
 
 	virtual std::string GetStateID() const { return s_UIID; }
 
-	bool stopTick = false;
-
 private:
 	static const std::string s_UIID;
 
-	static void s_menuToPlay();
-	static void s_exitFromMenu();
+	static void s_continueGame();
+	static void s_exitToMenu();
 
 	std::vector<GameObject*> m_GameObjects;
 };

@@ -1,6 +1,7 @@
 #include "TextureManager.h"
 #include "Game.h"
 #include "Player.h"
+#include "PauseState.h"
 #include <iostream>
 
 #include "PlayState.h"
@@ -33,6 +34,10 @@ bool PlayState::OnPlay()
 	}
 
 	m_GameObjects.push_back(new Player(new ObjectParams(0, 0, 22, 27, "player")));
+
+	InputHandler::Instance()->AddActionKeyDown(SDL_SCANCODE_ESCAPE, [this] {
+		Game::Instance()->GetStateManager()->PushState(new PauseState());
+		});
 
 	return true;
 }

@@ -51,6 +51,9 @@
     <ClCompile Include="MainMenuGameState.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="PauseState.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game.h">
@@ -92,5 +95,13 @@
     <ClInclude Include="MainMenuGameState.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="PauseState.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="GitVersion.tt">
+      <Filter>Source Files</Filter>
+    </None>
   </ItemGroup>
 </Project>

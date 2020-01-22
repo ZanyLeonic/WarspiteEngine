@@ -1,4 +1,5 @@
 #include "Game.h"
+#include "GitVersion.h"
 
 // our Game object
 Game* g_game = 0;
