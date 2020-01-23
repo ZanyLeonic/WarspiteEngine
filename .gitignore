@@ -4,6 +4,7 @@
 ### C++ ###
 # Prerequisites
 *.d
+GitVersion.h
 
 # Compiled Object files
 *.slo

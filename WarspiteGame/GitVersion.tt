@@ -49,11 +49,29 @@
         {
             string searchDirectory = this.Host.TemplateFile.Replace(Path.GetFileName(this.Host.TemplateFile), "");
             var file = System.IO.Path.Combine(searchDirectory, "GitVersion.h");
-
-            using (System.IO.StreamReader = System.IO.File.OpenText(file))
-            {
+            const string searchString = "#define GAME_BUILD_NUMBER";
             
-            }
+            try
+            {
+            string line;
+                using (System.IO.StreamReader reader = 
+                    new System.IO.StreamReader(file))
+                {
+                    while((line = reader.ReadLine()) != null)
+                    {
+                        if (line.Contains(searchString))
+                        {
+                            int buildNum = int.Parse(line.Replace(searchString, "").Replace(" ", ""));
+                    
+                            return buildNum + 1;
+                        }
+                    }   
+               }
+           }
+           catch(Exception)
+           {}
+           // We got nothing.
+           return 0;
         }
 
         static Int32 GetTime()
@@ -64,6 +82,6 @@
 #pragma once
 
 // GENERATED CODE --- CHANGED ON BUILD --- ANY MANUAL CHANGES WILL BE OVERWRITTEN.
-#define GAME_BUILD_NUMBER 0
+#define GAME_BUILD_NUMBER <#= incrementBuildNum() #>
 #define GAME_GIT_HASH "<#= GetSha1() #>"
 #define GAME_BUILD_TIME <#= GetTime() #>

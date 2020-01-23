@@ -2,15 +2,12 @@
 #ifndef __UI_PLAYSTATE_H__
 #define __UI_PLAYSTATE_H__
 
-#include "GameState.h"
+#include "GameStateBase.h"
 #include "GameObject.h"
 #include <vector>
 
-class PauseState : public GameState {
+class PauseState : public GameStateBase {
 public:
-	virtual void OnThink();
-	virtual void Draw();
-
 	virtual bool OnPlay();
 	virtual bool OnEnd();
 
@@ -21,8 +18,6 @@ private:
 
 	static void s_continueGame();
 	static void s_exitToMenu();
-
-	std::vector<GameObject*> m_GameObjects;
 };
 
 #endif

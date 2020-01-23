@@ -74,20 +74,24 @@
     <LibraryPath>C:\SDL\SDL2-2.0.10\lib\x86;C:\SDL\SDL2_image-2.0.5\lib\x86;$(LibraryPath)</LibraryPath>
     <OutDir>$(SolutionDir)$(Platform)\$(Configuration)\</OutDir>
     <IntDir>$(Platform)\$(Configuration)\</IntDir>
+    <CustomBuildBeforeTargets>PreBuildEvent</CustomBuildBeforeTargets>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <IncludePath>C:\SDL\SDL2-2.0.10\include;C:\SDL\SDL2_image-2.0.5\include;$(IncludePath)</IncludePath>
     <LibraryPath>C:\SDL\SDL2-2.0.10\lib\x64;C:\SDL\SDL2_image-2.0.5\lib\x64;$(LibraryPath)</LibraryPath>
+    <CustomBuildBeforeTargets>PreBuildEvent</CustomBuildBeforeTargets>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <OutDir>$(SolutionDir)$(Platform)\$(Configuration)\</OutDir>
     <IntDir>$(Platform)\$(Configuration)\</IntDir>
     <LibraryPath>C:\SDL\SDL2-2.0.10\lib\x86;C:\SDL\SDL2_image-2.0.5\lib\x86;$(LibraryPath)</LibraryPath>
     <IncludePath>C:\SDL\SDL2-2.0.10\include;C:\SDL\SDL2_image-2.0.5\include;$(IncludePath)</IncludePath>
+    <CustomBuildBeforeTargets>PreBuildEvent</CustomBuildBeforeTargets>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <IncludePath>C:\SDL\SDL2-2.0.10\include;C:\SDL\SDL2_image-2.0.5\include;$(IncludePath)</IncludePath>
     <LibraryPath>C:\SDL\SDL2-2.0.10\lib\x64;C:\SDL\SDL2_image-2.0.5\lib\x64;$(LibraryPath)</LibraryPath>
+    <CustomBuildBeforeTargets>PreBuildEvent</CustomBuildBeforeTargets>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -100,6 +104,12 @@
       <SubSystem>Windows</SubSystem>
       <AdditionalDependencies>SDL2.lib;SDL2main.lib;SDL2_image.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
+    <CustomBuildStep>
+      <Command>TextTransform.exe "$(SolutionDir)WarspiteGame\GitVersion.tt"</Command>
+      <Message>Updating the Build information</Message>
+      <Outputs>$(SolutionDir)WarspiteGame\GitVersion.h;%(Outputs)</Outputs>
+      <TreatOutputAsContent>true</TreatOutputAsContent>
+    </CustomBuildStep>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
@@ -112,6 +122,12 @@
       <SubSystem>Console</SubSystem>
       <AdditionalDependencies>SDL2.lib;SDL2main.lib;SDL2_image.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
+    <CustomBuildStep>
+      <Command>TextTransform.exe "$(SolutionDir)WarspiteGame\GitVersion.tt"</Command>
+      <Message>Updating the Build information</Message>
+      <Outputs>$(SolutionDir)WarspiteGame\GitVersion.h;%(Outputs)</Outputs>
+      <TreatOutputAsContent>false</TreatOutputAsContent>
+    </CustomBuildStep>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
@@ -128,6 +144,12 @@
       <OptimizeReferences>true</OptimizeReferences>
       <AdditionalDependencies>SDL2.lib;SDL2main.lib;SDL2_image.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
+    <CustomBuildStep>
+      <Command>TextTransform.exe "$(SolutionDir)WarspiteGame\GitVersion.tt"</Command>
+      <Message>Updating the Build information</Message>
+      <Outputs>$(SolutionDir)WarspiteGame\GitVersion.h;%(Outputs)</Outputs>
+      <TreatOutputAsContent>true</TreatOutputAsContent>
+    </CustomBuildStep>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
@@ -144,11 +166,18 @@
       <OptimizeReferences>true</OptimizeReferences>
       <AdditionalDependencies>SDL2.lib;SDL2main.lib;SDL2_image.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
+    <CustomBuildStep>
+      <Command>TextTransform.exe "$(SolutionDir)WarspiteGame\GitVersion.tt"</Command>
+      <Message>Updating the Build information</Message>
+      <Outputs>$(SolutionDir)WarspiteGame\GitVersion.h;%(Outputs)</Outputs>
+      <TreatOutputAsContent>true</TreatOutputAsContent>
+    </CustomBuildStep>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Button.cpp" />
     <ClCompile Include="Enemy.cpp" />
     <ClCompile Include="Game.cpp" />
+    <ClCompile Include="GameStateBase.cpp" />
     <ClCompile Include="GameStateManager.cpp" />
     <ClCompile Include="InputHandler.cpp" />
     <ClCompile Include="main.cpp" />
@@ -166,6 +195,7 @@
     <ClInclude Include="GameObject.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="GameState.h" />
+    <ClInclude Include="GameStateBase.h" />
     <ClInclude Include="GameStateManager.h" />
     <ClInclude Include="InputHandler.h" />
     <ClInclude Include="PauseState.h" />

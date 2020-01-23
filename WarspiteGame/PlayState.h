@@ -2,14 +2,11 @@
 #ifndef __PLAYSTATE_H__
 #define __PLAYSTATE_H__
 
-#include "GameState.h"
+#include "GameStateBase.h"
 class PlayState :
-	public GameState
+	public GameStateBase
 {
 public:
-	virtual void OnThink();
-	virtual void Draw();
-
 	virtual bool OnPlay();
 	virtual bool OnEnd();
 
@@ -17,7 +14,5 @@ public:
 
 private:
 	static const std::string s_playID;
-
-	std::vector<GameObject*> m_GameObjects;
 };
 #endif

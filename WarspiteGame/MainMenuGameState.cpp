@@ -6,23 +6,6 @@
 
 const std::string MainMenuGameState::s_UIID = "MENU";
 
-void MainMenuGameState::OnThink()
-{
-	for (int i = 0; i < m_GameObjects.size(); i++)
-	{
-		if (stopTick) return;
-		m_GameObjects[i]->OnThink();
-	}
-}
-
-void MainMenuGameState::Draw()
-{
-	for (int i = 0; i < m_GameObjects.size(); i++)
-	{
-		m_GameObjects[i]->Draw();
-	}
-}
-
 bool MainMenuGameState::OnPlay()
 {
 	// m_GameObjects.clear();
@@ -48,17 +31,12 @@ bool MainMenuGameState::OnPlay()
 
 bool MainMenuGameState::OnEnd()
 {
-	for (int i = 0; i < m_GameObjects.size(); i++)
-	{
-		m_GameObjects[i]->Destroy();
-	}
-	m_GameObjects.clear();
+	GameStateBase::OnEnd();
+
 	TextureManager::Instance()
 		->Remove("playbutton");
 	TextureManager::Instance()
 		->Remove("exitbutton");
-
-	stopTick = true;
 
 	std::cout << "Exiting MenuGameState\n";
 	return true;

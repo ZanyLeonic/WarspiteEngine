@@ -4,22 +4,6 @@
 
 const std::string PauseState::s_UIID = "PAUSE";
 
-void PauseState::OnThink()
-{
-	for (int i = 0; i < m_GameObjects.size(); i++)
-	{
-		m_GameObjects[i]->OnThink();
-	}
-}
-
-void PauseState::Draw()
-{
-	for (int i = 0; i < m_GameObjects.size(); i++)
-	{
-		m_GameObjects[i]->Draw();
-	}
-}
-
 bool PauseState::OnPlay()
 {
 	if (!TextureManager::Instance()->Load("assets/ResumeButton.png",
@@ -46,10 +30,7 @@ bool PauseState::OnPlay()
 
 bool PauseState::OnEnd()
 {
-	for (int i = 0; i < m_GameObjects.size(); i++)
-	{
-		m_GameObjects[i]->Destroy();
-	}
+	GameStateBase::OnEnd();
 
 	TextureManager::Instance()->Remove("resumeButton");
 	TextureManager::Instance()->Remove("exitButton");
