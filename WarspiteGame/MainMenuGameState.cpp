@@ -31,12 +31,12 @@ bool MainMenuGameState::OnPlay()
 
 bool MainMenuGameState::OnEnd()
 {
-	GameStateBase::OnEnd();
-
 	TextureManager::Instance()
 		->Remove("playbutton");
 	TextureManager::Instance()
 		->Remove("exitbutton");
+
+	GameStateBase::OnEnd();
 
 	std::cout << "Exiting MenuGameState\n";
 	return true;

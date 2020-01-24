@@ -11,9 +11,14 @@ int main(int argc, char* argv[])
 {
 	Uint32 frameStart, frameTime;
 
+	char title[357];
+
+	snprintf(title, sizeof(title), "Engine %d %s", GAME_BUILD_NUMBER, GAME_GIT_HASH);
+	
+	std::cout << "Build: "<< GAME_BUILD_NUMBER << "\nUsing source: " << GAME_GIT_HASH << "\n";
 	std::cout << "Attempting Game initialization...\n";
 	std::cout << "Target FPS is " << FPS << " FPS\n";
-	if (Game::Instance()->Init("Engine", 100, 100, 640, 480, false))
+	if (Game::Instance()->Init(title, 100, 100, 640, 480, false))
 	{
 		while (Game::Instance()->IsRunning())
 		{

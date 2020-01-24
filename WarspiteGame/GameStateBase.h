@@ -9,6 +9,7 @@ class GameStateBase :
 	public GameState
 {
 public:
+
 	virtual void OnThink();
 	virtual void Draw();
 
@@ -27,8 +28,8 @@ public:
 protected:
 	std::vector<GameObject*> m_GameObjects;
 
-	bool m_shouldTick = true;
-	bool m_shouldDraw = true;
+	bool m_shouldTick = false;
+	bool m_shouldDraw = false;
 };
 
 #endif

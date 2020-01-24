@@ -1,25 +1,11 @@
 #include "GameStateBase.h"
-
-void GameStateBase::OnThink()
-{
-	for (int i = 0; i < m_GameObjects.size(); i++)
-	{
-		if (!m_shouldTick) return;
-		m_GameObjects[i]->OnThink();
-	}
-}
-
-void GameStateBase::Draw()
-{
-	for (int i = 0; i < m_GameObjects.size(); i++)
-	{
-		if (!m_shouldDraw) return;
-		m_GameObjects[i]->Draw();
-	}
-}
+#include "Game.h"
 
 bool GameStateBase::OnPlay()
 {
+	m_shouldTick = true;
+	m_shouldDraw = true;
+
 	return true;
 }
 
@@ -37,4 +23,23 @@ bool GameStateBase::OnEnd()
 	m_GameObjects.clear();
 
 	return true;
+}
+
+void GameStateBase::OnThink()
+{
+	if (!m_shouldTick) return;
+	for (int i = 0; i < m_GameObjects.size(); i++)
+	{	
+		m_GameObjects[i]->OnThink();
+	}
+}
+
+void GameStateBase::Draw()
+{
+	if (!m_shouldDraw) return;
+
+	for (int i = 0; i < m_GameObjects.size(); i++)
+	{
+		m_GameObjects[i]->Draw();
+	}
 }

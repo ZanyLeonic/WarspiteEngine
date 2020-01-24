@@ -51,8 +51,8 @@ void GameStateManager::ModifyState(GameState* pState)
 
 		if (m_GameStates.back()->OnEnd())
 		{
-			delete m_GameStates.back();
 			m_GameStates.pop_back();
+			delete m_GameStates.back();
 		}
 	}
 

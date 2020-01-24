@@ -48,30 +48,24 @@
         int incrementBuildNum()
         {
             string searchDirectory = this.Host.TemplateFile.Replace(Path.GetFileName(this.Host.TemplateFile), "");
-            var file = System.IO.Path.Combine(searchDirectory, "GitVersion.h");
-            const string searchString = "#define GAME_BUILD_NUMBER";
-            
-            try
-            {
-            string line;
-                using (System.IO.StreamReader reader = 
-                    new System.IO.StreamReader(file))
-                {
-                    while((line = reader.ReadLine()) != null)
-                    {
-                        if (line.Contains(searchString))
-                        {
-                            int buildNum = int.Parse(line.Replace(searchString, "").Replace(" ", ""));
-                    
-                            return buildNum + 1;
-                        }
-                    }   
-               }
+            var file = System.IO.Path.Combine(searchDirectory, "build.txt");
+            int buildNum = -1;
+
+           try
+		   {
+				System.IO.StreamReader reader = new System.IO.StreamReader(file);
+				buildNum = int.Parse(reader.ReadLine());
+				reader.Close();
+				System.IO.File.WriteAllText(file, (buildNum+1).ToString());
+
+				return buildNum +1;
            }
            catch(Exception)
-           {}
+           {
+				System.IO.File.WriteAllText(file, (buildNum+1).ToString());
+		   }
            // We got nothing.
-           return 0;
+           return buildNum+1;
         }
 
         static Int32 GetTime()
