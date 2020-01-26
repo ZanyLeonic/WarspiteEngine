@@ -35,11 +35,13 @@ bool Button::OnThink()
 		if (InputHandler::Instance()->GetMouseButtonState(LEFT) && m_bReleased)
 		{
 			m_currentFrame = PRESSED;
-			m_OnClick(); // call the callback noooow!
+			if (m_OnClick()) // call the callback noooow!
+			{
+				return false;
+			}
 			m_bReleased = false;
 
-			if (Game::Instance()->GetStateManager()->StateDeleted)
-				return false;
+
 
 		}
 		else if (!InputHandler::Instance()->GetMouseButtonState(LEFT))
@@ -59,22 +61,22 @@ bool Button::OnThink()
 	return true;
 }
 
-void Button::onClick()
+bool Button::onClick()
 {
 	// default for the callback
-	return;
+	return true;
 }
 
-void Button::onEnter()
+bool Button::onEnter()
 {
 	// default for the callback
-	return;
+	return true;
 }
 
-void Button::onLeave()
+bool Button::onLeave()
 {
 	// default for the callback
-	return;
+	return true;
 }
 
 void Button::Destroy()

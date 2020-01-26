@@ -186,6 +186,11 @@ bool InputHandler::IsKeyDown(SDL_Scancode key)
 	return false;
 }
 
+void InputHandler::SetReleaseState(SDL_Scancode key, bool state)
+{
+	m_keyReleased[key] = state;
+}
+
 void InputHandler::onKeyDown()
 {
 	m_keystates = (Uint8*)SDL_GetKeyboardState(0);

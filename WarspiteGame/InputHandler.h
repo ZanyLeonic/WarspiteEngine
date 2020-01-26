@@ -46,6 +46,7 @@ public:
 	void AddActionKeyUp(SDL_Scancode key, KeyCallback callBack);
 
 	bool IsKeyDown(SDL_Scancode key);
+	void SetReleaseState(SDL_Scancode key, bool state);
 
 	Vector2D* GetMousePosition()
 	{

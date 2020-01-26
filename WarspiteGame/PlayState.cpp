@@ -10,6 +10,8 @@ const std::string PlayState::s_playID = "PLAY";
 
 bool PlayState::OnPlay()
 {
+	GameStateBase::OnPlay();
+
 	std::cout << "Entering PlayState\n";
 
 	if (!TextureManager::Instance()->Load("assets/player.png", "player", Game::Instance()->GetRenderer()))

@@ -41,7 +41,6 @@ void GameStateManager::OnThink()
 
 void GameStateManager::ModifyState(GameState* pState)
 {
-	StateDeleted = true;
 	if (!m_GameStates.empty())
 	{
 		// Don't do anything if the "new" state is the same.
@@ -60,6 +59,4 @@ void GameStateManager::ModifyState(GameState* pState)
 	// Add the new state the queue and run their OnPlay method.
 	m_GameStates.push_back(pState);
 	m_GameStates.back()->OnPlay();
-
-	StateDeleted = false;
 }

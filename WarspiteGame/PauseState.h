@@ -16,8 +16,8 @@ public:
 private:
 	static const std::string s_UIID;
 
-	static void s_continueGame();
-	static void s_exitToMenu();
+	static bool s_continueGame();
+	static bool s_exitToMenu();
 };
 
 #endif

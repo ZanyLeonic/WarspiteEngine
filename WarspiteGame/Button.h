@@ -5,7 +5,7 @@
 #include <functional>
 #include "SDLGameObject.h"
 
-typedef std::function<void()> ButtonCallback;
+typedef std::function<bool()> ButtonCallback;
 
 class Button : public SDLGameObject
 {
@@ -46,9 +46,9 @@ private:
 
 protected:
 	// Initial values for callbacks
-	virtual void onClick();
-	virtual void onEnter();
-	virtual void onLeave();
+	virtual bool onClick();
+	virtual bool onEnter();
+	virtual bool onLeave();
 
 private:
 	// Whether the button has been released or not.

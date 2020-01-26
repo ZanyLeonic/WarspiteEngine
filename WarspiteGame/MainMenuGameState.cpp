@@ -42,14 +42,16 @@ bool MainMenuGameState::OnEnd()
 	return true;
 }
 
-void MainMenuGameState::s_menuToPlay()
+bool MainMenuGameState::s_menuToPlay()
 {
 	std::cout << "Play button clicked\n";
 	Game::Instance()->GetStateManager()->ModifyState(new PlayState());
+	return false;
 }
 
-void MainMenuGameState::s_exitFromMenu()
+bool MainMenuGameState::s_exitFromMenu()
 {
 	std::cout << "Exit button clicked\n";
 	Game::Instance()->Quit();
+	return false;
 }

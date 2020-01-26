@@ -84,7 +84,7 @@ public:
 	}
 };
 
-static class WarspiteMath
+class WarspiteMath
 {
 public:
 	// Linear interpolates between two points (v1 and v2) by the value of t [0-1]

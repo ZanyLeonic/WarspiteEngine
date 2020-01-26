@@ -6,6 +6,8 @@ const std::string PauseState::s_UIID = "PAUSE";
 
 bool PauseState::OnPlay()
 {
+	GameStateBase::OnPlay();
+
 	if (!TextureManager::Instance()->Load("assets/ResumeButton.png",
 		"resumeButton", Game::Instance()->GetRenderer()))
 	{
@@ -19,7 +21,7 @@ bool PauseState::OnPlay()
 	}
 
 	Button* continueBtn = new Button(new ObjectParams(200, 80, 100, 32, "resumeButton"));
-	Button* mainBtn = new Button(new ObjectParams(200, 120, 100, 32, "exitButton"));
+	Button* mainBtn = new Button(new ObjectParams(200, 200, 100, 32, "exitButton"));
 
 	continueBtn->OnClick(s_continueGame);
 	mainBtn->OnClick(s_exitToMenu);
@@ -38,12 +40,17 @@ bool PauseState::OnEnd()
 	return true;
 }
 
-void PauseState::s_continueGame()
+bool PauseState::s_continueGame()
 {
+	InputHandler::Instance()->SetReleaseState(SDL_SCANCODE_ESCAPE, true);
 	Game::Instance()->GetStateManager()->PopState();
+
+	return false;
 }
 
-void PauseState::s_exitToMenu()
+bool PauseState::s_exitToMenu()
 {
 	Game::Instance()->GetStateManager()->ModifyState(new MainMenuGameState());
+
+	return false;
 }

@@ -125,7 +125,7 @@
     <CustomBuildStep>
       <Command>TextTransform.exe "$(SolutionDir)WarspiteGame\GitVersion.tt"</Command>
       <Message>Updating the Build information</Message>
-      <Outputs>$(SolutionDir)WarspiteGame\GitVersion.h;%(Outputs)</Outputs>
+      <Outputs>%(Outputs)</Outputs>
       <TreatOutputAsContent>false</TreatOutputAsContent>
     </CustomBuildStep>
   </ItemDefinitionGroup>
