@@ -14,7 +14,7 @@ public:
 	SDLGameObject(const ObjectParams* pParams);
 
 	virtual void Draw();
-	virtual void OnThink();
+	virtual bool OnThink();
 	virtual void Destroy();
 
 protected:

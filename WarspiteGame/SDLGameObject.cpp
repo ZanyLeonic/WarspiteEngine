@@ -21,10 +21,12 @@ void SDLGameObject::Draw()
 		m_currentFrame, Game::Instance()->GetRenderer());
 }
 
-void SDLGameObject::OnThink()
+bool SDLGameObject::OnThink()
 {
 	m_velocity += m_acceleration;  
 	m_position += m_velocity;
+
+	return true;
 }
 
 void SDLGameObject::Destroy()

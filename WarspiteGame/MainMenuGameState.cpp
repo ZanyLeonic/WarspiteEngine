@@ -8,7 +8,7 @@ const std::string MainMenuGameState::s_UIID = "MENU";
 
 bool MainMenuGameState::OnPlay()
 {
-	// m_GameObjects.clear();
+	GameStateBase::OnPlay();
 
 	if (!TextureManager::Instance()->Load("assets/PlayButton.png",
 		"playbutton", Game::Instance()->GetRenderer()))

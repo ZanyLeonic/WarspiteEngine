@@ -12,7 +12,7 @@ class Player : public SDLGameObject
 public:
 	Player(const ObjectParams* pParams);
 
-	void OnThink();
+	bool OnThink();
 
 	void KeyDown();
 	void KeyUp();

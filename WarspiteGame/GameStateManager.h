@@ -17,6 +17,8 @@ public:
 	void Draw();
 	void OnThink();
 
+	bool StateDeleted = false;
+
 private:
 	std::vector<GameState*> m_GameStates;
 };

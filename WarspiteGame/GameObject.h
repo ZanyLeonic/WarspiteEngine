@@ -10,7 +10,7 @@ class GameObject
 public:
 
 	virtual void Draw() = 0;
-	virtual void OnThink() = 0;
+	virtual bool OnThink() = 0;
 	virtual void Destroy() = 0;
 	
 protected:

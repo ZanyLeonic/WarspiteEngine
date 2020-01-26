@@ -10,7 +10,7 @@ Player::Player(const ObjectParams* pParams)
 	InputHandler::Instance()->AddActionKeyUp(SDL_SCANCODE_C, std::bind(&Player::KeyUp, this));
 }
 
-void Player::OnThink()
+bool Player::OnThink()
 {
 	std::cout << "\r";
 	std::cout << "X: " << m_position.GetX() << " Y: " << m_position.GetY() << " TimeLeft: " << timeLeft << "    ";
@@ -25,6 +25,7 @@ void Player::OnThink()
 	//}
 
 	SDLGameObject::OnThink();
+	return true;
 }
 
 void Player::KeyDown()

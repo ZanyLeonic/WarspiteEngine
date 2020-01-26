@@ -9,7 +9,7 @@ class Enemy : public SDLGameObject
 public:
 	Enemy(ObjectParams* pParams);
 
-	void OnThink();
+	bool OnThink();
 
 };
 

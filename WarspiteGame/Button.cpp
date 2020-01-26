@@ -1,5 +1,6 @@
 #include "Button.h"
 #include "InputHandler.h"
+#include "Game.h"
 
 Button::Button(const ObjectParams* pParams,
 	ButtonCallback onClick, ButtonCallback onEnter, ButtonCallback onLeave) :
@@ -8,9 +9,9 @@ Button::Button(const ObjectParams* pParams,
 	m_currentFrame = NO_HOVER; // Frame 0
 
 	// Initial callbacks
-	if(m_OnClick == nullptr)  m_OnClick = std::bind(&Button::onClick, this);
-	if (m_OnEnter == nullptr) m_OnEnter = std::bind(&Button::onEnter, this);
-	if (m_OnLeave == nullptr) m_OnLeave = std::bind(&Button::onLeave, this);
+	if(m_OnClick == 0)  m_OnClick = std::bind(&Button::onClick, this);
+	if (m_OnEnter == 0) m_OnEnter = std::bind(&Button::onEnter, this);
+	if (m_OnLeave == 0) m_OnLeave = std::bind(&Button::onLeave, this);
 }
 
 void Button::Draw()
@@ -18,7 +19,7 @@ void Button::Draw()
 	SDLGameObject::Draw();
 }
 
-void Button::OnThink()
+bool Button::OnThink()
 {
 	// Get the mouse position on the screen
 	Vector2D* pMousePos = InputHandler::Instance()->
@@ -36,6 +37,10 @@ void Button::OnThink()
 			m_currentFrame = PRESSED;
 			m_OnClick(); // call the callback noooow!
 			m_bReleased = false;
+
+			if (Game::Instance()->GetStateManager()->StateDeleted)
+				return false;
+
 		}
 		else if (!InputHandler::Instance()->GetMouseButtonState(LEFT))
 		{
@@ -50,6 +55,8 @@ void Button::OnThink()
 		m_currentFrame = NO_HOVER;
 		m_OnLeave();
 	}
+
+	return true;
 }
 
 void Button::onClick()

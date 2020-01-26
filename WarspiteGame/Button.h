@@ -12,10 +12,10 @@ class Button : public SDLGameObject
 public:
 
 	Button(const ObjectParams* pParams, 
-		ButtonCallback onClick=nullptr, ButtonCallback onEnter=nullptr, ButtonCallback onLeave=nullptr);
+		ButtonCallback onClick=0, ButtonCallback onEnter=0, ButtonCallback onLeave=0);
 
 	virtual void Draw();
-	virtual void OnThink();
+	virtual bool OnThink();
 	virtual void Destroy();
 
 	virtual inline void OnClick(ButtonCallback e)

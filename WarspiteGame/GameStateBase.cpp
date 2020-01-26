@@ -30,7 +30,7 @@ void GameStateBase::OnThink()
 	if (!m_shouldTick) return;
 	for (int i = 0; i < m_GameObjects.size(); i++)
 	{	
-		m_GameObjects[i]->OnThink();
+		if (!m_GameObjects[i]->OnThink()) return;
 	}
 }
 
