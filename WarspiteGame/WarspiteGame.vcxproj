@@ -79,7 +79,8 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <IncludePath>C:\SDL\SDL2-2.0.10\include;C:\SDL\SDL2_image-2.0.5\include;$(IncludePath)</IncludePath>
     <LibraryPath>C:\SDL\SDL2-2.0.10\lib\x64;C:\SDL\SDL2_image-2.0.5\lib\x64;$(LibraryPath)</LibraryPath>
-    <CustomBuildBeforeTargets>PreBuildEvent</CustomBuildBeforeTargets>
+    <CustomBuildBeforeTargets>
+    </CustomBuildBeforeTargets>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <OutDir>$(SolutionDir)$(Platform)\$(Configuration)\</OutDir>
@@ -123,11 +124,19 @@
       <AdditionalDependencies>SDL2.lib;SDL2main.lib;SDL2_image.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <CustomBuildStep>
-      <Command>TextTransform.exe "$(SolutionDir)WarspiteGame\GitVersion.tt"</Command>
-      <Message>Updating the Build information</Message>
-      <Outputs>%(Outputs)</Outputs>
-      <TreatOutputAsContent>false</TreatOutputAsContent>
+      <Command>
+      </Command>
+      <Message>
+      </Message>
+      <Outputs>
+      </Outputs>
+      <TreatOutputAsContent>
+      </TreatOutputAsContent>
     </CustomBuildStep>
+    <PreBuildEvent>
+      <Command>TextTransform.exe "$(SolutionDir)WarspiteGame\GitVersion.tt"</Command>
+      <Message>Updating the Build information...</Message>
+    </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>

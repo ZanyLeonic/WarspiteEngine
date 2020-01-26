@@ -11,9 +11,9 @@ int main(int argc, char* argv[])
 {
 	Uint32 frameStart, frameTime;
 
-	char title[357];
+	char title[377];
 
-	snprintf(title, sizeof(title), "Engine %d %s", GAME_BUILD_NUMBER, GAME_GIT_HASH);
+	snprintf(title, sizeof(title), "Engine (Build: %d git: %s)", GAME_BUILD_NUMBER, GAME_GIT_HASH);
 	
 	std::cout << "Build: "<< GAME_BUILD_NUMBER << "\nUsing source: " << GAME_GIT_HASH << "\n";
 	std::cout << "Attempting Game initialization...\n";
