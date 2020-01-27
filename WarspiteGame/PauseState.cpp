@@ -32,12 +32,10 @@ bool PauseState::OnPlay()
 
 bool PauseState::OnEnd()
 {
-	GameStateBase::OnEnd();
-
 	TextureManager::Instance()->Remove("resumeButton");
 	TextureManager::Instance()->Remove("exitButton");
 
-	return true;
+	return GameStateBase::OnEnd();
 }
 
 bool PauseState::s_continueGame()
