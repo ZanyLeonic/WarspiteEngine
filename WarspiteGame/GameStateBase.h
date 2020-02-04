@@ -16,6 +16,11 @@ public:
 	virtual bool OnPlay();
 	virtual bool OnEnd();
 
+	virtual inline std::vector<GameObject*> GetGameObjects()
+	{
+		return m_GameObjects;
+	}
+
 	virtual inline bool ShouldBeTicking()
 	{
 		return m_shouldTick;

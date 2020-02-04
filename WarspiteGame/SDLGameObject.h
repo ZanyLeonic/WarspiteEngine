@@ -17,6 +17,21 @@ public:
 	virtual bool OnThink();
 	virtual void Destroy();
 
+	virtual inline Vector2D GetPosition()
+	{
+		return m_position;
+	};
+
+	virtual inline Vector2D GetVelocity()
+	{
+		return m_velocity;
+	};
+
+	virtual inline Vector2D GetAcceleration()
+	{
+		return m_acceleration;
+	};
+
 protected:
 
 	Vector2D m_position;

@@ -20,13 +20,15 @@ public:
 private:
 	void HandleInput();
 
+	bool IsPositionFree(Vector2D* pNext);
+
 	bool moving = false;
 
 	bool moveUp = false;
 	bool moveRight = false;
 
 	int timeLeft = 0;
-	const int moveStep = 10;
+	const int moveStep = 20;
 };
 
 #endif /* defined(__Player__) */

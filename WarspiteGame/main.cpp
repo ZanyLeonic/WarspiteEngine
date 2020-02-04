@@ -11,9 +11,14 @@ int main(int argc, char* argv[])
 {
 	Uint32 frameStart, frameTime;
 
-	char title[377];
+	char title[420];
 
+#ifndef WARDEBUG
 	snprintf(title, sizeof(title), "Engine (Build: %d git: %s)", GAME_BUILD_NUMBER, GAME_GIT_HASH);
+#else
+	snprintf(title, sizeof(title), "Engine (DEBUG) (Build: %d git: %s)", GAME_BUILD_NUMBER, GAME_GIT_HASH);
+	std::cout << "This is debug build.\n";
+#endif
 	
 	std::cout << "Build: "<< GAME_BUILD_NUMBER << "\nUsing source: " << GAME_GIT_HASH << "\n";
 	std::cout << "Attempting Game initialization...\n";

@@ -19,10 +19,10 @@ bool Player::OnThink()
 
 	m_currentFrame = 0;
 
-	//if (moving)
-	//{
-	//	m_currentFrame = int(((SDL_GetTicks() / 150) % 3));
-	//}
+	if (moving)
+	{
+		m_currentFrame = int(((SDL_GetTicks() / (1000 / 4)) % 2));
+	}
 
 	SDLGameObject::OnThink();
 	return true;
@@ -42,41 +42,76 @@ void Player::HandleInput()
 {
 	if (timeLeft <= 0)
 	{
+		Vector2D curPos = m_position;
+
 		if (InputHandler::Instance()->IsKeyDown(SDL_SCANCODE_UP))
 		{
-			m_position.SetY(m_position.GetY() - moveStep);
+			//m_position.SetY(m_position.GetY() - moveStep);
+			
 			m_currentRow = 2;
-
 			moving = true;
 
-			timeLeft = 10;
+			curPos.SetY(curPos.GetY() - moveStep);
+			if (IsPositionFree(&curPos))
+			{
+				m_position = curPos;
+				timeLeft = 10;
+			}
+			else
+			{
+				std::cout << "Cannot move up - collided!\n";
+			}
 		}
 		else if (InputHandler::Instance()->IsKeyDown(SDL_SCANCODE_DOWN))
 		{
-			m_position.SetY(m_position.GetY() + moveStep);
-			m_currentRow = 1;
+			curPos.SetY(curPos.GetY() + moveStep);
 
+			m_currentRow = 1;
 			moving = true;
 
-			timeLeft = 10;
+			if (IsPositionFree(&curPos))
+			{
+				m_position = curPos;
+				timeLeft = 10;
+			}
+			else
+			{
+				std::cout << "Cannot move down - collided!\n";
+			}
 		}
 		else if (InputHandler::Instance()->IsKeyDown(SDL_SCANCODE_LEFT))
 		{
-			m_position.SetX(m_position.GetX() - moveStep);
-			m_currentRow = 3;
+			curPos.SetX(curPos.GetX() - moveStep);
 
+			m_currentRow = 3;
 			moving = true;
 
-			timeLeft = 10;
+			if (IsPositionFree(&curPos))
+			{
+				m_position = curPos;
+				timeLeft = 10;
+			}
+			else
+			{
+				std::cout << "Cannot move left - collided!\n";
+			}
 		}
 		else if (InputHandler::Instance()->IsKeyDown(SDL_SCANCODE_RIGHT))
 		{
-			m_position.SetX(m_position.GetX() + moveStep);
-			m_currentRow = 4;
+			curPos.SetX(curPos.GetX() + moveStep);
 
+			m_currentRow = 4;
 			moving = true;
 
-			timeLeft = 10;
+			if (IsPositionFree(&curPos))
+			{
+				m_position = curPos;
+				timeLeft = 10;
+			}
+			else
+			{
+				std::cout << "Cannot move right - collided!\n";
+			}
 		}
 		else if (timeLeft <= 0)
 		{
@@ -87,4 +122,24 @@ void Player::HandleInput()
 	{
 		timeLeft -= 1;
 	}
+}
+
+bool Player::IsPositionFree(Vector2D* pNext)
+{
+	std::vector<GameObject*> pGameObj = Game::Instance()->GetStateManager()->GetCurrentState()->GetGameObjects();
+
+	Vector2D nPos = Vector2D(*pNext);
+
+	for (int i = 0; i < pGameObj.size(); i++)
+	{
+		if (pGameObj[i] != this)
+		{
+			if (dynamic_cast<SDLGameObject*>(pGameObj[i])->GetPosition() == nPos)
+			{
+				return false;
+			}
+		}
+	}
+
+	return true;
 }

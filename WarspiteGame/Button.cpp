@@ -40,9 +40,6 @@ bool Button::OnThink()
 				return false;
 			}
 			m_bReleased = false;
-
-
-
 		}
 		else if (!InputHandler::Instance()->GetMouseButtonState(LEFT))
 		{

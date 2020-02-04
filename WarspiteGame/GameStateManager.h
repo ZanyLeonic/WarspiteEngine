@@ -2,25 +2,24 @@
 #ifndef __GAMESTATEMANAGER_H__
 #define __GAMESTATEMANAGER_H__
 
-#include "GameState.h"
+#include "GameStateBase.h"
 #include <vector>
 
 class GameStateManager
 {
 public:
+	GameStateBase* GetCurrentState();
 
-	void PushState(GameState* pState);
-	void ModifyState(GameState* pState);
+	void PushState(GameStateBase* pState);
+	void ModifyState(GameStateBase* pState);
 
 	void PopState();
 
 	void Draw();
 	void OnThink();
 
-	bool StateDeleted = false;
-
 private:
-	std::vector<GameState*> m_GameStates;
+	std::vector<GameStateBase*> m_GameStates;
 };
 
 #endif

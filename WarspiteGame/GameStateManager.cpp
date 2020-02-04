@@ -1,6 +1,15 @@
 #include "GameStateManager.h"
 
-void GameStateManager::PushState(GameState* pState)
+GameStateBase* GameStateManager::GetCurrentState()
+{
+	if (!m_GameStates.empty())
+	{
+		return m_GameStates.back();
+	}
+	return 0;
+}
+
+void GameStateManager::PushState(GameStateBase* pState)
 {
 	m_GameStates.push_back(pState);
 	m_GameStates.back()->OnPlay();
@@ -39,7 +48,7 @@ void GameStateManager::OnThink()
 	}
 }
 
-void GameStateManager::ModifyState(GameState* pState)
+void GameStateManager::ModifyState(GameStateBase* pState)
 {
 	if (!m_GameStates.empty())
 	{
