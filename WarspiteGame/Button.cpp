@@ -35,7 +35,7 @@ bool Button::OnThink()
 		if (InputHandler::Instance()->GetMouseButtonState(LEFT) && m_bReleased)
 		{
 			m_currentFrame = PRESSED;
-			if (m_OnClick()) // call the callback noooow!
+			if (!m_OnClick()) // call the callback noooow!
 			{
 				return false;
 			}

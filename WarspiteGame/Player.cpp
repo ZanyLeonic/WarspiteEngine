@@ -2,18 +2,21 @@
 #include "InputHandler.h"
 #include "Game.h"
 #include <iostream>
+#include <time.h>
 
 Player::Player(const ObjectParams* pParams)
-	: SDLGameObject(pParams)
+	: SDLGameObject(pParams), lastPosition(0, 0), nextPosition(0, 0)
 {
 	InputHandler::Instance()->AddActionKeyDown(SDL_SCANCODE_C, std::bind(&Player::KeyDown, this));
 	InputHandler::Instance()->AddActionKeyUp(SDL_SCANCODE_C, std::bind(&Player::KeyUp, this));
+
+	srand(time(NULL));
 }
 
 bool Player::OnThink()
 {
 	std::cout << "\r";
-	std::cout << "X: " << m_position.GetX() << " Y: " << m_position.GetY() << " TimeLeft: " << timeLeft << "    ";
+	std::cout << "X: " << m_position.GetX() << " Y: " << m_position.GetY() << " TimeLeft: " << float(timeLeft / 100) << "   ";
 
 	HandleInput();
 
@@ -21,6 +24,7 @@ bool Player::OnThink()
 
 	if (moving)
 	{
+		m_position = VectorMath::Lerp(lastPosition, nextPosition, (timeLeft / 100));
 		m_currentFrame = int(((SDL_GetTicks() / (1000 / 4)) % 2));
 	}
 
@@ -40,7 +44,7 @@ void Player::KeyUp()
 
 void Player::HandleInput()
 {
-	if (timeLeft <= 0)
+	if (timeLeft >= 100)
 	{
 		Vector2D curPos = m_position;
 
@@ -49,13 +53,14 @@ void Player::HandleInput()
 			//m_position.SetY(m_position.GetY() - moveStep);
 			
 			m_currentRow = 2;
-			moving = true;
 
 			curPos.SetY(curPos.GetY() - moveStep);
 			if (IsPositionFree(&curPos))
 			{
-				m_position = curPos;
-				timeLeft = 10;
+				moving = true;
+				lastPosition = m_position;
+				nextPosition = curPos;
+				timeLeft = 0;
 			}
 			else
 			{
@@ -67,12 +72,13 @@ void Player::HandleInput()
 			curPos.SetY(curPos.GetY() + moveStep);
 
 			m_currentRow = 1;
-			moving = true;
 
 			if (IsPositionFree(&curPos))
 			{
-				m_position = curPos;
-				timeLeft = 10;
+				moving = true;
+				lastPosition = m_position;
+				nextPosition = curPos;
+				timeLeft = 0;
 			}
 			else
 			{
@@ -84,12 +90,13 @@ void Player::HandleInput()
 			curPos.SetX(curPos.GetX() - moveStep);
 
 			m_currentRow = 3;
-			moving = true;
 
 			if (IsPositionFree(&curPos))
 			{
-				m_position = curPos;
-				timeLeft = 10;
+				moving = true;
+				lastPosition = m_position;
+				nextPosition = curPos;
+				timeLeft = 0;
 			}
 			else
 			{
@@ -101,26 +108,27 @@ void Player::HandleInput()
 			curPos.SetX(curPos.GetX() + moveStep);
 
 			m_currentRow = 4;
-			moving = true;
 
 			if (IsPositionFree(&curPos))
 			{
-				m_position = curPos;
-				timeLeft = 10;
+				moving = true;
+				lastPosition = m_position;
+				nextPosition = curPos;
+				timeLeft = 0;
 			}
 			else
 			{
 				std::cout << "Cannot move right - collided!\n";
 			}
 		}
-		else if (timeLeft <= 0)
+		else if (timeLeft >= 100)
 		{
 			moving = false;
 		}
 	}
 	else
 	{
-		timeLeft -= 1;
+		timeLeft += 5;
 	}
 }
 

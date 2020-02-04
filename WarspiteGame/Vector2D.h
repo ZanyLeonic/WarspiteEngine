@@ -89,7 +89,7 @@ public:
 	}
 };
 
-class WarspiteMath
+class VectorMath
 {
 public:
 	// Linear interpolates between two points (v1 and v2) by the value of t [0-1]

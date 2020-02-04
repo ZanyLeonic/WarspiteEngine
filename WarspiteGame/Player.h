@@ -5,6 +5,7 @@
 
 #include "SDLGameObject.h"
 #include "InputHandler.h"
+#include "Vector2D.h"
 #include <string.h>
 
 class Player : public SDLGameObject
@@ -22,12 +23,15 @@ private:
 
 	bool IsPositionFree(Vector2D* pNext);
 
+	Vector2D lastPosition;
+	Vector2D nextPosition;
+
 	bool moving = false;
 
 	bool moveUp = false;
 	bool moveRight = false;
 
-	int timeLeft = 0;
+	float timeLeft = 100;
 	const int moveStep = 20;
 };
 
