@@ -58,6 +58,10 @@ if("${SDL2_LIBRARIES}" STREQUAL "")
     set(SDL2_LIBRARIES "SDL2::SDL2")
 endif()
 
+if("${SDL2IMAGE_LIBRARIES}" STREQUAL "")
+    set(SDL2IMAGE_LIBRARIES "SDL2::SDL2_image")
+endif()
+
 set (Warspite_Libs
 	${SDL2_LIBRARIES}
 	${SDL2IMAGE_LIBRARIES}
@@ -69,16 +73,6 @@ include_directories(${SDL2IMAGE_INCLUDE_DIRS})
 # Add source to this project's executable.
 add_executable (${PROJECT_NAME} ${WarspiteEngine_Src} ${WarspiteEngine_Header})
 
-target_link_libraries(${PROJECT_NAME} PRIVATE ${Warspite_Libs})
-
-set_property(TARGET ${PROJECT_NAME} PROPERTY CXX_STANDARD 14)
-
-if(CMAKE_SIZEOF_VOID_P EQUAL 8)
-    add_definitions(-DENV64BIT)
-else()
-    add_definitions(-DENV32BIT)
-endif()
-
 if (WIN32)
 add_custom_command(TARGET ${PROJECT_NAME} PRE_BUILD
                    COMMAND python "${CMAKE_CURRENT_SOURCE_DIR}/GitVersion.py"
@@ -87,6 +81,16 @@ else()
 add_custom_command(TARGET ${PROJECT_NAME} PRE_BUILD
                    COMMAND python3 "${CMAKE_CURRENT_SOURCE_DIR}/GitVersion.py"
 )
+endif()
+
+target_link_libraries(${PROJECT_NAME} PUBLIC ${Warspite_Libs})
+
+set_property(TARGET ${PROJECT_NAME} PROPERTY CXX_STANDARD 14)
+
+if(CMAKE_SIZEOF_VOID_P EQUAL 8)
+    add_definitions(-DENV64BIT)
+else()
+    add_definitions(-DENV32BIT)
 endif()
 
 install(TARGETS ${PROJECT_NAME} RUNTIME DESTINATION .)
@@ -103,5 +107,3 @@ if (WIN32)
 endif()
 
 install (DIRECTORY assets DESTINATION .)
-
-# TODO: Add tests and install targets if needed.

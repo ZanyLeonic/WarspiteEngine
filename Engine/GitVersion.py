@@ -26,9 +26,13 @@ def GetHeadSha1(gitDir):
     if (gitDir != None):
         # The path to the commit path
         cPath = ""
-        with open(os.path.join(gitDir, "head"), "r") as f:
-            cPath = os.path.join(gitDir, str(f.readline()).replace("\n", "").replace(" ","")[4:])
-        
+        with open(os.path.join(gitDir, "HEAD"), "r") as f:
+            head = f.readline()
+            if ("ref:" in head):
+                cPath = os.path.join(gitDir, str(f.readline()).replace("\n", "").replace(" ","")[4:])
+            else:
+                cPath = os.path.join(gitDir, "HEAD")
+                
         with open(cPath, "r") as f:
             return (f.readline())
 
@@ -59,6 +63,9 @@ if __name__ == "__main__":
 
     headSha = GetHeadSha1(SearchForGitDirectory(searchDir)).replace("\n", "")
 
-    with open("{0}.h".format(os.path.splitext(__file__)[0]), "w") as f:
+    header = "{0}.h".format(os.path.splitext(__file__)[0])
+
+    with open(header, "w") as f:
         f.write(headerTemplate.format(IncrementBuildNumber(), headSha, GetTime()))
-         
+    
+    print("Wrote metadata to {0}!".format(header))
