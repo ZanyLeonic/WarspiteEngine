@@ -85,8 +85,10 @@ void Game::Destroy()
 	InputHandler::Instance()->Destroy();
 	m_pGameStateManager->PopState();
 
-	SDL_DestroyWindow(m_pWindow);
+	// Destroy the Renderer before the window
 	SDL_DestroyRenderer(m_pRenderer);
+	SDL_DestroyWindow(m_pWindow);
+
 	SDL_Quit();
 }
 

@@ -25,7 +25,7 @@ bool PlayState::OnPlay()
 		return false;
 	}
 
-	m_GameObjects.push_back(new TestObject(new ObjectParams(100, 90, 22, 27, "")));
+	//m_GameObjects.push_back(new TestObject(new ObjectParams(100, 90, 22, 27, "")));
 	m_GameObjects.push_back(new TestObject(new ObjectParams(100, 100, 22, 27, "testObj")));
 	m_GameObjects.push_back(new Player(new ObjectParams(0, 0, 22, 27, "player")));
 	

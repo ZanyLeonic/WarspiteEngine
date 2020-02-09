@@ -29,7 +29,7 @@ def GetHeadSha1(gitDir):
         with open(os.path.join(gitDir, "HEAD"), "r") as f:
             head = f.readline()
             if ("ref:" in head):
-                cPath = os.path.join(gitDir, str(f.readline()).replace("\n", "").replace(" ","")[4:])
+                cPath = os.path.join(gitDir, str(head).replace("\n", "").replace(" ","")[4:])
             else:
                 cPath = os.path.join(gitDir, "HEAD")
                 
