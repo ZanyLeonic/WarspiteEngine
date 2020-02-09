@@ -1,0 +1,49 @@
+# C/C++ with GCC
+# Build your C/C++ project with GCC using make.
+# Add steps that publish test results, save build artifacts, deploy, and more:
+# https://docs.microsoft.com/azure/devops/pipelines/apps/c-cpp/gcc
+
+trigger:
+- new
+
+jobs:
+- job: Windows
+  pool:
+    vmImage: 'windows-2019'
+  steps:
+  - task: CmdLine@2
+    displayName: Bootstrapping vcpkg
+    inputs:
+      script: |
+        cd %VCPKG_INSTALLATION_ROOT%
+        bootstrap-vcpkg.bat -disableMetrics
+        
+  - script: C:\vcpkg\vcpkg.exe install sdl2 sdl2-image --triplet x64-windows
+    displayName: "Installing SDL2 and SDL2-image"
+
+  - script: mkdir build
+    displayName: "Making build folder"
+  - task: CMake@1
+    displayName: "Generating build files"
+    inputs:
+        cmakeArgs: '-DCMAKE_TOOLCHAIN_FILE=C:\vcpkg\scripts\buildsystems\vcpkg.cmake -DCMAKE_BUILD_TYPE="Debug" -DVCPKG_TARGET_TRIPLET=x64-windows ..'
+  - task: PythonScript@0
+    displayName: "Generating build metadata"
+    inputs:
+      scriptSource: 'filePath'
+      scriptPath: '$(System.DefaultWorkingDirectory)\Engine\GitVersion.py'
+  - task: MSBuild@1
+    displayName: "Compiling project"
+    inputs:
+      solution: 'build/INSTALL.vcxproj'
+      msbuildArchitecture: 'x64'
+      platform: 'x64'
+      configuration: 'Debug'
+      createLogFile: true
+
+  - task: PublishBuildArtifacts@1
+    displayName: "Publishing build artifacts"
+    inputs:
+      PathtoPublish: 'C:/Program Files (x86)/Warspite/'
+      ArtifactName: 'drop'
+      publishLocation: 'Container'

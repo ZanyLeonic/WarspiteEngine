@@ -93,7 +93,7 @@ private:
 	
 	Vector2D* m_mousePosition = new Vector2D(0,0);
 
-	Uint8* m_keystates;
+	Uint8* m_keystates = 0;
 
 	static InputHandler* s_pInstance;
 };
