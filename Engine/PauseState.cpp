@@ -28,6 +28,8 @@ bool PauseState::OnPlay()
 
 	m_GameObjects.push_back(continueBtn);
 	m_GameObjects.push_back(mainBtn);
+
+	return true;
 }
 
 bool PauseState::OnEnd()

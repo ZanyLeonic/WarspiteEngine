@@ -9,8 +9,6 @@ Player::Player(const ObjectParams* pParams)
 {
 	InputHandler::Instance()->AddActionKeyDown(SDL_SCANCODE_C, std::bind(&Player::KeyDown, this));
 	InputHandler::Instance()->AddActionKeyUp(SDL_SCANCODE_C, std::bind(&Player::KeyUp, this));
-
-	srand(time(NULL));
 }
 
 bool Player::OnThink()
@@ -138,16 +136,16 @@ bool Player::IsPositionFree(Vector2D* pNext)
 
 	Vector2D nPos = Vector2D(*pNext);
 
+	// Linear search through the current GameObjects
 	for (int i = 0; i < pGameObj.size(); i++)
 	{
-		if (pGameObj[i] != this)
+		// Check if the GameObject is in the way and isn't us
+		if (pGameObj[i] != this && pGameObj[i]->GetPosition() == nPos)
 		{
-			if (dynamic_cast<SDLGameObject*>(pGameObj[i])->GetPosition() == nPos)
-			{
-				return false;
-			}
+			return false;
 		}
 	}
 
+	// Nothing is in the way!
 	return true;
 }

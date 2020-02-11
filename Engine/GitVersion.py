@@ -9,6 +9,7 @@ headerTemplate =  """#pragma once
 #define GAME_BUILD_TIME {2}
 """
 
+# Searches for .git directory recursively until it is found.
 def SearchForGitDirectory(path):
     di = os.listdir(path)
     pi = pathlib.Path(path)
@@ -22,20 +23,24 @@ def SearchForGitDirectory(path):
     else:
         return None
 
+# Gets the commit hash from the HEAD or the current commit reference.
 def GetHeadSha1(gitDir):
     if (gitDir != None):
         # The path to the commit path
         cPath = ""
         with open(os.path.join(gitDir, "HEAD"), "r") as f:
             head = f.readline()
+            # Does the HEAD contain a hash or a reference?
             if ("ref:" in head):
                 cPath = os.path.join(gitDir, str(head).replace("\n", "").replace(" ","")[4:])
             else:
                 cPath = os.path.join(gitDir, "HEAD")
                 
+        # Return the hash obtained.
         with open(cPath, "r") as f:
             return (f.readline())
 
+# Gets the build number from the persistent text file.
 def IncrementBuildNumber():
     searchDir = os.path.dirname(os.path.realpath(__file__))
     bPath = os.path.join(searchDir, "build.txt")

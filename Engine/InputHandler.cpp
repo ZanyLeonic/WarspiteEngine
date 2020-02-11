@@ -6,7 +6,7 @@ InputHandler* InputHandler::s_pInstance = 0;
 
 InputHandler::InputHandler()
 {
-	m_keyDownCallbacks[SDL_SCANCODE_F1] = keyDownTest;
+	m_bJoysticksInitialised = false;
 
 	for (int i = 0; i < 3; i++)
 	{
@@ -17,7 +17,8 @@ InputHandler::InputHandler()
 void InputHandler::OnThink()
 {
 	SDL_Event e;
-
+	
+	// Handles events for various cases
 	while (SDL_PollEvent(&e))
 	{
 		switch (e.type)
@@ -68,7 +69,7 @@ void InputHandler::Destroy()
 {
 	if (m_bJoysticksInitialised)
 	{
-		for (unsigned int i = 0; i < SDL_NumJoysticks(); i++)
+		for (int i = 0; i < SDL_NumJoysticks(); i++)
 		{
 			SDL_JoystickClose(m_joysticks[i]);
 		}

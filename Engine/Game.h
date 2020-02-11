@@ -3,11 +3,11 @@
 #define __Game__
 
 #include <SDL.h>
+#include <vector>
 #include "TextureManager.h"
 #include "InputHandler.h"
 #include "GameObject.h"
 #include "Player.h"
-#include <vector>
 #include "Enemy.h"
 #include "GameStateManager.h"
 #include "MainMenuGameState.h"

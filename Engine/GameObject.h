@@ -4,6 +4,7 @@
 #include <SDL.h>
 #include <iostream>
 #include "ObjectParams.h"
+#include "Vector2D.h"
 
 class GameObject
 {
@@ -12,6 +13,8 @@ public:
 	virtual void Draw() = 0;
 	virtual bool OnThink() = 0;
 	virtual void Destroy() = 0;
+
+	virtual Vector2D GetPosition() = 0;
 	
 protected:
 	GameObject(const ObjectParams* pParams) {} 

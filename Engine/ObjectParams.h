@@ -6,13 +6,13 @@
 class ObjectParams
 {
 public:
-	ObjectParams(int x, int y, int width, int height,
+	ObjectParams(float x, float y, int width, int height,
 		std::string textureID) : m_x(x), m_y(y), m_width(width),
 		m_height(height), m_textureID(textureID)
 	{}
 
-	int GetX() const { return m_x; }
-	int GetY() const { return m_y; }
+	float GetX() const { return m_x; }
+	float GetY() const { return m_y; }
 
 	int GetWidth() const { return m_width; }
 	int GetHeight() const { return m_height; }
@@ -22,8 +22,8 @@ public:
 private:
 	std::string m_textureID;
 
-	int m_x;
-	int m_y;
+	float m_x;
+	float m_y;
 
 	int m_width;
 	int m_height;

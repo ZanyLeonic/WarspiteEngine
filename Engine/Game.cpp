@@ -5,6 +5,7 @@
 
 Game* Game::s_pInstance = 0;
 
+// Initialises the major parts of the engine
 bool Game::Init(const char* title, int xpos, int ypos, int width, int height, bool fullscreen)
 {
 	TheInputHandler::Instance()->InitialiseJoysticks();

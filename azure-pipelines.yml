@@ -4,14 +4,26 @@
 # https://docs.microsoft.com/azure/devops/pipelines/apps/c-cpp/gcc
 
 trigger:
-- new
+- master
+- last-iteration
 
 jobs:
 - job: Windows
   pool:
     vmImage: 'windows-2019'
   steps:
+  - task: Cache@2
+    inputs:
+      key: 'vcpkg | "$(Agent.OS)" | "C:\vcpkg\.git\HEAD"'
+      restoreKeys: |
+        vcpkg | "$(Agent.OS)"
+        vcpkg
+      path: C:\vcpkg\**
+      cacheHitVar: VCPKG_CACHE_RESTORED
+    displayName: Cache vcpkg
+
   - task: CmdLine@2
+    condition: ne(variables.VCPKG_CACHE_RESTORED, 'true')
     displayName: Bootstrapping vcpkg
     inputs:
       script: |
@@ -19,6 +31,7 @@ jobs:
         bootstrap-vcpkg.bat -disableMetrics
         
   - script: C:\vcpkg\vcpkg.exe install sdl2 sdl2-image --triplet x64-windows
+    condition: ne(variables.VCPKG_CACHE_RESTORED, 'true')
     displayName: "Installing SDL2 and SDL2-image"
 
   - script: mkdir build
@@ -26,7 +39,7 @@ jobs:
   - task: CMake@1
     displayName: "Generating build files"
     inputs:
-        cmakeArgs: '-DCMAKE_TOOLCHAIN_FILE=C:\vcpkg\scripts\buildsystems\vcpkg.cmake -DCMAKE_BUILD_TYPE="Debug" -DVCPKG_TARGET_TRIPLET=x64-windows ..'
+        cmakeArgs: '-DCMAKE_TOOLCHAIN_FILE=C:\vcpkg\scripts\buildsystems\vcpkg.cmake -DCMAKE_BUILD_TYPE="Debug" -DVCPKG_TARGET_TRIPLET=x64-windows -DCMAKE_INSTALL_PREFIX=$(System.DefaultWorkingDirectory) ..'
   - task: PythonScript@0
     displayName: "Generating build metadata"
     inputs:
@@ -44,6 +57,6 @@ jobs:
   - task: PublishBuildArtifacts@1
     displayName: "Publishing build artifacts"
     inputs:
-      PathtoPublish: 'C:/Program Files (x86)/Warspite/'
+      PathtoPublish: '$(System.DefaultWorkingDirectory)/Warspite/'
       ArtifactName: 'drop'
       publishLocation: 'Container'

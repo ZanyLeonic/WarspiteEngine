@@ -56,7 +56,6 @@ public:
 private:
 
 	InputHandler();
-	~InputHandler();
 
 	// private functions to handle the different event types
 
