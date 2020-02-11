@@ -18,7 +18,7 @@ jobs:
       restoreKeys: |
         vcpkg | "$(Agent.OS)"
         vcpkg
-      path: C:\vcpkg\**
+      path: 'C:\vcpkg\'
       cacheHitVar: VCPKG_CACHE_RESTORED
     displayName: Cache vcpkg
 
