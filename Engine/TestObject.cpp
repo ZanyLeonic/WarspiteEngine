@@ -1,7 +1,7 @@
 #include "TestObject.h"
 
-TestObject::TestObject(ObjectParams* pParams)
-	: SDLGameObject(pParams)
+TestObject::TestObject()
+	: SDLGameObject()
 {
 }
 

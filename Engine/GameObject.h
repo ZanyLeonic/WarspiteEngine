@@ -14,10 +14,12 @@ public:
 	virtual bool OnThink() = 0;
 	virtual void Destroy() = 0;
 
+	virtual void Load(const ObjectParams* pParams) = 0;
+
 	virtual Vector2D GetPosition() = 0;
 	
 protected:
-	GameObject(const ObjectParams* pParams) {} 
+	GameObject() {} 
 	virtual ~GameObject() {}
 
 };

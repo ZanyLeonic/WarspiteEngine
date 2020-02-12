@@ -4,7 +4,7 @@ class TestObject :
 	public SDLGameObject
 {
 public:
-	TestObject(ObjectParams* pParams);
+	TestObject();
 	void collide();
 
 };

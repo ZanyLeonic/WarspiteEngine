@@ -22,8 +22,8 @@ bool MainMenuGameState::OnPlay()
 		return false;
 	}
 
-	m_GameObjects.push_back(new Button(new ObjectParams(200, 80, 100, 32, "playbutton"), s_menuToPlay));
-	m_GameObjects.push_back(new Button(new ObjectParams(200, 120, 100, 32, "exitbutton"), s_exitFromMenu));
+	//m_GameObjects.push_back(new Button(new ObjectParams(200, 80, 100, 32, "playbutton"), s_menuToPlay));
+	//m_GameObjects.push_back(new Button(new ObjectParams(200, 120, 100, 32, "exitbutton"), s_exitFromMenu));
 
 	std::cout << "Entered MenuGameState\n";
 	return true;

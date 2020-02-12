@@ -6,6 +6,7 @@ cmake_minimum_required (VERSION 3.8)
 set(WarspiteEngine_Src
 	Button.cpp
 	Enemy.cpp
+    GameObjectFactory.cpp
     Game.cpp
     GameStateBase.cpp
     GameStateManager.cpp
@@ -16,15 +17,18 @@ set(WarspiteEngine_Src
     Player.cpp
     PlayState.cpp
     SDLGameObject.cpp
+    StateParser.cpp
     TestObject.cpp
     TextureManager.cpp
     MainMenuGameState.cpp
 )
 
 set(WarspiteEngine_Header
+    BaseCreator.h
     Button.h
     Enemy.h
     GameObject.h
+    GameObjectFactory.h
     Game.h
     GameState.h
     GameStateBase.h
@@ -34,6 +38,7 @@ set(WarspiteEngine_Header
     Player.h
     PlayState.h
     SDLGameObject.h
+    StateParser.h
     TestObject.h
     TextureManager.h
     MainMenuGameState.h
@@ -52,6 +57,7 @@ endif()
 find_package (Python3 COMPONENTS Interpreter REQUIRED)
 find_package(SDL2 CONFIG REQUIRED)
 find_package(sdl2-image CONFIG REQUIRED)
+find_package(RapidJSON CONFIG REQUIRED)
 
 add_custom_target(projMetadata 
 	COMMAND ${Python_EXECUTABLE} "${CMAKE_CURRENT_SOURCE_DIR}/GitVersion.py"
@@ -74,6 +80,7 @@ set (Warspite_Libs
 
 include_directories(${SDL2_INCLUDE_DIRS})
 include_directories(${SDL2IMAGE_INCLUDE_DIRS})
+include_directories(${RAPIDJSON_INCLUDE_DIRS})
 
 # Add source to this project's executable.
 add_executable (${PROJECT_NAME} ${WarspiteEngine_Src} ${WarspiteEngine_Header})

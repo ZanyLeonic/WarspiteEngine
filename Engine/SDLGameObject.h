@@ -11,11 +11,13 @@ class SDLGameObject :
 {
 public:
 
-	SDLGameObject(const ObjectParams* pParams);
+	SDLGameObject();
 
 	virtual void Draw();
 	virtual bool OnThink();
 	virtual void Destroy();
+
+	virtual void Load(const ObjectParams* pParams);
 
 	virtual inline Vector2D GetPosition()
 	{

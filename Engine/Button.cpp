@@ -2,9 +2,8 @@
 #include "InputHandler.h"
 #include "Game.h"
 
-Button::Button(const ObjectParams* pParams,
-	ButtonCallback onClick, ButtonCallback onEnter, ButtonCallback onLeave) :
-	SDLGameObject(pParams), m_OnClick(onClick), m_OnEnter(onEnter), m_OnLeave(onLeave)
+Button::Button(ButtonCallback onClick, ButtonCallback onEnter, ButtonCallback onLeave) :
+	SDLGameObject(), m_OnClick(onClick), m_OnEnter(onEnter), m_OnLeave(onLeave)
 {
 	m_currentFrame = NO_HOVER; // Frame 0
 
@@ -12,6 +11,11 @@ Button::Button(const ObjectParams* pParams,
 	if(m_OnClick == 0)  m_OnClick = std::bind(&Button::onClick, this);
 	if (m_OnEnter == 0) m_OnEnter = std::bind(&Button::onEnter, this);
 	if (m_OnLeave == 0) m_OnLeave = std::bind(&Button::onLeave, this);
+}
+
+void Button::Load(const ObjectParams* pParams)
+{
+	SDLGameObject::Load(pParams);
 }
 
 void Button::Draw()

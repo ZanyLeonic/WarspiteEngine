@@ -1,0 +1,41 @@
+{
+  "states": [
+    {
+      "id": "MainMenu",
+      "textures": [
+        {
+          "path": "assets/play.png",
+          "id": "PlayButton"
+        },
+        {
+          "path": "assets/exit.png",
+          "id": "ExitButton"
+        }
+      ],
+      "objects": [
+        {
+          "type": "Button",
+          "x": 100,
+          "y": 100,
+          "width": 400,
+          "height": 100,
+          "callbackID": "Play"
+        },
+        {
+          "type": "Button",
+          "x": 100,
+          "y": 300,
+          "width": 400,
+          "height": 100,
+          "callbackID": "Exit"
+        }
+      ]
+    },
+    {
+      "id": "Play"
+    },
+    {
+      "id": "Pause"
+    }
+  ]
+}

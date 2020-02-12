@@ -20,14 +20,14 @@ bool PauseState::OnPlay()
 		return false;
 	}
 
-	Button* continueBtn = new Button(new ObjectParams(200, 80, 100, 32, "resumeButton"));
-	Button* mainBtn = new Button(new ObjectParams(200, 200, 100, 32, "exitButton"));
+	//Button* continueBtn = new Button(new ObjectParams(200, 80, 100, 32, "resumeButton"));
+	//Button* mainBtn = new Button(new ObjectParams(200, 200, 100, 32, "exitButton"));
 
-	continueBtn->OnClick(s_continueGame);
-	mainBtn->OnClick(s_exitToMenu);
+	//continueBtn->OnClick(s_continueGame);
+	//mainBtn->OnClick(s_exitToMenu);
 
-	m_GameObjects.push_back(continueBtn);
-	m_GameObjects.push_back(mainBtn);
+	//m_GameObjects.push_back(continueBtn);
+	//m_GameObjects.push_back(mainBtn);
 
 	return true;
 }

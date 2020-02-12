@@ -11,8 +11,9 @@ class Button : public SDLGameObject
 {
 public:
 
-	Button(const ObjectParams* pParams, 
-		ButtonCallback onClick=0, ButtonCallback onEnter=0, ButtonCallback onLeave=0);
+	Button(ButtonCallback onClick=0, ButtonCallback onEnter=0, ButtonCallback onLeave=0);
+
+	virtual void Load(const ObjectParams* pParams);
 
 	virtual void Draw();
 	virtual bool OnThink();

@@ -1,7 +1,7 @@
 #include "Enemy.h"
 
-Enemy::Enemy(ObjectParams* pParams)
-	: SDLGameObject(pParams)
+Enemy::Enemy()
+	: SDLGameObject()
 {
 }
 

@@ -4,11 +4,18 @@
 #include <iostream>
 #include <time.h>
 
-Player::Player(const ObjectParams* pParams)
-	: SDLGameObject(pParams), lastPosition(0, 0), nextPosition(0, 0)
+Player::Player()
+	: SDLGameObject()
+{
+
+}
+
+void Player::Load(const ObjectParams* pParams)
 {
 	InputHandler::Instance()->AddActionKeyDown(SDL_SCANCODE_C, std::bind(&Player::KeyDown, this));
 	InputHandler::Instance()->AddActionKeyUp(SDL_SCANCODE_C, std::bind(&Player::KeyUp, this));
+
+	SDLGameObject::Load(pParams);
 }
 
 bool Player::OnThink()

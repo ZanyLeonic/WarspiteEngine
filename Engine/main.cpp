@@ -1,5 +1,6 @@
 #include "Game.h"
 #include "GitVersion.h"
+#include "StateParser.h"
 
 // our Game object
 Game* g_game = 0;
@@ -23,6 +24,9 @@ int main(int argc, char* argv[])
 	std::cout << "Build: "<< GAME_BUILD_NUMBER << "\nUsing source: " << GAME_GIT_HASH << "\n";
 	std::cout << "Attempting Game initialization...\n";
 	std::cout << "Target FPS is " << FPS << " FPS\n";
+
+	StateParser::Instance()->ParseState("assets\\Test.json", "", NULL);
+
 	if (Game::Instance()->Init(title, 100, 100, 640, 480, false))
 	{
 		while (Game::Instance()->IsRunning())
