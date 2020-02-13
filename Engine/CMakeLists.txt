@@ -20,7 +20,7 @@ set(WarspiteEngine_Src
     StateParser.cpp
     TestObject.cpp
     TextureManager.cpp
-    MainMenuGameState.cpp
+    MainMenuState.cpp
 )
 
 set(WarspiteEngine_Header
@@ -41,7 +41,7 @@ set(WarspiteEngine_Header
     StateParser.h
     TestObject.h
     TextureManager.h
-    MainMenuGameState.h
+    MainMenuState.h
     Vector2D.h
 )
 

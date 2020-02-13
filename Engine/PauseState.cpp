@@ -50,7 +50,7 @@ bool PauseState::s_continueGame()
 
 bool PauseState::s_exitToMenu()
 {
-	Game::Instance()->GetStateManager()->ModifyState(new MainMenuGameState());
+	Game::Instance()->GetStateManager()->ModifyState(new MainMenuState());
 
 	return false;
 }

@@ -20,6 +20,12 @@ bool GameStateBase::OnEnd()
 	{
 		m_GameObjects[i]->Destroy();
 	}
+
+	for (int i = 0; i < m_TextureIDList.size(); i++)
+	{
+		TextureManager::Instance()->Remove(m_TextureIDList[i]);
+	}
+
 	m_GameObjects.clear();
 
 	return true;

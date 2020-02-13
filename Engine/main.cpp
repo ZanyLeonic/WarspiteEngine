@@ -25,8 +25,6 @@ int main(int argc, char* argv[])
 	std::cout << "Attempting Game initialization...\n";
 	std::cout << "Target FPS is " << FPS << " FPS\n";
 
-	StateParser::Instance()->ParseState("assets\\Test.json", "", NULL);
-
 	if (Game::Instance()->Init(title, 100, 100, 640, 480, false))
 	{
 		while (Game::Instance()->IsRunning())

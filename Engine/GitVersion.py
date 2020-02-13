@@ -3,6 +3,7 @@ import os, pathlib, time
 
 headerTemplate =  """#pragma once
 
+// PURPOSE: Provides the Engine with metadata of the build.
 // GENERATED CODE --- CHANGED ON BUILD --- ANY MANUAL CHANGES WILL BE OVERWRITTEN.
 #define GAME_BUILD_NUMBER {0}
 #define GAME_GIT_HASH "{1}"

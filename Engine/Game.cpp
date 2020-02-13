@@ -1,6 +1,8 @@
 #include "Game.h"
 #include "TextureManager.h"
 #include "InputHandler.h"
+#include "GameObjectFactory.h"
+#include "Button.h"
 #include <iostream>
 
 Game* Game::s_pInstance = 0;
@@ -35,8 +37,10 @@ bool Game::Init(const char* title, int xpos, int ypos, int width, int height, bo
 				SDL_SetRenderDrawColor(m_pRenderer,
 					255, 255, 255, 255);
 
+				GameObjectFactory::Instance()->RegisterType("Button", new ButtonCreator());
+
 				m_pGameStateManager = new GameStateManager();
-				m_pGameStateManager->ModifyState(new MainMenuGameState());
+				m_pGameStateManager->ModifyState(new MainMenuState());
 			}
 			else
 			{

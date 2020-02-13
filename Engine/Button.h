@@ -4,14 +4,15 @@
 
 #include <functional>
 #include "SDLGameObject.h"
-
-typedef std::function<bool()> ButtonCallback;
+#include "BaseCreator.h"
 
 class Button : public SDLGameObject
 {
+protected:
+	typedef std::function<bool()> ButtonCallback;
 public:
 
-	Button(ButtonCallback onClick=0, ButtonCallback onEnter=0, ButtonCallback onLeave=0);
+	Button();
 
 	virtual void Load(const ObjectParams* pParams);
 
@@ -31,6 +32,10 @@ public:
 	{
 		m_OnLeave = e;
 	};
+
+	int GetOnClickID() const { return m_onClickID; }
+	int GetOnEnterID() const { return m_onEnterID; }
+	int GetOnLeaveID() const { return m_onLeaveID; }
 
 private:
 	// Holds the callback to trigger on events
@@ -54,6 +59,18 @@ protected:
 private:
 	// Whether the button has been released or not.
 	bool m_bReleased = true;
+
+	int m_onClickID = 0;
+	int m_onEnterID = 0;
+	int m_onLeaveID = 0;
+};
+
+class ButtonCreator : public BaseCreator
+{
+	GameObject* CreateGameObject() const
+	{
+		return new Button();
+	}
 };
 
 #endif

@@ -32,6 +32,7 @@ public:
 
 protected:
 	std::vector<GameObject*> m_GameObjects;
+	std::vector<std::string> m_TextureIDList;
 
 	bool m_shouldTick = false;
 	bool m_shouldDraw = false;

@@ -1,8 +1,9 @@
 #include "StateParser.h"
 #include <cstdio>
 #include <rapidjson/filereadstream.h>
-
-StateParser* StateParser::s_pInstance = 0;
+#include "TextureManager.h"
+#include "GameObjectFactory.h"
+#include "Game.h"
 
 bool StateParser::ParseState(const char* stateFile, std::string stateID, std::vector<GameObject*>* pObjects, std::vector<std::string>* pTextureIDs)
 {
@@ -13,7 +14,7 @@ bool StateParser::ParseState(const char* stateFile, std::string stateID, std::ve
 	// load state file
 	if (fp != NULL)
 	{
-		char readBuffer[65536];
+		char readBuffer[16384];
 		rapidjson::FileReadStream is(fp, readBuffer, sizeof(readBuffer));
 
 		jDoc.ParseStream(is);
@@ -26,21 +27,25 @@ bool StateParser::ParseState(const char* stateFile, std::string stateID, std::ve
 			return false;
 		}
 		
-		const rapidjson::Value& states = jDoc["states"];
+		rapidjson::Value& states = jDoc["states"];
+		rapidjson::Value& state = jDoc["states"];
 
 		assert(states.IsArray());
 
 		for (rapidjson::SizeType i = 0; i < states.Size(); i++)
 		{
-			printf("states[%d] = %s\n", (int)i, states[i]["id"].GetString());
+			if (states[i]["id"].GetString() == stateID)
+			{
+				state = states[i];
+			}
 		}
 
-		const rapidjson::Value& textures = states["textures"];
+		const rapidjson::Value& textures = state["textures"];
 		assert(textures.IsArray());
 
 		ParseTextures(&textures, pTextureIDs);
 
-		const rapidjson::Value& objects = states["objects"];
+		const rapidjson::Value& objects = state["objects"];
 		assert(objects.IsArray());
 
 		ParseObjects(&objects, pObjects);
@@ -54,6 +59,7 @@ bool StateParser::ParseState(const char* stateFile, std::string stateID, std::ve
 
 		return true;
 	}
+
 	return false;
 }
 
@@ -61,7 +67,29 @@ void StateParser::ParseObjects(const rapidjson::Value* pStateRoot, std::vector<G
 {
 	for (rapidjson::SizeType i = 0; i < pStateRoot->Size(); i++)
 	{
+		int x, y, width, height, numFrames, animSpeed, onClickCallback, onEnterCallback, onLeaveCallback;
+		std::string textureID;
 
+		x = pStateRoot[i]["x"].GetInt();
+		y = pStateRoot[i]["y"].GetInt();
+		width = pStateRoot[i]["width"].GetInt();
+		height = pStateRoot[i]["height"].GetInt();
+		numFrames = pStateRoot[i]["numFrames"].GetInt();
+		animSpeed = pStateRoot[i]["animSpeed"].GetInt();
+
+		textureID = pStateRoot[i]["textureID"].GetString();
+
+		onClickCallback = pStateRoot[i]["onClickID"].GetInt();
+		onEnterCallback = pStateRoot[i]["onEnterID"].GetInt();
+		onLeaveCallback = pStateRoot[i]["onLeaveID"].GetInt();
+
+		GameObject* pGameObject = 
+			GameObjectFactory::Instance()->Create(pStateRoot[i]["type"].GetString());
+
+		pGameObject->Load(new ObjectParams(x, y, width, height, textureID, 
+			animSpeed, numFrames, onClickCallback, onEnterCallback, onLeaveCallback));
+
+		pObjects->push_back(pGameObject);
 	}
 }
 
@@ -69,6 +97,6 @@ void StateParser::ParseTextures(const rapidjson::Value* pStateRoot, std::vector<
 {
 	for (rapidjson::SizeType i = 0; i < pStateRoot->Size(); i++)
 	{
-		
+		TextureManager::Instance()->Load(pStateRoot[i]["path"].GetString(), pStateRoot[i]["id"].GetString(), Game::Instance()->GetRenderer());
 	}
 }

@@ -19,6 +19,7 @@
           "y": 100,
           "width": 400,
           "height": 100,
+		  "textureID" : "PlayButton",
           "callbackID": "Play"
         },
         {
@@ -27,15 +28,10 @@
           "y": 300,
           "width": 400,
           "height": 100,
+		  "textureID" : "ExitButton",
           "callbackID": "Exit"
         }
       ]
-    },
-    {
-      "id": "Play"
-    },
-    {
-      "id": "Pause"
     }
   ]
 }

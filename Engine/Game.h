@@ -10,7 +10,7 @@
 #include "Player.h"
 #include "Enemy.h"
 #include "GameStateManager.h"
-#include "MainMenuGameState.h"
+#include "MainMenuState.h"
 #include "PlayState.h"
 
 class Game
