@@ -8,9 +8,9 @@ Button::Button() :
 	m_currentFrame = NO_HOVER; // Frame 0
 
 	// Initial callbacks
-	/*if(m_OnClick == 0)  m_OnClick = std::bind(&Button::onClick, this);
+	if (m_OnClick == 0) m_OnClick = std::bind(&Button::onClick, this);
 	if (m_OnEnter == 0) m_OnEnter = std::bind(&Button::onEnter, this);
-	if (m_OnLeave == 0) m_OnLeave = std::bind(&Button::onLeave, this);*/
+	if (m_OnLeave == 0) m_OnLeave = std::bind(&Button::onLeave, this);
 }
 
 void Button::Load(const ObjectParams* pParams)
@@ -87,4 +87,19 @@ bool Button::onLeave()
 void Button::Destroy()
 {
 	SDLGameObject::Destroy();
+}
+
+void Button::OnClick(ButtonCallback e)
+{
+	m_OnClick = e != 0 ? e : std::bind(&Button::onClick, this);
+}
+
+void Button::OnEnter(ButtonCallback e)
+{
+	m_OnEnter = e != 0 ? e : std::bind(&Button::onEnter, this);
+}
+
+void Button::OnLeave(ButtonCallback e)
+{
+	m_OnLeave = e != 0 ? e : std::bind(&Button::onLeave, this);
 }

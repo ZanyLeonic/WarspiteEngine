@@ -9,7 +9,7 @@ const std::string MainMenuState::s_UIID = "MENU";
 
 bool MainMenuState::OnPlay()
 {
-	GameStateBase::OnPlay();
+	MenuState::OnPlay();
 
 	// Parse the state
 	StateParser sp;
@@ -27,12 +27,13 @@ bool MainMenuState::OnPlay()
 
 bool MainMenuState::OnEnd()
 {
-	TextureManager::Instance()
-		->Remove("playbutton");
-	TextureManager::Instance()
-		->Remove("exitbutton");
 
-	GameStateBase::OnEnd();
+	for (int i = 0; i < m_TextureIDList.size(); i++)
+	{
+		TextureManager::Instance()->Remove(m_TextureIDList[i]);
+	}
+
+	MenuState::OnEnd();
 
 	std::cout << "Exiting MainMenuState\n";
 	return true;
@@ -40,6 +41,8 @@ bool MainMenuState::OnEnd()
 
 void MainMenuState::SetCallbacks(const std::vector<ButtonCallback>& callbacks)
 {
+	// MenuState::SetCallbacks(callbacks);
+
 	for (int i = 0; i < m_GameObjects.size(); i++)
 	{
 		if (dynamic_cast<Button*>(m_GameObjects[i]))

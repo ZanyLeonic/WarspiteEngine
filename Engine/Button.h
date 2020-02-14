@@ -20,18 +20,9 @@ public:
 	virtual bool OnThink();
 	virtual void Destroy();
 
-	virtual inline void OnClick(ButtonCallback e)
-	{
-		m_OnClick = e;
-	};
-	virtual inline void OnEnter(ButtonCallback e)
-	{
-		m_OnEnter = e;
-	};
-	virtual inline void OnLeave(ButtonCallback e)
-	{
-		m_OnLeave = e;
-	};
+	virtual void OnClick(ButtonCallback e);
+	virtual void OnEnter(ButtonCallback e);
+	virtual void OnLeave(ButtonCallback e);
 
 	int GetOnClickID() const { return m_onClickID; }
 	int GetOnEnterID() const { return m_onEnterID; }
@@ -39,9 +30,9 @@ public:
 
 private:
 	// Holds the callback to trigger on events
-	ButtonCallback m_OnClick;
-	ButtonCallback m_OnEnter;
-	ButtonCallback m_OnLeave;
+	ButtonCallback m_OnClick = 0;
+	ButtonCallback m_OnEnter = 0;
+	ButtonCallback m_OnLeave = 0;
 
 	enum button_state
 	{

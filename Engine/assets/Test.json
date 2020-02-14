@@ -4,32 +4,40 @@
       "id": "MainMenu",
       "textures": [
         {
-          "path": "assets/play.png",
+          "path": "assets\\PlayButton.png",
           "id": "PlayButton"
         },
         {
-          "path": "assets/exit.png",
+          "path": "assets\\ExitButton.png",
           "id": "ExitButton"
         }
       ],
-      "test": [
+      "objects": [
         {
           "type": "Button",
           "x": 100,
           "y": 100,
-          "width": 400,
-          "height": 100,
+          "width": 300,
+          "height": 32,
 		  "textureID" : "PlayButton",
-          "callbackID": "Play"
+          "onClickID": 1,
+		  "onEnterID": 0,
+		  "onLeaveID": 0,
+		  "numFrames" : 3,
+		  "animSpeed" : 1
         },
         {
           "type": "Button",
           "x": 100,
           "y": 300,
-          "width": 400,
-          "height": 100,
+          "width": 300,
+          "height": 32,
 		  "textureID" : "ExitButton",
-          "callbackID": "Exit"
+          "onClickID": 2,
+		  "onEnterID": 0,
+		  "onLeaveID": 0,
+		  "numFrames" : 3,
+		  "animSpeed" : 1
         }
       ]
     }
