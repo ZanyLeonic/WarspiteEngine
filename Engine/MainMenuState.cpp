@@ -27,12 +27,6 @@ bool MainMenuState::OnPlay()
 
 bool MainMenuState::OnEnd()
 {
-
-	for (int i = 0; i < m_TextureIDList.size(); i++)
-	{
-		TextureManager::Instance()->Remove(m_TextureIDList[i]);
-	}
-
 	MenuState::OnEnd();
 
 	std::cout << "Exiting MainMenuState\n";
