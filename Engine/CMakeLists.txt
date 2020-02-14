@@ -4,6 +4,7 @@
 cmake_minimum_required (VERSION 3.8)
 
 set(WarspiteEngine_Src
+	AnimatedGraphic.cpp
 	Button.cpp
 	Enemy.cpp
     GameObjectFactory.cpp
@@ -24,6 +25,7 @@ set(WarspiteEngine_Src
 )
 
 set(WarspiteEngine_Header
+	AnimatedGraphic.h
     BaseCreator.h
     Button.h
     Enemy.h
@@ -42,6 +44,7 @@ set(WarspiteEngine_Header
     TestObject.h
     TextureManager.h
     MainMenuState.h
+	MenuState.h
     Vector2D.h
 )
 
@@ -54,10 +57,11 @@ if (WIN32)
 	set(SDL2IMAGE_LIBRARIES SDL2::SDL2_image)
 endif()
 
-find_package (Python3 COMPONENTS Interpreter REQUIRED)
+find_package(Python3 COMPONENTS Interpreter REQUIRED)
 find_package(SDL2 CONFIG REQUIRED)
 find_package(sdl2-image CONFIG REQUIRED)
-find_package(RapidJSON CONFIG REQUIRED)
+find_package(rapidjson CONFIG REQUIRED)
+
 
 add_custom_target(projMetadata 
 	COMMAND ${Python_EXECUTABLE} "${CMAKE_CURRENT_SOURCE_DIR}/GitVersion.py"

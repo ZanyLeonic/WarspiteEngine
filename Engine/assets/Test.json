@@ -12,7 +12,7 @@
           "id": "ExitButton"
         }
       ],
-      "objects": [
+      "test": [
         {
           "type": "Button",
           "x": 100,
