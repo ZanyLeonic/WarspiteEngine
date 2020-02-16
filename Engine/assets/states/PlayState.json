@@ -1,0 +1,58 @@
+{
+  "states": [
+	{
+      "id": "Game",
+      "textures": [
+        {
+          "path": "assets\\player.png",
+          "id": "Player"
+        },
+        {
+          "path": "assets\\dev\\Black_22x27.bmp",
+          "id": "TestObject"
+        }
+      ],
+      "objects": [
+        {
+          "type": "TestObject",
+          "x": 100,
+          "y": 100,
+          "width": 22,
+          "height": 27,
+		  "textureID" : "TestObject",
+          "onClickID": 2,
+		  "onEnterID": 0,
+		  "onLeaveID": 0,
+		  "numFrames" : 1,
+		  "animSpeed" : 1
+        },
+        {
+          "type": "TestObject",
+          "x": 100,
+          "y": 90,
+          "width": 22,
+          "height": 27,
+		  "textureID" : "",
+          "onClickID": 0,
+		  "onEnterID": 0,
+		  "onLeaveID": 0,
+		  "numFrames" : 1,
+		  "animSpeed" : 1
+        },
+		{
+          "type": "Player",
+          "x": 0,
+          "y": 0,
+          "width": 22,
+          "height": 27,
+		  "textureID" : "Player",
+          "onClickID": 1,
+		  "onEnterID": 0,
+		  "onLeaveID": 0,
+		  "numFrames" : 3,
+		  "animSpeed" : 1
+        }
+      ]
+    }
+  ]
+}

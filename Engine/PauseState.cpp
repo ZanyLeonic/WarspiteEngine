@@ -1,44 +1,49 @@
 #include "Game.h"
 #include "Button.h"
 #include "PauseState.h"
+#include "StateParser.h"
 
-const std::string PauseState::s_UIID = "PAUSE";
+const std::string PauseState::s_UIID = "PauseMenu";
 
 bool PauseState::OnPlay()
 {
 	GameStateBase::OnPlay();
 
-	if (!TextureManager::Instance()->Load("assets/ResumeButton.png",
-		"resumeButton", Game::Instance()->GetRenderer()))
-	{
-		return false;
-	}
+	StateParser sp;
+	sp.ParseState("assets/states/SystemMenus.json", s_UIID, &m_GameObjects, &m_TextureIDList);
 
-	if (!TextureManager::Instance()->Load("assets/ExitButton.png",
-		"exitButton", Game::Instance()->GetRenderer()))
-	{
-		return false;
-	}
+	m_callbacks.push_back(0);
+	m_callbacks.push_back(s_continueGame);
+	m_callbacks.push_back(s_exitToMenu);
 
-	//Button* continueBtn = new Button(new ObjectParams(200, 80, 100, 32, "resumeButton"));
-	//Button* mainBtn = new Button(new ObjectParams(200, 200, 100, 32, "exitButton"));
-
-	//continueBtn->OnClick(s_continueGame);
-	//mainBtn->OnClick(s_exitToMenu);
-
-	//m_GameObjects.push_back(continueBtn);
-	//m_GameObjects.push_back(mainBtn);
+	SetCallbacks(m_callbacks);
 
 	return true;
 }
 
 bool PauseState::OnEnd()
 {
-	TextureManager::Instance()->Remove("resumeButton");
-	TextureManager::Instance()->Remove("exitButton");
-
 	return GameStateBase::OnEnd();
 }
+
+void PauseState::SetCallbacks(const std::vector<ButtonCallback>& callbacks)
+{
+	// MenuState::SetCallbacks(callbacks);
+
+	for (int i = 0; i < m_GameObjects.size(); i++)
+	{
+		if (dynamic_cast<Button*>(m_GameObjects[i]))
+		{
+			Button* pButton =
+				dynamic_cast<Button*>(m_GameObjects[i]);
+
+			pButton->OnClick(callbacks[pButton->GetOnClickID()]);
+			pButton->OnEnter(callbacks[pButton->GetOnEnterID()]);
+			pButton->OnLeave(callbacks[pButton->GetOnLeaveID()]);
+		}
+	}
+}
+
 
 bool PauseState::s_continueGame()
 {

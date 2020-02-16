@@ -9,6 +9,7 @@
 #include "GameObject.h"
 #include "Player.h"
 #include "Enemy.h"
+#include "TestObject.h"
 #include "GameStateManager.h"
 #include "MainMenuState.h"
 #include "PlayState.h"

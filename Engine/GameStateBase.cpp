@@ -27,6 +27,7 @@ bool GameStateBase::OnEnd()
 	}
 
 	m_GameObjects.clear();
+	m_TextureIDList.clear();
 
 	return true;
 }

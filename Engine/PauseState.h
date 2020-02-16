@@ -2,11 +2,11 @@
 #ifndef __UI_PLAYSTATE_H__
 #define __UI_PLAYSTATE_H__
 
-#include "GameStateBase.h"
+#include "MenuState.h"
 #include "GameObject.h"
 #include <vector>
 
-class PauseState : public GameStateBase {
+class PauseState : public MenuState {
 public:
 	virtual bool OnPlay();
 	virtual bool OnEnd();
@@ -14,6 +14,8 @@ public:
 	virtual std::string GetStateID() const { return s_UIID; }
 
 private:
+	virtual void SetCallbacks(const std::vector<ButtonCallback>& callbacks);
+
 	static const std::string s_UIID;
 
 	static bool s_continueGame();

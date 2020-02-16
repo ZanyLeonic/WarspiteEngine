@@ -37,7 +37,9 @@ bool Game::Init(const char* title, int xpos, int ypos, int width, int height, bo
 				SDL_SetRenderDrawColor(m_pRenderer,
 					255, 255, 255, 255);
 
+				GameObjectFactory::Instance()->RegisterType("Player", new PlayerCreator());
 				GameObjectFactory::Instance()->RegisterType("Button", new ButtonCreator());
+				GameObjectFactory::Instance()->RegisterType("TestObject", new TestObjectCreator());
 
 				m_pGameStateManager = new GameStateManager();
 				m_pGameStateManager->ModifyState(new MainMenuState());

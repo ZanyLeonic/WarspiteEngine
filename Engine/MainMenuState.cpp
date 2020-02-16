@@ -5,7 +5,7 @@
 #include "StateParser.h"
 #include <iostream>
 
-const std::string MainMenuState::s_UIID = "MENU";
+const std::string MainMenuState::s_UIID = "MainMenu";
 
 bool MainMenuState::OnPlay()
 {
@@ -13,7 +13,7 @@ bool MainMenuState::OnPlay()
 
 	// Parse the state
 	StateParser sp;
-	sp.ParseState("assets/Test.json", "MainMenu", &m_GameObjects, &m_TextureIDList);
+	sp.ParseState("assets/states/SystemMenus.json", s_UIID, &m_GameObjects, &m_TextureIDList);
 
 	m_callbacks.push_back(0);
 	m_callbacks.push_back(s_menuToPlay);

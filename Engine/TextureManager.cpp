@@ -30,6 +30,9 @@ bool TextureManager::Load(std::string fileName, std::string id, SDL_Renderer* pR
 
 void TextureManager::Draw(std::string id, int x, int y, int width, int height, SDL_Renderer* pRenderer, SDL_RendererFlip flip)
 {
+	// Don't try to draw if there is no id specified.
+	if (id == "") return;
+
 	SDL_Rect srcRect;
 	SDL_Rect destRect;
 
@@ -46,6 +49,8 @@ void TextureManager::Draw(std::string id, int x, int y, int width, int height, S
 
 void TextureManager::DrawFrame(std::string id, int x, int y, int width, int height, int currentRow, int currentFrame, SDL_Renderer* pRenderer, SDL_RendererFlip flip)
 {
+	if (id == "") return;
+
 	SDL_Rect srcRect;
 	SDL_Rect destRect;
 	srcRect.x = width * currentFrame;
