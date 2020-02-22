@@ -5,7 +5,7 @@
 
 trigger:
 - master
-- last-iteration
+- develop
 
 jobs:
 - job: Windows
@@ -33,7 +33,7 @@ jobs:
         
   - script: C:\vcpkg\vcpkg.exe install sdl2 sdl2-image rapidjson --triplet x64-windows
     condition: ne(variables.VCPKG_CACHE_RESTORED, 'true')
-    displayName: "Installing SDL2 and SDL2-image"
+    displayName: "Installing dependencies"
 
   - script: mkdir build
     displayName: "Making build folder"
