@@ -21,10 +21,7 @@
 			  "height": 32,
 			  "textureID" : "PlayButton",
 			  "onClickID": 1,
-			  "onEnterID": 0,
-			  "onLeaveID": 0,
-			  "numFrames" : 3,
-			  "animSpeed" : 1
+			  "numFrames" : 3
 			},
 			{
 			  "type": "Button",
@@ -34,10 +31,7 @@
 			  "height": 32,
 			  "textureID" : "ExitButton",
 			  "onClickID": 2,
-			  "onEnterID": 0,
-			  "onLeaveID": 0,
-			  "numFrames" : 3,
-			  "animSpeed" : 1
+			  "numFrames" : 3
 			}
 		  ]
 		},
@@ -62,10 +56,7 @@
 			  "height": 32,
 			  "textureID" : "ResumeButton",
 			  "onClickID": 1,
-			  "onEnterID": 0,
-			  "onLeaveID": 0,
-			  "numFrames" : 3,
-			  "animSpeed" : 1
+			  "numFrames" : 3
 			},
 			{
 			  "type": "Button",
@@ -75,10 +66,7 @@
 			  "height": 32,
 			  "textureID" : "ExitButton",
 			  "onClickID": 2,
-			  "onEnterID": 0,
-			  "onLeaveID": 0,
-			  "numFrames" : 3,
-			  "animSpeed" : 1
+			  "numFrames" : 3
 			}
 		  ]
 		}

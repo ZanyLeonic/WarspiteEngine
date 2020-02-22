@@ -31,7 +31,9 @@ bool StateParser::ParseState(const char* stateFile, std::string stateID, std::ve
 		char readBuffer[4096];
 		FileReadStream is(fp, readBuffer, sizeof(readBuffer));
 
-		jDoc.ParseStream<0, UTF8<>, FileReadStream>(is);
+		jDoc.ParseStream(is);
+
+		fclose(fp);
 
 		// Have we parsed the JSON correctly?
 		if (jDoc.HasParseError())
@@ -47,11 +49,8 @@ bool StateParser::ParseState(const char* stateFile, std::string stateID, std::ve
 
 		assert(jDoc["states"].IsArray());
 
-		// Need to store the size in a variable first due to issues
-		SizeType l = jDoc["states"].GetArray().Size();
-
 		// Try and find our state the caller wants.
-		for (SizeType i = 0; i < l && state.GetType() == Type::kFalseType; i++)
+		for (SizeType i = 0; i < jDoc["states"].Size() && state.GetType() == Type::kFalseType; i++)
 		{
 			// if it matches...
 			if (jDoc["states"][i]["id"].GetString() == stateID)
@@ -65,7 +64,6 @@ bool StateParser::ParseState(const char* stateFile, std::string stateID, std::ve
 		if (state.IsBool())
 		{
 			// we didn't find it.
-			fclose(fp);
 
 			std::cout << "Could not find state \"" << stateID << "\" in file \"" << stateFile << "\"\n";
 
@@ -74,8 +72,6 @@ bool StateParser::ParseState(const char* stateFile, std::string stateID, std::ve
 
 		// Find out what textures we need for the state.
 		const Value& textures = state["textures"].GetArray();
-
-		printf("textures = %s\n", getJSON(&textures).c_str());
 		assert(textures.IsArray());
 
 		// Load the textures into the TextureManager
@@ -87,9 +83,6 @@ bool StateParser::ParseState(const char* stateFile, std::string stateID, std::ve
 
 		// Add the Objects to the passed m_GameObjects
 		ParseObjects(&objects, pObjects);
-
-		// Close the file handle
-		fclose(fp);
 
 		return true;
 	}
@@ -113,18 +106,20 @@ void StateParser::ParseObjects(const rapidjson::Value* pStateRoot, std::vector<G
 		std::string textureID;
 
 		// Retrieve the relevant information from the object declaration...
+		// Required
 		x = b["x"].GetInt();
 		y = b["y"].GetInt();
 		width = b["width"].GetInt();
 		height = b["height"].GetInt();
-		numFrames = b["numFrames"].IsInt() ? b["numFrames"].GetInt() : 1;
-		animSpeed = b["animSpeed"].IsInt() ? b["animSpeed"].GetInt() : 1;
-
 		textureID = b["textureID"].GetString();
 
-		onClickCallback = b["onClickID"].IsInt() ? b["onClickID"].GetInt() : 0;
-		onEnterCallback = b["onEnterID"].IsInt() ? b["onEnterID"].GetInt() : 0;
-		onLeaveCallback = b["onLeaveID"].IsInt() ? b["onLeaveID"].GetInt() : 0;
+		// Optional
+		numFrames = b.HasMember("numFrames") ? b["numFrames"].GetInt() : 1;
+		animSpeed = b.HasMember("animSpeed") ? b["animSpeed"].GetInt() : 1;
+
+		onClickCallback = b.HasMember("onClickID") ? b["onClickID"].GetInt() : 0;
+		onEnterCallback = b.HasMember("onEnterID") ? b["onEnterID"].GetInt() : 0;
+		onLeaveCallback = b.HasMember("onLeaveID") ? b["onLeaveID"].GetInt() : 0;
 
 		// Attempt to create the object type.
 		GameObject* pGameObject =
