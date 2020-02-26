@@ -14,6 +14,8 @@ set(WarspiteEngine_Src
     InputHandler.cpp
     main.cpp
     ObjectParams.h
+    Level.cpp
+    LevelParser.cpp
     PauseState.cpp
     Player.cpp
     PlayState.cpp
@@ -21,6 +23,7 @@ set(WarspiteEngine_Src
     StateParser.cpp
     TestObject.cpp
     TextureManager.cpp
+    TileLayer.cpp
     MainMenuState.cpp
 )
 
@@ -36,6 +39,9 @@ set(WarspiteEngine_Header
     GameStateBase.h
     GameStateManager.h
     InputHandler.h
+    Layer.h
+    Level.h
+    LevelParser.h
     PauseState.h
     Player.h
     PlayState.h
@@ -43,6 +49,7 @@ set(WarspiteEngine_Header
     StateParser.h
     TestObject.h
     TextureManager.h
+    TileLayer.h
     MainMenuState.h
 	MenuState.h
     Vector2D.h
