@@ -1,5 +1,10 @@
 #include "Level.h"
 
+Level::Level()
+{
+
+}
+
 void Level::OnThink()
 {
 	for (int i = 0; i < m_layers.size(); i++)

@@ -38,8 +38,7 @@ private:
 	Vector2D m_position;
 	Vector2D m_velocity;
 
-	const std::vector<Tileset>& m_tilesets;
-
+	// std::vector<Tileset>& m_tilesets;
 	std::vector<std::vector<int>> m_tileIDs;
 };
 

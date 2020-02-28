@@ -1,6 +1,7 @@
 #include "Game.h"
 #include "TextureManager.h"
 #include "InputHandler.h"
+#include "LevelParser.h"
 #include "GameObjectFactory.h"
 #include "Button.h"
 #include <iostream>
@@ -25,6 +26,9 @@ bool Game::Init(const char* title, int xpos, int ypos, int width, int height, bo
 		std::cout << "SDL init success\n";
 		// init the window
 		m_pWindow = SDL_CreateWindow(title, xpos, ypos, width, height, flags);
+
+		LevelParser ls;
+		ls.ParseLevel("assets/maps/untitled.json");
 
 		if (m_pWindow != 0)
 		{

@@ -9,6 +9,7 @@
 
 struct Tileset
 {
+	int FirstGID;
 	int TileWidth;
 	int TileHeight;
 	int Spacing;
@@ -22,7 +23,6 @@ struct Tileset
 class Level
 {
 public:
-	Level();
 	~Level() {};
 
 	void OnThink();
