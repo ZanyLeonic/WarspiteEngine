@@ -68,7 +68,7 @@ find_package(Python3 COMPONENTS Interpreter REQUIRED)
 find_package(SDL2 CONFIG REQUIRED)
 find_package(sdl2-image CONFIG REQUIRED)
 find_package(rapidjson CONFIG REQUIRED)
-
+find_package(ZLIB REQUIRED)
 
 add_custom_target(projMetadata 
 	COMMAND ${Python_EXECUTABLE} "${CMAKE_CURRENT_SOURCE_DIR}/GitVersion.py"
@@ -87,6 +87,7 @@ endif()
 set (Warspite_Libs
 	${SDL2_LIBRARIES}
 	${SDL2IMAGE_LIBRARIES}
+	ZLIB::ZLIB
 )
 
 include_directories(${SDL2_INCLUDE_DIRS})

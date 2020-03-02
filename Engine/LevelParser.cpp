@@ -1,12 +1,27 @@
 #include "LevelParser.h"
 #include "Level.h"
+#include "TileLayer.h"
 #include "TextureManager.h"
 #include "Game.h"
 
 #include <iostream>
 #include <rapidjson/filereadstream.h>
+#include <rapidjson/writer.h>
+#include "etc/Base64.h"
+#include <zlib.h>
 
 using namespace rapidjson;
+
+// Debug: Serializes JSON
+std::string getJSONs(const Value* pStateRoot)
+{
+	StringBuffer sb;
+	Writer<StringBuffer> writer(sb);
+
+	pStateRoot->Accept(writer);
+
+	return sb.GetString();
+}
 
 Level* LevelParser::ParseLevel(const char* levelFile)
 {
@@ -91,20 +106,24 @@ void LevelParser::parseTilesets(const rapidjson::Value* pTilesetRoot, std::vecto
 
 			fclose(tHandle);
 
-			TextureManager::Instance()->Load(tileset["image"].GetString(),
-				tileset["name"].GetString(), Game::Instance()->GetRenderer());
+			const Value& t = tileset.GetObject();
+
+			TextureManager::Instance()->Load(t["image"].GetString(),
+				t["name"].GetString(), Game::Instance()->GetRenderer());
 
 			Tileset ts;
 
-			ts.Width = tileset["width"].GetInt();
-			ts.Height = tileset["height"].GetInt();
-			ts.FirstGID = tileset["firstgid"].GetInt();
-			ts.TileWidth = tileset["tilewidth"].GetInt();
-			ts.TileHeight = tileset["tileheight"].GetInt();
-			ts.Spacing = tileset["spacing"].GetInt();
-			ts.Margin = tileset["margin"].GetInt();
+			std::cout << getJSONs(&t) << std::endl;
 
-			ts.Name = tileset["name"].GetString();
+			ts.Width = t["imagewidth"].GetInt();
+			ts.Height = t["imageheight"].GetInt();
+			ts.FirstGID = t.HasMember("firstgid") ? t["firstgid"].GetInt() : 1; // got no gid? must be the first
+			ts.TileWidth = t["tilewidth"].GetInt();
+			ts.TileHeight = t["tileheight"].GetInt();
+			ts.Spacing = t["spacing"].GetInt();
+			ts.Margin = t["margin"].GetInt();
+
+			ts.Name = t["name"].GetString();
 
 			ts.NumColumns = ts.Width / (ts.TileWidth + ts.Spacing);
 
@@ -113,10 +132,23 @@ void LevelParser::parseTilesets(const rapidjson::Value* pTilesetRoot, std::vecto
 	}
 	else
 	{
-		throw "Unimplemented!";
+		// throw "Unimplemented!";
 	}
 }
 
 void LevelParser::parseTileLayer(const rapidjson::Value* pTileElement, std::vector<Layer*>* pLayers, const std::vector<Tileset>* pTilesets)
 {
+	const Value::ConstObject& obj = pTileElement->GetObject();
+
+	TileLayer* pTileLayer = new TileLayer(m_tileSize, *pTilesets);
+
+	// tiles
+	std::vector<std::vector<int>> data;
+
+	std::string decodedIDs;
+	std::string rawData = obj["data"].GetString();
+
+	decodedIDs = base64_decode(rawData);
+
+	uLongf numGids = m_width * m_height * sizeof(int);
 }

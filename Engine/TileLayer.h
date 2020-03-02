@@ -13,7 +13,9 @@ class TileLayer :
 {
 public:
 
-	TileLayer(int tileSize, const std::vector<Tileset>& tilesets);
+	TileLayer(int tileSize, const std::vector<Tileset>& tileset)
+		: m_tileSize(tileSize), m_tilesets(std::vector<Tileset>(tileset))
+	{};
 
 	virtual void OnThink();
 	virtual void Draw();
@@ -38,7 +40,7 @@ private:
 	Vector2D m_position;
 	Vector2D m_velocity;
 
-	// std::vector<Tileset>& m_tilesets;
+	std::vector<Tileset>& m_tilesets = std::vector<Tileset>();
 	std::vector<std::vector<int>> m_tileIDs;
 };
 
