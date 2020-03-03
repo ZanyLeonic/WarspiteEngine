@@ -3,7 +3,8 @@
 
 TextureManager* TextureManager::s_pInstance = 0;
 
-bool TextureManager::Load(std::string fileName, std::string id, SDL_Renderer* pRenderer)
+bool TextureManager::Load(std::string fileName, std::string id, 
+	SDL_Renderer* pRenderer)
 {
 	SDL_Surface* pTempSurface = IMG_Load(fileName.c_str());
 
@@ -28,7 +29,9 @@ bool TextureManager::Load(std::string fileName, std::string id, SDL_Renderer* pR
 	return false;
 }
 
-void TextureManager::Draw(std::string id, int x, int y, int width, int height, SDL_Renderer* pRenderer, SDL_RendererFlip flip)
+void TextureManager::Draw(std::string id, int x, int y, 
+	int width, int height, SDL_Renderer* pRenderer, 
+	SDL_RendererFlip flip)
 {
 	// Don't try to draw if there is no id specified.
 	if (id == "") return;
@@ -47,7 +50,9 @@ void TextureManager::Draw(std::string id, int x, int y, int width, int height, S
 		&destRect, 0, 0, flip);
 }
 
-void TextureManager::DrawFrame(std::string id, int x, int y, int width, int height, int currentRow, int currentFrame, SDL_Renderer* pRenderer, SDL_RendererFlip flip)
+void TextureManager::DrawFrame(std::string id, int x, int y, 
+	int width, int height, int currentRow, int currentFrame, 
+	SDL_Renderer* pRenderer, SDL_RendererFlip flip)
 {
 	if (id == "") return;
 
@@ -60,7 +65,29 @@ void TextureManager::DrawFrame(std::string id, int x, int y, int width, int heig
 	destRect.x = x;
 	destRect.y = y;
 
-	SDL_RenderCopyEx(pRenderer, m_textureMap[id], &srcRect, &destRect, 0, 0, flip);
+	SDL_RenderCopyEx(pRenderer, m_textureMap[id], 
+		&srcRect, &destRect, 0, 0, flip);
+}
+
+void TextureManager::DrawTile(std::string id, int margin, int spacing, 
+	int x, int y, int width, int height, int currentRow, 
+	int currentFrame, SDL_Renderer* pRenderer)
+{
+	SDL_Rect srcRect;
+	SDL_Rect destRect;
+
+	// Get the tile from the tileset we want...
+	srcRect.x = margin + (spacing + width) * currentFrame;
+	srcRect.y = margin + (spacing + height) * currentRow;
+	srcRect.w = destRect.w = width;
+	srcRect.h = destRect.h = height;
+	
+	destRect.x = x;
+	destRect.y = y;
+
+	// render it on the renderer
+	SDL_RenderCopyEx(pRenderer, m_textureMap[id], 
+		&srcRect, &destRect, 0, 0, SDL_FLIP_NONE);
 }
 
 void TextureManager::Remove(std::string id)

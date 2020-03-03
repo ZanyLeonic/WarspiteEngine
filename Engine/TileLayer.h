@@ -4,6 +4,7 @@
 
 #include <vector>
 
+#include "Game.h"
 #include "Level.h"
 #include "Layer.h"
 #include "Vector2D.h"
@@ -15,7 +16,10 @@ public:
 
 	TileLayer(int tileSize, const std::vector<Tileset>& tileset)
 		: m_tileSize(tileSize), m_tilesets(std::vector<Tileset>(tileset))
-	{};
+	{
+		m_numColumns = (Game::Instance()->GetViewportSize().GetX());
+		m_numRows = (Game::Instance()->GetViewportSize().GetY());
+	};
 
 	virtual void OnThink();
 	virtual void Draw();

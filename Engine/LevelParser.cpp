@@ -81,6 +81,8 @@ void LevelParser::parseTilesets(const rapidjson::Value* pTilesetRoot, std::vecto
 {
 	const Value::ConstObject& obj = pTilesetRoot->GetObject();
 
+	int fg = obj["firstgid"].GetInt();
+
 	if (obj.HasMember("source"))
 	{
 		Document tileset;
@@ -117,7 +119,7 @@ void LevelParser::parseTilesets(const rapidjson::Value* pTilesetRoot, std::vecto
 
 			ts.Width = t["imagewidth"].GetInt();
 			ts.Height = t["imageheight"].GetInt();
-			ts.FirstGID = t.HasMember("firstgid") ? t["firstgid"].GetInt() : 1; // got no gid? must be the first
+			ts.FirstGID = fg;
 			ts.TileWidth = t["tilewidth"].GetInt();
 			ts.TileHeight = t["tileheight"].GetInt();
 			ts.Spacing = t["spacing"].GetInt();
@@ -151,4 +153,26 @@ void LevelParser::parseTileLayer(const rapidjson::Value* pTileElement, std::vect
 	decodedIDs = base64_decode(rawData);
 
 	uLongf numGids = m_width * m_height * sizeof(int);
+	std::vector<unsigned> gids(numGids);
+	uncompress((Bytef*)&gids[0], &numGids, 
+		(const Bytef*)decodedIDs.c_str(), decodedIDs.size());
+
+	std::vector<int> layerRow(m_width);
+
+	for (int j = 0; j < m_height; j++)
+	{
+		data.push_back(layerRow);
+	}
+
+	for (int rows = 0; rows < m_height; rows++)
+	{
+		for (int cols = 0; cols < m_width; cols++)
+		{
+			data[rows][cols] = gids[rows * m_width + cols];
+		}
+
+		pTileLayer->SetTileIDs(data);
+
+		pLayers->push_back(pTileLayer);
+	}
 }

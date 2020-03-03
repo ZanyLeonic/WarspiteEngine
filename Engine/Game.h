@@ -13,6 +13,7 @@
 #include "GameStateManager.h"
 #include "MainMenuState.h"
 #include "PlayState.h"
+#include "Vector2D.h"
 
 class Game
 {
@@ -50,6 +51,8 @@ public:
 	SDL_Window* GetWindow() const { return m_pWindow; }
 	GameStateManager* GetStateManager() const { return m_pGameStateManager; }
 
+	Vector2D GetViewportSize() const { return m_viewportSize; }
+
 private:
 
 	GameStateManager* m_pGameStateManager;
@@ -60,6 +63,8 @@ private:
 	SDL_Texture* m_pTexture = nullptr; // the new SDL_Texture variable
 	SDL_Rect m_sourceRectangle = {}; // the first rectangle
 	SDL_Rect m_destinationRectangle = {}; // another rectangle
+
+	Vector2D m_viewportSize;
 
 	bool m_bRunning = false;
 };

@@ -55,6 +55,17 @@ set(WarspiteEngine_Header
     Vector2D.h
 )
 
+# Thirdparty code
+set (WarspiteEngine_Src
+	${WarspiteEngine_Src}
+	etc/Base64.cpp
+)
+
+set (WarspiteEngine_Header
+	${WarspiteEngine_Header}
+	etc/Base64.h
+)
+
 if (WIN32)
     # Workaround for RelWithDebInfo builds not installing all the libraries
     set(CMAKE_MAP_IMPORTED_CONFIG_MINSIZEREL Release)

@@ -4,6 +4,7 @@
 #include "TestObject.h"
 #include "PauseState.h"
 #include "StateParser.h"
+#include "LevelParser.h"
 #include <iostream>
 
 #include "PlayState.h"
@@ -17,6 +18,9 @@ bool PlayState::OnPlay()
 	StateParser sp;
 	sp.ParseState("assets/states/PlayState.json", s_playID, &m_GameObjects, &m_TextureIDList);
 
+	LevelParser lp;
+	pLevel = lp.ParseLevel("assets/maps/untitled.json");
+
 	InputHandler::Instance()->AddActionKeyDown(SDL_SCANCODE_ESCAPE, [this] {
 			Game::Instance()->GetStateManager()->PushState(new PauseState());
 	});
@@ -24,6 +28,11 @@ bool PlayState::OnPlay()
 	std::cout << "Entering PlayState\n";
 	
 	return true;
+}
+
+void PlayState::Draw()
+{
+	pLevel->Draw();
 }
 
 bool PlayState::OnEnd()
