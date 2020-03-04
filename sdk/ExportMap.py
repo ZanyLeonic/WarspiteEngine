@@ -1,10 +1,13 @@
 #!/usr/bin/env python3
-
 import os, sys, json
 from pathlib import Path
 from shutil import copyfile
 
-workingDir = Path(os.getcwd())
+try:
+    workingDir = Path(sys.argv[2])
+except IndexError:
+    workingDir = Path(os.getcwd())
+
 mapFile = Path(sys.argv[1]) # expecting the first parameter after the script to be the map file.
 baseFolder = "assets" # the base folder for storing assets - can be game folder or generic engine assets
 
@@ -56,7 +59,7 @@ for j, i in enumerate(mapData["tilesets"]):
         # It's an embedded tileset
         cTileset = i
     
-    npTileset = Path(os.path.join(workingDir, baseFolder, "tilesets", pTileset.parent))
+    npTileset = Path(os.path.join(workingDir, baseFolder, "tilesets", pTileset.name))
 
     # Usually relative to the tileset
     iTileSet = Path(os.path.join(pTileset.parent, cTileset["image"]))
@@ -82,9 +85,24 @@ for j, i in enumerate(mapData["tilesets"]):
             with ws:
                 json.dump(cTileset, ws)
         
-        #i[]
+        mapData["tilesets"][j]["source"] = str(npTileset.relative_to(workingDir))
     else:
         mapData["tilesets"][j] = cTileset
+
+print("Copied tilesets!")
+nMapFile = Path(os.path.join(workingDir, baseFolder, "maps", mapFile.name))
+
+try:
+    jw = open(nMapFile, "w")
+except OSError as e:
+    print("An error occurred while writing \"%s\"!" % str(nMapFile.absolute()))
+    print("Error:\n%s" % str(e))    
+else:
+    with jw:
+        json.dump(mapData, jw)
+
+print("Rewrote map files!")
+
 
 
 

@@ -9,9 +9,8 @@
             "type": "python",
             "request": "launch",
             "program": "${workspaceFolder}/sdk/ExportMap.py",
-            "args": ["${workspaceFolder}/sdk/test.json"],
-            "console": "integratedTerminal",
-            "cwd": "${workspaceFolder}/Engine"
+            "args": ["${workspaceFolder}/sdk/test.json", "${workspaceFolder}/Engine"],
+            "console": "integratedTerminal"
         }
     ]
 }
