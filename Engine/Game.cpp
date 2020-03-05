@@ -26,14 +26,12 @@ bool Game::Init(const char* title, int xpos, int ypos, int width, int height, bo
 		std::cout << "SDL init success\n";
 		// init the window
 		m_pWindow = SDL_CreateWindow(title, xpos, ypos, width, height, flags);
-
-		LevelParser ls;
-		ls.ParseLevel("assets/maps/untitled.json");
+		m_viewportSize = Vector2D(width, height);
 
 		if (m_pWindow != 0)
 		{
 			std::cout << "Window creation success\n";
-			m_pRenderer = SDL_CreateRenderer(m_pWindow, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_TARGETTEXTURE);
+			m_pRenderer = SDL_CreateRenderer(m_pWindow, -1, SDL_RENDERER_ACCELERATED);
 
 			if (m_pRenderer != 0) // render init success
 			{

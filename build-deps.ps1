@@ -35,12 +35,12 @@ function InstallPackages() {
     if (!(Get-Command $vcpkg  -ErrorAction SilentlyContinue)) {
         if (!(Test-Path build/vcpkg)) {
             mkdir build -Force | Out-Null
-            pushd build
+            Push-Location build
             & git clone https://github.com/Microsoft/vcpkg.git --depth 1
-            pushd vcpkg
+            Push-Location vcpkg
             ./bootstrap-vcpkg -disableMetrics
-            popd
-            popd
+            Pop-Location
+            Pop-Location
         }
         $vcpkg = "build/vcpkg/vcpkg.exe"
         $local_vcpkg = $true

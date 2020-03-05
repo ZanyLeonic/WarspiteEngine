@@ -14,7 +14,7 @@ jobs:
   steps:
   - task: Cache@2
     inputs:
-      key: 'v3 | vcpkg | "$(Agent.OS)" | "C:\vcpkg\.git\HEAD"'
+      key: 'v4 | vcpkg | "$(Agent.OS)" | "C:\vcpkg\.git\HEAD"'
       restoreKeys: |
         v3 | vcpkg | "$(Agent.OS)"
         vcpkg | "$(Agent.OS)"
@@ -31,7 +31,7 @@ jobs:
         cd %VCPKG_INSTALLATION_ROOT%
         bootstrap-vcpkg.bat -disableMetrics
         
-  - script: C:\vcpkg\vcpkg.exe install sdl2 sdl2-image rapidjson zlib --triplet x64-windows
+  - script: C:\vcpkg\vcpkg.exe install sdl2 sdl2-image[libjpeg-turbo,libwebp,tiff] rapidjson zlib --triplet x64-windows
     condition: ne(variables.VCPKG_CACHE_RESTORED, 'true')
     displayName: "Installing dependencies"
 
@@ -40,7 +40,7 @@ jobs:
   - task: CMake@1
     displayName: "Generating build files"
     inputs:
-        cmakeArgs: '-DCMAKE_TOOLCHAIN_FILE=C:\vcpkg\scripts\buildsystems\vcpkg.cmake -DCMAKE_BUILD_TYPE="Debug" -DVCPKG_TARGET_TRIPLET=x64-windows -DCMAKE_INSTALL_PREFIX=$(System.DefaultWorkingDirectory) ..'
+        cmakeArgs: '-DCMAKE_TOOLCHAIN_FILE=C:\vcpkg\scripts\buildsystems\vcpkg.cmake -DVCPKG_TARGET_TRIPLET=x64-windows -DCMAKE_INSTALL_PREFIX=$(System.DefaultWorkingDirectory) ..'
   - task: PythonScript@0
     displayName: "Generating build metadata"
     inputs:

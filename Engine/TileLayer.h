@@ -14,9 +14,10 @@ class TileLayer :
 {
 public:
 
-	TileLayer(int tileSize, const std::vector<Tileset>& tileset)
-		: m_tileSize(tileSize), m_tilesets(std::vector<Tileset>(tileset))
+	TileLayer(int tileSize, const std::vector<Tileset>& tilesets)
+		: m_tileSize(tileSize)
 	{
+		m_tilesets = tilesets;
 		m_numColumns = (Game::Instance()->GetViewportSize().GetX());
 		m_numRows = (Game::Instance()->GetViewportSize().GetY());
 	};

@@ -11,6 +11,8 @@ except IndexError:
 mapFile = Path(sys.argv[1]) # expecting the first parameter after the script to be the map file.
 baseFolder = "assets" # the base folder for storing assets - can be game folder or generic engine assets
 
+print("Processing map %s..." % mapFile.name)
+
 # A few checks
 if not (os.path.isfile(mapFile)):
     print("Cannot find map file \"%s\"!" % mapFile)
@@ -102,6 +104,7 @@ else:
         json.dump(mapData, jw)
 
 print("Rewrote map files!")
+print("Moved \"%s\" to \"%s\"" % (str(nMapFile.name), str(nMapFile.parent)))
 
 
 
