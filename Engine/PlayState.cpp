@@ -19,7 +19,7 @@ bool PlayState::OnPlay()
 	sp.ParseState("assets/states/PlayState.json", s_playID, &m_GameObjects, &m_TextureIDList);
 
 	LevelParser lp;
-	pLevel = lp.ParseLevel("assets/maps/testMap.json");
+	pLevel = lp.ParseLevel("assets/maps/meow.json");
 
 	InputHandler::Instance()->AddActionKeyDown(SDL_SCANCODE_ESCAPE, [this] {
 			Game::Instance()->GetStateManager()->PushState(new PauseState());
