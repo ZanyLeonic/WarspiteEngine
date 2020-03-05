@@ -33,6 +33,7 @@ bool PlayState::OnPlay()
 void PlayState::Draw()
 {
 	pLevel->Draw();
+	GameStateBase::Draw();
 }
 
 bool PlayState::OnEnd()
