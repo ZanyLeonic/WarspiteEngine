@@ -16,7 +16,7 @@ jobs:
     inputs:
       key: 'v4 | vcpkg | "$(Agent.OS)" | "C:\vcpkg\.git\HEAD"'
       restoreKeys: |
-        v3 | vcpkg | "$(Agent.OS)"
+        v4 | vcpkg | "$(Agent.OS)"
         vcpkg | "$(Agent.OS)"
         vcpkg
       path: 'C:\vcpkg\'
