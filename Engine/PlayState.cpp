@@ -19,7 +19,7 @@ bool PlayState::OnPlay()
 	sp.ParseState("assets/states/PlayState.json", s_playID, &m_GameObjects, &m_TextureIDList);
 
 	LevelParser lp;
-	pLevel = lp.ParseLevel("assets/maps/testMap.json");
+	pLevel = lp.ParseLevel("assets/maps/help2.json");
 
 	InputHandler::Instance()->AddActionKeyDown(SDL_SCANCODE_ESCAPE, [this] {
 			Game::Instance()->GetStateManager()->PushState(new PauseState());
@@ -33,6 +33,14 @@ bool PlayState::OnPlay()
 void PlayState::Draw()
 {
 	pLevel->Draw();
+	// gameobjects and stuff
+	GameStateBase::Draw();
+}
+
+void PlayState::OnThink()
+{
+	pLevel->OnThink();
+	GameStateBase::OnThink();
 }
 
 bool PlayState::OnEnd()

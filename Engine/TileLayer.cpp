@@ -5,6 +5,7 @@
 void TileLayer::OnThink()
 {
 	m_position += m_velocity;
+	m_velocity.SetX(1);
 }
 
 void TileLayer::Draw()

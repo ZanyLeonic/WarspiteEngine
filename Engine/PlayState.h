@@ -11,6 +11,7 @@ class PlayState :
 public:
 	virtual bool OnPlay();
 	virtual void Draw();
+	virtual void OnThink();
 	virtual bool OnEnd();
 
 	virtual std::string GetStateID() const { return s_playID; }
