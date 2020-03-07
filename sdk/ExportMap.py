@@ -92,8 +92,20 @@ for j, i in enumerate(mapData["tilesets"]):
         mapData["tilesets"][j] = cTileset
 
 print("Copied tilesets!")
-nMapFile = Path(os.path.join(workingDir, baseFolder, "maps", mapFile.name))
 
+# Does the map have custom properties?
+if ("properties" in mapData):
+    for i, j in enumerate(mapData["properties"]):
+        if(j["type"] == "file"):
+            propFile=Path(mapFile.parent, j["value"])
+            nPropFile=Path(workingDir, baseFolder, propFile.name)
+            if (propFile.resolve() != nPropFile.resolve()):
+                copyfile(propFile, nPropFile)
+
+            mapData["properties"][i]["value"] = str(nPropFile.relative_to(workingDir))
+print ("Checked property values")
+
+nMapFile = Path(os.path.join(workingDir, baseFolder, "maps", mapFile.name))
 try:
     jw = open(nMapFile, "w")
 except OSError as e:
