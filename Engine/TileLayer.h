@@ -18,10 +18,8 @@ public:
 		: m_tileSize(tileSize)
 	{
 		m_tilesets = tilesets;
-		m_numColumns = (Game::Instance()->GetViewportSize().GetX()
-			/ m_tileSize);
-		m_numRows = (Game::Instance()->GetViewportSize().GetY()
-			/ m_tileSize);
+		m_numColumns = (Game::Instance()->GetViewportSize().GetX() / m_tileSize);
+		m_numRows = (Game::Instance()->GetViewportSize().GetY() / m_tileSize);
 	};
 
 	virtual void OnThink();
