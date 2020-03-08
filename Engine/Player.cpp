@@ -1,11 +1,11 @@
 #include "Player.h"
 #include "InputHandler.h"
+#include "Camera.h"
 #include "Game.h"
 #include <iostream>
-#include <time.h>
 
 Player::Player()
-	: SDLGameObject()
+	: WarspiteObject()
 {
 
 }
@@ -15,7 +15,7 @@ void Player::Load(const ObjectParams* pParams)
 	InputHandler::Instance()->AddActionKeyDown(SDL_SCANCODE_C, std::bind(&Player::KeyDown, this));
 	InputHandler::Instance()->AddActionKeyUp(SDL_SCANCODE_C, std::bind(&Player::KeyUp, this));
 
-	SDLGameObject::Load(pParams);
+	WarspiteObject::Load(pParams);
 }
 
 bool Player::OnThink()
@@ -30,10 +30,11 @@ bool Player::OnThink()
 	if (moving)
 	{
 		m_position = VectorMath::Lerp(lastPosition, nextPosition, (timeLeft / 100));
+		Camera::Instance()->SetPosition(m_position);
 		m_currentFrame = int(((SDL_GetTicks() / (1000 / 4)) % 2));
 	}
 
-	SDLGameObject::OnThink();
+	WarspiteObject::OnThink();
 	return true;
 }
 

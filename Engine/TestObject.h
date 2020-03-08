@@ -2,10 +2,10 @@
 #ifndef __TestObject_h__
 #define __TestObject_h__
 
-#include "SDLGameObject.h"
+#include "WarspiteObject.h"
 #include "BaseCreator.h"
 class TestObject :
-	public SDLGameObject
+	public WarspiteObject
 {
 public:
 	TestObject();

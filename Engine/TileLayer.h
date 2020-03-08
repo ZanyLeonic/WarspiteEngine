@@ -14,12 +14,16 @@ class TileLayer :
 {
 public:
 
-	TileLayer(int tileSize, const std::vector<Tileset>& tilesets)
+	TileLayer(int tileSize, int mapWidth, int mapHeight, 
+		const std::vector<Tileset>& tilesets)
 		: m_tileSize(tileSize)
 	{
 		m_tilesets = tilesets;
-		m_numColumns = (Game::Instance()->GetViewportSize().GetX() / m_tileSize);
-		m_numRows = (Game::Instance()->GetViewportSize().GetY() / m_tileSize);
+		m_numColumns = mapWidth;
+		m_numRows = mapHeight;
+
+		m_mapWidth = mapWidth;
+		m_mapHeight = mapHeight;
 	};
 
 	virtual void OnThink();
@@ -40,6 +44,8 @@ public:
 private:
 	int m_numColumns;
 	int m_numRows;
+	int m_mapWidth;
+	int m_mapHeight;
 	int m_tileSize;
 
 	Vector2D m_position;

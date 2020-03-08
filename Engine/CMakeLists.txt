@@ -6,6 +6,7 @@ cmake_minimum_required (VERSION 3.8)
 set(WarspiteEngine_Src
 	AnimatedGraphic.cpp
 	Button.cpp
+	Camera.cpp
 	Enemy.cpp
     GameObjectFactory.cpp
     Game.cpp
@@ -19,7 +20,7 @@ set(WarspiteEngine_Src
     PauseState.cpp
     Player.cpp
     PlayState.cpp
-    SDLGameObject.cpp
+    WarspiteObject.cpp
     StateParser.cpp
     TestObject.cpp
     TextureManager.cpp
@@ -31,6 +32,7 @@ set(WarspiteEngine_Header
 	AnimatedGraphic.h
     BaseCreator.h
     Button.h
+	Camera.h
     Enemy.h
     GameObject.h
     GameObjectFactory.h
@@ -45,7 +47,7 @@ set(WarspiteEngine_Header
     PauseState.h
     Player.h
     PlayState.h
-    SDLGameObject.h
+    WarspiteObject.h
 	ObjectParams.h
 	ObjectLayer.h
     StateParser.h

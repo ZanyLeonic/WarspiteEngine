@@ -2,9 +2,9 @@
 #ifndef __AnimatedGraphic_H__
 #define __AnimatedGraphic_H__
 
-#include "SDLGameObject.h"
+#include "WarspiteObject.h"
 
-class AnimatedGraphic : public SDLGameObject
+class AnimatedGraphic : public WarspiteObject
 {
 public:
 	AnimatedGraphic() {};

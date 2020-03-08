@@ -1,17 +1,17 @@
 #pragma once
 #pragma once
-#ifndef __SDLGameObject__
-#define __SDLGameObject__
+#ifndef __WarspiteObject__
+#define __WarspiteObject__
 
 #include "GameObject.h"
 #include "Vector2D.h"
 
-class SDLGameObject :
+class WarspiteObject :
 	public GameObject
 {
 public:
 
-	SDLGameObject();
+	WarspiteObject();
 
 	virtual void Draw();
 	virtual bool OnThink();
@@ -50,4 +50,4 @@ protected:
 	std::string m_textureID;
 };
 
-#endif /* defined(__SDLGameObject__) */
+#endif /* defined(__WarspiteObject__) */

@@ -3,10 +3,10 @@
 #define __BUTTON_H__
 
 #include <functional>
-#include "SDLGameObject.h"
+#include "WarspiteObject.h"
 #include "BaseCreator.h"
 
-class Button : public SDLGameObject
+class Button : public WarspiteObject
 {
 protected:
 	typedef std::function<bool()> ButtonCallback;

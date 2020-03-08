@@ -1,13 +1,13 @@
-#include "SDLGameObject.h"
+#include "WarspiteObject.h"
 #include "TextureManager.h"
 #include "Game.h"
 
-SDLGameObject::SDLGameObject() : GameObject()
+WarspiteObject::WarspiteObject() : GameObject()
 {
 
 }
 
-void SDLGameObject::Load(const ObjectParams* pParams)
+void WarspiteObject::Load(const ObjectParams* pParams)
 {
 	m_position = Vector2D(pParams->GetX(), pParams->GetY());
 	m_velocity = Vector2D(0, 0);
@@ -22,7 +22,7 @@ void SDLGameObject::Load(const ObjectParams* pParams)
 	m_numFrames = pParams->GetNumberOfFrames();
 }
 
-void SDLGameObject::Draw()
+void WarspiteObject::Draw()
 {
 	if (m_velocity.GetX() > 0)
 	{
@@ -38,7 +38,7 @@ void SDLGameObject::Draw()
 	}
 }
 
-bool SDLGameObject::OnThink()
+bool WarspiteObject::OnThink()
 {
 	m_velocity += m_acceleration;  
 	m_position += m_velocity;
@@ -46,6 +46,6 @@ bool SDLGameObject::OnThink()
 	return true;
 }
 
-void SDLGameObject::Destroy()
+void WarspiteObject::Destroy()
 {
 }

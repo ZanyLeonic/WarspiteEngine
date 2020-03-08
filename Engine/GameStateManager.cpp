@@ -17,7 +17,7 @@ void GameStateManager::PushState(GameStateBase* pState)
 
 void GameStateManager::PopState()
 {
-	// Check if the queue has items before popping
+	// Check if the queue has items before Popping
 	if (!m_GameStates.empty())
 	{
 		// Only remove the last item if their OnEnd implementation
@@ -26,7 +26,7 @@ void GameStateManager::PopState()
 		{
 			// Delete the actual object in memory
 			delete m_GameStates.back();
-			// ...and remove its pointer from the queue.
+			// ...and remove its Pointer from the queue.
 			m_GameStates.pop_back();
 		}
 	}

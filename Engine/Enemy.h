@@ -2,9 +2,9 @@
 #ifndef __Enemy__
 #define __Enemy__
 
-#include "SDLGameObject.h"
+#include "WarspiteObject.h"
 
-class Enemy : public SDLGameObject
+class Enemy : public WarspiteObject
 {
 public:
 	Enemy();

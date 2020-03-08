@@ -3,7 +3,7 @@
 #include "Game.h"
 
 Button::Button() :
-	SDLGameObject()
+	WarspiteObject()
 {
 	m_currentFrame = NO_HOVER; // Frame 0
 
@@ -15,7 +15,7 @@ Button::Button() :
 
 void Button::Load(const ObjectParams* pParams)
 {
-	SDLGameObject::Load(pParams);
+	WarspiteObject::Load(pParams);
 	
 	m_onClickID = pParams->GetOnClickID();
 	m_onEnterID = pParams->GetOnEnterID();
@@ -24,12 +24,12 @@ void Button::Load(const ObjectParams* pParams)
 
 void Button::Draw()
 {
-	SDLGameObject::Draw();
+	WarspiteObject::Draw();
 }
 
 bool Button::OnThink()
 {
-	// Get the mouse position on the screen
+	// Get the mouse Position on the screen
 	Vector2D* pMousePos = InputHandler::Instance()->
 		GetMousePosition();
 
@@ -86,7 +86,7 @@ bool Button::onLeave()
 
 void Button::Destroy()
 {
-	SDLGameObject::Destroy();
+	WarspiteObject::Destroy();
 }
 
 void Button::OnClick(ButtonCallback e)

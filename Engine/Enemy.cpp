@@ -1,7 +1,7 @@
 #include "Enemy.h"
 
 Enemy::Enemy()
-	: SDLGameObject()
+	: WarspiteObject()
 {
 }
 

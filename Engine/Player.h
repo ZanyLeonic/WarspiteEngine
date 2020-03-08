@@ -3,13 +3,13 @@
 #ifndef __Player__
 #define __Player__
 
-#include "SDLGameObject.h"
+#include "WarspiteObject.h"
 #include "InputHandler.h"
 #include "Vector2D.h"
 #include "BaseCreator.h"
 #include <string.h>
 
-class Player : public SDLGameObject
+class Player : public WarspiteObject
 {
 public:
 	Player();

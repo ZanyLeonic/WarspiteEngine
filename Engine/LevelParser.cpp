@@ -1,10 +1,10 @@
 #include "LevelParser.h"
 #include "Level.h"
-#include "TileLayer.h"
 #include "ObjectLayer.h"
 #include "TextureManager.h"
 #include "GameObjectFactory.h"
 #include "Game.h"
+#include "TileLayer.h"
 
 #include <iostream>
 #include <rapidjson/filereadstream.h>
@@ -163,7 +163,7 @@ void LevelParser::parseTileLayer(const rapidjson::Value* pTileElement, std::vect
 {
 	const Value::ConstObject& obj = pTileElement->GetObject();
 
-	TileLayer* pTileLayer = new TileLayer(m_tileSize, *pTilesets);
+	TileLayer* pTileLayer = new TileLayer(m_tileSize, m_width, m_height, *pTilesets);
 
 	// tiles
 	std::vector<std::vector<int>> data;
@@ -234,48 +234,46 @@ void LevelParser::parseObjectLayer(const rapidjson::Value* pObjectVal, std::vect
 			for (SizeType j = 0; j < d.Size(); j++)
 			{
 				// Maybe use a switch
-				const Value::ConstObject& po = d[j].GetObject();
-				std::cout << getJSONs(&d[j]) << std::endl;
-				std::string propName = po["name"].GetString();
+				std::string propName = d[j]["name"].GetString();
 
-				if (propName.compare("textureWidth"))
+				if (propName == "textureWidth")
 				{
-					width = po["value"].GetInt();
+					width = d[j]["value"].GetInt();
 					continue;
 				}
-				else if (propName.compare("textureHeight"))
+				else if (propName == "textureHeight")
 				{
-					height = po["value"].GetInt();
+					height = d[j]["value"].GetInt();
 					continue;
 				}
-				else if (propName.compare("numFrames"))
+				else if (propName == "numFrames")
 				{
-					numFrames = po["value"].GetInt();
+					numFrames = d[j]["value"].GetInt();
 					continue;
 				}
-				else if (propName.compare("animSpeed"))
+				else if (propName == "animSpeed")
 				{
-					animSpeed = po["value"].GetInt();
+					animSpeed = d[j]["value"].GetInt();
 					continue;
 				}
-				else if (propName.compare("onClickCallback"))
+				else if (propName == "onClickCallback")
 				{
-					onClickCallback = po["value"].GetInt();
+					onClickCallback = d[j]["value"].GetInt();
 					continue;
 				}
-				else if (propName.compare("onEnterCallback"))
+				else if (propName == "onEnterCallback")
 				{
-					onClickCallback = po["value"].GetInt();
+					onClickCallback = d[j]["value"].GetInt();
 					continue;
 				}
-				else if (propName.compare("onLeaveCallback"))
+				else if (propName == "onLeaveCallback")
 				{
-					onClickCallback = po["value"].GetInt();
+					onClickCallback = d[j]["value"].GetInt();
 					continue;
 				}
-				else if (propName.compare("textureID"))
+				else if (propName == "textureID")
 				{
-					textureID = po["value"].GetString();
+					textureID = d[j]["value"].GetString();
 					continue;
 				}
 				else
