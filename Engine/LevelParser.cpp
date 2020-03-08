@@ -56,6 +56,10 @@ Level* LevelParser::ParseLevel(const char* levelFile)
 		m_width = tLevel["width"].GetInt();
 		m_tileSize = tLevel["tilewidth"].GetInt();
 
+		// multiply by tilesize since we are using pixels
+		pLevel->m_LevelSize.SetX(m_width * m_tileSize);
+		pLevel->m_LevelSize.SetY(m_height * m_tileSize);
+
 		assert(tLevel["tilesets"].IsArray());
 		const Value& tilesets = tLevel["tilesets"].GetArray();
 

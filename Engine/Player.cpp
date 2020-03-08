@@ -4,6 +4,9 @@
 #include "Game.h"
 #include <iostream>
 
+#define PLAYER_WIDTH 22
+#define PLAYER_HEIGHT 27
+
 Player::Player()
 	: WarspiteObject()
 {
@@ -30,7 +33,7 @@ bool Player::OnThink()
 	if (moving)
 	{
 		m_position = VectorMath::Lerp(lastPosition, nextPosition, (timeLeft / 100));
-		Camera::Instance()->SetPosition(m_position);
+		Camera::Instance()->SetTarget(&m_position);
 		m_currentFrame = int(((SDL_GetTicks() / (1000 / 4)) % 2));
 	}
 
@@ -149,6 +152,23 @@ bool Player::IsPositionFree(Vector2D* pNext)
 	{
 		// Check if the GameObject is in the way and isn't us
 		if (pGameObj[i] != this && pGameObj[i]->GetPosition() == nPos)
+		{
+			return false;
+		}
+	}
+
+	// Also do a check if we are going off the level
+	PlayState* pPS = static_cast<PlayState*>(Game::Instance()->GetStateManager()->GetCurrentState());
+	if (pPS != 0)
+	{
+		Level* pLevel = pPS->GetLoadedLevel();
+
+		if ((pNext->GetX() < 0) || (pNext->GetX() + PLAYER_WIDTH > pLevel->m_LevelSize.GetX()))
+		{
+			return false;
+		}
+
+		if ((pNext->GetY() < 0) || (pNext->GetY() + PLAYER_HEIGHT > pLevel->m_LevelSize.GetY()))
 		{
 			return false;
 		}

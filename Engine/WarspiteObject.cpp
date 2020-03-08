@@ -1,5 +1,6 @@
 #include "WarspiteObject.h"
 #include "TextureManager.h"
+#include "Camera.h"
 #include "Game.h"
 
 WarspiteObject::WarspiteObject() : GameObject()
@@ -24,17 +25,19 @@ void WarspiteObject::Load(const ObjectParams* pParams)
 
 void WarspiteObject::Draw()
 {
+	Vector2D cPos = Camera::Instance()->GetPosition();
 	if (m_velocity.GetX() > 0)
 	{
 		TextureManager::Instance()->DrawFrame(m_textureID, (int)m_position.GetX(),
-			(int)m_position.GetY(), m_width, m_height, m_currentRow,
-			m_currentFrame, Game::Instance()->GetRenderer(), SDL_FLIP_HORIZONTAL);
+			(int)m_position.GetY(), m_width, m_height, 0, 0, 
+			m_currentRow, m_currentFrame, Game::Instance()->GetRenderer(), 
+			SDL_FLIP_HORIZONTAL);
 	}
 	else
 	{
 		TextureManager::Instance()->DrawFrame(m_textureID, (int)m_position.GetX(),
-			(int)m_position.GetY(), m_width, m_height, m_currentRow,
-			m_currentFrame, Game::Instance()->GetRenderer());
+			(int)m_position.GetY(), m_width, m_height, 0, 0, 
+			m_currentRow, m_currentFrame, Game::Instance()->GetRenderer());
 	}
 }
 

@@ -37,7 +37,7 @@ void TileLayer::Draw()
 				continue;
 			}
 
-			if (((j * m_tileSize) - y2) - cCamPos.GetY() < -m_tileSize || ((j * m_tileSize) - y2) - cCamPos.GetY() > vPortSz.GetY())
+			if (((i * m_tileSize) - y2) - cCamPos.GetY() < -m_tileSize || ((i * m_tileSize) - y2) - cCamPos.GetY() > vPortSz.GetY())
 			{
 				continue;
 			}

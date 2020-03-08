@@ -15,6 +15,7 @@ public:
 	virtual bool OnEnd();
 
 	virtual std::string GetStateID() const { return s_playID; }
+	virtual Level* GetLoadedLevel() const { return pLevel; }
 
 private:
 	static const std::string s_playID;

@@ -5,6 +5,7 @@
 #include <string>
 #include <vector>
 
+#include "Vector2D.h"
 #include "Layer.h"
 
 struct Tileset
@@ -37,6 +38,8 @@ public:
 	{
 		return &m_layers;
 	};
+
+	Vector2D m_LevelSize;
 
 private:
 
