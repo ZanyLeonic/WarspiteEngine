@@ -46,7 +46,7 @@ function InstallPackages() {
         $local_vcpkg = $true
     }
 
-    & $vcpkg install sdl2 sdl2-image rapidjson zlib --triplet $Arch-windows
+    & $vcpkg install sdl2 sdl2-image[libjpeg-turbo,libwebp,tiff] rapidjson zlib --triplet $Arch-windows
     if ($local_vcpkg) {
         & $vcpkg integrate install
         Write-Output "Cleaning up..."
