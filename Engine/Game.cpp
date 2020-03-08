@@ -1,5 +1,6 @@
 #include "Game.h"
 #include "TextureManager.h"
+#include "Camera.h"
 #include "InputHandler.h"
 #include "LevelParser.h"
 #include "GameObjectFactory.h"
@@ -80,6 +81,7 @@ void Game::OnThink()
 {
 	// Call the current GameState functionality via the GameStateManager.
 	m_pGameStateManager->OnThink();
+	Camera::Instance()->OnThink();
 }
 
 void Game::HandleEvents()

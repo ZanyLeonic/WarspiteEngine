@@ -17,6 +17,7 @@ set(WarspiteEngine_Src
 	ObjectLayer.cpp
     Level.cpp
     LevelParser.cpp
+	MapObject.cpp
     PauseState.cpp
     Player.cpp
     PlayState.cpp
@@ -44,10 +45,10 @@ set(WarspiteEngine_Header
     Layer.h
     Level.h
     LevelParser.h
+	MapObject.h
     PauseState.h
     Player.h
     PlayState.h
-    WarspiteObject.h
 	ObjectParams.h
 	ObjectLayer.h
     StateParser.h
@@ -57,6 +58,7 @@ set(WarspiteEngine_Header
     MainMenuState.h
 	MenuState.h
     Vector2D.h
+	WarspiteObject.h
 )
 
 # Thirdparty code

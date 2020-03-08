@@ -1,9 +1,10 @@
 #include "WarspiteObject.h"
 #include "TextureManager.h"
-#include "Camera.h"
 #include "Game.h"
 
-WarspiteObject::WarspiteObject() : GameObject()
+WarspiteObject::WarspiteObject() 
+	: GameObject(), m_height(0), m_width(0), 
+	m_numFrames(1), m_currentFrame(0), m_currentRow(0)
 {
 
 }
@@ -25,7 +26,6 @@ void WarspiteObject::Load(const ObjectParams* pParams)
 
 void WarspiteObject::Draw()
 {
-	Vector2D cPos = Camera::Instance()->GetPosition();
 	if (m_velocity.GetX() > 0)
 	{
 		TextureManager::Instance()->DrawFrame(m_textureID, (int)m_position.GetX(),

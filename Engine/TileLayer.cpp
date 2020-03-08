@@ -11,8 +11,8 @@ void TileLayer::Draw()
 {
 	int x, y, x2, y2 = 0;
 
-	x = m_position.GetX() / m_tileSize;
-	y = m_position.GetY() / m_tileSize;
+	x = int(m_position.GetX()) / m_tileSize;
+	y = int(m_position.GetY()) / m_tileSize;
 
 	x2 = int(m_position.GetX()) % m_tileSize;
 	y2 = int(m_position.GetY()) % m_tileSize;

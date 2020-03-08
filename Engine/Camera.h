@@ -17,7 +17,7 @@ public:
 		return s_pCamera;
 	}
 
-	void OnThink(Vector2D cVel);
+	void OnThink();
 
 	void SetTarget(Vector2D* target) 
 	{ 

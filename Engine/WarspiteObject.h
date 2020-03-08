@@ -47,7 +47,7 @@ protected:
 	int m_currentFrame;
 	int m_numFrames;
 
-	std::string m_textureID;
+	std::string m_textureID = "";
 };
 
 #endif /* defined(__WarspiteObject__) */

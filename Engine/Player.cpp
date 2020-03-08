@@ -24,16 +24,16 @@ void Player::Load(const ObjectParams* pParams)
 bool Player::OnThink()
 {
 	std::cout << "\r";
-	std::cout << "X: " << m_position.GetX() << " Y: " << m_position.GetY() << " TimeLeft: " << float(timeLeft / 100) << "   ";
-
+	std::cout << "X: " << m_position.GetX() << " Y: " << m_position.GetY() << "X: " << Camera::Instance()->GetPosition().GetX() << " Y: " << Camera::Instance()->GetPosition().GetY() << " TimeLeft: " << float(m_timeLeft / 100) << "   ";
+	
 	HandleInput();
 
 	m_currentFrame = 0;
 
 	if (moving)
 	{
-		m_position = VectorMath::Lerp(lastPosition, nextPosition, (timeLeft / 100));
-		Camera::Instance()->SetTarget(&m_position);
+		m_position = VectorMath::Lerp(lastPosition, nextPosition, (m_timeLeft / 100));
+		Camera::Instance()->SetTarget(&(m_position));
 		m_currentFrame = int(((SDL_GetTicks() / (1000 / 4)) % 2));
 	}
 
@@ -53,23 +53,24 @@ void Player::KeyUp()
 
 void Player::HandleInput()
 {
-	if (timeLeft >= 100)
+	if (m_timeLeft >= 100)
 	{
 		Vector2D curPos = m_position;
 
 		if (InputHandler::Instance()->IsKeyDown(SDL_SCANCODE_UP))
 		{
-			//m_position.SetY(m_position.GetY() - moveStep);
+			//m_position.SetY(m_position.GetY() - m_moveStep);
 			
 			m_currentRow = 2;
 
-			curPos.SetY(curPos.GetY() - moveStep);
+			curPos.SetY(curPos.GetY() - m_moveStep);
 			if (IsPositionFree(&curPos))
 			{
 				moving = true;
 				lastPosition = m_position;
 				nextPosition = curPos;
-				timeLeft = 0;
+				m_CamOffset.SetY(m_CamOffset.GetY() - m_moveStep);
+				m_timeLeft = 0;
 			}
 			else
 			{
@@ -78,7 +79,7 @@ void Player::HandleInput()
 		}
 		else if (InputHandler::Instance()->IsKeyDown(SDL_SCANCODE_DOWN))
 		{
-			curPos.SetY(curPos.GetY() + moveStep);
+			curPos.SetY(curPos.GetY() + m_moveStep);
 
 			m_currentRow = 1;
 
@@ -87,7 +88,8 @@ void Player::HandleInput()
 				moving = true;
 				lastPosition = m_position;
 				nextPosition = curPos;
-				timeLeft = 0;
+				m_CamOffset.SetY(m_CamOffset.GetY() + m_moveStep);
+				m_timeLeft = 0;
 			}
 			else
 			{
@@ -96,7 +98,7 @@ void Player::HandleInput()
 		}
 		else if (InputHandler::Instance()->IsKeyDown(SDL_SCANCODE_LEFT))
 		{
-			curPos.SetX(curPos.GetX() - moveStep);
+			curPos.SetX(curPos.GetX() - m_moveStep);
 
 			m_currentRow = 3;
 
@@ -105,7 +107,8 @@ void Player::HandleInput()
 				moving = true;
 				lastPosition = m_position;
 				nextPosition = curPos;
-				timeLeft = 0;
+				m_CamOffset.SetX(m_CamOffset.GetX() - m_moveStep);
+				m_timeLeft = 0;
 			}
 			else
 			{
@@ -114,7 +117,7 @@ void Player::HandleInput()
 		}
 		else if (InputHandler::Instance()->IsKeyDown(SDL_SCANCODE_RIGHT))
 		{
-			curPos.SetX(curPos.GetX() + moveStep);
+			curPos.SetX(curPos.GetX() + m_moveStep);
 
 			m_currentRow = 4;
 
@@ -123,21 +126,22 @@ void Player::HandleInput()
 				moving = true;
 				lastPosition = m_position;
 				nextPosition = curPos;
-				timeLeft = 0;
+				m_CamOffset.SetX(m_CamOffset.GetX() + m_moveStep);
+				m_timeLeft = 0;
 			}
 			else
 			{
 				std::cout << "Cannot move right - collided!\n";
 			}
 		}
-		else if (timeLeft >= 100)
+		else if (m_timeLeft >= 100)
 		{
 			moving = false;
 		}
 	}
 	else
 	{
-		timeLeft += 5;
+		m_timeLeft += 5;
 	}
 }
 

@@ -10,15 +10,15 @@
 
 struct Tileset
 {
-	int FirstGID;
-	int TileWidth;
-	int TileHeight;
-	int Spacing;
-	int Margin;
-	int Width;
-	int Height;
-	int NumColumns;
-	std::string Name;
+	int FirstGID = 0;
+	int TileWidth = 0;
+	int TileHeight = 0;
+	int Spacing = 0;
+	int Margin = 0;
+	int Width = 0;
+	int Height = 0;
+	int NumColumns = 0;
+	std::string Name = "";
 };
 
 class Level

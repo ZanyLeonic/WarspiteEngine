@@ -19,11 +19,9 @@ public:
 		: m_tileSize(tileSize)
 	{
 		m_tilesets = tilesets;
+
 		m_numColumns = mapWidth;
 		m_numRows = mapHeight;
-
-		m_mapWidth = mapWidth;
-		m_mapHeight = mapHeight;
 	};
 
 	virtual void OnThink();
@@ -44,8 +42,6 @@ public:
 private:
 	int m_numColumns;
 	int m_numRows;
-	int m_mapWidth;
-	int m_mapHeight;
 	int m_tileSize;
 
 	Vector2D m_position;

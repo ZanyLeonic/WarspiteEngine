@@ -1,7 +1,7 @@
 #include "TestObject.h"
 
 TestObject::TestObject()
-	: WarspiteObject()
+	: MapObject()
 {
 }
 

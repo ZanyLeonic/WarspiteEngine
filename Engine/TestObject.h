@@ -2,10 +2,10 @@
 #ifndef __TestObject_h__
 #define __TestObject_h__
 
-#include "WarspiteObject.h"
+#include "MapObject.h"
 #include "BaseCreator.h"
 class TestObject :
-	public WarspiteObject
+	public MapObject
 {
 public:
 	TestObject();

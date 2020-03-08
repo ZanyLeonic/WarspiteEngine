@@ -34,8 +34,9 @@ private:
 	bool moveUp = false;
 	bool moveRight = false;
 
-	float timeLeft = 100;
-	const int moveStep = 20;
+	float m_timeLeft = 100;
+	const int m_moveStep = 20;
+	Vector2D m_CamOffset;
 };
 
 class PlayerCreator : public BaseCreator
