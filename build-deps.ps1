@@ -23,7 +23,7 @@ function GenerateProjectFiles() {
     "-DCMAKE_TOOLCHAIN_FILE=C:\vcpkg\scripts\buildsystems\vcpkg.cmake",
     '-DCMAKE_BUILD_TYPE="Debug"', 
     "-DVCPKG_TARGET_TRIPLET=$Arch-windows",
-    "..")
+    ".")
     & cmake $args
 }
 
@@ -55,5 +55,5 @@ function InstallPackages() {
     }
 }
 
-GenerateProjectFiles
 InstallPackages
+GenerateProjectFiles
