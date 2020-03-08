@@ -13,7 +13,7 @@ set(WarspiteEngine_Src
     GameStateManager.cpp
     InputHandler.cpp
     main.cpp
-    ObjectParams.h
+	ObjectLayer.cpp
     Level.cpp
     LevelParser.cpp
     PauseState.cpp
@@ -46,6 +46,8 @@ set(WarspiteEngine_Header
     Player.h
     PlayState.h
     SDLGameObject.h
+	ObjectParams.h
+	ObjectLayer.h
     StateParser.h
     TestObject.h
     TextureManager.h

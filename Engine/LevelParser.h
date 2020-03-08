@@ -23,6 +23,11 @@ private:
 		std::vector<Layer*>* pLayers,
 		const std::vector<Tileset>* pTilesets);
 
+	void parseTextures(const rapidjson::Value* pTextureRoot);
+
+	void parseObjectLayer(const rapidjson::Value* pObjectVal,
+		std::vector<Layer*>* pLayer);
+
 	int m_tileSize;
 	int m_width;
 	int m_height;

@@ -1,7 +1,9 @@
 #include "LevelParser.h"
 #include "Level.h"
 #include "TileLayer.h"
+#include "ObjectLayer.h"
 #include "TextureManager.h"
+#include "GameObjectFactory.h"
 #include "Game.h"
 
 #include <iostream>
@@ -62,13 +64,32 @@ Level* LevelParser::ParseLevel(const char* levelFile)
 			parseTilesets(&tilesets[i], pLevel->GetTilesets());
 		}
 
+		if (tLevel.HasMember("properties"))
+		{
+			const Value& properties = tLevel["properties"].GetArray();
+			for (SizeType i = 0; i < properties.Size(); i++)
+			{
+				if (properties[i]["type"] == "file")
+					parseTextures(&properties[i]);
+			}
+		}
+
 		assert(tLevel["layers"].IsArray());
 		const Value& layers = tLevel["layers"].GetArray();
 
 		for (SizeType i = 0; i < layers.Size(); i++)
 		{
-			parseTileLayer(&layers[i], pLevel->GetLayers(),
-				pLevel->GetTilesets());
+			std::string t = layers[i]["type"].GetString();
+
+			if(t == "tilelayer")
+			{
+				parseTileLayer(&layers[i], pLevel->GetLayers(),
+					pLevel->GetTilesets());
+			}
+			else if (t == "objectgroup")
+			{
+				parseObjectLayer(&layers[i], pLevel->GetLayers());
+			}			
 		}
 
 		return pLevel;
@@ -175,4 +196,100 @@ void LevelParser::parseTileLayer(const rapidjson::Value* pTileElement, std::vect
 
 		pLayers->push_back(pTileLayer);
 	}
+}
+
+void LevelParser::parseTextures(const rapidjson::Value* pTextureRoot)
+{
+	const Value::ConstObject& o = pTextureRoot->GetObject();
+
+	TextureManager::Instance()->Load(o["value"].GetString(), o["name"].GetString(),
+		Game::Instance()->GetRenderer());
+}
+
+void LevelParser::parseObjectLayer(const rapidjson::Value* pObjectVal, std::vector<Layer*>* pLayer)
+{
+	const Value::ConstObject& o = pObjectVal->GetObject();
+	const Value::ConstArray& a = o["objects"].GetArray();
+
+	ObjectLayer* pObjectLayer = new ObjectLayer();
+	
+	for (SizeType i = 0; i < a.Size(); i++)
+	{
+		std::cout << "i: " << i << " a size: " << a.Size() << std::endl;
+		const Value::ConstObject& b = a[i].GetObject();
+		int x = 0, y = 0, width = 0, height = 0, 
+			onClickCallback = 0, onEnterCallback = 0, onLeaveCallback = 0;
+		int numFrames = 1, animSpeed = 1;
+		std::string textureID;
+
+		x = b["x"].GetInt();
+		y = b["y"].GetInt();
+		
+		GameObject* pGameObject = GameObjectFactory::Instance()
+			->Create(b["type"].GetString());
+
+		if (b.HasMember("properties"))
+		{
+			const Value::ConstArray& d = b["properties"].GetArray();
+			for (SizeType j = 0; j < d.Size(); j++)
+			{
+				// Maybe use a switch
+				const Value::ConstObject& po = d[j].GetObject();
+				std::cout << getJSONs(&d[j]) << std::endl;
+				std::string propName = po["name"].GetString();
+
+				if (propName.compare("textureWidth"))
+				{
+					width = po["value"].GetInt();
+					continue;
+				}
+				else if (propName.compare("textureHeight"))
+				{
+					height = po["value"].GetInt();
+					continue;
+				}
+				else if (propName.compare("numFrames"))
+				{
+					numFrames = po["value"].GetInt();
+					continue;
+				}
+				else if (propName.compare("animSpeed"))
+				{
+					animSpeed = po["value"].GetInt();
+					continue;
+				}
+				else if (propName.compare("onClickCallback"))
+				{
+					onClickCallback = po["value"].GetInt();
+					continue;
+				}
+				else if (propName.compare("onEnterCallback"))
+				{
+					onClickCallback = po["value"].GetInt();
+					continue;
+				}
+				else if (propName.compare("onLeaveCallback"))
+				{
+					onClickCallback = po["value"].GetInt();
+					continue;
+				}
+				else if (propName.compare("textureID"))
+				{
+					textureID = po["value"].GetString();
+					continue;
+				}
+				else
+				{
+					std::cout << "Warning: Unrecongised property\"" << propName << "\"!";
+				}
+			}
+		}
+
+		pGameObject->Load(new ObjectParams(x, y, width, height, 
+			textureID, animSpeed, numFrames, onClickCallback, 
+			onEnterCallback, onLeaveCallback));
+		pObjectLayer->GetGameObjects()->push_back(pGameObject);
+	}
+
+	pLayer->push_back(pObjectLayer);
 }
