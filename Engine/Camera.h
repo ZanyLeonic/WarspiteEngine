@@ -23,9 +23,20 @@ public:
 	{ 
 		m_pTarget = target; 
 	}
+
 	void SetPosition(const Vector2D& position) 
 	{
 		m_position = position;
+	}
+
+	void SetLevelSize(const Vector2D& sz)
+	{
+		m_levelSize = sz;
+	}
+
+	Vector2D GetLevelSize() const
+	{
+		return m_levelSize;
 	}
 
 	Vector2D GetPosition() const;
@@ -35,9 +46,10 @@ private:
 	Camera();
 	~Camera();
 
-	Vector2D* m_pTarget = new Vector2D();
+	Vector2D* m_pTarget = 0;
 	
 	Vector2D m_position;
+	Vector2D m_levelSize;
 
 	static Camera* s_pCamera;
 };

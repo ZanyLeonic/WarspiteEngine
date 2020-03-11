@@ -17,6 +17,7 @@ public:
 	void Load(const ObjectParams* pParams);
 
 	bool OnThink();
+	void Draw();
 
 	void KeyDown();
 	void KeyUp();

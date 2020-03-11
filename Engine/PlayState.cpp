@@ -1,5 +1,6 @@
 #include "TextureManager.h"
 #include "Game.h"
+#include "Camera.h"
 #include "Player.h"
 #include "TestObject.h"
 #include "PauseState.h"
@@ -20,6 +21,12 @@ bool PlayState::OnPlay()
 
 	LevelParser lp;
 	pLevel = lp.ParseLevel("assets/maps/help2.json");
+
+	if (pLevel)
+	{
+		// Give the camera the Level size
+		Camera::Instance()->SetLevelSize(pLevel->m_LevelSize);
+	}
 
 	InputHandler::Instance()->AddActionKeyDown(SDL_SCANCODE_ESCAPE, [this] {
 			Game::Instance()->GetStateManager()->PushState(new PauseState());

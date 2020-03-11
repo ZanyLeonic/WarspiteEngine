@@ -33,12 +33,30 @@ bool Player::OnThink()
 	if (moving)
 	{
 		m_position = VectorMath::Lerp(lastPosition, nextPosition, (m_timeLeft / 100));
-		Camera::Instance()->SetTarget(&(m_position));
+		Camera::Instance()->SetTarget(&m_position);
 		m_currentFrame = int(((SDL_GetTicks() / (1000 / 4)) % 2));
 	}
 
 	WarspiteObject::OnThink();
 	return true;
+}
+void Player::Draw()
+{
+	Vector2D cPos = Camera::Instance()->GetPosition();
+
+	if (m_velocity.GetX() > 0)
+	{
+		TextureManager::Instance()->DrawFrame(m_textureID, (int)m_position.GetX(),
+			(int)m_position.GetY(), m_width, m_height, cPos.GetX(), cPos.GetY(),
+			m_currentRow, m_currentFrame, Game::Instance()->GetRenderer(),
+			SDL_FLIP_HORIZONTAL);
+	}
+	else
+	{
+		TextureManager::Instance()->DrawFrame(m_textureID, (int)m_position.GetX(),
+			(int)m_position.GetY(), m_width, m_height, cPos.GetX(), cPos.GetY(),
+			m_currentRow, m_currentFrame, Game::Instance()->GetRenderer());
+	}
 }
 
 void Player::KeyDown()
