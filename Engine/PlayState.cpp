@@ -3,6 +3,7 @@
 #include "Camera.h"
 #include "Player.h"
 #include "TestObject.h"
+#include "ObjectLayer.h"
 #include "PauseState.h"
 #include "StateParser.h"
 #include "LevelParser.h"
@@ -31,6 +32,19 @@ bool PlayState::OnPlay()
 	InputHandler::Instance()->AddActionKeyDown(SDL_SCANCODE_ESCAPE, [this] {
 			Game::Instance()->GetStateManager()->PushState(new PauseState());
 	});
+
+	std::vector<Layer*> objs = *pLevel->GetLayers();
+
+	for (int i = 0; i < objs.size(); i++)
+	{
+		ObjectLayer* obl = static_cast<ObjectLayer*>(objs[i]);
+		if (!obl) continue;
+
+		for (int j = 0; j < obl->GetGameObjects()->size(); j++)
+		{
+			obl->GetGameObjects()->data()[j]->OnPlay();
+		}
+	}
 
 	std::cout << "Entering PlayState\n";
 	

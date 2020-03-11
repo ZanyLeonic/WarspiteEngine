@@ -282,7 +282,7 @@ void LevelParser::parseObjectLayer(const rapidjson::Value* pObjectVal, std::vect
 				}
 				else
 				{
-					std::cout << "Warning: Unrecongised property\"" << propName << "\"!";
+					std::cout << "Warning: Unrecongised property\"" << propName << "\"." << std::endl;
 				}
 			}
 		}

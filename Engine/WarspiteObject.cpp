@@ -24,6 +24,10 @@ void WarspiteObject::Load(const ObjectParams* pParams)
 	m_numFrames = pParams->GetNumberOfFrames();
 }
 
+void WarspiteObject::OnPlay()
+{
+}
+
 void WarspiteObject::Draw()
 {
 	if (m_velocity.GetX() > 0)

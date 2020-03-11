@@ -14,6 +14,8 @@ class Player : public WarspiteObject
 public:
 	Player();
 
+	void OnPlay();
+
 	void Load(const ObjectParams* pParams);
 
 	bool OnThink();
@@ -26,6 +28,8 @@ private:
 	void HandleInput();
 
 	bool IsPositionFree(Vector2D* pNext);
+
+	std::vector<std::vector<GameObject*>*> m_objects;
 
 	Vector2D lastPosition;
 	Vector2D nextPosition;

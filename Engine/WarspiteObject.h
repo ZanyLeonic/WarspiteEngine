@@ -13,6 +13,7 @@ public:
 
 	WarspiteObject();
 
+	virtual void OnPlay();
 	virtual void Draw();
 	virtual bool OnThink();
 	virtual void Destroy();

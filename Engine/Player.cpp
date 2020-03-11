@@ -1,6 +1,7 @@
 #include "Player.h"
 #include "InputHandler.h"
 #include "Camera.h"
+#include "ObjectLayer.h"
 #include "Game.h"
 #include <iostream>
 
@@ -11,6 +12,24 @@ Player::Player()
 	: WarspiteObject()
 {
 
+}
+
+void Player::OnPlay()
+{
+	PlayState* ps = static_cast<PlayState*>(Game::Instance()->GetStateManager()->GetCurrentState());
+
+	if (ps)
+	{
+		std::vector<Layer*> objs = *ps->GetLoadedLevel()->GetLayers();
+
+		for (int i = 0; i < objs.size(); i++)
+		{
+			ObjectLayer* obl = static_cast<ObjectLayer*>(objs[i]);
+			if (!obl) continue;
+
+			m_objects.push_back(obl->GetGameObjects());
+		}
+	}
 }
 
 void Player::Load(const ObjectParams* pParams)
@@ -165,17 +184,30 @@ void Player::HandleInput()
 
 bool Player::IsPositionFree(Vector2D* pNext)
 {
-	std::vector<GameObject*> pGameObj = Game::Instance()->GetStateManager()->GetCurrentState()->GetGameObjects();
+	//std::vector<GameObject*> pGameObj = Game::Instance()->GetStateManager()->GetCurrentState()->GetGameObjects();
 
 	Vector2D nPos = Vector2D(*pNext);
 
-	// Linear search through the current GameObjects
-	for (int i = 0; i < pGameObj.size(); i++)
+	//// Linear search through the current GameObjects
+	//for (int i = 0; i < pGameObj.size(); i++)
+	//{
+	//	// Check if the GameObject is in the way and isn't us
+	//	if (pGameObj[i] != this && pGameObj[i]->GetPosition() == nPos)
+	//	{
+	//		return false;
+	//	}
+	//}
+
+
+	for (int i = 0; i < m_objects.size(); i++)
 	{
-		// Check if the GameObject is in the way and isn't us
-		if (pGameObj[i] != this && pGameObj[i]->GetPosition() == nPos)
+		for (int j = 0; j < m_objects[i]->size(); j++)
 		{
-			return false;
+			// Check if the GameObject is in the way and isn't us
+			if (m_objects[i]->data()[j] != this && m_objects[i]->data()[j]->GetPosition() == nPos)
+			{
+				return false;
+			}
 		}
 	}
 
