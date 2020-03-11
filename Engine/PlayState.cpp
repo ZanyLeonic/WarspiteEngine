@@ -38,11 +38,14 @@ bool PlayState::OnPlay()
 	for (int i = 0; i < objs.size(); i++)
 	{
 		ObjectLayer* obl = static_cast<ObjectLayer*>(objs[i]);
-		if (!obl) continue;
+		
+		if (typeid(*obl) != typeid(ObjectLayer*)) continue;
 
-		for (int j = 0; j < obl->GetGameObjects()->size(); j++)
+		std::vector<GameObject*>& sGo = *obl->GetGameObjects();
+
+		for (int j = 0; j < sGo.size(); j++)
 		{
-			obl->GetGameObjects()->data()[j]->OnPlay();
+			sGo[j]->OnPlay();
 		}
 	}
 
