@@ -9,6 +9,9 @@ void TileLayer::OnThink()
 
 void TileLayer::Draw()
 {
+	Vector2D cCamPos = Camera::Instance()->GetPosition();
+	Vector2D vPortSz = Game::Instance()->GetViewportSize();
+
 	int x, y, x2, y2 = 0;
 
 	x = int(m_position.GetX()) / m_tileSize;
@@ -27,9 +30,6 @@ void TileLayer::Draw()
 			{
 				continue;
 			}
-			
-			Vector2D cCamPos = Camera::Instance()->GetPosition();
-			Vector2D vPortSz = Game::Instance()->GetViewportSize();
 
 			// Don't render tiles that cannot be seen by the camera
 			if (((j * m_tileSize) - x2) - cCamPos.GetX() < -m_tileSize || ((j * m_tileSize) - x2) - cCamPos.GetX() > vPortSz.GetX())

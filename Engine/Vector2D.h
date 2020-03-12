@@ -103,6 +103,11 @@ public:
 	{
 		return (m_x == b.m_x) && (m_y == b.m_y);
 	}
+
+	bool operator!=(Vector2D& b)
+	{
+		return (m_x != b.m_x) && (m_y != b.m_y);
+	}
 };
 
 class VectorMath

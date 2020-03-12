@@ -43,7 +43,8 @@ private:
 	int m_numColumns;
 	int m_numRows;
 	int m_tileSize;
-
+	
+	Vector2D m_lastCamPos;
 	Vector2D m_position;
 	Vector2D m_velocity;
 

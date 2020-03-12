@@ -23,7 +23,7 @@ void Player::OnPlay()
 
 		for (int i = 0; i < objs.size(); i++)
 		{
-			ObjectLayer* obl = static_cast<ObjectLayer*>(objs[i]);
+			ObjectLayer* obl = dynamic_cast<ObjectLayer*>(objs[i]);
 			if (!obl) continue;
 
 			m_objects.push_back(obl->GetGameObjects());
@@ -52,7 +52,7 @@ bool Player::OnThink()
 	{
 		m_position = VectorMath::Lerp(lastPosition, nextPosition, (m_timeLeft / 100));
 		Camera::Instance()->SetTarget(&m_position);
-		m_currentFrame = int(((SDL_GetTicks() / (1000 / 4)) % 2));
+		m_currentFrame = int(((SDL_GetTicks() / (1000 / 4)) % 3));
 	}
 
 	WarspiteObject::OnThink();
