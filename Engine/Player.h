@@ -40,7 +40,7 @@ private:
 	bool moveRight = false;
 
 	float m_timeLeft = 100;
-	const int m_moveStep = 20;
+	const int m_moveStep = 32;
 	Vector2D m_CamOffset;
 };
 

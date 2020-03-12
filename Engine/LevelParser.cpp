@@ -56,6 +56,10 @@ Level* LevelParser::ParseLevel(const char* levelFile)
 		m_width = tLevel["width"].GetInt();
 		m_tileSize = tLevel["tilewidth"].GetInt();
 
+		std::string bgColour = tLevel.HasMember("backgroundcolor") ? tLevel["backgroundcolor"].GetString() : "";
+
+		parseBackgroundColour(&bgColour);
+
 		// multiply by tilesize since we are using pixels
 		pLevel->m_LevelSize.SetX(m_width * m_tileSize);
 		pLevel->m_LevelSize.SetY(m_height * m_tileSize);
@@ -208,6 +212,45 @@ void LevelParser::parseTextures(const rapidjson::Value* pTextureRoot)
 
 	TextureManager::Instance()->Load(o["value"].GetString(), o["name"].GetString(),
 		Game::Instance()->GetRenderer());
+}
+
+void LevelParser::parseBackgroundColour(const std::string* colourVal)
+{
+	int r = 255;
+	int g = 255;
+	int b = 255;
+	int a = 255;
+
+	switch (colourVal->length())
+	{
+	// No alpha channel
+	case 7:
+		// Red
+		sscanf(colourVal->substr(1, 2).c_str(), "%x", &r);
+		// Green
+		sscanf(colourVal->substr(3, 2).c_str(), "%x", &g);
+		// Blue
+		sscanf(colourVal->substr(5, 2).c_str(), "%x", &b);
+		// Alpha
+		a = 255;
+
+		break;
+	
+	// Alpha channel
+	case 9:
+		sscanf(colourVal->substr(1, 2).c_str(), "%x", &a);
+		sscanf(colourVal->substr(3, 2).c_str(), "%x", &r);
+		sscanf(colourVal->substr(5, 2).c_str(), "%x", &g);
+		sscanf(colourVal->substr(7, 2).c_str(), "%x", &b);
+
+		break;
+
+	default:
+		std::cout << "Warning: Unrecongised or unsupported colour value!" << std::endl;
+		break;
+	};
+
+	SDL_SetRenderDrawColor(Game::Instance()->GetRenderer(), r, g, b, a);
 }
 
 void LevelParser::parseObjectLayer(const rapidjson::Value* pObjectVal, std::vector<Layer*>* pLayer)

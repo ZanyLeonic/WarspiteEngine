@@ -25,6 +25,8 @@ private:
 
 	void parseTextures(const rapidjson::Value* pTextureRoot);
 
+	void parseBackgroundColour(const std::string* colourVal);
+
 	void parseObjectLayer(const rapidjson::Value* pObjectVal,
 		std::vector<Layer*>* pLayer);
 

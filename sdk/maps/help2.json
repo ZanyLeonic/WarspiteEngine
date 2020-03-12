@@ -1,4 +1,5 @@
-{ "compressionlevel":-1,
+{ "backgroundcolor":"#202c0b",
+ "compressionlevel":-1,
  "editorsettings":
     {
      "export":
@@ -59,6 +60,55 @@
                  "width":32,
                  "x":0,
                  "y":0
+                }, 
+                {
+                 "height":32,
+                 "id":4,
+                 "name":"TestObj1",
+                 "properties":[
+                        {
+                         "name":"textureHeight",
+                         "type":"int",
+                         "value":27
+                        }, 
+                        {
+                         "name":"textureID",
+                         "type":"string",
+                         "value":"TestObject"
+                        }, 
+                        {
+                         "name":"textureWidth",
+                         "type":"int",
+                         "value":22
+                        }],
+                 "rotation":0,
+                 "type":"TestObject",
+                 "visible":true,
+                 "width":32,
+                 "x":96,
+                 "y":96
+                }, 
+                {
+                 "height":32,
+                 "id":5,
+                 "name":"TestObj2",
+                 "properties":[
+                        {
+                         "name":"textureHeight",
+                         "type":"int",
+                         "value":27
+                        }, 
+                        {
+                         "name":"textureWidth",
+                         "type":"int",
+                         "value":22
+                        }],
+                 "rotation":0,
+                 "type":"TestObject",
+                 "visible":true,
+                 "width":32,
+                 "x":96,
+                 "y":86
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -67,13 +117,18 @@
          "y":0
         }],
  "nextlayerid":4,
- "nextobjectid":4,
+ "nextobjectid":6,
  "orientation":"orthogonal",
  "properties":[
         {
-         "name":"player",
+         "name":"Player",
          "type":"file",
          "value":"..\/..\/Engine\/assets\/player.png"
+        }, 
+        {
+         "name":"TestObject",
+         "type":"file",
+         "value":"..\/..\/Engine\/assets\/dev\/Black_22x27.bmp"
         }],
  "renderorder":"right-down",
  "tiledversion":"1.3.1",

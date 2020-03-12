@@ -33,13 +33,16 @@ bool PlayState::OnPlay()
 			Game::Instance()->GetStateManager()->PushState(new PauseState());
 	});
 
+	// Execute the OnPlay method on all the GameObjects in all Object Layers
 	std::vector<Layer*> objs = *pLevel->GetLayers();
 
 	for (int i = 0; i < objs.size(); i++)
 	{
-		ObjectLayer* obl = static_cast<ObjectLayer*>(objs[i]);
+		ObjectLayer* obl = dynamic_cast<ObjectLayer*>(objs[i]);
 		
-		if (typeid(*obl) != typeid(ObjectLayer*)) continue;
+//		if (typeid(*obl) != typeid(ObjectLayer*)) continue;
+
+		if (!obl) continue;
 
 		std::vector<GameObject*>& sGo = *obl->GetGameObjects();
 

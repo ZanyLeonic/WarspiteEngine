@@ -11,7 +11,6 @@
 Player::Player()
 	: WarspiteObject()
 {
-
 }
 
 void Player::OnPlay()
@@ -43,7 +42,7 @@ void Player::Load(const ObjectParams* pParams)
 bool Player::OnThink()
 {
 	std::cout << "\r";
-	std::cout << "X: " << m_position.GetX() << " Y: " << m_position.GetY() << "X: " << Camera::Instance()->GetPosition().GetX() << " Y: " << Camera::Instance()->GetPosition().GetY() << " TimeLeft: " << float(m_timeLeft / 100) << "   ";
+	std::cout << "PLAYER -> X: " << m_position.GetX() << " Y: " << m_position.GetY() << " CAM -> X: " << Camera::Instance()->GetPosition().GetX() << " Y: " << Camera::Instance()->GetPosition().GetY() << " TimeLeft: " << float(m_timeLeft / 100) << "   ";
 	
 	HandleInput();
 
@@ -201,10 +200,14 @@ bool Player::IsPositionFree(Vector2D* pNext)
 
 	for (int i = 0; i < m_objects.size(); i++)
 	{
-		for (int j = 0; j < m_objects[i]->size(); j++)
+		if (!m_objects[i]) continue;
+
+		std::vector<GameObject*>& ir = *m_objects[i];
+
+		for (int j = 0; j < ir.size(); j++)
 		{
 			// Check if the GameObject is in the way and isn't us
-			if (m_objects[i]->data()[j] != this && m_objects[i]->data()[j]->GetPosition() == nPos)
+			if (ir[j] != this && ir[j]->GetPosition() == nPos)
 			{
 				return false;
 			}

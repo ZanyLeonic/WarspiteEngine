@@ -3,32 +3,8 @@
 	{
       "id": "Game",
       "textures": [
-        {
-          "path": "assets\\player.png",
-          "id": "Player"
-        },
-        {
-          "path": "assets\\dev\\Black_22x27.bmp",
-          "id": "TestObject"
-        }
       ],
       "objects": [
-        {
-          "type": "TestObject",
-          "x": 100,
-          "y": 100,
-          "width": 22,
-          "height": 27,
-		  "textureID" : "TestObject"
-        },
-        {
-          "type": "TestObject",
-          "x": 100,
-          "y": 90,
-          "width": 22,
-          "height": 27,
-		  "textureID" : ""
-        }
       ]
     }
   ]
