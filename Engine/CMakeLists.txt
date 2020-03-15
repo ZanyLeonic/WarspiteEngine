@@ -23,6 +23,7 @@ set(WarspiteEngine_Src
     PlayState.cpp
     WarspiteObject.cpp
     StateParser.cpp
+	SoundManager.cpp
     TestObject.cpp
     TextureManager.cpp
     TileLayer.cpp
@@ -52,6 +53,7 @@ set(WarspiteEngine_Header
 	ObjectParams.h
 	ObjectLayer.h
     StateParser.h
+	SoundManager.h
     TestObject.h
     TextureManager.h
     TileLayer.h
@@ -85,6 +87,7 @@ find_package(Python3 COMPONENTS Interpreter REQUIRED)
 find_package(SDL2 CONFIG REQUIRED)
 find_package(sdl2-image CONFIG REQUIRED)
 find_package(rapidjson CONFIG REQUIRED)
+find_package(openal CONFIG REQUIRED)
 find_package(ZLIB REQUIRED)
 
 add_custom_target(projMetadata 
@@ -105,6 +108,7 @@ set (Warspite_Libs
 	${SDL2_LIBRARIES}
 	${SDL2IMAGE_LIBRARIES}
 	ZLIB::ZLIB
+	OPENAL::OPENAL
 )
 
 include_directories(${SDL2_INCLUDE_DIRS})
