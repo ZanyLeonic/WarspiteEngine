@@ -108,7 +108,7 @@ set (Warspite_Libs
 	${SDL2_LIBRARIES}
 	${SDL2IMAGE_LIBRARIES}
 	ZLIB::ZLIB
-	OPENAL::OPENAL
+	OpenAL::OpenAL
 )
 
 include_directories(${SDL2_INCLUDE_DIRS})

@@ -169,41 +169,59 @@ void LevelParser::parseTilesets(const rapidjson::Value* pTilesetRoot, std::vecto
 
 void LevelParser::parseTileLayer(const rapidjson::Value* pTileElement, std::vector<Layer*>* pLayers, const std::vector<Tileset>* pTilesets)
 {
+	// Make the JSON value an object to manipulate better.
 	const Value::ConstObject& obj = pTileElement->GetObject();
 
+	// Another with a new instance of TileLayer to work with and return.
 	TileLayer* pTileLayer = new TileLayer(m_tileSize, m_width, m_height, *pTilesets);
 
-	// tiles
+	// the final decoded tile data in a 2D integer array
 	std::vector<std::vector<int>> data;
 
+	// The first one to hold the decoded base64 and the rawData string 
+	// to hold the base64 from the file.
 	std::string decodedIDs;
 	std::string rawData = obj["data"].GetString();
 
+	// Decoding the base64 into a string
 	decodedIDs = base64_decode(rawData);
 
+	// The desired size of the buffer ? map dimensions 
+	// multiplied by the size of an integer since the 
+	// destination is a int vector.
 	uLongf numGids = m_width * m_height * sizeof(int);
+
+	// Our buffer to store the uncompressed map data in.
 	std::vector<unsigned> gids(numGids);
+
+	// ZLib uncompress method ? takes our buffer in the 
+	// form of the type Bytef pointer, the size of the buffer, 
+	// the compressed data and the compressed data size.
 	uncompress((Bytef*)&gids[0], &numGids, 
 		(const Bytef*)decodedIDs.c_str(), decodedIDs.size());
 
+	// Populating our 2D array with blank rows
 	std::vector<int> layerRow(m_width);
 
+	// Add a row corrisponding to the height of the map we are trying to load.
 	for (int j = 0; j < m_height; j++)
 	{
 		data.push_back(layerRow);
 	}
 
+	// Then we fill the 2D array with the uncompressed tile data found in the map.
 	for (int rows = 0; rows < m_height; rows++)
 	{
 		for (int cols = 0; cols < m_width; cols++)
 		{
 			data[rows][cols] = gids[rows * m_width + cols];
 		}
-
-		pTileLayer->SetTileIDs(data);
-
-		pLayers->push_back(pTileLayer);
 	}
+
+	// Finally, we provide the TileLayer instance with the tile data and then 
+	// push it into the provided layers we were given.
+	pTileLayer->SetTileIDs(data);
+	pLayers->push_back(pTileLayer);
 }
 
 void LevelParser::parseTextures(const rapidjson::Value* pTextureRoot)

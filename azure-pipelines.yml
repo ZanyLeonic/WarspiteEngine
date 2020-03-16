@@ -34,26 +34,20 @@ jobs:
   - script: C:\vcpkg\vcpkg.exe install sdl2 sdl2-image[libjpeg-turbo,libwebp,tiff] openal-soft rapidjson zlib --triplet x64-windows
     condition: ne(variables.VCPKG_CACHE_RESTORED, 'true')
     displayName: "Installing dependencies"
-
-  - script: mkdir build
-    displayName: "Making build folder"
-  - task: CMake@1
-    displayName: "Generating build files"
-    inputs:
-        cmakeArgs: '-DCMAKE_TOOLCHAIN_FILE=C:\vcpkg\scripts\buildsystems\vcpkg.cmake -DVCPKG_TARGET_TRIPLET=x64-windows -DCMAKE_INSTALL_PREFIX=$(System.DefaultWorkingDirectory) ..'
+    
   - task: PythonScript@0
     displayName: "Generating build metadata"
     inputs:
       scriptSource: 'filePath'
       scriptPath: '$(System.DefaultWorkingDirectory)\Engine\GitVersion.py'
-  - task: MSBuild@1
-    displayName: "Compiling project"
+      
+  - task: run-cmake@0
     inputs:
-      solution: 'build/INSTALL.vcxproj'
-      msbuildArchitecture: 'x64'
-      platform: 'x64'
-      configuration: 'Debug'
-      createLogFile: true
+      cmakeListsOrSettingsJson: 'CMakeListsTxtBasic'
+      cmakeToolchainPath: 'C:\vcpkg\scripts\buildsystems\vcpkg.cmake'
+      useVcpkgToolchainFile: true
+      vcpkgTriplet: 'x64-windows'
+      cmakeGenerator: 'Ninja'
 
   - task: PublishBuildArtifacts@1
     displayName: "Publishing build artifacts"
