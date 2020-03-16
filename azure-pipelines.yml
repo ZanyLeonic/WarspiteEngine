@@ -35,23 +35,30 @@ jobs:
     condition: ne(variables.VCPKG_CACHE_RESTORED, 'true')
     displayName: "Installing dependencies"
     
+  - script: mkdir build
+    displayName: "Making build folder"
+  - task: CMake@1
+    displayName: "Generating build files"
+    inputs:
+        cmakeArgs: '-DCMAKE_TOOLCHAIN_FILE=C:\vcpkg\scripts\buildsystems\vcpkg.cmake -DVCPKG_TARGET_TRIPLET=x64-windows -DCMAKE_INSTALL_PREFIX=$(Build.ArtifactStagingDirectory) ..'
   - task: PythonScript@0
     displayName: "Generating build metadata"
     inputs:
       scriptSource: 'filePath'
       scriptPath: '$(System.DefaultWorkingDirectory)\Engine\GitVersion.py'
-      
-  - task: run-cmake@0
+  - task: MSBuild@1
+    displayName: "Compiling project"
     inputs:
-      cmakeListsOrSettingsJson: 'CMakeListsTxtBasic'
-      cmakeToolchainPath: 'C:\vcpkg\scripts\buildsystems\vcpkg.cmake'
-      useVcpkgToolchainFile: true
-      vcpkgTriplet: 'x64-windows'
-      cmakeGenerator: 'Ninja'
+      solution: 'build/INSTALL.vcxproj'
+      msbuildArchitecture: 'x64'
+      platform: 'x64'
+      configuration: 'Debug'
+      maximumCpuCount: true
+      createLogFile: true
 
   - task: PublishBuildArtifacts@1
     displayName: "Publishing build artifacts"
     inputs:
-      PathtoPublish: '$(System.DefaultWorkingDirectory)/Warspite/'
+      PathtoPublish: '$(Build.ArtifactStagingDirectory)'
       ArtifactName: 'drop'
       publishLocation: 'Container'
