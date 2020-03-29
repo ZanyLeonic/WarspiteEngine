@@ -12,19 +12,11 @@ void TileLayer::Draw()
 	Vector2D cCamPos = Camera::Instance()->GetPosition();
 	Vector2D vPortSz = Game::Instance()->GetViewportSize();
 
-	int x, y, x2, y2 = 0;
-
-	x = int(m_position.GetX()) / m_tileSize;
-	y = int(m_position.GetY()) / m_tileSize;
-
-	x2 = int(m_position.GetX()) % m_tileSize;
-	y2 = int(m_position.GetY()) % m_tileSize;
-
 	for (int i = 0; i < m_numRows; i++)
 	{
 		for (int j = 0; j < m_numColumns; j++)
 		{
-			int id = m_tileIDs[i + y][j + x];
+			int id = m_tileIDs[i][j];
 
 			if (id == 0)
 			{
@@ -32,12 +24,12 @@ void TileLayer::Draw()
 			}
 
 			// Don't render tiles that cannot be seen by the camera
-			if (((j * m_tileSize) - x2) - cCamPos.GetX() < -m_tileSize || ((j * m_tileSize) - x2) - cCamPos.GetX() > vPortSz.GetX())
+			if (((j * m_tileSize)) - cCamPos.GetX() < -m_tileSize || ((j * m_tileSize)) - cCamPos.GetX() > vPortSz.GetX())
 			{
 				continue;
 			}
 
-			if (((i * m_tileSize) - y2) - cCamPos.GetY() < -m_tileSize || ((i * m_tileSize) - y2) - cCamPos.GetY() > vPortSz.GetY())
+			if (((i * m_tileSize)) - cCamPos.GetY() < -m_tileSize || ((i * m_tileSize)) - cCamPos.GetY() > vPortSz.GetY())
 			{
 				continue;
 			}
@@ -47,7 +39,7 @@ void TileLayer::Draw()
 			id--;
 
 			TextureManager::Instance()->DrawTile(tileset.Name, tileset.Margin, tileset.Spacing,
-				((j * m_tileSize) - x2) - cCamPos.GetX(), ((i * m_tileSize) - y2) - cCamPos.GetY(), m_tileSize, m_tileSize, // X, Y, width and height
+				((j * m_tileSize)) - cCamPos.GetX(), ((i * m_tileSize)) - cCamPos.GetY(), m_tileSize, m_tileSize, // X, Y, width and height
 				(id - (tileset.FirstGID - 1)) / tileset.NumColumns, (id - (tileset.FirstGID - 1)) % tileset.NumColumns, // Row and frame
 				Game::Instance()->GetRenderer());
 		}

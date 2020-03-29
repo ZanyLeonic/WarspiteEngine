@@ -45,7 +45,8 @@ bool StateParser::ParseState(const char* stateFile, std::string stateID, std::ve
 		}
 		
 		// Create a new Value to store our state (if we find it.)
-		Value& state = Value(false);
+		Value iState = Value(false);
+		Value& state = iState;
 
 		assert(jDoc["states"].IsArray());
 

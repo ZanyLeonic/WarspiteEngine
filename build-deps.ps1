@@ -16,11 +16,11 @@ function SetEnv() {
 }
 
 function GenerateProjectFiles() {
-    if (!(Get-Command msbuild -ErrorAction SilentlyContinue)) {
+    if (!(Get-Command cmake -ErrorAction SilentlyContinue)) {
         SetEnv
     }
     $args = @( 
-    "-DCMAKE_TOOLCHAIN_FILE=C:\vcpkg\scripts\buildsystems\vcpkg.cmake",
+    "-DCMAKE_TOOLCHAIN_FILE=$VcpkgDir\scripts\buildsystems\vcpkg.cmake",
     '-DCMAKE_BUILD_TYPE="Debug"', 
     "-DVCPKG_TARGET_TRIPLET=$Arch-windows",
     ".")
