@@ -63,9 +63,11 @@ bool PlayState::OnPlay()
 
 void PlayState::Draw()
 {
-	TextureManager::Instance()->Draw("test", 0, 0, 1024, 1024, Game::Instance()->GetRenderer());
+	Vector2D cPos = Camera::Instance()->GetPosition();
 
-	//pLevel->Draw();
+	TextureManager::Instance()->DrawFrame("test", 0, 0, 1024, 1024, cPos.GetX(), cPos.GetY(), 0, 0, Game::Instance()->GetRenderer());
+
+	pLevel->Draw();
 	// gameobjects and stuff
 	GameStateBase::Draw();
 }

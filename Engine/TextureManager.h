@@ -3,7 +3,7 @@
 #define __TextureManager__
 
 #include "Vector2D.h"
-#include <SDL2\SDL.h>
+#include <SDL.h>
 #include <string>
 #include <map>
 
