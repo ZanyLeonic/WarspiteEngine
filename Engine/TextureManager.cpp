@@ -1,4 +1,5 @@
 #include "TextureManager.h"
+
 #include <SDL_image.h>
 
 TextureManager* TextureManager::s_pInstance = 0;
@@ -27,6 +28,61 @@ bool TextureManager::Load(std::string fileName, std::string id,
 
 	// if we got here, something is wrong.
 	return false;
+}
+
+void TextureManager::CreateCheckboardPattern(Vector2D size, SDL_Renderer* pRenderer)
+{
+	const int cSize = 32;
+	
+	const SDL_Colour c1 = { 0xFF, 0x00, 0xFF };
+	const SDL_Colour c2 = { 0x00, 0x00, 0x00 };
+
+	int tRows = int(size.GetX() / 32);
+	int tCols = int(size.GetY() / 32);
+
+	SDL_Texture* pTexture = SDL_CreateTexture(pRenderer, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_TARGET, size.GetX(), size.GetY());
+
+	SDL_SetRenderTarget(pRenderer, pTexture);
+	SDL_SetRenderDrawColor(pRenderer, 0xFF, 0xFF, 0xFF, 0xFF);
+	SDL_RenderClear(pRenderer);
+
+	SDL_Colour d1;
+	SDL_Colour d2;
+
+	for (int i = 0; i < tRows; i++)
+	{
+		if (int(i % 2) == 0)
+		{
+			d1 = c1;
+			d2 = c2;
+		}
+		else
+		{
+			d1 = c2;
+			d2 = c1;
+		}
+
+		for (int j = 0; j < tCols; j++)
+		{
+			if (int(j % 2) == 0)
+			{
+				SDL_SetRenderDrawColor(pRenderer, d1.r, d1.g, d1.b, 0xFF);
+			}
+			else
+			{
+				SDL_SetRenderDrawColor(pRenderer, d2.r, d2.g, d2.b, 0xFF);
+			}
+
+			SDL_Rect r = {i * cSize, j * cSize, cSize, cSize};
+
+			SDL_RenderFillRect(pRenderer, &r);
+		}
+	}
+
+	m_textureMap["test"] = pTexture;
+
+	SDL_SetRenderTarget(pRenderer, NULL);
+	SDL_RenderPresent(pRenderer);
 }
 
 void TextureManager::Draw(std::string id, int x, int y, 

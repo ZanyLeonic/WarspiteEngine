@@ -52,6 +52,10 @@ bool PlayState::OnPlay()
 		}
 	}
 
+	TextureManager::Instance()->CreateCheckboardPattern(Vector2D(1024, 1024), Game::Instance()->GetRenderer());
+	SDL_SetRenderDrawColor(Game::Instance()->GetRenderer(), 255, 255, 255, 255);
+
+
 	std::cout << "Entering PlayState\n";
 	
 	return true;
@@ -59,7 +63,9 @@ bool PlayState::OnPlay()
 
 void PlayState::Draw()
 {
-	pLevel->Draw();
+	TextureManager::Instance()->Draw("test", 0, 0, 1024, 1024, Game::Instance()->GetRenderer());
+
+	//pLevel->Draw();
 	// gameobjects and stuff
 	GameStateBase::Draw();
 }

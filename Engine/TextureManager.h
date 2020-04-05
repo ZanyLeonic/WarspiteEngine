@@ -2,6 +2,7 @@
 #ifndef __TextureManager__
 #define __TextureManager__
 
+#include "Vector2D.h"
 #include <SDL2\SDL.h>
 #include <string>
 #include <map>
@@ -24,6 +25,8 @@ public:
 	}
 
 	bool Load(std::string fileName, std::string id, SDL_Renderer* pRenderer);
+
+	void CreateCheckboardPattern(Vector2D size, SDL_Renderer* pRenderer);
 
 	// draw
 	void Draw(std::string id, int x, int y, int width, int  height, 
