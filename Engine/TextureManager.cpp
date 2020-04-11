@@ -41,8 +41,10 @@ void TextureManager::CreateCheckboardPattern(Vector2D size, SDL_Renderer* pRende
 	int tCols = int(size.GetY() / 32);
 
 	SDL_Texture* pTexture = SDL_CreateTexture(pRenderer, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_TARGET, size.GetX(), size.GetY());
+	SDL_SetTextureBlendMode(pTexture, SDL_BLENDMODE_NONE);
 
 	SDL_SetRenderTarget(pRenderer, pTexture);
+	
 	SDL_SetRenderDrawColor(pRenderer, 0xFF, 0xFF, 0xFF, 0xFF);
 	SDL_RenderClear(pRenderer);
 

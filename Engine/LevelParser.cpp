@@ -72,16 +72,21 @@ Level* LevelParser::ParseLevel(const char* levelFile)
 			parseTilesets(&tilesets[i], pLevel->GetTilesets());
 		}
 
+		// Does the level have properties?
 		if (tLevel.HasMember("properties"))
 		{
+			// Storing in a variable first to prevent implicit conversion
+			// (some C++ compilers do not like that.)
 			const Value& properties = tLevel["properties"].GetArray();
 			for (SizeType i = 0; i < properties.Size(); i++)
 			{
+				// Ignore any other types of properties when attempting to load textures.
 				if (properties[i]["type"] == "file")
 					parseTextures(&properties[i]);
 			}
 		}
 
+		// If we don't have an array - something is wrong.
 		assert(tLevel["layers"].IsArray());
 		const Value& layers = tLevel["layers"].GetArray();
 
@@ -226,8 +231,10 @@ void LevelParser::parseTileLayer(const rapidjson::Value* pTileElement, std::vect
 
 void LevelParser::parseTextures(const rapidjson::Value* pTextureRoot)
 {
+	// Get the correct type of the value. (should be an object)
 	const Value::ConstObject& o = pTextureRoot->GetObject();
 
+	// Load the texture via the TextureManager with the info inside the object.
 	TextureManager::Instance()->Load(o["value"].GetString(), o["name"].GetString(),
 		Game::Instance()->GetRenderer());
 }
@@ -273,28 +280,39 @@ void LevelParser::parseBackgroundColour(const std::string* colourVal)
 
 void LevelParser::parseObjectLayer(const rapidjson::Value* pObjectVal, std::vector<Layer*>* pLayer)
 {
+	// Get our JSON values to their types.
 	const Value::ConstObject& o = pObjectVal->GetObject();
 	const Value::ConstArray& a = o["objects"].GetArray();
 
+	// Create our ObjectLayer we are filling with data.
 	ObjectLayer* pObjectLayer = new ObjectLayer();
 	
+	// iterate through each object we have.
 	for (SizeType i = 0; i < a.Size(); i++)
 	{
+		// debug
 		std::cout << "i: " << i << " a size: " << a.Size() << std::endl;
+
+		// get our current object as a JSON object to get data from.
 		const Value::ConstObject& b = a[i].GetObject();
+		// intialise variables for the data we are getting from the JSON.
 		int x = 0, y = 0, width = 0, height = 0, 
 			onClickCallback = 0, onEnterCallback = 0, onLeaveCallback = 0;
 		int numFrames = 1, animSpeed = 1;
 		std::string textureID;
 
+		// Get the desired coordinates
 		x = b["x"].GetInt();
 		y = b["y"].GetInt();
 		
+		// Create the object that is defined
 		GameObject* pGameObject = GameObjectFactory::Instance()
 			->Create(b["type"].GetString());
 
+		// fill in any additional information (if provided.)
 		if (b.HasMember("properties"))
 		{
+			// iterate
 			const Value::ConstArray& d = b["properties"].GetArray();
 			for (SizeType j = 0; j < d.Size(); j++)
 			{
@@ -343,16 +361,19 @@ void LevelParser::parseObjectLayer(const rapidjson::Value* pObjectVal, std::vect
 				}
 				else
 				{
-					std::cout << "Warning: Unrecongised property\"" << propName << "\"." << std::endl;
+					// Future proofing incase new properties get added for newer engine version.
+					std::cout << "Warning: Unrecongised property\"" << propName << "\"!" << std::endl;
 				}
 			}
 		}
 
+		// intialise the object with the data obtained.
 		pGameObject->Load(new ObjectParams(x, y, width, height, 
 			textureID, animSpeed, numFrames, onClickCallback, 
 			onEnterCallback, onLeaveCallback));
 		pObjectLayer->GetGameObjects()->push_back(pGameObject);
 	}
 
+	// Add the object layer to the Level object
 	pLayer->push_back(pObjectLayer);
 }

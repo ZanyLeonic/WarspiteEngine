@@ -32,7 +32,7 @@ bool Game::Init(const char* title, int xpos, int ypos, int width, int height, bo
 		if (m_pWindow != 0)
 		{
 			std::cout << "Window creation success\n";
-			m_pRenderer = SDL_CreateRenderer(m_pWindow, -1, SDL_RENDERER_TARGETTEXTURE);
+			m_pRenderer = SDL_CreateRenderer(m_pWindow, -1, SDL_RENDERER_TARGETTEXTURE | SDL_RENDERER_SOFTWARE);
 
 			if (m_pRenderer != 0) // render init success
 			{
