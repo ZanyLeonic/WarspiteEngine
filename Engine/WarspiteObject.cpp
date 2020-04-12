@@ -33,14 +33,14 @@ void WarspiteObject::Draw()
 	if (m_velocity.GetX() > 0)
 	{
 		TextureManager::Instance()->DrawFrame(m_textureID, (int)m_position.GetX(),
-			(int)m_position.GetY(), m_width, m_height, 0, 0, 
+			(int)m_position.GetY(), m_width, m_height, 
 			m_currentRow, m_currentFrame, Game::Instance()->GetRenderer(), 
 			SDL_FLIP_HORIZONTAL);
 	}
 	else
 	{
 		TextureManager::Instance()->DrawFrame(m_textureID, (int)m_position.GetX(),
-			(int)m_position.GetY(), m_width, m_height, 0, 0, 
+			(int)m_position.GetY(), m_width, m_height,
 			m_currentRow, m_currentFrame, Game::Instance()->GetRenderer());
 	}
 }

@@ -26,6 +26,9 @@ class Level
 public:
 	~Level() {};
 
+	void OnPlay();
+	void Destroy();
+
 	void OnThink();
 	void Draw();
 

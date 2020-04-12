@@ -26,7 +26,7 @@ public:
 
 	bool Load(std::string fileName, std::string id, SDL_Renderer* pRenderer);
 
-	void CreateCheckboardPattern(Vector2D size, SDL_Renderer* pRenderer);
+	void CreateCheckboardPattern(Vector2D size, std::string texName, SDL_Renderer* pRenderer);
 
 	// draw
 	void Draw(std::string id, int x, int y, int width, int  height, 
@@ -34,8 +34,8 @@ public:
 
 	// drawframe
 	void DrawFrame(std::string id, int x, int y, int width, int height,
-		int camX, int camY, int currentRow, int currentFrame, 
-		SDL_Renderer* pRenderer, SDL_RendererFlip flip = SDL_FLIP_NONE);
+		int currentRow, int currentFrame, SDL_Renderer* pRenderer, 
+		SDL_RendererFlip flip = SDL_FLIP_NONE);
 
 	void DrawTile(std::string id, int margin, int spacing, 
 		int x, int y, int width, int height, int currentRow, 

@@ -6,6 +6,9 @@ class Layer
 {
 public:
 
+	virtual void OnPlay() = 0;
+	virtual void Destroy() = 0;
+
 	virtual void OnThink() = 0;
 	virtual void Draw() = 0;
 

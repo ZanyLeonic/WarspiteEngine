@@ -2,6 +2,14 @@
 #include "Camera.h"
 #include "TileLayer.h"
 
+void TileLayer::OnPlay()
+{
+}
+
+void TileLayer::Destroy()
+{
+}
+
 void TileLayer::OnThink()
 {
 	m_position += m_velocity;
@@ -9,7 +17,7 @@ void TileLayer::OnThink()
 
 void TileLayer::Draw()
 {
-	Vector2D cCamPos = Camera::Instance()->GetPosition();
+	Vector2D cCamPos = Camera::Instance()->GetPositionT();
 	Vector2D vPortSz = Game::Instance()->GetViewportSize();
 
 	for (int i = 0; i < m_numRows; i++)

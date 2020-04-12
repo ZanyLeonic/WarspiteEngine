@@ -11,13 +11,18 @@ void Camera::OnThink()
 
 }
 
-Vector2D Camera::GetPosition() const
+Vector2D Camera::GetPositionT() const
 {
 	if (m_pTarget != 0)
 	{
-		Vector2D pos(((m_pTarget->GetX()) - (Game::Instance()->GetViewportSize().GetX() / 2)),
-			((m_pTarget->GetY()) - (Game::Instance()->GetViewportSize().GetY() / 2))) ;
+		Vector2D vsz = Game::Instance()->GetViewportSize();
 
+		// Offset the target by half of the viewport
+		Vector2D pos(((m_pTarget->GetX()) - (vsz.GetX() / 2)),
+			((m_pTarget->GetY()) - (vsz.GetY() / 2))) ;
+
+		// if the X and Y are less than 0 – that means the camera is not past half of
+		// the screen – set to 0. 
 		if (pos.GetX() < 0)
 		{
 			pos.SetX(0);
@@ -28,17 +33,10 @@ Vector2D Camera::GetPosition() const
 			pos.SetY(0);
 		}
 
-		if (pos.GetX() > Game::Instance()->GetViewportSize().GetX())
-		{
-			pos.SetX(Game::Instance()->GetViewportSize().GetX());
-		}
-
-		if (pos.GetY() > Game::Instance()->GetViewportSize().GetY())
-		{
-			pos.SetY(Game::Instance()->GetViewportSize().GetY());
-		}
-
+		// Return the new offsetted position
 		return pos;
 	}
+
+	// No target? return the last stored position.
 	return m_position;
 }

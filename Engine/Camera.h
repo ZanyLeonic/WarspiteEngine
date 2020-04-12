@@ -39,7 +39,12 @@ public:
 		return m_levelSize;
 	}
 
-	Vector2D GetPosition() const;
+	Vector2D GetPosition() const
+	{
+		return m_position;
+	}
+
+	Vector2D GetPositionT() const;
 
 private:
 

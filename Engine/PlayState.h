@@ -20,5 +20,7 @@ public:
 private:
 	static const std::string s_playID;
 	Level* pLevel;
+
+	Vector2D m_screenSize;
 };
 #endif

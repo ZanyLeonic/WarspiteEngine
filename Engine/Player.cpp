@@ -42,7 +42,7 @@ void Player::Load(const ObjectParams* pParams)
 bool Player::OnThink()
 {
 	std::cout << "\r";
-	std::cout << "PLAYER -> X: " << m_position.GetX() << " Y: " << m_position.GetY() << " CAM -> X: " << Camera::Instance()->GetPosition().GetX() << " Y: " << Camera::Instance()->GetPosition().GetY() << " TimeLeft: " << float(m_timeLeft / 100) << "   ";
+	std::cout << "PLAYER -> X: " << m_position.GetX() << " Y: " << m_position.GetY() << " CAM -> X: " << Camera::Instance()->GetPosition().GetX() << " Y: " << Camera::Instance()->GetPosition().GetY() << " TimeLeft: " << float(m_timeLeft / 100) <<  " Frame: " << m_frameOffset << "   ";
 	
 	HandleInput();
 
@@ -52,7 +52,8 @@ bool Player::OnThink()
 	{
 		m_position = VectorMath::Lerp(lastPosition, nextPosition, (m_timeLeft / 100));
 		Camera::Instance()->SetTarget(&m_position);
-		m_currentFrame = int(((SDL_GetTicks() / (1000 / 4)) % 3));
+		
+		DecideFrame();
 	}
 
 	WarspiteObject::OnThink();
@@ -60,20 +61,23 @@ bool Player::OnThink()
 }
 void Player::Draw()
 {
-	Vector2D cPos = Camera::Instance()->GetPosition();
+	// Get the camera position to offset the drawing
+	Vector2D cPos = Camera::Instance()->GetPositionT();
 
+	// Flip the sprite automatically if the velocity is negative.
 	if (m_velocity.GetX() > 0)
 	{
-		TextureManager::Instance()->DrawFrame(m_textureID, (int)m_position.GetX(),
-			(int)m_position.GetY(), m_width, m_height, cPos.GetX(), cPos.GetY(),
-			m_currentRow, m_currentFrame, Game::Instance()->GetRenderer(),
-			SDL_FLIP_HORIZONTAL);
+		TextureManager::Instance()->DrawFrame(m_textureID,
+			int(m_position.GetX() - cPos.GetX()), int(m_position.GetY() - cPos.GetY()),
+			m_width, m_height, m_currentRow, m_currentFrame,
+			Game::Instance()->GetRenderer(), SDL_FLIP_HORIZONTAL);
 	}
 	else
 	{
-		TextureManager::Instance()->DrawFrame(m_textureID, (int)m_position.GetX(),
-			(int)m_position.GetY(), m_width, m_height, cPos.GetX(), cPos.GetY(),
-			m_currentRow, m_currentFrame, Game::Instance()->GetRenderer());
+		TextureManager::Instance()->DrawFrame(m_textureID,
+			int(m_position.GetX() - cPos.GetX()), int(m_position.GetY() - cPos.GetY()),
+			m_width, m_height, m_currentRow, m_currentFrame,
+			Game::Instance()->GetRenderer());
 	}
 }
 
@@ -105,8 +109,8 @@ void Player::HandleInput()
 				moving = true;
 				lastPosition = m_position;
 				nextPosition = curPos;
-				m_CamOffset.SetY(m_CamOffset.GetY() - m_moveStep);
 				m_timeLeft = 0;
+				m_stepLastFrame = true;
 			}
 			else
 			{
@@ -124,8 +128,8 @@ void Player::HandleInput()
 				moving = true;
 				lastPosition = m_position;
 				nextPosition = curPos;
-				m_CamOffset.SetY(m_CamOffset.GetY() + m_moveStep);
 				m_timeLeft = 0;
+				m_stepLastFrame = true;
 			}
 			else
 			{
@@ -143,8 +147,8 @@ void Player::HandleInput()
 				moving = true;
 				lastPosition = m_position;
 				nextPosition = curPos;
-				m_CamOffset.SetX(m_CamOffset.GetX() - m_moveStep);
 				m_timeLeft = 0;
+				m_stepLastFrame = true;
 			}
 			else
 			{
@@ -162,8 +166,8 @@ void Player::HandleInput()
 				moving = true;
 				lastPosition = m_position;
 				nextPosition = curPos;
-				m_CamOffset.SetX(m_CamOffset.GetX() + m_moveStep);
 				m_timeLeft = 0;
+				m_stepLastFrame = true;
 			}
 			else
 			{
@@ -183,25 +187,15 @@ void Player::HandleInput()
 
 bool Player::IsPositionFree(Vector2D* pNext)
 {
-	//std::vector<GameObject*> pGameObj = Game::Instance()->GetStateManager()->GetCurrentState()->GetGameObjects();
-
+	// Get the value from the pointer and store it in a rvalue.
 	Vector2D nPos = Vector2D(*pNext);
 
-	//// Linear search through the current GameObjects
-	//for (int i = 0; i < pGameObj.size(); i++)
-	//{
-	//	// Check if the GameObject is in the way and isn't us
-	//	if (pGameObj[i] != this && pGameObj[i]->GetPosition() == nPos)
-	//	{
-	//		return false;
-	//	}
-	//}
-
-
+	// Go through each ObjectLayer we got earlier
 	for (int i = 0; i < m_objects.size(); i++)
 	{
 		if (!m_objects[i]) continue;
 
+		// Get an rvalue of the list of GameObject's for the iterated layer
 		std::vector<GameObject*>& ir = *m_objects[i];
 
 		for (int j = 0; j < ir.size(); j++)
@@ -233,4 +227,17 @@ bool Player::IsPositionFree(Vector2D* pNext)
 
 	// Nothing is in the way!
 	return true;
+}
+
+void Player::DecideFrame()
+{
+	int nFrame = (SDL_GetTicks() / 100) % 3;
+
+	if (m_stepLastFrame)
+	{
+		nFrame = 0;
+		m_stepLastFrame = false;
+	}
+
+	m_currentFrame = nFrame;
 }

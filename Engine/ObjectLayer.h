@@ -9,6 +9,9 @@ class ObjectLayer :
 	public Layer
 {
 public:
+	virtual void OnPlay();
+	virtual void Destroy();
+
 	virtual void OnThink();
 	virtual void Draw();
 

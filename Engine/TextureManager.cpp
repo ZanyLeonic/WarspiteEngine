@@ -30,7 +30,7 @@ bool TextureManager::Load(std::string fileName, std::string id,
 	return false;
 }
 
-void TextureManager::CreateCheckboardPattern(Vector2D size, SDL_Renderer* pRenderer)
+void TextureManager::CreateCheckboardPattern(Vector2D size, std::string texName, SDL_Renderer* pRenderer)
 {
 	const int cSize = 32;
 	
@@ -81,7 +81,7 @@ void TextureManager::CreateCheckboardPattern(Vector2D size, SDL_Renderer* pRende
 		}
 	}
 
-	m_textureMap["test"] = pTexture;
+	m_textureMap[texName] = pTexture;
 
 	SDL_SetRenderTarget(pRenderer, NULL);
 	SDL_RenderPresent(pRenderer);
@@ -109,7 +109,7 @@ void TextureManager::Draw(std::string id, int x, int y,
 }
 
 void TextureManager::DrawFrame(std::string id, int x, int y, 
-	int width, int height, int camX, int camY, int currentRow, int currentFrame, 
+	int width, int height, int currentRow, int currentFrame, 
 	SDL_Renderer* pRenderer, SDL_RendererFlip flip)
 {
 	if (id == "") return;
@@ -121,8 +121,8 @@ void TextureManager::DrawFrame(std::string id, int x, int y,
 	srcRect.y = height * (currentRow - 1);
 	srcRect.w = destRect.w = width;
 	srcRect.h = destRect.h = height;
-	destRect.x = x - camX;
-	destRect.y = y - camY;
+	destRect.x = x;
+	destRect.y = y;
 
 	SDL_RenderCopyEx(pRenderer, m_textureMap[id], 
 		&srcRect, &destRect, 0, 0, flip);

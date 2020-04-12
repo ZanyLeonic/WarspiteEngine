@@ -24,6 +24,9 @@ public:
 		m_numRows = mapHeight;
 	};
 
+	virtual void OnPlay();
+	virtual void Destroy();
+
 	virtual void OnThink();
 	virtual void Draw();
 

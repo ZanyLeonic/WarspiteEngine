@@ -29,6 +29,8 @@ private:
 
 	bool IsPositionFree(Vector2D* pNext);
 
+	void DecideFrame();
+
 	std::vector<std::vector<GameObject*>*> m_objects;
 
 	Vector2D lastPosition;
@@ -39,8 +41,13 @@ private:
 	bool moveUp = false;
 	bool moveRight = false;
 
+	bool m_stepLastFrame = false;
+
 	float m_timeLeft = 100;
 	const int m_moveStep = 32;
+
+	int m_frameOffset = 0;
+
 	Vector2D m_CamOffset;
 };
 
