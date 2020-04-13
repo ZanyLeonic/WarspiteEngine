@@ -15,17 +15,21 @@ Player::Player()
 
 void Player::OnPlay()
 {
+	// Are we in the PlayState?
 	PlayState* ps = static_cast<PlayState*>(Game::Instance()->GetStateManager()->GetCurrentState());
 
 	if (ps)
 	{
+		// If so - we can grab the current level and its Layers
 		std::vector<Layer*> objs = *ps->GetLoadedLevel()->GetLayers();
 
 		for (int i = 0; i < objs.size(); i++)
 		{
+			// Only care about the ObjectLayers - since that's what we are going to collide with.
 			ObjectLayer* obl = dynamic_cast<ObjectLayer*>(objs[i]);
 			if (!obl) continue;
 
+			// Add each GameObject vector to a vector of vectors.
 			m_objects.push_back(obl->GetGameObjects());
 		}
 	}
@@ -193,7 +197,7 @@ bool Player::IsPositionFree(Vector2D* pNext)
 	// Go through each ObjectLayer we got earlier
 	for (int i = 0; i < m_objects.size(); i++)
 	{
-		if (!m_objects[i]) continue;
+		if (m_objects[i]) continue;
 
 		// Get an rvalue of the list of GameObject's for the iterated layer
 		std::vector<GameObject*>& ir = *m_objects[i];

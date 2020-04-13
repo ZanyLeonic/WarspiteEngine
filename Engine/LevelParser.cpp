@@ -56,7 +56,7 @@ Level* LevelParser::ParseLevel(const char* levelFile)
 		m_width = tLevel["width"].GetInt();
 		m_tileSize = tLevel["tilewidth"].GetInt();
 
-		std::string bgColour = tLevel.HasMember("backgroundcolor") ? tLevel["backgroundcolor"].GetString() : "";
+		std::string bgColour = tLevel.HasMember("backgroundcolor") ? tLevel["backgroundcolor"].GetString() : "#FFFFFF";
 
 		parseBackgroundColour(&bgColour);
 
@@ -251,11 +251,11 @@ void LevelParser::parseBackgroundColour(const std::string* colourVal)
 	// No alpha channel
 	case 7:
 		// Red
-		sscanf(colourVal->substr(1, 2).c_str(), "%x", &r);
+		r = std::stoi(colourVal->substr(1, 2).c_str(), 0, 16);
 		// Green
-		sscanf(colourVal->substr(3, 2).c_str(), "%x", &g);
+		g = std::stoi(colourVal->substr(3, 2).c_str(), 0, 16);
 		// Blue
-		sscanf(colourVal->substr(5, 2).c_str(), "%x", &b);
+		b = std::stoi(colourVal->substr(5, 2).c_str(), 0, 16);
 		// Alpha
 		a = 255;
 
@@ -263,10 +263,10 @@ void LevelParser::parseBackgroundColour(const std::string* colourVal)
 	
 	// Alpha channel
 	case 9:
-		sscanf(colourVal->substr(1, 2).c_str(), "%x", &a);
-		sscanf(colourVal->substr(3, 2).c_str(), "%x", &r);
-		sscanf(colourVal->substr(5, 2).c_str(), "%x", &g);
-		sscanf(colourVal->substr(7, 2).c_str(), "%x", &b);
+		a = std::stoi(colourVal->substr(1, 2).c_str(), 0, 16);
+		r = std::stoi(colourVal->substr(3, 2).c_str(), 0, 16);
+		g = std::stoi(colourVal->substr(5, 2).c_str(), 0, 16);
+		b = std::stoi(colourVal->substr(7, 2).c_str(), 0, 16);
 
 		break;
 
