@@ -251,27 +251,25 @@ void LevelParser::parseBackgroundColour(const std::string* colourVal)
 	// No alpha channel
 	case 7:
 		// Red
-		r = std::stoi(colourVal->substr(1, 2).c_str(), 0, 16);
+		r = std::stoi(colourVal->substr(1, 2), 0, 16);
 		// Green
-		g = std::stoi(colourVal->substr(3, 2).c_str(), 0, 16);
+		g = std::stoi(colourVal->substr(3, 2), 0, 16);
 		// Blue
-		b = std::stoi(colourVal->substr(5, 2).c_str(), 0, 16);
-		// Alpha
-		a = 255;
+		b = std::stoi(colourVal->substr(5, 2), 0, 16);
 
 		break;
 	
 	// Alpha channel
 	case 9:
-		a = std::stoi(colourVal->substr(1, 2).c_str(), 0, 16);
-		r = std::stoi(colourVal->substr(3, 2).c_str(), 0, 16);
-		g = std::stoi(colourVal->substr(5, 2).c_str(), 0, 16);
-		b = std::stoi(colourVal->substr(7, 2).c_str(), 0, 16);
+		a = std::stoi(colourVal->substr(1, 2), 0, 16);
+		r = std::stoi(colourVal->substr(3, 2), 0, 16);
+		g = std::stoi(colourVal->substr(5, 2), 0, 16);
+		b = std::stoi(colourVal->substr(7, 2), 0, 16);
 
 		break;
 
 	default:
-		std::cout << "Warning: Unrecongised or unsupported colour value!" << std::endl;
+		std::cout << "Warning: Unrecongised or unsupported colour value!" << std::endl << "Value: " << colourVal << std::endl;
 		break;
 	};
 
