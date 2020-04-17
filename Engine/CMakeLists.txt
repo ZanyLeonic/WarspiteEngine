@@ -4,41 +4,41 @@
 cmake_minimum_required (VERSION 3.8)
 
 set(WarspiteEngine_Src
-	AnimatedGraphic.cpp
-	Button.cpp
-	Camera.cpp
-	Enemy.cpp
-    GameObjectFactory.cpp
+    AnimatedGraphic.cpp
+    Button.cpp
+    Camera.cpp
+    Enemy.cpp
     Game.cpp
+    GameObjectFactory.cpp
     GameStateBase.cpp
     GameStateManager.cpp
     InputHandler.cpp
-    main.cpp
-	ObjectLayer.cpp
     Level.cpp
     LevelParser.cpp
-	MapObject.cpp
+    main.cpp
+    MainMenuState.cpp
+    MapObject.cpp
+    ObjectLayer.cpp
     PauseState.cpp
     Player.cpp
     PlayState.cpp
-    WarspiteObject.cpp
+    SoundManager.cpp
     StateParser.cpp
-	SoundManager.cpp
     TestObject.cpp
     TextureManager.cpp
     TileLayer.cpp
-    MainMenuState.cpp
+    WarspiteObject.cpp
 )
 
 set(WarspiteEngine_Header
-	AnimatedGraphic.h
+    AnimatedGraphic.h
     BaseCreator.h
     Button.h
-	Camera.h
+    Camera.h
     Enemy.h
+    Game.h
     GameObject.h
     GameObjectFactory.h
-    Game.h
     GameState.h
     GameStateBase.h
     GameStateManager.h
@@ -46,32 +46,32 @@ set(WarspiteEngine_Header
     Layer.h
     Level.h
     LevelParser.h
-	MapObject.h
+    MainMenuState.h
+    MapObject.h
+    MenuState.h
+    ObjectLayer.h
+    ObjectParams.h
     PauseState.h
     Player.h
     PlayState.h
-	ObjectParams.h
-	ObjectLayer.h
+    SoundManager.h
     StateParser.h
-	SoundManager.h
     TestObject.h
     TextureManager.h
     TileLayer.h
-    MainMenuState.h
-	MenuState.h
     Vector2D.h
-	WarspiteObject.h
+    WarspiteObject.h
 )
 
 # Thirdparty code
 set (WarspiteEngine_Src
-	${WarspiteEngine_Src}
-	etc/Base64.cpp
+    ${WarspiteEngine_Src}
+    etc/Base64.cpp
 )
 
 set (WarspiteEngine_Header
-	${WarspiteEngine_Header}
-	etc/Base64.h
+    ${WarspiteEngine_Header}
+    etc/Base64.h
 )
 
 if (WIN32)
@@ -83,6 +83,11 @@ if (WIN32)
 	set(SDL2IMAGE_LIBRARIES SDL2::SDL2_image)
 endif()
 
+# Apply some debug options
+if (CMAKE_BUILD_TYPE STREQUAL "Debug")
+    add_compile_definitions(WARDEBUG)
+endif()
+
 find_package(Python3 COMPONENTS Interpreter REQUIRED)
 find_package(SDL2 CONFIG REQUIRED)
 find_package(sdl2-image CONFIG REQUIRED)
@@ -90,7 +95,7 @@ find_package(rapidjson CONFIG REQUIRED)
 find_package(openal CONFIG REQUIRED)
 find_package(ZLIB REQUIRED)
 
-add_custom_target(projMetadata 
+add_custom_target(ProjectMetadata
 	COMMAND ${Python_EXECUTABLE} "${CMAKE_CURRENT_SOURCE_DIR}/GitVersion.py"
 	COMMENT "Generating build metadata..."
 )
@@ -105,10 +110,10 @@ if("${SDL2IMAGE_LIBRARIES}" STREQUAL "")
 endif()
 
 set (Warspite_Libs
-	${SDL2_LIBRARIES}
-	${SDL2IMAGE_LIBRARIES}
-	ZLIB::ZLIB
-	OpenAL::OpenAL
+    ${SDL2_LIBRARIES}
+    ${SDL2IMAGE_LIBRARIES}
+    ZLIB::ZLIB
+    OpenAL::OpenAL
 )
 
 include_directories(${SDL2_INCLUDE_DIRS})
@@ -117,7 +122,7 @@ include_directories(${RAPIDJSON_INCLUDE_DIRS})
 
 # Add source to this project's executable.
 add_executable (${PROJECT_NAME} ${WarspiteEngine_Src} ${WarspiteEngine_Header})
-add_dependencies(${PROJECT_NAME} projMetadata)
+add_dependencies(${PROJECT_NAME} ProjectMetadata)
 
 # As a last ditch effort...
 if ("${Python_EXECUTABLE}" STREQUAL "")

@@ -3,13 +3,40 @@ import os, sys, json
 from pathlib import Path
 from shutil import copyfile
 
+appName="Warspite Map Exporter"
+appVer="1.0.0.0"
+appDesc="""Corrects paths and moves maps and their dependencies."""
+
+def DoesParameterExist(parmName):
+    for i in sys.argv:
+        if i == parmName:
+            return True
+    return False
+
+def GetParameterValue(parmName, required=False):
+    for i, j in enumerate(sys.argv):
+        if j == parmName and (i+1 < len(sys.argv)):
+            if not sys.argv[i+1].startswith("-"):
+                return sys.argv[i+1]
+
+    if required == True:
+        raise RuntimeError("Cannot find specified required parameter \"{0}\"!".format(parmName))
+        
+    return 0
+
+print("{0}".format(appName))
+print("Version: {0}".format(appVer))
+print("Description:\n{0}\n".format(appDesc))
+
 try:
-    workingDir = Path(sys.argv[2])
-except IndexError:
+    workingDir = Path(GetParameterValue("-workDir", True))
+except RuntimeError:
     workingDir = Path(os.getcwd())
 
-mapFile = Path(sys.argv[1]) # expecting the first parameter after the script to be the map file.
-baseFolder = "assets" # the base folder for storing assets - can be game folder or generic engine assets
+print("Using working directory: \"{0}\"".format(workingDir))
+
+mapFile = Path(GetParameterValue("-map", True)) # expecting the first parameter after the script to be the map file.
+baseFolder = GetParameterValue("-baseFolder") if DoesParameterExist("-baseFolder") else "assets" # the base folder for storing assets - can be game folder or generic engine assets
 
 print("Processing map %s..." % mapFile.name)
 
