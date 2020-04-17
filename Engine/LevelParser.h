@@ -7,7 +7,7 @@
 #include <vector>
 
 class Level;
-class Tileset;
+struct Tileset;
 class Layer;
 
 class LevelParser

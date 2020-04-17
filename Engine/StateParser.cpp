@@ -127,7 +127,7 @@ void StateParser::ParseObjects(const rapidjson::Value* pStateRoot, std::vector<G
 			GameObjectFactory::Instance()->Create(b["type"].GetString());
 
 		// Provide the extracting info to the object.
-		pGameObject->Load(new ObjectParams(x, y, width, height, textureID,
+		pGameObject->Load(new ObjectParams((float)x, (float)y, width, height, textureID,
 			animSpeed, numFrames, onClickCallback, onEnterCallback, onLeaveCallback));
 
 		// Add it to the m_GameObjects

@@ -1,5 +1,6 @@
 #include "Game.h"
 #include "TextureManager.h"
+#include "SoundManager.h"
 #include "Camera.h"
 #include "InputHandler.h"
 #include "LevelParser.h"
@@ -27,7 +28,7 @@ bool Game::Init(const char* title, int xpos, int ypos, int width, int height, bo
 		std::cout << "SDL init success\n";
 		// init the window
 		m_pWindow = SDL_CreateWindow(title, xpos, ypos, width, height, flags);
-		m_viewportSize = Vector2D(width, height);
+		m_viewportSize = Vector2D((float)width, (float)height);
 
 		if (m_pWindow != 0)
 		{
@@ -39,6 +40,9 @@ bool Game::Init(const char* title, int xpos, int ypos, int width, int height, bo
 				std::cout << "renderer creation success\n";
 				SDL_SetRenderDrawColor(m_pRenderer,
 					255, 255, 255, 255);
+
+				// Just create an instance to initialise it.
+				SoundManager::Instance();
 
 				GameObjectFactory::Instance()->RegisterType("Player", new PlayerCreator());
 				GameObjectFactory::Instance()->RegisterType("Button", new ButtonCreator());
@@ -94,6 +98,7 @@ void Game::Destroy()
 	std::cout << "Cleaning Game instance...\n";
 
 	InputHandler::Instance()->Destroy();
+	SoundManager::Instance()->Destroy();
 	m_pGameStateManager->PopState();
 
 	// Destroy the Renderer before the window

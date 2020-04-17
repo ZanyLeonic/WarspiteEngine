@@ -61,8 +61,8 @@ Level* LevelParser::ParseLevel(const char* levelFile)
 		parseBackgroundColour(&bgColour);
 
 		// multiply by tilesize since we are using pixels
-		pLevel->m_LevelSize.SetX(m_width * m_tileSize);
-		pLevel->m_LevelSize.SetY(m_height * m_tileSize);
+		pLevel->m_LevelSize.SetX((int)(m_width * m_tileSize));
+		pLevel->m_LevelSize.SetY((int)(m_height * m_tileSize));
 
 		assert(tLevel["tilesets"].IsArray());
 		const Value& tilesets = tLevel["tilesets"].GetArray();
@@ -203,7 +203,7 @@ void LevelParser::parseTileLayer(const rapidjson::Value* pTileElement, std::vect
 	// form of the type Bytef pointer, the size of the buffer, 
 	// the compressed data and the compressed data size.
 	uncompress((Bytef*)&gids[0], &numGids, 
-		(const Bytef*)decodedIDs.c_str(), decodedIDs.size());
+		(const Bytef*)decodedIDs.c_str(), (uLong)decodedIDs.size());
 
 	// Populating our 2D array with blank rows
 	std::vector<int> layerRow(m_width);
@@ -366,7 +366,7 @@ void LevelParser::parseObjectLayer(const rapidjson::Value* pObjectVal, std::vect
 		}
 
 		// intialise the object with the data obtained.
-		pGameObject->Load(new ObjectParams(x, y, width, height, 
+		pGameObject->Load(new ObjectParams((float)x, (float)y, width, height, 
 			textureID, animSpeed, numFrames, onClickCallback, 
 			onEnterCallback, onLeaveCallback));
 		pObjectLayer->GetGameObjects()->push_back(pGameObject);

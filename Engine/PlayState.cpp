@@ -1,4 +1,5 @@
 #include "TextureManager.h"
+#include "SoundManager.h"
 #include "Game.h"
 #include "Camera.h"
 #include "Player.h"
@@ -29,6 +30,10 @@ bool PlayState::OnPlay()
 		Game::Instance()->GetStateManager()->PushState(new PauseState());
 		});
 
+	InputHandler::Instance()->AddActionKeyDown(SDL_SCANCODE_0, [this] {
+		SoundManager::Instance()->Test();
+		});
+
 	if (pLevel)
 	{
 		// Give the camera the Level size
@@ -57,7 +62,7 @@ void PlayState::Draw()
 	}
 	else
 	{
-		TextureManager::Instance()->Draw("levelLoadFail", 0, 0, m_screenSize.GetX(), m_screenSize.GetY(), Game::Instance()->GetRenderer());
+		TextureManager::Instance()->Draw("levelLoadFail", 0, 0, (int)m_screenSize.GetX(), (int)m_screenSize.GetY(), Game::Instance()->GetRenderer());
 	}
 	// gameobjects and stuff
 	GameStateBase::Draw();

@@ -47,7 +47,7 @@ void TileLayer::Draw()
 			id--;
 
 			TextureManager::Instance()->DrawTile(tileset.Name, tileset.Margin, tileset.Spacing,
-				((j * m_tileSize)) - cCamPos.GetX(), ((i * m_tileSize)) - cCamPos.GetY(), m_tileSize, m_tileSize, // X, Y, width and height
+				(int)(((j * m_tileSize)) - cCamPos.GetX()), (int)(((i * m_tileSize)) - cCamPos.GetY()), m_tileSize, m_tileSize, // X, Y, width and height
 				(id - (tileset.FirstGID - 1)) / tileset.NumColumns, (id - (tileset.FirstGID - 1)) % tileset.NumColumns, // Row and frame
 				Game::Instance()->GetRenderer());
 		}
@@ -71,7 +71,7 @@ Tileset TileLayer::GetTilesetByID(int tileID)
 		}
 
 		std::cout << "Cannot find tileset, returning an empty tileset\n";
-		
-		return Tileset();
 	}
+
+	return Tileset();
 }
