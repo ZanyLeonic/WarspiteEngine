@@ -124,7 +124,7 @@ include_directories(${ZLIB_INCLUDE_DIRS})
 
 # Add source to this project's executable.
 add_executable (${PROJECT_NAME} ${WarspiteEngine_Src} ${WarspiteEngine_Header})
-add_dependencies(${PROJECT_NAME} projMetadata)
+add_dependencies(${PROJECT_NAME} ProjectMetadata)
 
 # As a last ditch effort...
 if ("${Python_EXECUTABLE}" STREQUAL "")
