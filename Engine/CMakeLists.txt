@@ -80,7 +80,7 @@ if (WIN32)
     set(CMAKE_MAP_IMPORTED_CONFIG_RELWITHDEBINFO Release)
 
     set(SDL2_LIBRARIES SDL2::SDL2 SDL2::SDL2main)
-	set(SDL2IMAGE_LIBRARIES SDL2::SDL2_image)
+	set(SDL2_IMAGE_LIBRARIES SDL2::SDL2_image)
 endif()
 
 # Apply some debug options
@@ -90,9 +90,9 @@ endif()
 
 find_package(Python3 COMPONENTS Interpreter REQUIRED)
 find_package(SDL2 CONFIG REQUIRED)
-find_package(sdl2-image CONFIG REQUIRED)
-find_package(rapidjson CONFIG REQUIRED)
-find_package(openal CONFIG REQUIRED)
+find_package(SDL2_image REQUIRED)
+find_package(rapidjson REQUIRED)
+find_package(OpenAL REQUIRED)
 find_package(ZLIB REQUIRED)
 
 add_custom_target(ProjectMetadata
@@ -105,24 +105,26 @@ if("${SDL2_LIBRARIES}" STREQUAL "")
     set(SDL2_LIBRARIES "SDL2::SDL2")
 endif()
 
-if("${SDL2IMAGE_LIBRARIES}" STREQUAL "")
+if("${SDL2_IMAGE_LIBRARIES}" STREQUAL "")
     set(SDL2IMAGE_LIBRARIES "SDL2::SDL2_image")
 endif()
 
 set (Warspite_Libs
-    ${SDL2_LIBRARIES}
-    ${SDL2IMAGE_LIBRARIES}
-    ZLIB::ZLIB
-    OpenAL::OpenAL
+	${SDL2_LIBRARIES}
+	${SDL2_IMAGE_LIBRARIES}
+	${OPENAL_LIBRARY}
+	${ZLIB_LIBRARIES}
 )
 
 include_directories(${SDL2_INCLUDE_DIRS})
-include_directories(${SDL2IMAGE_INCLUDE_DIRS})
+include_directories(${SDL2_IMAGE_INCLUDE_DIRS})
 include_directories(${RAPIDJSON_INCLUDE_DIRS})
+include_directories(${OPENAL_INCLUDE_DIRS})
+include_directories(${ZLIB_INCLUDE_DIRS})
 
 # Add source to this project's executable.
 add_executable (${PROJECT_NAME} ${WarspiteEngine_Src} ${WarspiteEngine_Header})
-add_dependencies(${PROJECT_NAME} ProjectMetadata)
+add_dependencies(${PROJECT_NAME} projMetadata)
 
 # As a last ditch effort...
 if ("${Python_EXECUTABLE}" STREQUAL "")
