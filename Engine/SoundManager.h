@@ -61,11 +61,6 @@ struct WaveFile
 			return NULL;
 		}
 	}
-
-	std::vector<char> GetSoundData() 
-	{
-		return std::vector<char>(RawData, RawData + DataSize);
-	}
 };
 
 class SoundManager
@@ -164,7 +159,7 @@ private:
 		std::uint8_t& bitsPerSample,
 		ALsizei& size);
 
-	WaveFile* loadWav(const std::string& filename);
+	bool loadWav(const std::string& filename, WaveFile* wf);
 
 	// Variables
 	ALCdevice* openALDevice = 0;

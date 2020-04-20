@@ -34,22 +34,24 @@ void SoundManager::PlayMusic(std::string id, int loop)
 
 void SoundManager::Test()
 {
-    WaveFile* file;
+    WaveFile file;
 
-    file = loadWav("assets/sound/test.wav");
+    if (!loadWav("assets/sound/test.wav", &file)) { return; }
 
-    if (file->RawData == nullptr || file->DataSize == 0)
+    if (file.RawData == nullptr || file.DataSize == 0)
     {
         std::cerr << "ERROR: Could not load wav" << std::endl;
         return;
     }
 
+    std::vector<char> soundData = std::vector<char>(file.RawData, file.RawData + file.DataSize);
+
     ALuint buffer;
     alCall(alGenBuffers, 1, &buffer);
 
     // Load the wav into the buffer
-    alCall(alBufferData, buffer, file->GetFormat(), file->GetSoundData().data(), (ALsizei)file->GetSoundData().size(), file->SampleRate);
-    // file.GetSoundData().clear(); // erase the sound in RAM
+    alCall(alBufferData, buffer, file.GetFormat(), soundData.data(), (ALsizei)soundData.size(), file.SampleRate);
+    soundData.clear(); // erase the sound in RAM
 
     // Setup a source for the file to play
     ALuint source;
@@ -343,27 +345,23 @@ bool SoundManager::loadWavFileHeader(std::ifstream& file, std::uint8_t& channels
     return true;
 }
 
-WaveFile* SoundManager::loadWav(const std::string& filename)
+bool SoundManager::loadWav(const std::string& filename, WaveFile* wf)
 {
-    WaveFile file;
-
     std::ifstream in(filename, std::ios::binary);
     if (!in.is_open())
     {
         std::cerr << "ERROR: Could not open \"" << filename << "\"" << std::endl;
-        return nullptr;
+        return false;
     }
-    if (!loadWavFileHeader(in, file.Channels, file.SampleRate, file.BitRate, file.DataSize))
+    if (!loadWavFileHeader(in, wf->Channels, wf->SampleRate, wf->BitRate, wf->DataSize))
     {
         std::cerr << "ERROR: Could not load wav header of \"" << filename << "\"" << std::endl;
-        return nullptr;
+        return false;
     }
 
-    char* data = new char[file.DataSize];
+    wf->RawData = new char[wf->DataSize];
 
-    in.read(data, file.DataSize);
+    in.read(wf->RawData, wf->DataSize);
 
-    file.RawData = data;
-
-    return &file;
+    return true;
 }
