@@ -7,6 +7,7 @@
 #include <AL/alc.h>
 #include <string>
 #include <vector>
+#include <iostream>
 
 #define alCall(function, ...) alCallImpl(__FILE__, __LINE__, function, __VA_ARGS__)
 #define alcCall(function, device, ...) alcCallImpl(__FILE__, __LINE__, function, device, __VA_ARGS__)
@@ -29,6 +30,42 @@ enum class endian
 	big = __ORDER_BIG_ENDIAN__,
 	native = __BYTE_ORDER__
 #endif
+};
+
+struct WaveFile
+{
+	std::uint8_t	Channels   = 0;
+	ALsizei			SampleRate = 0;
+	std::uint8_t	BitRate	= 0;
+	ALsizei			DataSize	= 0;
+	char*			RawData	= 0;
+
+	// Determines and returns the correct format depending on our data
+	ALenum			GetFormat()
+	{
+		if (Channels == 1 && BitRate == 8)
+			return AL_FORMAT_MONO8;
+		else if (Channels == 1 && BitRate == 16)
+			return AL_FORMAT_MONO16;
+		else if (Channels == 2 && BitRate == 8)
+			return AL_FORMAT_STEREO8;
+		else if (Channels == 2 && BitRate == 16)
+			return AL_FORMAT_STEREO16;
+		else
+		{
+			// We have no idea what this is.
+			std::cerr
+				<< "ERROR: unrecognised wave format: "
+				<< Channels << " channels, "
+				<< BitRate << " bps" << std::endl;
+			return NULL;
+		}
+	}
+
+	std::vector<char> GetSoundData() 
+	{
+		return std::vector<char>(RawData, RawData + DataSize);
+	}
 };
 
 class SoundManager
@@ -127,11 +164,7 @@ private:
 		std::uint8_t& bitsPerSample,
 		ALsizei& size);
 
-	char* loadWav(const std::string& filename,
-		std::uint8_t& channels,
-		std::int32_t& sampleRate,
-		std::uint8_t& bitsPerSample,
-		ALsizei& size);
+	WaveFile* loadWav(const std::string& filename);
 
 	// Variables
 	ALCdevice* openALDevice = 0;

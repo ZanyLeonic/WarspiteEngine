@@ -34,42 +34,22 @@ void SoundManager::PlayMusic(std::string id, int loop)
 
 void SoundManager::Test()
 {
-    std::uint8_t 	channels;
-    ALsizei 	    sampleRate;
-    std::uint8_t 	bitsPerSample;
-    ALsizei			dataSize;
-    char* rawSoundData = loadWav("assets/sound/test.wav", channels, sampleRate, bitsPerSample, dataSize);
-    if (rawSoundData == nullptr || dataSize == 0)
+    WaveFile* file;
+
+    file = loadWav("assets/sound/test.wav");
+
+    if (file->RawData == nullptr || file->DataSize == 0)
     {
         std::cerr << "ERROR: Could not load wav" << std::endl;
         return;
     }
-    std::vector<char> soundData(rawSoundData, rawSoundData + dataSize);
 
     ALuint buffer;
     alCall(alGenBuffers, 1, &buffer);
 
-    ALenum format;
-    if (channels == 1 && bitsPerSample == 8)
-        format = AL_FORMAT_MONO8;
-    else if (channels == 1 && bitsPerSample == 16)
-        format = AL_FORMAT_MONO16;
-    else if (channels == 2 && bitsPerSample == 8)
-        format = AL_FORMAT_STEREO8;
-    else if (channels == 2 && bitsPerSample == 16)
-        format = AL_FORMAT_STEREO16;
-    else
-    {
-        std::cerr
-            << "ERROR: unrecognised wave format: "
-            << channels << " channels, "
-            << bitsPerSample << " bps" << std::endl;
-        return;
-    }
-
     // Load the wav into the buffer
-    alCall(alBufferData, buffer, format, soundData.data(), (ALsizei)soundData.size(), sampleRate);
-    soundData.clear(); // erase the sound in RAM
+    alCall(alBufferData, buffer, file->GetFormat(), file->GetSoundData().data(), (ALsizei)file->GetSoundData().size(), file->SampleRate);
+    // file.GetSoundData().clear(); // erase the sound in RAM
 
     // Setup a source for the file to play
     ALuint source;
@@ -363,23 +343,27 @@ bool SoundManager::loadWavFileHeader(std::ifstream& file, std::uint8_t& channels
     return true;
 }
 
-char* SoundManager::loadWav(const std::string& filename, std::uint8_t& channels, std::int32_t& sampleRate, std::uint8_t& bitsPerSample, ALsizei& size)
+WaveFile* SoundManager::loadWav(const std::string& filename)
 {
+    WaveFile file;
+
     std::ifstream in(filename, std::ios::binary);
     if (!in.is_open())
     {
         std::cerr << "ERROR: Could not open \"" << filename << "\"" << std::endl;
         return nullptr;
     }
-    if (!loadWavFileHeader(in, channels, sampleRate, bitsPerSample, size))
+    if (!loadWavFileHeader(in, file.Channels, file.SampleRate, file.BitRate, file.DataSize))
     {
         std::cerr << "ERROR: Could not load wav header of \"" << filename << "\"" << std::endl;
         return nullptr;
     }
 
-    char* data = new char[size];
+    char* data = new char[file.DataSize];
 
-    in.read(data, size);
+    in.read(data, file.DataSize);
 
-    return data;
+    file.RawData = data;
+
+    return &file;
 }
