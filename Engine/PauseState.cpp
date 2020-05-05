@@ -47,7 +47,6 @@ void PauseState::SetCallbacks(const std::vector<ButtonCallback>& callbacks)
 
 bool PauseState::s_continueGame()
 {
-	InputHandler::Instance()->SetReleaseState(SDL_SCANCODE_ESCAPE, true);
 	Game::Instance()->GetStateManager()->PopState();
 
 	return false;

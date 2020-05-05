@@ -36,7 +36,7 @@ void SoundManager::Test()
 {
     WaveFile file;
 
-    if (!loadWav("assets/sound/test.wav", &file)) { return; }
+    if (!loadWav("assets/sound/mycode.wav", &file)) { return; }
 
     if (file.RawData == nullptr || file.DataSize == 0)
     {

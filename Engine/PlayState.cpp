@@ -27,11 +27,21 @@ bool PlayState::OnPlay()
 	pLevel = lp.ParseLevel("assets/maps/help2.json");
 
 	InputHandler::Instance()->AddActionKeyDown(SDL_SCANCODE_ESCAPE, [this] {
-		Game::Instance()->GetStateManager()->PushState(new PauseState());
+			if (!dynamic_cast<PauseState*>(Game::Instance()->GetStateManager()->GetCurrentState()))
+			{
+				Game::Instance()->GetStateManager()->PushState(new PauseState());
+			}
+		});
+
+	InputHandler::Instance()->AddActionKeyUp(SDL_SCANCODE_ESCAPE, [this] {
+			return;
 		});
 
 	InputHandler::Instance()->AddActionKeyDown(SDL_SCANCODE_0, [this] {
-		SoundManager::Instance()->Test();
+			SoundManager::Instance()->Test();
+		});
+	InputHandler::Instance()->AddActionKeyUp(SDL_SCANCODE_0, [this] {
+			return;
 		});
 
 	if (pLevel)
