@@ -85,6 +85,7 @@ void Game::OnThink()
 {
 	// Call the current GameState functionality via the GameStateManager.
 	m_pGameStateManager->OnThink();
+	SoundManager::Instance()->OnThink();
 	Camera::Instance()->OnThink();
 }
 

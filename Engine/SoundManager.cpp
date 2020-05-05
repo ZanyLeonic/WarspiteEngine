@@ -1,12 +1,27 @@
 #include "SoundManager.h"
-#include <iostream>
-#include <fstream>
+#include <vorbis/codec.h>
 
 SoundManager* SoundManager::s_pInstance = 0;
 
 bool SoundManager::Load(std::string fileName, std::string id, SoundType type)
 {
     return false;
+}
+
+void SoundManager::OnThink()
+{
+    for (int i = 0; i < streams.size(); i++)
+    {
+        // Get the state of the current stream
+        ALint state;
+        alCall(alGetSourcei, streams[i].Source, AL_SOURCE_STATE, &state);
+
+        // Only update the streams that are playing.
+        if (state == AL_PLAYING)
+        {
+            UpdateStream(streams[i]);
+        }
+    }
 }
 
 void SoundManager::Destroy()
@@ -364,4 +379,316 @@ bool SoundManager::loadWav(const std::string& filename, WaveFile* wf)
     in.read(wf->RawData, wf->DataSize);
 
     return true;
+}
+
+std::size_t readOggCallback(void* destination, std::size_t size1, std::size_t size2, void* fileHandle)
+{
+    StreamingAudioData* audioData = reinterpret_cast<StreamingAudioData*>(fileHandle);
+
+    ALsizei length = size1 * size2;
+
+    if (audioData->SizeConsumed + length > audioData->Size)
+        length = audioData->Size - audioData->SizeConsumed;
+
+    if (!audioData->File.is_open())
+    {
+        audioData->File.open(audioData->Filename, std::ios::binary);
+        if (!audioData->File.is_open())
+        {
+            std::cerr << "ERROR: Could not re-open streaming file \"" << audioData->Filename << "\"" << std::endl;
+            return 0;
+        }
+    }
+
+    char* moreData = new char[length];
+
+    audioData->File.clear();
+    audioData->File.seekg(audioData->SizeConsumed);
+    if (!audioData->File.read(&moreData[0], length))
+    {
+        if (audioData->File.eof())
+        {
+            audioData->File.clear(); // just clear the error, we will resolve it later
+        }
+        else if (audioData->File.fail())
+        {
+            std::cerr << "ERROR: OGG stream has fail bit set " << audioData->Filename << std::endl;
+            audioData->File.clear();
+            return 0;
+        }
+        else if (audioData->File.bad())
+        {
+            perror(("ERROR: OGG stream has bad bit set " + audioData->Filename).c_str());
+            audioData->File.clear();
+            return 0;
+        }
+    }
+    audioData->SizeConsumed += length;
+
+    std::memcpy(destination, &moreData[0], length);
+
+    delete[] moreData;
+
+    audioData->File.clear();
+
+    return length;
+}
+
+std::int32_t seekOggCallback(void* fileHandle, ogg_int64_t to, std::int32_t type)
+{
+    StreamingAudioData* audioData = reinterpret_cast<StreamingAudioData*>(fileHandle);
+
+    if (type == SEEK_CUR)
+    {
+        audioData->SizeConsumed += to;
+    }
+    else if (type == SEEK_END)
+    {
+        audioData->SizeConsumed = audioData->Size - to;
+    }
+    else if (type == SEEK_SET)
+    {
+        audioData->SizeConsumed = to;
+    }
+    else
+        return -1; // what are you trying to do vorbis?
+
+    if (audioData->SizeConsumed < 0)
+    {
+        audioData->SizeConsumed = 0;
+        return -1;
+    }
+    if (audioData->SizeConsumed > audioData->Size)
+    {
+        audioData->SizeConsumed = audioData->Size;
+        return -1;
+    }
+
+    return 0;
+}
+
+long int tellOggCallback(void* fileHandle)
+{
+    StreamingAudioData* audioData = reinterpret_cast<StreamingAudioData*>(fileHandle);
+    return audioData->SizeConsumed;
+}
+
+bool SoundManager::CreateStreamFromFile(const std::string& filename, StreamingAudioData& audioData)
+{
+    audioData.Filename = filename;
+    audioData.File.open(filename, std::ios::binary);
+    if (!audioData.File.is_open())
+    {
+        std::cerr << "ERROR: couldn't open file" << std::endl;
+        return 0;
+    }
+
+    audioData.File.seekg(0, std::ios_base::beg);
+    audioData.File.ignore(std::numeric_limits<std::streamsize>::max());
+    audioData.Size = audioData.File.gcount();
+    audioData.File.clear();
+    audioData.File.seekg(0, std::ios_base::beg);
+    audioData.SizeConsumed = 0;
+
+    ov_callbacks oggCallbacks;
+    oggCallbacks.read_func = readOggCallback;
+    oggCallbacks.close_func = nullptr;
+    oggCallbacks.seek_func = seekOggCallback;
+    oggCallbacks.tell_func = tellOggCallback;
+
+    if (ov_open_callbacks(reinterpret_cast<void*>(&audioData), &audioData.OggVorbisFile, nullptr, -1, oggCallbacks) < 0)
+    {
+        std::cerr << "ERROR: Could not ov_open_callbacks" << std::endl;
+        return false;
+    }
+
+    vorbis_info* vorbisInfo = ov_info(&audioData.OggVorbisFile, -1);
+
+    audioData.Channels = vorbisInfo->channels;
+    audioData.BitRate = 16;
+    audioData.SampleRate = vorbisInfo->rate;
+    audioData.Duration = ov_time_total(&audioData.OggVorbisFile, -1);
+
+    alCall(alGenSources, 1, &audioData.Source);
+    alCall(alSourcef, audioData.Source, AL_PITCH, 1.f);
+    alCall(alSourcef, audioData.Source, AL_GAIN, 1.f);
+    alCall(alSource3f, audioData.Source, AL_POSITION, 0.f, 0.f, 0.f);
+    alCall(alSource3f, audioData.Source, AL_VELOCITY, 0.f, 0.f, 0.f);
+    alCall(alSourcei, audioData.Source, AL_LOOPING, AL_FALSE);
+
+    alCall(alGenBuffers, NUM_BUFFERS, &audioData.Buffers[0]);
+
+    if (audioData.File.eof())
+    {
+        std::cerr << "ERROR: Already reached EOF without loading data" << std::endl;
+        return false;
+    }
+    else if (audioData.File.fail())
+    {
+        std::cerr << "ERROR: Fail bit set" << std::endl;
+        return false;
+    }
+    else if (!audioData.File)
+    {
+        std::cerr << "ERROR: file is false" << std::endl;
+        return false;
+    }
+
+    char* data = new char[BUFFER_SIZE];
+
+    for (std::uint8_t i = 0; i < NUM_BUFFERS; ++i)
+    {
+        std::int32_t dataSoFar = 0;
+        while (dataSoFar < BUFFER_SIZE)
+        {
+            std::int32_t result = ov_read(&audioData.OggVorbisFile, &data[dataSoFar], BUFFER_SIZE - dataSoFar, 0, 2, 1, &audioData.OggCurrentSection);
+            if (result == OV_HOLE)
+            {
+                std::cerr << "ERROR: OV_HOLE found in initial read of buffer " << i << std::endl;
+                break;
+            }
+            else if (result == OV_EBADLINK)
+            {
+                std::cerr << "ERROR: OV_EBADLINK found in initial read of buffer " << i << std::endl;
+                break;
+            }
+            else if (result == OV_EINVAL)
+            {
+                std::cerr << "ERROR: OV_EINVAL found in initial read of buffer " << i << std::endl;
+                break;
+            }
+            else if (result == 0)
+            {
+                std::cerr << "ERROR: EOF found in initial read of buffer " << i << std::endl;
+                break;
+            }
+
+            dataSoFar += result;
+        }
+
+        if (audioData.Channels == 1 && audioData.BitRate == 8)
+            audioData.Format = AL_FORMAT_MONO8;
+        else if (audioData.Channels == 1 && audioData.BitRate == 16)
+            audioData.Format = AL_FORMAT_MONO16;
+        else if (audioData.Channels == 2 && audioData.BitRate == 8)
+            audioData.Format = AL_FORMAT_STEREO8;
+        else if (audioData.Channels == 2 && audioData.BitRate == 16)
+            audioData.Format = AL_FORMAT_STEREO16;
+        else
+        {
+            std::cerr << "ERROR: unrecognised ogg Format: " << audioData.Channels << " Channels, " << audioData.BitRate << " bps" << std::endl;
+            delete[] data;
+            return false;
+        }
+
+        alCall(alBufferData, audioData.Buffers[i], audioData.Format, data, dataSoFar, audioData.SampleRate);
+    }
+
+    alCall(alSourceQueueBuffers, audioData.Source, NUM_BUFFERS, &audioData.Buffers[0]);
+
+    delete[] data;
+
+    return true;
+}
+
+void SoundManager::PlayStream(const StreamingAudioData& audioData)
+{
+    alCall(alSourceStop, audioData.Source);
+    alCall(alSourcePlay, audioData.Source);
+
+    streams.push_back(audioData);
+}
+
+void SoundManager::UpdateStream(StreamingAudioData& audioData)
+{
+    ALint buffersProcessed = 0;
+    alCall(alGetSourcei, audioData.Source, AL_BUFFERS_PROCESSED, &buffersProcessed);
+    if (buffersProcessed <= 0)
+    {
+        return;
+    }
+    while (buffersProcessed--)
+    {
+        ALuint buffer;
+        alCall(alSourceUnqueueBuffers, audioData.Source, 1, &buffer);
+
+        char* data = new char[BUFFER_SIZE];
+        std::memset(data, 0, BUFFER_SIZE);
+
+        ALsizei dataSizeToBuffer = 0;
+        std::int32_t sizeRead = 0;
+
+        while (sizeRead < BUFFER_SIZE)
+        {
+            std::int32_t result = ov_read(&audioData.OggVorbisFile, &data[sizeRead], BUFFER_SIZE - sizeRead, 0, 2, 1, &audioData.OggCurrentSection);
+            if (result == OV_HOLE)
+            {
+                std::cerr << "ERROR: OV_HOLE found in update of buffer " << std::endl;
+                break;
+            }
+            else if (result == OV_EBADLINK)
+            {
+                std::cerr << "ERROR: OV_EBADLINK found in update of buffer " << std::endl;
+                break;
+            }
+            else if (result == OV_EINVAL)
+            {
+                std::cerr << "ERROR: OV_EINVAL found in update of buffer " << std::endl;
+                break;
+            }
+            else if (result == 0)
+            {
+                std::int32_t seekResult = ov_raw_seek(&audioData.OggVorbisFile, 0);
+                if (seekResult == OV_ENOSEEK)
+                    std::cerr << "ERROR: OV_ENOSEEK found when trying to loop" << std::endl;
+                else if (seekResult == OV_EINVAL)
+                    std::cerr << "ERROR: OV_EINVAL found when trying to loop" << std::endl;
+                else if (seekResult == OV_EREAD)
+                    std::cerr << "ERROR: OV_EREAD found when trying to loop" << std::endl;
+                else if (seekResult == OV_EFAULT)
+                    std::cerr << "ERROR: OV_EFAULT found when trying to loop" << std::endl;
+                else if (seekResult == OV_EOF)
+                    std::cerr << "ERROR: OV_EOF found when trying to loop" << std::endl;
+                else if (seekResult == OV_EBADLINK)
+                    std::cerr << "ERROR: OV_EBADLINK found when trying to loop" << std::endl;
+
+                if (seekResult != 0)
+                {
+                    std::cerr << "ERROR: Unknown error in ov_raw_seek" << std::endl;
+                    return;
+                }
+            }
+            sizeRead += result;
+        }
+        dataSizeToBuffer = sizeRead;
+
+        if (dataSizeToBuffer > 0)
+        {
+            alCall(alBufferData, buffer, audioData.Format, data, dataSizeToBuffer, audioData.SampleRate);
+            alCall(alSourceQueueBuffers, audioData.Source, 1, &buffer);
+        }
+
+        if (dataSizeToBuffer < BUFFER_SIZE)
+        {
+            std::cout << "Data missing" << std::endl;
+        }
+
+        ALint state;
+        alCall(alGetSourcei, audioData.Source, AL_SOURCE_STATE, &state);
+        if (state != AL_PLAYING)
+        {
+            alCall(alSourceStop, audioData.Source);
+            alCall(alSourcePlay, audioData.Source);
+        }
+
+        delete[] data;
+    }
+}
+
+void SoundManager::StopStream(const StreamingAudioData& audioData)
+{
+    alCall(alSourceStop, audioData.Source);
+    
+    // Remove the audio stream from the vector if it has been stopped.
+    streams.erase(std::remove(streams.begin(), streams.end(), audioData), streams.end());
 }

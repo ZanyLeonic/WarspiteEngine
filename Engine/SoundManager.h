@@ -5,9 +5,11 @@
 
 #include <AL/al.h>
 #include <AL/alc.h>
+#include <vorbis/vorbisfile.h>
 #include <string>
 #include <vector>
 #include <iostream>
+#include <fstream>
 
 #define alCall(function, ...) alCallImpl(__FILE__, __LINE__, function, __VA_ARGS__)
 #define alcCall(function, device, ...) alcCallImpl(__FILE__, __LINE__, function, device, __VA_ARGS__)
@@ -63,6 +65,27 @@ struct WaveFile
 	}
 };
 
+// Streaming audio
+const std::size_t NUM_BUFFERS = 4;
+const ALsizei BUFFER_SIZE = 65536;
+
+struct StreamingAudioData
+{
+	ALuint Buffers[NUM_BUFFERS];
+	std::string Filename;
+	std::ifstream File;
+	std::uint8_t Channels;
+	std::int32_t SampleRate;
+	std::uint8_t BitRate;
+	ALsizei Size;
+	ALuint Source;
+	ALsizei SizeConsumed = 0;
+	ALenum Format;
+	OggVorbis_File OggVorbisFile;
+	std::int_fast32_t OggCurrentSection = 0;
+	std::size_t Duration;
+};
+
 class SoundManager
 {
 public:
@@ -77,6 +100,7 @@ public:
 	}
 
 	bool Load(std::string fileName, std::string id, SoundType type);
+	void OnThink();
 	void Destroy();
 
 	void PlaySound(std::string id, int loop);
@@ -160,6 +184,18 @@ private:
 		ALsizei& size);
 
 	bool loadWav(const std::string& filename, WaveFile* wf);
+
+public:
+	// Ogg Implementation
+	bool CreateStreamFromFile(const std::string& filename, StreamingAudioData& audioData);
+
+	void PlayStream(const StreamingAudioData& audioData);
+	void StopStream(const StreamingAudioData& audioData);
+
+private:
+	void UpdateStream(StreamingAudioData& audioData);
+
+	std::vector<StreamingAudioData> streams;
 
 	// Variables
 	ALCdevice* openALDevice = 0;

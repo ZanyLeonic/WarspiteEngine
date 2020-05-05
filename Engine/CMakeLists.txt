@@ -93,6 +93,7 @@ find_package(SDL2 CONFIG REQUIRED)
 find_package(SDL2_image REQUIRED)
 find_package(rapidjson REQUIRED)
 find_package(OpenAL REQUIRED)
+find_package(Vorbis REQUIRED)
 find_package(ZLIB REQUIRED)
 
 add_custom_target(ProjectMetadata
@@ -113,13 +114,16 @@ set (Warspite_Libs
 	${SDL2_LIBRARIES}
 	${SDL2_IMAGE_LIBRARIES}
 	${OPENAL_LIBRARY}
+    ${VORBIS_LIBRARIES}
 	${ZLIB_LIBRARIES}
 )
 
 include_directories(${SDL2_INCLUDE_DIRS})
 include_directories(${SDL2_IMAGE_INCLUDE_DIRS})
 include_directories(${RAPIDJSON_INCLUDE_DIRS})
+include_directories(${OGG_INCLUDE_DIR})
 include_directories(${OPENAL_INCLUDE_DIRS})
+include_directories(${VORBIS_INCLUDE_DIR})
 include_directories(${ZLIB_INCLUDE_DIRS})
 
 # Add source to this project's executable.

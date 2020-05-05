@@ -13,6 +13,7 @@
 #include "PlayState.h"
 
 const std::string PlayState::s_playID = "Game";
+StreamingAudioData testStream;
 
 bool PlayState::OnPlay()
 {
@@ -42,6 +43,30 @@ bool PlayState::OnPlay()
 		});
 	InputHandler::Instance()->AddActionKeyUp(SDL_SCANCODE_0, [this] {
 			return;
+		});
+
+	// Load
+	InputHandler::Instance()->AddActionKeyDown(SDL_SCANCODE_1, [this] {
+		SoundManager::Instance()->CreateStreamFromFile("assets/sound/teststream.ogg", testStream);
+		});
+	InputHandler::Instance()->AddActionKeyUp(SDL_SCANCODE_1, [this] {
+		return;
+		});
+
+	// Play
+	InputHandler::Instance()->AddActionKeyDown(SDL_SCANCODE_2, [this] {
+		SoundManager::Instance()->PlayStream(testStream);
+		});
+	InputHandler::Instance()->AddActionKeyUp(SDL_SCANCODE_2, [this] {
+		return;
+		});
+
+	// Pause
+	InputHandler::Instance()->AddActionKeyDown(SDL_SCANCODE_3, [this] {
+		SoundManager::Instance()->StopStream(testStream);
+		});
+	InputHandler::Instance()->AddActionKeyUp(SDL_SCANCODE_3, [this] {
+		return;
 		});
 
 	if (pLevel)
