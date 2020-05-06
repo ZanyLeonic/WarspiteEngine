@@ -12,15 +12,10 @@ void SoundManager::OnThink()
 {
     for (int i = 0; i < streams.size(); i++)
     {
-        if (streams[i]->SizeConsumed == streams[i]->Size)
+        // Have we reached the end?
+        if (ov_time_tell(&streams[i]->OggVorbisFile) == ov_time_total(&streams[i]->OggVorbisFile, -1))
         {
-            ALint looping;
-            alCall(alGetSourcei, streams[i]->Source, AL_LOOPING, &looping);
-
-            if (looping == AL_FALSE)
-            {
-                StopStream(streams[i]);
-            }
+            return;
         }
 
         // Get the state of the current stream
@@ -399,7 +394,9 @@ std::size_t readOggCallback(void* destination, std::size_t size1, std::size_t si
     ALsizei length = size1 * size2;
 
     if (audioData->SizeConsumed + length > audioData->Size)
+    {
         length = audioData->Size - audioData->SizeConsumed;
+    }
 
     if (!audioData->File.is_open())
     {
@@ -412,6 +409,9 @@ std::size_t readOggCallback(void* destination, std::size_t size1, std::size_t si
     }
 
     char* moreData = new char[length];
+
+    std::cout << "\r";
+    std::cout << "length = " << length << " size = " << audioData->Size <<  " SizeConsumed = " << audioData->SizeConsumed;
 
     audioData->File.clear();
     audioData->File.seekg(audioData->SizeConsumed);
@@ -651,6 +651,12 @@ void SoundManager::UpdateStream(StreamingAudioData& audioData)
             }
             else if (result == 0)
             {
+
+                if (ov_time_tell(&audioData.OggVorbisFile)  == ov_time_total(&audioData.OggVorbisFile, -1))
+                {
+                    return;
+                }
+
                 std::int32_t seekResult = ov_raw_seek(&audioData.OggVorbisFile, 0);
                 if (seekResult == OV_ENOSEEK)
                     std::cerr << "ERROR: OV_ENOSEEK found when trying to loop" << std::endl;
@@ -691,7 +697,7 @@ void SoundManager::UpdateStream(StreamingAudioData& audioData)
         if (state != AL_PLAYING)
         {
             alCall(alSourceStop, audioData.Source);
-            // alCall(alSourcePlay, audioData.Source);
+            alCall(alSourcePlay, audioData.Source);
         }
 
         delete[] data;

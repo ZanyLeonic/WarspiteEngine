@@ -77,6 +77,7 @@ struct StreamingAudioData
 	std::uint8_t Channels;
 	std::int32_t SampleRate;
 	std::uint8_t BitRate;
+	bool Finished;
 	ALsizei Size;
 	ALuint Source;
 	ALsizei SizeConsumed = 0;
@@ -215,6 +216,9 @@ private:
 	std::vector<StreamingAudioData*> streams;
 
 	std::vector<std::string> devices;
+
+	// testing!
+	int posi = 0;
 };
 
 #endif

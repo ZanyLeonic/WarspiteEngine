@@ -45,8 +45,8 @@ void Player::Load(const ObjectParams* pParams)
 
 bool Player::OnThink()
 {
-	std::cout << "\r";
-	std::cout << "PLAYER -> X: " << m_position.GetX() << " Y: " << m_position.GetY() << " CAM -> X: " << Camera::Instance()->GetPosition().GetX() << " Y: " << Camera::Instance()->GetPosition().GetY() << " TimeLeft: " << float(m_timeLeft / 100) <<  " Frame: " << m_frameOffset << "   ";
+	// std::cout << "\r";
+	// std::cout << "PLAYER -> X: " << m_position.GetX() << " Y: " << m_position.GetY() << " CAM -> X: " << Camera::Instance()->GetPosition().GetX() << " Y: " << Camera::Instance()->GetPosition().GetY() << " TimeLeft: " << float(m_timeLeft / 100) <<  " Frame: " << m_frameOffset << "   ";
 	
 	HandleInput();
 
