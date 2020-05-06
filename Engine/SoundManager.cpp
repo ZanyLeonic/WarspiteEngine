@@ -473,10 +473,8 @@ long int tellOggCallback(void* fileHandle)
     return audioData->SizeConsumed;
 }
 
-bool SoundManager::CreateStreamFromFile(const std::string& filename, StreamingAudioData& audioData)
+bool SoundManager::CreateStreamFromFile(StreamingAudioData& audioData)
 {
-    audioData.Filename = filename;
-    audioData.File.open(filename, std::ios::binary);
     if (!audioData.File.is_open())
     {
         std::cerr << "ERROR: couldn't open file" << std::endl;
