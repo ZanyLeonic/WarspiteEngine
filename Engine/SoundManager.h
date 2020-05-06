@@ -73,7 +73,7 @@ struct StreamingAudioData
 {
 	ALuint Buffers[NUM_BUFFERS];
 	std::string Filename;
-	std::ifstream* File;
+	std::ifstream File;
 	std::uint8_t Channels;
 	std::int32_t SampleRate;
 	std::uint8_t BitRate;
@@ -84,11 +84,6 @@ struct StreamingAudioData
 	OggVorbis_File OggVorbisFile;
 	std::int_fast32_t OggCurrentSection = 0;
 	std::size_t Duration;
-
-	StreamingAudioData()
-	{
-	
-	}
 
 	bool operator==(const StreamingAudioData s1)
 	{
@@ -205,17 +200,19 @@ public:
 	// Ogg Implementation
 	bool CreateStreamFromFile(const std::string& filename, StreamingAudioData& audioData);
 
-	void PlayStream(const StreamingAudioData& audioData);
-	void StopStream(const StreamingAudioData& audioData);
+	void PlayStream(StreamingAudioData* audioData);
+	void StopStream(StreamingAudioData* audioData);
 
 private:
 	void UpdateStream(StreamingAudioData& audioData);
 
-	std::vector<StreamingAudioData> streams;
+	// std::vector<StreamingAudioData> streams;
 
 	// Variables
 	ALCdevice* openALDevice = 0;
 	ALCcontext* openALContext = 0;
+
+	std::vector<StreamingAudioData*> streams;
 
 	std::vector<std::string> devices;
 };

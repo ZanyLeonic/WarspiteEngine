@@ -55,7 +55,7 @@ bool PlayState::OnPlay()
 
 	// Play
 	InputHandler::Instance()->AddActionKeyDown(SDL_SCANCODE_2, [this] {
-		SoundManager::Instance()->PlayStream(testStream);
+		SoundManager::Instance()->PlayStream(&testStream);
 		});
 	InputHandler::Instance()->AddActionKeyUp(SDL_SCANCODE_2, [this] {
 		return;
@@ -63,7 +63,7 @@ bool PlayState::OnPlay()
 
 	// Pause
 	InputHandler::Instance()->AddActionKeyDown(SDL_SCANCODE_3, [this] {
-		SoundManager::Instance()->PlayStream(testStream);
+		SoundManager::Instance()->PlayStream(&testStream);
 		});
 	InputHandler::Instance()->AddActionKeyUp(SDL_SCANCODE_3, [this] {
 		return;

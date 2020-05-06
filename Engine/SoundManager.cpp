@@ -14,12 +14,12 @@ void SoundManager::OnThink()
     {
         // Get the state of the current stream
         ALint state;
-        alCall(alGetSourcei, streams[i].Source, AL_SOURCE_STATE, &state);
+        alCall(alGetSourcei, streams[i]->Source, AL_SOURCE_STATE, &state);
 
         // Only update the streams that are playing.
         if (state == AL_PLAYING)
         {
-            UpdateStream(streams[i]);
+            UpdateStream(*streams[i]);
         }
     }
 }
@@ -390,18 +390,10 @@ std::size_t readOggCallback(void* destination, std::size_t size1, std::size_t si
     if (audioData->SizeConsumed + length > audioData->Size)
         length = audioData->Size - audioData->SizeConsumed;
 
-    if (!audioData->File)
+    if (!audioData->File.is_open())
     {
-        std::ifstream tempStream;
-        tempStream.open(audioData->Filename, std::ios::binary);
-
-        audioData->File = &tempStream;
-    }
-
-    if (!audioData->File->is_open())
-    {
-        audioData->File->open(audioData->Filename, std::ios::binary);
-        if (!audioData->File->is_open())
+        audioData->File.open(audioData->Filename, std::ios::binary);
+        if (!audioData->File.is_open())
         {
             std::cerr << "ERROR: Could not re-open streaming file \"" << audioData->Filename << "\"" << std::endl;
             return 0;
@@ -410,24 +402,24 @@ std::size_t readOggCallback(void* destination, std::size_t size1, std::size_t si
 
     char* moreData = new char[length];
 
-    audioData->File->clear();
-    audioData->File->seekg(audioData->SizeConsumed);
-    if (!audioData->File->read(&moreData[0], length))
+    audioData->File.clear();
+    audioData->File.seekg(audioData->SizeConsumed);
+    if (!audioData->File.read(&moreData[0], length))
     {
-        if (audioData->File->eof())
+        if (audioData->File.eof())
         {
-            audioData->File->clear(); // just clear the error, we will resolve it later
+            audioData->File.clear(); // just clear the error, we will resolve it later
         }
-        else if (audioData->File->fail())
+        else if (audioData->File.fail())
         {
             std::cerr << "ERROR: OGG stream has fail bit set " << audioData->Filename << std::endl;
-            audioData->File->clear();
+            audioData->File.clear();
             return 0;
         }
-        else if (audioData->File->bad())
+        else if (audioData->File.bad())
         {
             perror(("ERROR: OGG stream has bad bit set " + audioData->Filename).c_str());
-            audioData->File->clear();
+            audioData->File.clear();
             return 0;
         }
     }
@@ -437,7 +429,7 @@ std::size_t readOggCallback(void* destination, std::size_t size1, std::size_t si
 
     delete[] moreData;
 
-    audioData->File->clear();
+    audioData->File.clear();
 
     return length;
 }
@@ -484,24 +476,18 @@ long int tellOggCallback(void* fileHandle)
 bool SoundManager::CreateStreamFromFile(const std::string& filename, StreamingAudioData& audioData)
 {
     audioData.Filename = filename;
-
-    std::ifstream tempStream;
-
-    tempStream.open(filename, std::ios::binary);
-
-    audioData.File = &tempStream;
-
-    if (!audioData.File->is_open())
+    audioData.File.open(filename, std::ios::binary);
+    if (!audioData.File.is_open())
     {
         std::cerr << "ERROR: couldn't open file" << std::endl;
         return 0;
     }
 
-    audioData.File->seekg(0, std::ios_base::beg);
-    audioData.File->ignore(std::numeric_limits<std::streamsize>::max());
-    audioData.Size = audioData.File->gcount();
-    audioData.File->clear();
-    audioData.File->seekg(0, std::ios_base::beg);
+    audioData.File.seekg(0, std::ios_base::beg);
+    audioData.File.ignore(std::numeric_limits<std::streamsize>::max());
+    audioData.Size = audioData.File.gcount();
+    audioData.File.clear();
+    audioData.File.seekg(0, std::ios_base::beg);
     audioData.SizeConsumed = 0;
 
     ov_callbacks oggCallbacks;
@@ -532,12 +518,12 @@ bool SoundManager::CreateStreamFromFile(const std::string& filename, StreamingAu
 
     alCall(alGenBuffers, NUM_BUFFERS, &audioData.Buffers[0]);
 
-    if (audioData.File->eof())
+    if (audioData.File.eof())
     {
         std::cerr << "ERROR: Already reached EOF without loading data" << std::endl;
         return false;
     }
-    else if (audioData.File->fail())
+    else if (audioData.File.fail())
     {
         std::cerr << "ERROR: Fail bit set" << std::endl;
         return false;
@@ -605,10 +591,10 @@ bool SoundManager::CreateStreamFromFile(const std::string& filename, StreamingAu
     return true;
 }
 
-void SoundManager::PlayStream(const StreamingAudioData& audioData)
+void SoundManager::PlayStream(StreamingAudioData* audioData)
 {
-    alCall(alSourceStop, audioData.Source);
-    alCall(alSourcePlay, audioData.Source);
+    alCall(alSourceStop, audioData->Source);
+    alCall(alSourcePlay, audioData->Source);
 
     streams.push_back(audioData);
 }
@@ -699,9 +685,9 @@ void SoundManager::UpdateStream(StreamingAudioData& audioData)
     }
 }
 
-void SoundManager::StopStream(const StreamingAudioData& audioData)
+void SoundManager::StopStream(StreamingAudioData* audioData)
 {
-    alCall(alSourceStop, audioData.Source);
+    alCall(alSourceStop, audioData->Source);
     
     // Remove the audio stream from the vector if it has been stopped.
     streams.erase(std::remove(streams.begin(), streams.end(), audioData), streams.end());
