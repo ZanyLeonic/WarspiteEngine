@@ -13,12 +13,10 @@
 #include "PlayState.h"
 
 const std::string PlayState::s_playID = "Game";
-StreamingAudioData *testStream = new StreamingAudioData("assets/sound/testStream.ogg");
+StreamingAudioData testStream;
 
 bool PlayState::OnPlay()
 {
-	
-
 	GameStateBase::OnPlay();
 
 	m_screenSize = Game::Instance()->GetViewportSize();
@@ -49,7 +47,7 @@ bool PlayState::OnPlay()
 
 	// Load
 	InputHandler::Instance()->AddActionKeyDown(SDL_SCANCODE_1, [this] {
-		SoundManager::Instance()->CreateStreamFromFile(*testStream);
+		SoundManager::Instance()->CreateStreamFromFile("assets/sound/teststream.ogg", testStream);
 		});
 	InputHandler::Instance()->AddActionKeyUp(SDL_SCANCODE_1, [this] {
 		return;
@@ -57,7 +55,7 @@ bool PlayState::OnPlay()
 
 	// Play
 	InputHandler::Instance()->AddActionKeyDown(SDL_SCANCODE_2, [this] {
-		SoundManager::Instance()->PlayStream(*testStream);
+		SoundManager::Instance()->PlayStream(testStream);
 		});
 	InputHandler::Instance()->AddActionKeyUp(SDL_SCANCODE_2, [this] {
 		return;
@@ -65,7 +63,7 @@ bool PlayState::OnPlay()
 
 	// Pause
 	InputHandler::Instance()->AddActionKeyDown(SDL_SCANCODE_3, [this] {
-		SoundManager::Instance()->StopStream(*testStream);
+		SoundManager::Instance()->PlayStream(testStream);
 		});
 	InputHandler::Instance()->AddActionKeyUp(SDL_SCANCODE_3, [this] {
 		return;

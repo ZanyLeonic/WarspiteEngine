@@ -390,10 +390,18 @@ std::size_t readOggCallback(void* destination, std::size_t size1, std::size_t si
     if (audioData->SizeConsumed + length > audioData->Size)
         length = audioData->Size - audioData->SizeConsumed;
 
-    if (!audioData->File.is_open())
+    if (!audioData->File)
     {
-        audioData->File.open(audioData->Filename, std::ios::binary);
-        if (!audioData->File.is_open())
+        std::ifstream tempStream;
+        tempStream.open(audioData->Filename, std::ios::binary);
+
+        audioData->File = &tempStream;
+    }
+
+    if (!audioData->File->is_open())
+    {
+        audioData->File->open(audioData->Filename, std::ios::binary);
+        if (!audioData->File->is_open())
         {
             std::cerr << "ERROR: Could not re-open streaming file \"" << audioData->Filename << "\"" << std::endl;
             return 0;
@@ -402,24 +410,24 @@ std::size_t readOggCallback(void* destination, std::size_t size1, std::size_t si
 
     char* moreData = new char[length];
 
-    audioData->File.clear();
-    audioData->File.seekg(audioData->SizeConsumed);
-    if (!audioData->File.read(&moreData[0], length))
+    audioData->File->clear();
+    audioData->File->seekg(audioData->SizeConsumed);
+    if (!audioData->File->read(&moreData[0], length))
     {
-        if (audioData->File.eof())
+        if (audioData->File->eof())
         {
-            audioData->File.clear(); // just clear the error, we will resolve it later
+            audioData->File->clear(); // just clear the error, we will resolve it later
         }
-        else if (audioData->File.fail())
+        else if (audioData->File->fail())
         {
             std::cerr << "ERROR: OGG stream has fail bit set " << audioData->Filename << std::endl;
-            audioData->File.clear();
+            audioData->File->clear();
             return 0;
         }
-        else if (audioData->File.bad())
+        else if (audioData->File->bad())
         {
             perror(("ERROR: OGG stream has bad bit set " + audioData->Filename).c_str());
-            audioData->File.clear();
+            audioData->File->clear();
             return 0;
         }
     }
@@ -429,7 +437,7 @@ std::size_t readOggCallback(void* destination, std::size_t size1, std::size_t si
 
     delete[] moreData;
 
-    audioData->File.clear();
+    audioData->File->clear();
 
     return length;
 }
@@ -473,19 +481,27 @@ long int tellOggCallback(void* fileHandle)
     return audioData->SizeConsumed;
 }
 
-bool SoundManager::CreateStreamFromFile(StreamingAudioData& audioData)
+bool SoundManager::CreateStreamFromFile(const std::string& filename, StreamingAudioData& audioData)
 {
-    if (!audioData.File.is_open())
+    audioData.Filename = filename;
+
+    std::ifstream tempStream;
+
+    tempStream.open(filename, std::ios::binary);
+
+    audioData.File = &tempStream;
+
+    if (!audioData.File->is_open())
     {
         std::cerr << "ERROR: couldn't open file" << std::endl;
         return 0;
     }
 
-    audioData.File.seekg(0, std::ios_base::beg);
-    audioData.File.ignore(std::numeric_limits<std::streamsize>::max());
-    audioData.Size = audioData.File.gcount();
-    audioData.File.clear();
-    audioData.File.seekg(0, std::ios_base::beg);
+    audioData.File->seekg(0, std::ios_base::beg);
+    audioData.File->ignore(std::numeric_limits<std::streamsize>::max());
+    audioData.Size = audioData.File->gcount();
+    audioData.File->clear();
+    audioData.File->seekg(0, std::ios_base::beg);
     audioData.SizeConsumed = 0;
 
     ov_callbacks oggCallbacks;
@@ -516,12 +532,12 @@ bool SoundManager::CreateStreamFromFile(StreamingAudioData& audioData)
 
     alCall(alGenBuffers, NUM_BUFFERS, &audioData.Buffers[0]);
 
-    if (audioData.File.eof())
+    if (audioData.File->eof())
     {
         std::cerr << "ERROR: Already reached EOF without loading data" << std::endl;
         return false;
     }
-    else if (audioData.File.fail())
+    else if (audioData.File->fail())
     {
         std::cerr << "ERROR: Fail bit set" << std::endl;
         return false;

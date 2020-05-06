@@ -73,7 +73,7 @@ struct StreamingAudioData
 {
 	ALuint Buffers[NUM_BUFFERS];
 	std::string Filename;
-	std::ifstream File;
+	std::ifstream* File;
 	std::uint8_t Channels;
 	std::int32_t SampleRate;
 	std::uint8_t BitRate;
@@ -85,10 +85,9 @@ struct StreamingAudioData
 	std::int_fast32_t OggCurrentSection = 0;
 	std::size_t Duration;
 
-	StreamingAudioData(const std::string& filename)
+	StreamingAudioData()
 	{
-		Filename = filename;
-		File.open(filename, std::ios::binary);
+	
 	}
 
 	bool operator==(const StreamingAudioData s1)
@@ -204,7 +203,7 @@ private:
 
 public:
 	// Ogg Implementation
-	bool CreateStreamFromFile(StreamingAudioData& audioData);
+	bool CreateStreamFromFile(const std::string& filename, StreamingAudioData& audioData);
 
 	void PlayStream(const StreamingAudioData& audioData);
 	void StopStream(const StreamingAudioData& audioData);
