@@ -18,7 +18,7 @@ int main(int argc, char* argv[])
 	snprintf(title, sizeof(title), "Engine (Build: %d git: %s)", GAME_BUILD_NUMBER, GAME_GIT_HASH);
 #else
 	snprintf(title, sizeof(title), "Engine (DEBUG) (Build: %d git: %s)", GAME_BUILD_NUMBER, GAME_GIT_HASH);
-	std::cout << "This is debug build.\n";
+	std::cout << "This is a debug build.\n";
 #endif
 	
 	std::cout << "Build: "<< GAME_BUILD_NUMBER << "\nUsing source: " << GAME_GIT_HASH << "\n";

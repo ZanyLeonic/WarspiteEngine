@@ -12,21 +12,13 @@ void SoundManager::OnThink()
 {
     for (int i = 0; i < streams.size(); i++)
     {
-        // Have we reached the end?
-        if (ov_time_tell(&streams[i]->OggVorbisFile) == ov_time_total(&streams[i]->OggVorbisFile, -1))
+        if (streams[i]->Finished)
         {
-            return;
+            StopStream(streams[i]);
+            continue;
         }
 
-        // Get the state of the current stream
-        ALint state;
-        alCall(alGetSourcei, streams[i]->Source, AL_SOURCE_STATE, &state);
-
-        // Only update the streams that are playing.
-        if (state == AL_PLAYING)
-        {
-            UpdateStream(*streams[i]);
-        }
+        UpdateStream(*streams[i]);
     }
 }
 
@@ -411,7 +403,7 @@ std::size_t readOggCallback(void* destination, std::size_t size1, std::size_t si
     char* moreData = new char[length];
 
     std::cout << "\r";
-    std::cout << "length = " << length << " size = " << audioData->Size <<  " SizeConsumed = " << audioData->SizeConsumed;
+    std::cout << "length = " << length << " size = " << audioData->Size <<  " SizeConsumed = " << audioData->SizeConsumed << "       ";
 
     audioData->File.clear();
     audioData->File.seekg(audioData->SizeConsumed);
@@ -606,6 +598,12 @@ bool SoundManager::CreateStreamFromFile(const std::string& filename, StreamingAu
 
 void SoundManager::PlayStream(StreamingAudioData* audioData)
 {
+    if (audioData->Finished)
+    {
+        CreateStreamFromFile(audioData->Filename, *audioData);
+        audioData->Finished = false;
+    }
+
     alCall(alSourceStop, audioData->Source);
     alCall(alSourcePlay, audioData->Source);
 
@@ -615,6 +613,8 @@ void SoundManager::PlayStream(StreamingAudioData* audioData)
 void SoundManager::UpdateStream(StreamingAudioData& audioData)
 {
     ALint buffersProcessed = 0;
+    bool reachedEnd = false;
+
     alCall(alGetSourcei, audioData.Source, AL_BUFFERS_PROCESSED, &buffersProcessed);
     if (buffersProcessed <= 0)
     {
@@ -631,8 +631,9 @@ void SoundManager::UpdateStream(StreamingAudioData& audioData)
         ALsizei dataSizeToBuffer = 0;
         std::int32_t sizeRead = 0;
 
-        while (sizeRead < BUFFER_SIZE)
+        while ((sizeRead < BUFFER_SIZE) && !reachedEnd)
         {
+
             std::int32_t result = ov_read(&audioData.OggVorbisFile, &data[sizeRead], BUFFER_SIZE - sizeRead, 0, 2, 1, &audioData.OggCurrentSection);
             if (result == OV_HOLE)
             {
@@ -651,30 +652,9 @@ void SoundManager::UpdateStream(StreamingAudioData& audioData)
             }
             else if (result == 0)
             {
-
                 if (ov_time_tell(&audioData.OggVorbisFile)  == ov_time_total(&audioData.OggVorbisFile, -1))
                 {
-                    return;
-                }
-
-                std::int32_t seekResult = ov_raw_seek(&audioData.OggVorbisFile, 0);
-                if (seekResult == OV_ENOSEEK)
-                    std::cerr << "ERROR: OV_ENOSEEK found when trying to loop" << std::endl;
-                else if (seekResult == OV_EINVAL)
-                    std::cerr << "ERROR: OV_EINVAL found when trying to loop" << std::endl;
-                else if (seekResult == OV_EREAD)
-                    std::cerr << "ERROR: OV_EREAD found when trying to loop" << std::endl;
-                else if (seekResult == OV_EFAULT)
-                    std::cerr << "ERROR: OV_EFAULT found when trying to loop" << std::endl;
-                else if (seekResult == OV_EOF)
-                    std::cerr << "ERROR: OV_EOF found when trying to loop" << std::endl;
-                else if (seekResult == OV_EBADLINK)
-                    std::cerr << "ERROR: OV_EBADLINK found when trying to loop" << std::endl;
-
-                if (seekResult != 0)
-                {
-                    std::cerr << "ERROR: Unknown error in ov_raw_seek" << std::endl;
-                    return;
+                    reachedEnd = true;
                 }
             }
             sizeRead += result;
@@ -692,15 +672,22 @@ void SoundManager::UpdateStream(StreamingAudioData& audioData)
             std::cout << "Data missing" << std::endl;
         }
 
-        ALint state;
-        alCall(alGetSourcei, audioData.Source, AL_SOURCE_STATE, &state);
-        if (state != AL_PLAYING)
-        {
-            alCall(alSourceStop, audioData.Source);
-            alCall(alSourcePlay, audioData.Source);
-        }
-
         delete[] data;
+    }
+
+    if (reachedEnd == true && !audioData.Finished)
+    {
+        ALint state = AL_PLAYING;
+        while (state == AL_PLAYING)
+        {
+            alCall(alGetSourcei, audioData.Source, AL_SOURCE_STATE, &state);
+        }
+        
+        audioData.File.close();
+        audioData.Finished = true;
+
+        return;
+
     }
 }
 
