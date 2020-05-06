@@ -47,7 +47,7 @@ bool PlayState::OnPlay()
 
 	// Load
 	InputHandler::Instance()->AddActionKeyDown(SDL_SCANCODE_1, [this] {
-		SoundManager::Instance()->CreateStreamFromFile("assets/sound/teststream.ogg", testStream);
+		SoundManager::Instance()->CreateStreamFromFile("assets/sound/30test.ogg", testStream);
 		});
 	InputHandler::Instance()->AddActionKeyUp(SDL_SCANCODE_1, [this] {
 		return;
@@ -63,7 +63,7 @@ bool PlayState::OnPlay()
 
 	// Pause
 	InputHandler::Instance()->AddActionKeyDown(SDL_SCANCODE_3, [this] {
-		SoundManager::Instance()->PlayStream(&testStream);
+		SoundManager::Instance()->StopStream(&testStream);
 		});
 	InputHandler::Instance()->AddActionKeyUp(SDL_SCANCODE_3, [this] {
 		return;

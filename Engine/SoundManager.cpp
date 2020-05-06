@@ -12,6 +12,17 @@ void SoundManager::OnThink()
 {
     for (int i = 0; i < streams.size(); i++)
     {
+        if (streams[i]->SizeConsumed == streams[i]->Size)
+        {
+            ALint looping;
+            alCall(alGetSourcei, streams[i]->Source, AL_LOOPING, &looping);
+
+            if (looping == AL_FALSE)
+            {
+                StopStream(streams[i]);
+            }
+        }
+
         // Get the state of the current stream
         ALint state;
         alCall(alGetSourcei, streams[i]->Source, AL_SOURCE_STATE, &state);
@@ -475,6 +486,8 @@ long int tellOggCallback(void* fileHandle)
 
 bool SoundManager::CreateStreamFromFile(const std::string& filename, StreamingAudioData& audioData)
 {
+    if (audioData.File.is_open()) return false;
+
     audioData.Filename = filename;
     audioData.File.open(filename, std::ios::binary);
     if (!audioData.File.is_open())
@@ -576,7 +589,7 @@ bool SoundManager::CreateStreamFromFile(const std::string& filename, StreamingAu
             audioData.Format = AL_FORMAT_STEREO16;
         else
         {
-            std::cerr << "ERROR: unrecognised ogg Format: " << audioData.Channels << " Channels, " << audioData.BitRate << " bps" << std::endl;
+            std::cerr << "ERROR: unrecognised OGG Format: " << audioData.Channels << " Channels, " << audioData.BitRate << " bps" << std::endl;
             delete[] data;
             return false;
         }
@@ -678,7 +691,7 @@ void SoundManager::UpdateStream(StreamingAudioData& audioData)
         if (state != AL_PLAYING)
         {
             alCall(alSourceStop, audioData.Source);
-            alCall(alSourcePlay, audioData.Source);
+            // alCall(alSourcePlay, audioData.Source);
         }
 
         delete[] data;
