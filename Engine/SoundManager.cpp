@@ -10,14 +10,19 @@ bool SoundManager::Load(std::string fileName, std::string id, SoundType type)
 
 void SoundManager::OnThink()
 {
+    // Iterate throughout all the streams that are active
     for (int i = 0; i < streams.size(); i++)
     {
+        // Don't play finished streams
         if (streams[i]->Finished)
         {
+            // infact, stop the stream and remove it from the list
+            // of streams to iterate through
             StopStream(streams[i]);
             continue;
         }
 
+        // Update our streams every frame
         UpdateStream(*streams[i]);
     }
 }
@@ -101,18 +106,21 @@ SoundManager::SoundManager()
     std::cout << "Using device \"" << devices[0].c_str() << "\"..." << std::endl;
 
     // Open the first device we get
+    // Sidenote - does OpenAL soft even allow us to choose which device to intialise?
     openALDevice = alcOpenDevice(devices[0].c_str());
     if (!openALDevice)
     {
         std::cerr << "Cannot open device \"" << devices[0].c_str() << "\"!" << std::endl;
     }
 
+    // Whoops - we cannot create a context.
     if (!alcCall(alcCreateContext, openALContext, openALDevice, openALDevice, nullptr) || !openALContext)
     {
         std::cerr << "ERROR: Could not create audio context" << std::endl;
         /* probably exit program */
     }
 
+    // Uh oh, cannot switch audio context, no audio for the app session?
     ALCboolean contextMadeCurrent = false;
     if (!alcCall(alcMakeContextCurrent, contextMadeCurrent, openALDevice, openALContext)
         || contextMadeCurrent != ALC_TRUE)
@@ -121,7 +129,7 @@ SoundManager::SoundManager()
         /* probably exit or give up on having sound */
     }
 
-
+    // We somehow survived! fhew.
     std::cout << "SoundManager initialised." << std::endl;
 }
 
@@ -133,7 +141,7 @@ SoundManager::~SoundManager()
 
 bool SoundManager::checkALErrors(const std::string& filename, const std::uint_fast32_t line)
 {
-    // Spew out friendly error message for the corrisponding ENUMS.
+    // Spew out friendly error message for the corrisponding enums.
     ALenum error = alGetError();
     if (error != AL_NO_ERROR)
     {
@@ -166,7 +174,7 @@ bool SoundManager::checkALErrors(const std::string& filename, const std::uint_fa
 
 bool SoundManager::checkALCErrors(const std::string& filename, const std::uint_fast32_t line, ALCdevice* device)
 {
-    // Spew out friendly error message for the corrisponding ENUMS.
+    // Spew out friendly error message for the corrisponding enums.
     ALCenum error = alcGetError(device);
     if (error != ALC_NO_ERROR)
     {
@@ -229,6 +237,8 @@ std::int32_t SoundManager::convertToInt(char* buffer, std::size_t len)
 
 bool SoundManager::loadWavFileHeader(std::ifstream& file, std::uint8_t& channels, std::int32_t& sampleRate, std::uint8_t& bitsPerSample, ALsizei& size)
 {
+    // a method for casually reading wave file headers.
+
     char buffer[4];
     if (!file.is_open())
         return false;
@@ -360,6 +370,7 @@ bool SoundManager::loadWavFileHeader(std::ifstream& file, std::uint8_t& channels
 
 bool SoundManager::loadWav(const std::string& filename, WaveFile* wf)
 {
+    // Open the wave file...
     std::ifstream in(filename, std::ios::binary);
     if (!in.is_open())
     {
@@ -372,10 +383,12 @@ bool SoundManager::loadWav(const std::string& filename, WaveFile* wf)
         return false;
     }
 
+    // ... and shove the data into the structure >:D
     wf->RawData = new char[wf->DataSize];
 
     in.read(wf->RawData, wf->DataSize);
 
+    // then return true.
     return true;
 }
 
@@ -383,7 +396,7 @@ std::size_t readOggCallback(void* destination, std::size_t size1, std::size_t si
 {
     StreamingAudioData* audioData = reinterpret_cast<StreamingAudioData*>(fileHandle);
 
-    ALsizei length = size1 * size2;
+    ALsizei length = (ALsizei)(size1 * size2);
 
     if (audioData->SizeConsumed + length > audioData->Size)
     {
@@ -443,15 +456,15 @@ std::int32_t seekOggCallback(void* fileHandle, ogg_int64_t to, std::int32_t type
 
     if (type == SEEK_CUR)
     {
-        audioData->SizeConsumed += to;
+        audioData->SizeConsumed += (ALsizei)to;
     }
     else if (type == SEEK_END)
     {
-        audioData->SizeConsumed = audioData->Size - to;
+        audioData->SizeConsumed = audioData->Size - (ALsizei)to;
     }
     else if (type == SEEK_SET)
     {
-        audioData->SizeConsumed = to;
+        audioData->SizeConsumed = (ALsizei)to;
     }
     else
         return -1; // what are you trying to do vorbis?
@@ -490,7 +503,7 @@ bool SoundManager::CreateStreamFromFile(const std::string& filename, StreamingAu
 
     audioData.File.seekg(0, std::ios_base::beg);
     audioData.File.ignore(std::numeric_limits<std::streamsize>::max());
-    audioData.Size = audioData.File.gcount();
+    audioData.Size = (ALsizei)audioData.File.gcount();
     audioData.File.clear();
     audioData.File.seekg(0, std::ios_base::beg);
     audioData.SizeConsumed = 0;
@@ -512,7 +525,7 @@ bool SoundManager::CreateStreamFromFile(const std::string& filename, StreamingAu
     audioData.Channels = vorbisInfo->channels;
     audioData.BitRate = 16;
     audioData.SampleRate = vorbisInfo->rate;
-    audioData.Duration = ov_time_total(&audioData.OggVorbisFile, -1);
+    audioData.Duration = (size_t)ov_time_total(&audioData.OggVorbisFile, -1);
 
     alCall(alGenSources, 1, &audioData.Source);
     alCall(alSourcef, audioData.Source, AL_PITCH, 1.f);
@@ -521,7 +534,7 @@ bool SoundManager::CreateStreamFromFile(const std::string& filename, StreamingAu
     alCall(alSource3f, audioData.Source, AL_VELOCITY, 0.f, 0.f, 0.f);
     alCall(alSourcei, audioData.Source, AL_LOOPING, AL_FALSE);
 
-    alCall(alGenBuffers, NUM_BUFFERS, &audioData.Buffers[0]);
+    alCall(alGenBuffers, (ALsizei)NUM_BUFFERS, &audioData.Buffers[0]);
 
     if (audioData.File.eof())
     {
@@ -589,7 +602,7 @@ bool SoundManager::CreateStreamFromFile(const std::string& filename, StreamingAu
         alCall(alBufferData, audioData.Buffers[i], audioData.Format, data, dataSoFar, audioData.SampleRate);
     }
 
-    alCall(alSourceQueueBuffers, audioData.Source, NUM_BUFFERS, &audioData.Buffers[0]);
+    alCall(alSourceQueueBuffers, audioData.Source, (ALsizei)NUM_BUFFERS, &audioData.Buffers[0]);
 
     delete[] data;
 
@@ -598,15 +611,19 @@ bool SoundManager::CreateStreamFromFile(const std::string& filename, StreamingAu
 
 void SoundManager::PlayStream(StreamingAudioData* audioData)
 {
+    // If we are using an audio data reference that has already played...
     if (audioData->Finished)
     {
+        // ... recreate the struct to avoid any weird side effects.
         CreateStreamFromFile(audioData->Filename, *audioData);
         audioData->Finished = false;
     }
 
+    // Fully stop the source than play.
     alCall(alSourceStop, audioData->Source);
     alCall(alSourcePlay, audioData->Source);
 
+    // Add it to the vector of audio data we will update every frame.
     streams.push_back(audioData);
 }
 
@@ -615,11 +632,14 @@ void SoundManager::UpdateStream(StreamingAudioData& audioData)
     ALint buffersProcessed = 0;
     bool reachedEnd = false;
 
+    // Don't stream any more data until we have finished playing the current data in the buffer
     alCall(alGetSourcei, audioData.Source, AL_BUFFERS_PROCESSED, &buffersProcessed);
     if (buffersProcessed <= 0)
     {
         return;
     }
+
+    // Stream more parts of the file into the buffer if the current buffer has been played.
     while (buffersProcessed--)
     {
         ALuint buffer;
@@ -667,10 +687,10 @@ void SoundManager::UpdateStream(StreamingAudioData& audioData)
             alCall(alSourceQueueBuffers, audioData.Source, 1, &buffer);
         }
 
-        if (dataSizeToBuffer < BUFFER_SIZE)
-        {
-            std::cout << "Data missing" << std::endl;
-        }
+        //if (dataSizeToBuffer < BUFFER_SIZE)
+        //{
+        //    std::cout << "Data missing" << std::endl;
+        //}
 
         delete[] data;
     }
@@ -687,7 +707,6 @@ void SoundManager::UpdateStream(StreamingAudioData& audioData)
         audioData.Finished = true;
 
         return;
-
     }
 }
 

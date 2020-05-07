@@ -3,6 +3,7 @@
 #define __Game__
 
 #include <SDL.h>
+#include <SDL_thread.h>
 #include <vector>
 #include "TextureManager.h"
 #include "InputHandler.h"
@@ -53,6 +54,8 @@ public:
 
 	Vector2D GetViewportSize() const { return m_viewportSize; }
 
+	SDL_Thread* GetAudioThread() const { return audioThread; }
+
 private:
 
 	GameStateManager* m_pGameStateManager;
@@ -63,6 +66,8 @@ private:
 	SDL_Texture* m_pTexture = nullptr; // the new SDL_Texture variable
 	SDL_Rect m_sourceRectangle = {}; // the first rectangle
 	SDL_Rect m_destinationRectangle = {}; // another rectangle
+
+	SDL_Thread* audioThread = 0;
 
 	Vector2D m_viewportSize;
 

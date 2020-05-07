@@ -10,6 +10,23 @@
 
 Game* Game::s_pInstance = 0;
 
+int audioLoop(void* data)
+{
+	// Just create an instance to initialise it.
+	SoundManager::Instance();
+
+	Game* pG = reinterpret_cast<Game*>(data);
+
+	while (pG->IsRunning())
+	{
+		SoundManager::Instance()->OnThink();
+
+		// SDL_WaitThread(pG->GetAudioThread(), NULL);
+	}
+
+	return 0;
+}
+
 // Initialises the major parts of the engine
 bool Game::Init(const char* title, int xpos, int ypos, int width, int height, bool fullscreen)
 {
@@ -41,8 +58,8 @@ bool Game::Init(const char* title, int xpos, int ypos, int width, int height, bo
 				SDL_SetRenderDrawColor(m_pRenderer,
 					255, 255, 255, 255);
 
-				// Just create an instance to initialise it.
-				SoundManager::Instance();
+				SDL_Thread* aT = SDL_CreateThread(audioLoop, "AudioThread", (void*)Game::Instance());
+				SDL_DetachThread(aT);
 
 				GameObjectFactory::Instance()->RegisterType("Player", new PlayerCreator());
 				GameObjectFactory::Instance()->RegisterType("Button", new ButtonCreator());
@@ -85,7 +102,7 @@ void Game::OnThink()
 {
 	// Call the current GameState functionality via the GameStateManager.
 	m_pGameStateManager->OnThink();
-	SoundManager::Instance()->OnThink();
+	
 	Camera::Instance()->OnThink();
 }
 
