@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
-import os, sys, json
+import os
+import sys
+import json
 from pathlib import Path
 from shutil import copyfile
 
@@ -19,7 +21,7 @@ def GetParameterValue(parmName, required=False):
             if not sys.argv[i+1].startswith("-"):
                 return sys.argv[i+1]
 
-    if required == True:
+    if required:
         raise RuntimeError("Cannot find specified required parameter \"{0}\"!".format(parmName))
         
     return 0
@@ -102,7 +104,7 @@ for j, i in enumerate(mapData["tilesets"]):
     cTileset["image"] = str(dTileSet.relative_to(workingDir))
 
     # If we are dealing with an external file...
-    if not (pTileset == mapFile):
+    if (pTileset != mapFile):
         try:
             ws = open(npTileset, "w")
         except OSError as e:
@@ -144,8 +146,3 @@ else:
 
 print("Rewrote map files!")
 print("Moved \"%s\" to \"%s\"" % (str(nMapFile.name), str(nMapFile.parent)))
-
-
-
-
-    
