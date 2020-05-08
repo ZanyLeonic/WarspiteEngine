@@ -14,6 +14,7 @@
 
 const std::string PlayState::s_playID = "Game";
 StreamingAudioData testStream;
+WaveFile testFile;
 
 bool PlayState::OnPlay()
 {
@@ -38,11 +39,20 @@ bool PlayState::OnPlay()
 			return;
 		});
 
+	// Load Wave
 	InputHandler::Instance()->AddActionKeyDown(SDL_SCANCODE_0, [this] {
-			SoundManager::Instance()->Test();
+			SoundManager::Instance()->Load("assets/sound/mycode.wav", testFile);
 		});
 	InputHandler::Instance()->AddActionKeyUp(SDL_SCANCODE_0, [this] {
 			return;
+		});
+
+	// Play Wave
+	InputHandler::Instance()->AddActionKeyDown(SDL_SCANCODE_9, [this] {
+		SoundManager::Instance()->PlaySound(&testFile);
+		});
+	InputHandler::Instance()->AddActionKeyUp(SDL_SCANCODE_9, [this] {
+		return;
 		});
 
 	// Load

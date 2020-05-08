@@ -1,100 +1,7 @@
 #include "SoundManager.h"
-#include <vorbis/codec.h>
+#include <SDL2/SDL_thread.h>
 
 SoundManager* SoundManager::s_pInstance = 0;
-
-bool SoundManager::Load(std::string fileName, std::string id, SoundType type)
-{
-    return false;
-}
-
-void SoundManager::OnThink()
-{
-    // Iterate throughout all the streams that are active
-    for (int i = 0; i < streams.size(); i++)
-    {
-        // Don't play finished streams
-        if (streams[i]->Finished)
-        {
-            // infact, stop the stream and remove it from the list
-            // of streams to iterate through
-            StopStream(streams[i]);
-            continue;
-        }
-
-        // Update our streams every frame
-        UpdateStream(*streams[i]);
-    }
-}
-
-void SoundManager::Destroy()
-{
-    std::cout << "Destroying device handles..." << std::endl;
-    // Try to destroy our device
-    ALCboolean closed;
-    if (!alcCall(alcCloseDevice, closed, openALDevice, openALDevice))
-    {
-        std::cerr << "Error while destroying device" << std::endl;
-    }
-    else
-    {
-        std::cout << "Successfully destroyed device handle" << std::endl;
-    }
-}
-
-void SoundManager::PlaySound(std::string id, int loop)
-{
-}
-
-void SoundManager::PlayMusic(std::string id, int loop)
-{
-}
-
-void SoundManager::Test()
-{
-    WaveFile file;
-
-    if (!loadWav("assets/sound/mycode.wav", &file)) { return; }
-
-    if (file.RawData == nullptr || file.DataSize == 0)
-    {
-        std::cerr << "ERROR: Could not load wav" << std::endl;
-        return;
-    }
-
-    std::vector<char> soundData = std::vector<char>(file.RawData, file.RawData + file.DataSize);
-
-    ALuint buffer;
-    alCall(alGenBuffers, 1, &buffer);
-
-    // Load the wav into the buffer
-    alCall(alBufferData, buffer, file.GetFormat(), soundData.data(), (ALsizei)soundData.size(), file.SampleRate);
-    soundData.clear(); // erase the sound in RAM
-
-    // Setup a source for the file to play
-    ALuint source;
-    alCall(alGenSources, 1, &source);
-    alCall(alSourcef, source, AL_PITCH, 1.0f);
-    alCall(alSourcef, source, AL_GAIN, 1.0f);
-    alCall(alSource3f, source, AL_POSITION, 0.f, 0.f, 0.f);
-    alCall(alSource3f, source, AL_VELOCITY, 0.f, 0.f, 0.f);
-    alCall(alSourcei, source, AL_LOOPING, AL_FALSE);
-    alCall(alSourcei, source, AL_BUFFER, buffer);
-
-    // play the source
-    alCall(alSourcePlay, source);
-
-    ALint state = AL_PLAYING;
-
-    while (state == AL_PLAYING)
-    {
-        alCall(alGetSourcei, source, AL_SOURCE_STATE, &state);
-    }
-
-    // then free the memory that contained the wav file.
-    alCall(alDeleteSources, 1, &source);
-    alCall(alDeleteBuffers, 1, &buffer);
-}
 
 SoundManager::SoundManager()
 {
@@ -137,6 +44,108 @@ SoundManager::~SoundManager()
 {
     // Just destroy if we are being deconstructed
     Destroy();
+}
+
+void SoundManager::OnThink()
+{
+    // Iterate throughout all the streams that are active
+    for (int i = 0; i < streams.size(); i++)
+    {
+        // Don't play finished streams
+        if (streams[i]->Finished)
+        {
+            // infact, stop the stream and remove it from the list
+            // of streams to iterate through
+            StopStream(streams[i]);
+            continue;
+        }
+
+        // Update our streams every frame
+        UpdateStream(*streams[i]);
+    }
+}
+
+void SoundManager::Destroy()
+{
+    std::cout << "Destroying device handles..." << std::endl;
+    // Try to destroy our device
+    ALCboolean closed;
+    if (!alcCall(alcCloseDevice, closed, openALDevice, openALDevice))
+    {
+        std::cerr << "Error while destroying device" << std::endl;
+    }
+    else
+    {
+        std::cout << "Successfully destroyed device handle" << std::endl;
+    }
+}
+
+bool SoundManager::Load(const std::string& fileName, WaveFile& file)
+{
+    // The input already has been loaded! No need to load again.
+    if (file.RawData != nullptr && file.DataSize > 0) return true;
+
+    if (!loadWav(fileName, &file)) { return false; }
+
+    if (file.RawData == nullptr || file.DataSize == 0)
+    {
+        std::cerr << "ERROR: Could not load wav" << std::endl;
+        return false;
+    }
+
+    file.Filename = fileName;
+
+    std::vector<char> soundData = std::vector<char>(file.RawData, file.RawData + file.DataSize);
+
+    alCall(alGenBuffers, 1, &file.Buffer);
+
+    // Load the wav into the buffer
+    alCall(alBufferData, file.Buffer, file.GetFormat(), soundData.data(), (ALsizei)soundData.size(), file.SampleRate);
+    soundData.clear(); // erase the sound in RAM
+
+    // Setup a source for the file to play
+    alCall(alGenSources, 1, &file.Source);
+    alCall(alSourcef, file.Source, AL_PITCH, 1.0f);
+    alCall(alSourcef, file.Source, AL_GAIN, 1.0f);
+    alCall(alSource3f, file.Source, AL_POSITION, 0.f, 0.f, 0.f);
+    alCall(alSource3f, file.Source, AL_VELOCITY, 0.f, 0.f, 0.f);
+    alCall(alSourcei, file.Source, AL_LOOPING, AL_FALSE);
+    alCall(alSourcei, file.Source, AL_BUFFER, file.Buffer);
+
+    return true;
+}
+
+int playWav(void* data)
+{
+    WaveFile* file = reinterpret_cast<WaveFile*>(data);
+
+    // play the source
+    alSourcePlay(file->Source);
+
+    ALint state = AL_PLAYING;
+
+    while (state == AL_PLAYING)
+    {
+        alGetSourcei(file->Source, AL_SOURCE_STATE, &state);
+    }
+
+    return 0;
+}
+
+void SoundManager::PlaySound(WaveFile* file)
+{
+    // We are dealing with uninitialised data! don't play!
+    if (file->RawData == nullptr || file->DataSize == 0) return;
+
+    SDL_Thread* pBThread = SDL_CreateThread(playWav, file->Filename.c_str(), (void*)file);
+    SDL_DetachThread(pBThread);
+}
+
+void SoundManager::DeleteSound(WaveFile* file)
+{
+    // then free the memory that contained the wav file.
+    alCall(alDeleteSources, 1, &file->Source);
+    alCall(alDeleteBuffers, 1, &file->Buffer);
 }
 
 bool SoundManager::checkALErrors(const std::string& filename, const std::uint_fast32_t line)

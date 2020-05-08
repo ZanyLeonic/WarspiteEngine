@@ -2,8 +2,8 @@
 #ifndef __Game__
 #define __Game__
 
-#include <SDL.h>
-#include <SDL_thread.h>
+#include <SDL2/SDL.h>
+#include <SDL2/SDL_thread.h>
 #include <vector>
 #include "TextureManager.h"
 #include "InputHandler.h"

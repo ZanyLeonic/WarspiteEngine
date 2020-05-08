@@ -36,11 +36,14 @@ enum class endian
 
 struct WaveFile
 {
+	ALuint			Buffer;
+	std::uint8_t	BitRate = 0;
 	std::uint8_t	Channels   = 0;
+	ALsizei			DataSize = 0;
+	std::string		Filename;
 	ALsizei			SampleRate = 0;
-	std::uint8_t	BitRate	= 0;
-	ALsizei			DataSize	= 0;
-	char*			RawData	= 0;
+	ALuint			Source;
+	char*			RawData = 0;
 
 	// Determines and returns the correct format depending on our data
 	ALenum			GetFormat()
@@ -100,7 +103,17 @@ struct StreamingAudioData
 
 class SoundManager
 {
+private:
+	// Singleton stuff
+	static SoundManager* s_pInstance;
+
+	SoundManager();
+	~SoundManager();
+
+	SoundManager(const SoundManager&);
+
 public:
+	// more singleton stuff
 	static SoundManager* Instance()
 	{
 		if (s_pInstance == 0)
@@ -111,23 +124,26 @@ public:
 		return s_pInstance;
 	}
 
-	bool Load(std::string fileName, std::string id, SoundType type);
 	void OnThink();
 	void Destroy();
 
-	void PlaySound(std::string id, int loop);
-	void PlayMusic(std::string id, int loop);
+	// Wave methods
+	bool Load(const std::string& fileName, WaveFile& file);
 
-	void Test();
+	void PlaySound(WaveFile* file);
+	void DeleteSound(WaveFile* file);
 
 private:
+	// Utility for loading WAVE files
+	std::int32_t convertToInt(char* buffer, std::size_t len);
 
-	static SoundManager* s_pInstance;
+	bool loadWavFileHeader(std::ifstream& file,
+		std::uint8_t& channels,
+		std::int32_t& sampleRate,
+		std::uint8_t& bitsPerSample,
+		ALsizei& size);
 
-	SoundManager();
-	~SoundManager();
-
-	SoundManager(const SoundManager&);
+	bool loadWav(const std::string& filename, WaveFile* wf);
 
 	// Reports errors encountered with OpenAL
 	bool checkALErrors(const std::string& filename, const std::uint_fast32_t line);
@@ -185,17 +201,6 @@ private:
 		returnValue = function(std::forward<Params>(params)...);
 		return checkALCErrors(filename, line, device);
 	}
-
-	// Utility for loading WAVE files
-	std::int32_t convertToInt(char* buffer, std::size_t len);
-	
-	bool loadWavFileHeader(std::ifstream& file,
-		std::uint8_t& channels,
-		std::int32_t& sampleRate,
-		std::uint8_t& bitsPerSample,
-		ALsizei& size);
-
-	bool loadWav(const std::string& filename, WaveFile* wf);
 
 public:
 	// Ogg Implementation
