@@ -5,8 +5,8 @@
 #include "Game.h"
 #include <iostream>
 
-#define PLAYER_WIDTH 22
-#define PLAYER_HEIGHT 27
+#define PLAYER_WIDTH 32
+#define PLAYER_HEIGHT 32
 
 Player::Player()
 	: WarspiteObject()

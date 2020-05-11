@@ -623,6 +623,12 @@ void SoundManager::PlayStream(StreamingAudioData* audioData)
     // If we are using an audio data reference that has already played...
     if (audioData->Finished)
     {
+        ov_clear(&audioData->OggVorbisFile);
+
+        alCall(alSourcei, audioData->Source, AL_BUFFER, 0);
+        alCall(alDeleteSources, 1, &audioData->Source);
+        alCall(alDeleteBuffers, NUM_BUFFERS, &audioData->Buffers[0]);
+    	
         // ... recreate the struct to avoid any weird side effects.
         CreateStreamFromFile(audioData->Filename, *audioData);
         audioData->Finished = false;
