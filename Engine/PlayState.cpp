@@ -14,6 +14,7 @@
 
 const std::string PlayState::s_playID = "Game";
 StreamingAudioData testStream;
+StreamingAudioData stream2;
 WaveFile testFile;
 
 bool PlayState::OnPlay()
@@ -58,6 +59,7 @@ bool PlayState::OnPlay()
 	// Load
 	InputHandler::Instance()->AddActionKeyDown(SDL_SCANCODE_1, [this] {
 		SoundManager::Instance()->CreateStreamFromFile("assets/sound/test.ogg", testStream);
+		SoundManager::Instance()->CreateStreamFromFile("assets/sound/stream2.ogg", stream2);
 		});
 	InputHandler::Instance()->AddActionKeyUp(SDL_SCANCODE_1, [this] {
 		return;
@@ -66,14 +68,27 @@ bool PlayState::OnPlay()
 	// Play
 	InputHandler::Instance()->AddActionKeyDown(SDL_SCANCODE_2, [this] {
 		SoundManager::Instance()->PlayStream(&testStream);
+		
 		});
 	InputHandler::Instance()->AddActionKeyUp(SDL_SCANCODE_2, [this] {
 		return;
 		});
 
+	InputHandler::Instance()->AddActionKeyDown(SDL_SCANCODE_4, [this] {
+		SoundManager::Instance()->PlayStream(&stream2);
+
+		});
+	InputHandler::Instance()->AddActionKeyUp(SDL_SCANCODE_4, [this] {
+		return;
+		});
+
+	
+	
+
 	// Pause
 	InputHandler::Instance()->AddActionKeyDown(SDL_SCANCODE_3, [this] {
 		SoundManager::Instance()->StopStream(&testStream);
+		SoundManager::Instance()->StopStream(&stream2);
 		});
 	InputHandler::Instance()->AddActionKeyUp(SDL_SCANCODE_3, [this] {
 		return;
