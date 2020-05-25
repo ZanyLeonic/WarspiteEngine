@@ -63,6 +63,7 @@ bool Player::OnThink()
 	WarspiteObject::OnThink();
 	return true;
 }
+
 void Player::Draw()
 {
 	// Get the camera position to offset the drawing

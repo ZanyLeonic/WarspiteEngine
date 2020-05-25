@@ -2,7 +2,7 @@
 #ifndef __InputHandler__
 #define __InputHandler__
 
-#include <SDL.h>
+#include <SDL2/SDL.h>
 #include <vector>
 #include <map>
 #include <functional>
@@ -52,9 +52,8 @@ public:
 	{
 		return m_mousePosition;
 	}
-
+	
 private:
-
 	InputHandler();
 
 	// private functions to handle the different event types
@@ -97,5 +96,4 @@ private:
 	static InputHandler* s_pInstance;
 };
 typedef InputHandler TheInputHandler;
-
 #endif /* defined(__InputHandler__) */

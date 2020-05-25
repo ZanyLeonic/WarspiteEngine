@@ -9,7 +9,6 @@
 class GameObject
 {
 public:
-
 	virtual void OnPlay() = 0;
 	virtual void Draw() = 0;
 	virtual bool OnThink() = 0;
@@ -22,7 +21,5 @@ public:
 protected:
 	GameObject() {} 
 	virtual ~GameObject() {}
-
 };
-
 #endif /* defined(__GameObject__) */

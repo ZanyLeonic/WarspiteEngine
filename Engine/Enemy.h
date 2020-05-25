@@ -10,7 +10,5 @@ public:
 	Enemy();
 
 	bool OnThink();
-
 };
-
 #endif /* defined(__Enemy__) */

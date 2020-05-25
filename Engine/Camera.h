@@ -47,7 +47,6 @@ public:
 	Vector2D GetPositionT() const;
 
 private:
-
 	Camera();
 	~Camera();
 

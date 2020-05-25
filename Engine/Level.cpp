@@ -3,7 +3,6 @@
 
 Level::Level()
 {
-
 }
 
 void Level::OnPlay()

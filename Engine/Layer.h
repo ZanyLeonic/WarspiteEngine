@@ -5,7 +5,6 @@
 class Layer
 {
 public:
-
 	virtual void OnPlay() = 0;
 	virtual void Destroy() = 0;
 
@@ -14,6 +13,5 @@ public:
 
 protected:
 	virtual ~Layer() {}
-
 };
 #endif

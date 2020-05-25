@@ -14,7 +14,5 @@ public:
 	virtual bool OnEnd() = 0;
 
 	virtual std::string GetStateID() const = 0;
-
 };
-
 #endif

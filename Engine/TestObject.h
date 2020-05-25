@@ -10,7 +10,6 @@ class TestObject :
 public:
 	TestObject();
 	void collide();
-
 };
 
 class TestObjectCreator : public BaseCreator
@@ -21,4 +20,3 @@ class TestObjectCreator : public BaseCreator
 	}
 };
 #endif
-

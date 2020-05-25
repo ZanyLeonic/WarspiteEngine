@@ -13,7 +13,6 @@ class TileLayer :
 	public Layer
 {
 public:
-
 	TileLayer(int tileSize, int mapWidth, int mapHeight, 
 		const std::vector<Tileset>& tilesets)
 		: m_tileSize(tileSize)
@@ -57,4 +56,3 @@ private:
 };
 
 #endif
-

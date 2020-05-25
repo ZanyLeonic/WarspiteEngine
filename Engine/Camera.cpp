@@ -8,7 +8,6 @@ Camera::Camera()
 
 void Camera::OnThink()
 {
-
 }
 
 Vector2D Camera::GetPositionT() const

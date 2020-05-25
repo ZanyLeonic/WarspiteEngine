@@ -1,5 +1,6 @@
 #include "SoundManager.h"
 
+// TODO: Clean up and refine this class - it is a mess.
 SoundManager* SoundManager::s_pInstance = 0;
 
 SoundManager::SoundManager()
@@ -48,7 +49,6 @@ SoundManager::~SoundManager()
 
 int UpdateStream(StreamingAudioData& audioData)
 {
-
 	ALint buffersProcessed = 0;
 	bool reachedEnd = false;
 

@@ -11,7 +11,6 @@ class Button : public WarspiteObject
 protected:
 	typedef std::function<bool()> ButtonCallback;
 public:
-
 	Button();
 
 	virtual void Load(const ObjectParams* pParams);

@@ -45,12 +45,10 @@ public:
 	Vector2D m_LevelSize;
 
 private:
-
 	friend class LevelParser;
 	Level();
 
 	std::vector<Tileset> m_tilesets;
 	std::vector<Layer*> m_layers;
 };
-
 #endif

@@ -27,7 +27,7 @@ def SearchForGitDirectory(path):
 
 # Gets the commit hash from the HEAD or the current commit reference.
 def GetHeadSha1(gitDir):
-    if (gitDir == None):
+    if (gitDir is None):
         return
     
     # The path to the commit path

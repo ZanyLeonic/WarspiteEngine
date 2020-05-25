@@ -35,7 +35,6 @@ private:
 	static Game* s_pInstance;
 
 public:
-
 	// simply set the running variable to true
 	bool Init(const char* title, int xpos, int ypos, int width, int height, bool fullscreen);
 
@@ -57,7 +56,6 @@ public:
 	SDL_Thread* GetAudioThread() const { return audioThread; }
 
 private:
-
 	GameStateManager* m_pGameStateManager;
 
 	SDL_Window* m_pWindow = nullptr;
@@ -73,5 +71,4 @@ private:
 
 	bool m_bRunning = false;
 };
-
 #endif /* defined(__Game__) */
