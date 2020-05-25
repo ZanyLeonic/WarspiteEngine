@@ -5,6 +5,7 @@
 
 #include <AL/al.h>
 #include <AL/alc.h>
+#include <SDL2/SDL_thread.h>
 #include <vorbis/vorbisfile.h>
 #include <string>
 #include <vector>
@@ -88,7 +89,8 @@ struct StreamingAudioData
 	OggVorbis_File OggVorbisFile;
 	std::int_fast32_t OggCurrentSection = 0;
 	std::size_t Duration;
-
+	SDL_threadID threadID = 0;
+	
 	bool operator==(const StreamingAudioData s1)
 	{
 		// Compare some of the fields - may need to change to include more in the future.
@@ -100,6 +102,61 @@ struct StreamingAudioData
 			Duration == s1.Duration;
 	}
 };
+
+// Wrapper for OpenAL (AL and ALC) calls
+	// Template for methods that return a non-void type
+template<typename alFunction, typename... Params>
+auto alCallImpl(const char* filename,
+	const std::uint_fast32_t line,
+	alFunction function,
+	Params... params)
+	->typename std::enable_if_t<!std::is_same_v<void, decltype(function(params...))>, decltype(function(params...))>
+{
+	auto ret = function(std::forward<Params>(params)...);
+	checkALErrors(filename, line);
+	return ret;
+}
+
+// Template for methods that return a void type
+template<typename alFunction, typename... Params>
+auto alCallImpl(const char* filename,
+	const std::uint_fast32_t line,
+	alFunction function,
+	Params... params)
+	->typename std::enable_if_t<std::is_same_v<void, decltype(function(params...))>, bool>
+{
+	function(std::forward<Params>(params)...);
+	return checkALErrors(filename, line);
+}
+
+template<typename alcFunction, typename... Params>
+auto alcCallImpl(const char* filename,
+	const std::uint_fast32_t line,
+	alcFunction function,
+	ALCdevice* device,
+	Params... params)
+	->typename std::enable_if_t<std::is_same_v<void, decltype(function(params...))>, bool>
+{
+	function(std::forward<Params>(params)...);
+	return checkALCErrors(filename, line, device);
+}
+
+template<typename alcFunction, typename ReturnType, typename... Params>
+auto alcCallImpl(const char* filename,
+	const std::uint_fast32_t line,
+	alcFunction function,
+	ReturnType& returnValue,
+	ALCdevice* device,
+	Params... params)
+	->typename std::enable_if_t<!std::is_same_v<void, decltype(function(params...))>, bool>
+{
+	returnValue = function(std::forward<Params>(params)...);
+	return checkALCErrors(filename, line, device);
+}
+
+// Reports errors encountered with OpenAL
+bool checkALErrors(const std::string& filename, const std::uint_fast32_t line);
+bool checkALCErrors(const std::string& filename, const std::uint_fast32_t line, ALCdevice* device);
 
 class SoundManager
 {
@@ -145,72 +202,17 @@ private:
 
 	bool loadWav(const std::string& filename, WaveFile* wf);
 
-	// Reports errors encountered with OpenAL
-	bool checkALErrors(const std::string& filename, const std::uint_fast32_t line);
-	bool checkALCErrors(const std::string& filename, const std::uint_fast32_t line, ALCdevice* device);
-
 	bool getAvailableDevices(std::vector<std::string>& devicesVec, ALCdevice* device);
-	
-	// Wrapper for OpenAL (AL and ALC) calls
-	// Template for methods that return a non-void type
-	template<typename alFunction, typename... Params>
-	auto alCallImpl(const char* filename,
-		const std::uint_fast32_t line,
-		alFunction function,
-		Params... params)
-		->typename std::enable_if_t<!std::is_same_v<void, decltype(function(params...))>, decltype(function(params...))>
-	{
-		auto ret = function(std::forward<Params>(params)...);
-		checkALErrors(filename, line);
-		return ret;
-	}
-
-	// Template for methods that return a void type
-	template<typename alFunction, typename... Params>
-	auto alCallImpl(const char* filename,
-		const std::uint_fast32_t line,
-		alFunction function,
-		Params... params)
-		->typename std::enable_if_t<std::is_same_v<void, decltype(function(params...))>, bool>
-	{
-		function(std::forward<Params>(params)...);
-		return checkALErrors(filename, line);
-	}
-
-	template<typename alcFunction, typename... Params>
-	auto alcCallImpl(const char* filename,
-		const std::uint_fast32_t line,
-		alcFunction function,
-		ALCdevice* device,
-		Params... params)
-		->typename std::enable_if_t<std::is_same_v<void, decltype(function(params...))>, bool>
-	{
-		function(std::forward<Params>(params)...);
-		return checkALCErrors(filename, line, device);
-	}
-
-	template<typename alcFunction, typename ReturnType, typename... Params>
-	auto alcCallImpl(const char* filename,
-		const std::uint_fast32_t line,
-		alcFunction function,
-		ReturnType& returnValue,
-		ALCdevice* device,
-		Params... params)
-		->typename std::enable_if_t<!std::is_same_v<void, decltype(function(params...))>, bool>
-	{
-		returnValue = function(std::forward<Params>(params)...);
-		return checkALCErrors(filename, line, device);
-	}
 
 public:
 	// Ogg Implementation
 	bool CreateStreamFromFile(const std::string& filename, StreamingAudioData& audioData);
 
-	void PlayStream(StreamingAudioData* audioData);
-	void StopStream(StreamingAudioData* audioData);
+	// void PlayStream(StreamingAudioData* audioData);
+	// void StopStream(StreamingAudioData* audioData);
 
 private:
-	void UpdateStream(StreamingAudioData& audioData);
+	// void UpdateStream(StreamingAudioData& audioData);
 
 	// std::vector<StreamingAudioData> streams;
 
@@ -219,6 +221,7 @@ private:
 	ALCcontext* openALContext = 0;
 
 	std::vector<StreamingAudioData*> streams;
+	std::vector<SDL_threadID> threads;
 
 	std::vector<std::string> devices;
 
