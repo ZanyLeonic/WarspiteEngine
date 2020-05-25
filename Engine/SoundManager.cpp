@@ -3,52 +3,13 @@
 // TODO: Clean up and refine this class - it is a mess.
 SoundManager* SoundManager::s_pInstance = 0;
 
-SoundManager::SoundManager()
-{
-	std::cout << "Initialising SoundManager..." << std::endl;
-
-	// Enumerate all our devices
-	getAvailableDevices(devices, NULL);
-
-	std::cout << "Using device \"" << devices[0].c_str() << "\"..." << std::endl;
-
-	// Open the first device we get
-	// Sidenote - does OpenAL soft even allow us to choose which device to intialise?
-	openALDevice = alcOpenDevice(devices[0].c_str());
-	if (!openALDevice)
-	{
-		std::cerr << "Cannot open device \"" << devices[0].c_str() << "\"!" << std::endl;
-	}
-
-	// Whoops - we cannot create a context.
-	if (!alcCall(alcCreateContext, openALContext, openALDevice, openALDevice, nullptr) || !openALContext)
-	{
-		std::cerr << "ERROR: Could not create audio context" << std::endl;
-		/* probably exit program */
-	}
-
-	// Uh oh, cannot switch audio context, no audio for the app session?
-	ALCboolean contextMadeCurrent = false;
-	if (!alcCall(alcMakeContextCurrent, contextMadeCurrent, openALDevice, openALContext)
-		|| contextMadeCurrent != ALC_TRUE)
-	{
-		std::cerr << "ERROR: Could not make audio context current" << std::endl;
-		/* probably exit or give up on having sound */
-	}
-
-	// We somehow survived! fhew.
-	std::cout << "SoundManager initialised." << std::endl;
-}
-
-SoundManager::~SoundManager()
-{
-	// Just destroy if we are being deconstructed
-	Destroy();
-}
-
-
 int UpdateStream(StreamingAudioData& audioData)
 {
+	ALint st;
+	alCall(alGetSourcei, audioData.Source, AL_SOURCE_STATE, &st);
+
+	if (st != AL_PLAYING) return 0; // We might be paused or stopped.
+
 	ALint buffersProcessed = 0;
 	bool reachedEnd = false;
 
@@ -73,7 +34,7 @@ int UpdateStream(StreamingAudioData& audioData)
 
 		while ((sizeRead < BUFFER_SIZE) && !reachedEnd)
 		{
-
+			// Continue to read the OGG file
 			std::int32_t result = ov_read(&audioData.OggVorbisFile, &data[sizeRead], BUFFER_SIZE - sizeRead, 0, 2, 1, &audioData.OggCurrentSection);
 			if (result == OV_HOLE)
 			{
@@ -107,22 +68,20 @@ int UpdateStream(StreamingAudioData& audioData)
 			alCall(alSourceQueueBuffers, audioData.Source, 1, &buffer);
 		}
 
-		//if (dataSizeToBuffer < BUFFER_SIZE)
-		//{
-		//    std::cout << "Data missing" << std::endl;
-		//}
-
 		delete[] data;
 	}
 
+	// Change flag only if we have reached the end and we haven't finished yet.
 	if (reachedEnd == true && !audioData.Finished)
 	{
+		// Play the last bit of the remaining buffer
 		ALint state = AL_PLAYING;
 		while (state == AL_PLAYING)
 		{
 			alCall(alGetSourcei, audioData.Source, AL_SOURCE_STATE, &state);
 		}
 
+		// Close the file stream + toggle flag
 		audioData.File.close();
 		audioData.Finished = true;
 	}
@@ -130,61 +89,389 @@ int UpdateStream(StreamingAudioData& audioData)
 	return 0;
 }
 
-void StopStream(StreamingAudioData* audioData)
-{
-	alCall(alSourceStop, audioData->Source);
-
-	// Remove the audio stream from the vector if it has been stopped.
-	// streams.erase(std::remove(streams.begin(), streams.end(), audioData), streams.end());
-}
-
-
 int audioStreamUpdate(void* data)
 {
 	auto* as = reinterpret_cast<StreamingAudioData*>(data);
-	
-	//if (as->Finished)
-	//{
-	//	ov_clear(&as->OggVorbisFile);
 
-	//	alCall(alSourcei, as->Source, AL_BUFFER, 0);
-	//	alCall(alDeleteSources, 1, &as->Source);
-	//	alCall(alDeleteBuffers, NUM_BUFFERS, &as->Buffers[0]);
-	//	as->Finished = false;
-	//}
+	if (as->StreamCreated)
+		as->StreamCreated(as);
 
-	// Fully stop the source than play.
-	alCall(alSourceStop, as->Source);
-	alCall(alSourcePlay, as->Source);
+	SoundManager::Instance()->GetStreams().push_back(as);
 	
 	while (as->Finished != true)
 	{
+		if (as->UpdateCallback)
+			as->UpdateCallback(as);
+
 		UpdateStream(*as);
 	}
 
-	StopStream(as);
+	alCall(alSourceStop, as->Source);
+
+	if (as->StopCallback)
+		as->StopCallback(as);
+
+	SoundManager::Instance()->GetStreams().erase(
+		std::remove(SoundManager::Instance()->GetStreams().begin(), 
+		SoundManager::Instance()->GetStreams().end(), as), 
+		SoundManager::Instance()->GetStreams().end()
+	);
+	
+	return 0;
+}
+
+
+std::size_t readOggCallback(void* destination, std::size_t size1, std::size_t size2, void* fileHandle)
+{
+	StreamingAudioData* audioData = reinterpret_cast<StreamingAudioData*>(fileHandle);
+
+	ALsizei length = (ALsizei)(size1 * size2);
+
+	if (audioData->SizeConsumed + length > audioData->Size)
+	{
+		length = audioData->Size - audioData->SizeConsumed;
+	}
+
+	if (!audioData->File.is_open())
+	{
+		audioData->File.open(audioData->Filename, std::ios::binary);
+		if (!audioData->File.is_open())
+		{
+			std::cerr << "ERROR: Could not re-open streaming file \"" << audioData->Filename << "\"" << std::endl;
+			return 0;
+		}
+	}
+
+	char* moreData = new char[length];
+
+	audioData->File.clear();
+	audioData->File.seekg(audioData->SizeConsumed);
+	if (!audioData->File.read(&moreData[0], length))
+	{
+		if (audioData->File.eof())
+		{
+			audioData->File.clear(); // just clear the error, we will resolve it later
+		}
+		else if (audioData->File.fail())
+		{
+			std::cerr << "ERROR: OGG stream has fail bit set " << audioData->Filename << std::endl;
+			audioData->File.clear();
+			return 0;
+		}
+		else if (audioData->File.bad())
+		{
+			perror(("ERROR: OGG stream has bad bit set " + audioData->Filename).c_str());
+			audioData->File.clear();
+			return 0;
+		}
+	}
+	audioData->SizeConsumed += length;
+
+	std::memcpy(destination, &moreData[0], length);
+
+	delete[] moreData;
+
+	audioData->File.clear();
+
+	return length;
+}
+
+std::int32_t seekOggCallback(void* fileHandle, ogg_int64_t to, std::int32_t type)
+{
+	StreamingAudioData* audioData = reinterpret_cast<StreamingAudioData*>(fileHandle);
+
+	if (type == SEEK_CUR)
+	{
+		audioData->SizeConsumed += (ALsizei)to;
+	}
+	else if (type == SEEK_END)
+	{
+		audioData->SizeConsumed = audioData->Size - (ALsizei)to;
+	}
+	else if (type == SEEK_SET)
+	{
+		audioData->SizeConsumed = (ALsizei)to;
+	}
+	else
+		return -1; // what are you trying to do vorbis?
+
+	if (audioData->SizeConsumed < 0)
+	{
+		audioData->SizeConsumed = 0;
+		return -1;
+	}
+	if (audioData->SizeConsumed > audioData->Size)
+	{
+		audioData->SizeConsumed = audioData->Size;
+		return -1;
+	}
 
 	return 0;
 }
 
+long int tellOggCallback(void* fileHandle)
+{
+	StreamingAudioData* audioData = reinterpret_cast<StreamingAudioData*>(fileHandle);
+	return audioData->SizeConsumed;
+}
+
+int createStreamOnThread(void* pdata)
+{
+	auto audioData = reinterpret_cast<StreamingAudioData*>(pdata);
+
+	// Open the audio file in a filestream
+	audioData->File.open(audioData->Filename, std::ios::binary);
+	if (!audioData->File.is_open())
+	{
+		std::cerr << "ERROR: couldn't open file" << std::endl;
+		return 0;
+	}
+
+	// Seek at the beginning of the ogg file
+	audioData->File.seekg(0, std::ios_base::beg);
+	audioData->File.ignore(std::numeric_limits<std::streamsize>::max());
+	audioData->Size = (ALsizei)audioData->File.gcount();
+	audioData->File.clear();
+	audioData->File.seekg(0, std::ios_base::beg);
+	audioData->SizeConsumed = 0;
+
+	// Assign the ogg callbacks for this audio thread
+	ov_callbacks oggCallbacks;
+	oggCallbacks.read_func = readOggCallback;
+	oggCallbacks.close_func = nullptr;
+	oggCallbacks.seek_func = seekOggCallback;
+	oggCallbacks.tell_func = tellOggCallback;
+
+	// Open the OGG file with vorbis
+	if (ov_open_callbacks(pdata, &audioData->OggVorbisFile, nullptr, -1, oggCallbacks) < 0)
+	{
+		std::cerr << "ERROR: Could not ov_open_callbacks" << std::endl;
+		return -1;
+	}
+
+	// Populate the struct with the information of the OGG file
+	vorbis_info* vorbisInfo = ov_info(&audioData->OggVorbisFile, -1);
+
+	audioData->Channels = vorbisInfo->channels;
+	audioData->BitRate = 16;
+	audioData->SampleRate = vorbisInfo->rate;
+	audioData->Duration = (size_t)ov_time_total(&audioData->OggVorbisFile, -1);
+
+	// Create the OpenAL smuck
+	alCall(alGenSources, 1, &audioData->Source);
+	alCall(alSourcef, audioData->Source, AL_PITCH, 1.f);
+	alCall(alSourcef, audioData->Source, AL_GAIN, 1.f);
+	alCall(alSource3f, audioData->Source, AL_POSITION, 0.f, 0.f, 0.f);
+	alCall(alSource3f, audioData->Source, AL_VELOCITY, 0.f, 0.f, 0.f);
+	alCall(alSourcei, audioData->Source, AL_LOOPING, AL_FALSE);
+
+	alCall(alGenBuffers, (ALsizei)NUM_BUFFERS, &audioData->Buffers[0]);
+
+	if (audioData->File.eof())
+	{
+		std::cerr << "ERROR: Already reached EOF without loading data" << std::endl;
+		return false;
+	}
+	else if (audioData->File.fail())
+	{
+		std::cerr << "ERROR: Fail bit set" << std::endl;
+		return false;
+	}
+	else if (!audioData->File)
+	{
+		std::cerr << "ERROR: file is false" << std::endl;
+		return false;
+	}
+
+	// Create our buffer
+	char* data = new char[BUFFER_SIZE];
+
+	// then FILL IT!!!
+	for (std::uint8_t i = 0; i < NUM_BUFFERS; ++i)
+	{
+		// Read until our buffers are full
+		std::int32_t dataSoFar = 0;
+		while (dataSoFar < BUFFER_SIZE)
+		{
+			// Read a part of the OGG file
+			std::int32_t result = ov_read(&audioData->OggVorbisFile, &data[dataSoFar], BUFFER_SIZE - dataSoFar, 0, 2, 1, &audioData->OggCurrentSection);
+			if (result == OV_HOLE)
+			{
+				std::cerr << "ERROR: OV_HOLE found in initial read of buffer " << i << std::endl;
+				break;
+			}
+			else if (result == OV_EBADLINK)
+			{
+				std::cerr << "ERROR: OV_EBADLINK found in initial read of buffer " << i << std::endl;
+				break;
+			}
+			else if (result == OV_EINVAL)
+			{
+				std::cerr << "ERROR: OV_EINVAL found in initial read of buffer " << i << std::endl;
+				break;
+			}
+			else if (result == 0)
+			{
+				std::cerr << "ERROR: EOF found in initial read of buffer " << i << std::endl;
+				break;
+			}
+
+			// update the amount that was read
+			dataSoFar += result;
+		}
+
+		// Set the information of the OGG to the struct
+		if (audioData->Channels == 1 && audioData->BitRate == 8)
+			audioData->Format = AL_FORMAT_MONO8;
+		else if (audioData->Channels == 1 && audioData->BitRate == 16)
+			audioData->Format = AL_FORMAT_MONO16;
+		else if (audioData->Channels == 2 && audioData->BitRate == 8)
+			audioData->Format = AL_FORMAT_STEREO8;
+		else if (audioData->Channels == 2 && audioData->BitRate == 16)
+			audioData->Format = AL_FORMAT_STEREO16;
+		else
+		{
+			std::cerr << "ERROR: unrecognised OGG Format: " << audioData->Channels << " Channels, " << audioData->BitRate << " bps" << std::endl;
+			delete[] data;
+			return -1;
+		}
+
+		// actually fill the buffers
+		alCall(alBufferData, audioData->Buffers[i], audioData->Format, data, dataSoFar, audioData->SampleRate);
+	}
+
+	// Queue the buffers
+	alCall(alSourceQueueBuffers, audioData->Source, (ALsizei)NUM_BUFFERS, &audioData->Buffers[0]);
+
+	delete[] data;
+
+	// Then call the main audio loop
+	return audioStreamUpdate(pdata);
+}
+
+bool checkALErrors(const std::string& filename, const std::uint_fast32_t line)
+{
+	// Spew out friendly error message for the corrisponding enums.
+	ALenum error = alGetError();
+	if (error != AL_NO_ERROR)
+	{
+		std::cerr << "***ERROR*** (" << filename << ": " << line << ")\n";
+		switch (error)
+		{
+		case AL_INVALID_NAME:
+			std::cerr << "AL_INVALID_NAME: a bad name (ID) was passed to an OpenAL function";
+			break;
+		case AL_INVALID_ENUM:
+			std::cerr << "AL_INVALID_ENUM: an invalid enum value was passed to an OpenAL function";
+			break;
+		case AL_INVALID_VALUE:
+			std::cerr << "AL_INVALID_VALUE: an invalid value was passed to an OpenAL function";
+			break;
+		case AL_INVALID_OPERATION:
+			std::cerr << "AL_INVALID_OPERATION: the requested operation is not valid";
+			break;
+		case AL_OUT_OF_MEMORY:
+			std::cerr << "AL_OUT_OF_MEMORY: the requested operation resulted in OpenAL running out of memory";
+			break;
+		default:
+			std::cerr << "UNKNOWN AL ERROR: " << error;
+		}
+		std::cerr << std::endl;
+		return false;
+	}
+	return true;
+}
+
+bool checkALCErrors(const std::string& filename, const std::uint_fast32_t line, ALCdevice* device)
+{
+	// Spew out friendly error message for the corrisponding enums.
+	ALCenum error = alcGetError(device);
+	if (error != ALC_NO_ERROR)
+	{
+		std::cerr << "***ERROR*** (" << filename << ": " << line << ")\n";
+		switch (error)
+		{
+		case ALC_INVALID_VALUE:
+			std::cerr << "ALC_INVALID_VALUE: an invalid value was passed to an OpenAL function";
+			break;
+		case ALC_INVALID_DEVICE:
+			std::cerr << "ALC_INVALID_DEVICE: a bad device was passed to an OpenAL function";
+			break;
+		case ALC_INVALID_CONTEXT:
+			std::cerr << "ALC_INVALID_CONTEXT: a bad context was passed to an OpenAL function";
+			break;
+		case ALC_INVALID_ENUM:
+			std::cerr << "ALC_INVALID_ENUM: an unknown enum value was passed to an OpenAL function";
+			break;
+		case ALC_OUT_OF_MEMORY:
+			std::cerr << "ALC_OUT_OF_MEMORY: an unknown enum value was passed to an OpenAL function";
+			break;
+		default:
+			std::cerr << "UNKNOWN ALC ERROR: " << error;
+		}
+		std::cerr << std::endl;
+		return false;
+	}
+	return true;
+}
+
+SoundManager::SoundManager()
+{
+	std::cout << "Initialising SoundManager..." << std::endl;
+
+	// Enumerate all our devices
+	getAvailableDevices(devices, NULL);
+
+	std::cout << "Using device \"" << devices[0].c_str() << "\"..." << std::endl;
+
+	// Open the first device we get
+	// Sidenote - does OpenAL soft even allow us to choose which device to initialise?
+	openALDevice = alcOpenDevice(devices[0].c_str());
+	if (!openALDevice)
+	{
+		std::cerr << "Cannot open device \"" << devices[0].c_str() << "\"!" << std::endl;
+	}
+
+	// Whoops - we cannot create a context.
+	if (!alcCall(alcCreateContext, openALContext, openALDevice, openALDevice, nullptr) || !openALContext)
+	{
+		std::cerr << "ERROR: Could not create audio context" << std::endl;
+		/* probably exit program */
+	}
+
+	// Uh oh, cannot switch audio context, no audio for the app session?
+	ALCboolean contextMadeCurrent = false;
+	if (!alcCall(alcMakeContextCurrent, contextMadeCurrent, openALDevice, openALContext)
+		|| contextMadeCurrent != ALC_TRUE)
+	{
+		std::cerr << "ERROR: Could not make audio context current" << std::endl;
+		/* probably exit or give up on having sound */
+	}
+
+	// We somehow survived! fhew.
+	std::cout << "SoundManager initialised." << std::endl;
+}
+
+SoundManager::~SoundManager()
+{
+	// Just destroy if we are being deconstructed
+	Destroy();
+}
+
 void SoundManager::OnThink()
 {
-	//// Iterate throughout all the streams that are active
-	//for (int i = 0; i < streams.size(); i++)
-	//{
-	//    // Don't play finished streams
-	//    if (streams[i]->Finished)
-	//    {
-	//        // infact, stop the stream and remove it from the list
-	//        // of streams to iterate through
-	//        StopStream(streams[i]);
-	//        continue;
-	//    }
-	//}
 }
 
 void SoundManager::Destroy()
 {
+	std::cout << "Destroying active AudioStreams..." << std::endl;
+	for (int i=0;i < streams.size();i++)
+	{
+		alCall(alSourcei, streams[i]->Source, AL_BUFFER, 0);
+        alCall(alDeleteSources, 1, &streams[i]->Source);
+        alCall(alDeleteBuffers, NUM_BUFFERS, &streams[i]->Buffers[0]);
+	}
+
 	std::cout << "Destroying device handles..." << std::endl;
 	// Try to destroy our device
 	ALCboolean closed;
@@ -259,77 +546,19 @@ void SoundManager::PlaySound(WaveFile* file)
 	SDL_DetachThread(pBThread);
 }
 
+void SoundManager::StopSound(WaveFile* file)
+{
+	// We are dealing with uninitialised data! don't play!
+	if (file->RawData == nullptr || file->DataSize == 0) return;
+	
+	alCall(alSourceStop, file->Source);
+}
+
 void SoundManager::DeleteSound(WaveFile* file)
 {
 	// then free the memory that contained the wav file.
 	alCall(alDeleteSources, 1, &file->Source);
 	alCall(alDeleteBuffers, 1, &file->Buffer);
-}
-
-bool checkALErrors(const std::string& filename, const std::uint_fast32_t line)
-{
-	// Spew out friendly error message for the corrisponding enums.
-	ALenum error = alGetError();
-	if (error != AL_NO_ERROR)
-	{
-		std::cerr << "***ERROR*** (" << filename << ": " << line << ")\n";
-		switch (error)
-		{
-		case AL_INVALID_NAME:
-			std::cerr << "AL_INVALID_NAME: a bad name (ID) was passed to an OpenAL function";
-			break;
-		case AL_INVALID_ENUM:
-			std::cerr << "AL_INVALID_ENUM: an invalid enum value was passed to an OpenAL function";
-			break;
-		case AL_INVALID_VALUE:
-			std::cerr << "AL_INVALID_VALUE: an invalid value was passed to an OpenAL function";
-			break;
-		case AL_INVALID_OPERATION:
-			std::cerr << "AL_INVALID_OPERATION: the requested operation is not valid";
-			break;
-		case AL_OUT_OF_MEMORY:
-			std::cerr << "AL_OUT_OF_MEMORY: the requested operation resulted in OpenAL running out of memory";
-			break;
-		default:
-			std::cerr << "UNKNOWN AL ERROR: " << error;
-		}
-		std::cerr << std::endl;
-		return false;
-	}
-	return true;
-}
-
-bool checkALCErrors(const std::string& filename, const std::uint_fast32_t line, ALCdevice* device)
-{
-	// Spew out friendly error message for the corrisponding enums.
-	ALCenum error = alcGetError(device);
-	if (error != ALC_NO_ERROR)
-	{
-		std::cerr << "***ERROR*** (" << filename << ": " << line << ")\n";
-		switch (error)
-		{
-		case ALC_INVALID_VALUE:
-			std::cerr << "ALC_INVALID_VALUE: an invalid value was passed to an OpenAL function";
-			break;
-		case ALC_INVALID_DEVICE:
-			std::cerr << "ALC_INVALID_DEVICE: a bad device was passed to an OpenAL function";
-			break;
-		case ALC_INVALID_CONTEXT:
-			std::cerr << "ALC_INVALID_CONTEXT: a bad context was passed to an OpenAL function";
-			break;
-		case ALC_INVALID_ENUM:
-			std::cerr << "ALC_INVALID_ENUM: an unknown enum value was passed to an OpenAL function";
-			break;
-		case ALC_OUT_OF_MEMORY:
-			std::cerr << "ALC_OUT_OF_MEMORY: an unknown enum value was passed to an OpenAL function";
-			break;
-		default:
-			std::cerr << "UNKNOWN ALC ERROR: " << error;
-		}
-		std::cerr << std::endl;
-		return false;
-	}
-	return true;
 }
 
 bool SoundManager::getAvailableDevices(std::vector<std::string>& devicesVec, ALCdevice* device)
@@ -365,7 +594,6 @@ std::int32_t SoundManager::convertToInt(char* buffer, std::size_t len)
 bool SoundManager::loadWavFileHeader(std::ifstream& file, std::uint8_t& channels, std::int32_t& sampleRate, std::uint8_t& bitsPerSample, ALsizei& size)
 {
 	// a method for casually reading wave file headers.
-
 	char buffer[4];
 	if (!file.is_open())
 		return false;
@@ -519,258 +747,65 @@ bool SoundManager::loadWav(const std::string& filename, WaveFile* wf)
 	return true;
 }
 
-std::size_t readOggCallback(void* destination, std::size_t size1, std::size_t size2, void* fileHandle)
-{
-	StreamingAudioData* audioData = reinterpret_cast<StreamingAudioData*>(fileHandle);
-
-	ALsizei length = (ALsizei)(size1 * size2);
-
-	if (audioData->SizeConsumed + length > audioData->Size)
-	{
-		length = audioData->Size - audioData->SizeConsumed;
-	}
-
-	if (!audioData->File.is_open())
-	{
-		audioData->File.open(audioData->Filename, std::ios::binary);
-		if (!audioData->File.is_open())
-		{
-			std::cerr << "ERROR: Could not re-open streaming file \"" << audioData->Filename << "\"" << std::endl;
-			return 0;
-		}
-	}
-
-	char* moreData = new char[length];
-
-	// std::cout << "\r";
-	// std::cout << "length = " << length << " size = " << audioData->Size <<  " SizeConsumed = " << audioData->SizeConsumed << "       ";
-
-	audioData->File.clear();
-	audioData->File.seekg(audioData->SizeConsumed);
-	if (!audioData->File.read(&moreData[0], length))
-	{
-		if (audioData->File.eof())
-		{
-			audioData->File.clear(); // just clear the error, we will resolve it later
-		}
-		else if (audioData->File.fail())
-		{
-			std::cerr << "ERROR: OGG stream has fail bit set " << audioData->Filename << std::endl;
-			audioData->File.clear();
-			return 0;
-		}
-		else if (audioData->File.bad())
-		{
-			perror(("ERROR: OGG stream has bad bit set " + audioData->Filename).c_str());
-			audioData->File.clear();
-			return 0;
-		}
-	}
-	audioData->SizeConsumed += length;
-
-	std::memcpy(destination, &moreData[0], length);
-
-	delete[] moreData;
-
-	audioData->File.clear();
-
-	return length;
-}
-
-std::int32_t seekOggCallback(void* fileHandle, ogg_int64_t to, std::int32_t type)
-{
-	StreamingAudioData* audioData = reinterpret_cast<StreamingAudioData*>(fileHandle);
-
-	if (type == SEEK_CUR)
-	{
-		audioData->SizeConsumed += (ALsizei)to;
-	}
-	else if (type == SEEK_END)
-	{
-		audioData->SizeConsumed = audioData->Size - (ALsizei)to;
-	}
-	else if (type == SEEK_SET)
-	{
-		audioData->SizeConsumed = (ALsizei)to;
-	}
-	else
-		return -1; // what are you trying to do vorbis?
-
-	if (audioData->SizeConsumed < 0)
-	{
-		audioData->SizeConsumed = 0;
-		return -1;
-	}
-	if (audioData->SizeConsumed > audioData->Size)
-	{
-		audioData->SizeConsumed = audioData->Size;
-		return -1;
-	}
-
-	return 0;
-}
-
-long int tellOggCallback(void* fileHandle)
-{
-	StreamingAudioData* audioData = reinterpret_cast<StreamingAudioData*>(fileHandle);
-	return audioData->SizeConsumed;
-}
-
-int createStreamOnThread(void* pdata)
-{
-	auto audioData = reinterpret_cast<StreamingAudioData*>(pdata);
-
-	audioData->File.open(audioData->Filename, std::ios::binary);
-	if (!audioData->File.is_open())
-	{
-		std::cerr << "ERROR: couldn't open file" << std::endl;
-		return 0;
-	}
-
-	audioData->File.seekg(0, std::ios_base::beg);
-	audioData->File.ignore(std::numeric_limits<std::streamsize>::max());
-	audioData->Size = (ALsizei)audioData->File.gcount();
-	audioData->File.clear();
-	audioData->File.seekg(0, std::ios_base::beg);
-	audioData->SizeConsumed = 0;
-
-	ov_callbacks oggCallbacks;
-	oggCallbacks.read_func = readOggCallback;
-	oggCallbacks.close_func = nullptr;
-	oggCallbacks.seek_func = seekOggCallback;
-	oggCallbacks.tell_func = tellOggCallback;
-
-	if (ov_open_callbacks(pdata, &audioData->OggVorbisFile, nullptr, -1, oggCallbacks) < 0)
-	{
-		std::cerr << "ERROR: Could not ov_open_callbacks" << std::endl;
-		return -1;
-	}
-
-	vorbis_info* vorbisInfo = ov_info(&audioData->OggVorbisFile, -1);
-
-	audioData->Channels = vorbisInfo->channels;
-	audioData->BitRate = 16;
-	audioData->SampleRate = vorbisInfo->rate;
-	audioData->Duration = (size_t)ov_time_total(&audioData->OggVorbisFile, -1);
-
-	alCall(alGenSources, 1, &audioData->Source);
-	alCall(alSourcef, audioData->Source, AL_PITCH, 1.f);
-	alCall(alSourcef, audioData->Source, AL_GAIN, 1.f);
-	alCall(alSource3f, audioData->Source, AL_POSITION, 0.f, 0.f, 0.f);
-	alCall(alSource3f, audioData->Source, AL_VELOCITY, 0.f, 0.f, 0.f);
-	alCall(alSourcei, audioData->Source, AL_LOOPING, AL_FALSE);
-
-	alCall(alGenBuffers, (ALsizei)NUM_BUFFERS, &audioData->Buffers[0]);
-
-	if (audioData->File.eof())
-	{
-		std::cerr << "ERROR: Already reached EOF without loading data" << std::endl;
-		return false;
-	}
-	else if (audioData->File.fail())
-	{
-		std::cerr << "ERROR: Fail bit set" << std::endl;
-		return false;
-	}
-	else if (!audioData->File)
-	{
-		std::cerr << "ERROR: file is false" << std::endl;
-		return false;
-	}
-
-	char* data = new char[BUFFER_SIZE];
-
-	for (std::uint8_t i = 0; i < NUM_BUFFERS; ++i)
-	{
-		std::int32_t dataSoFar = 0;
-		while (dataSoFar < BUFFER_SIZE)
-		{
-			std::int32_t result = ov_read(&audioData->OggVorbisFile, &data[dataSoFar], BUFFER_SIZE - dataSoFar, 0, 2, 1, &audioData->OggCurrentSection);
-			if (result == OV_HOLE)
-			{
-				std::cerr << "ERROR: OV_HOLE found in initial read of buffer " << i << std::endl;
-				break;
-			}
-			else if (result == OV_EBADLINK)
-			{
-				std::cerr << "ERROR: OV_EBADLINK found in initial read of buffer " << i << std::endl;
-				break;
-			}
-			else if (result == OV_EINVAL)
-			{
-				std::cerr << "ERROR: OV_EINVAL found in initial read of buffer " << i << std::endl;
-				break;
-			}
-			else if (result == 0)
-			{
-				std::cerr << "ERROR: EOF found in initial read of buffer " << i << std::endl;
-				break;
-			}
-
-			dataSoFar += result;
-		}
-
-		if (audioData->Channels == 1 && audioData->BitRate == 8)
-			audioData->Format = AL_FORMAT_MONO8;
-		else if (audioData->Channels == 1 && audioData->BitRate == 16)
-			audioData->Format = AL_FORMAT_MONO16;
-		else if (audioData->Channels == 2 && audioData->BitRate == 8)
-			audioData->Format = AL_FORMAT_STEREO8;
-		else if (audioData->Channels == 2 && audioData->BitRate == 16)
-			audioData->Format = AL_FORMAT_STEREO16;
-		else
-		{
-			std::cerr << "ERROR: unrecognised OGG Format: " << audioData->Channels << " Channels, " << audioData->BitRate << " bps" << std::endl;
-			delete[] data;
-			return -1;
-		}
-
-		alCall(alBufferData, audioData->Buffers[i], audioData->Format, data, dataSoFar, audioData->SampleRate);
-	}
-
-	alCall(alSourceQueueBuffers, audioData->Source, (ALsizei)NUM_BUFFERS, &audioData->Buffers[0]);
-
-	delete[] data;
-
-	return audioStreamUpdate(pdata);
-}
-
 bool SoundManager::CreateStreamFromFile(const std::string& filename, StreamingAudioData& audioData)
 {
+	// Don't try to create a new stream in an already created stream
 	if (audioData.File.is_open()) return false;
 
-	audioData.Filename = filename;
-
+	// buffer
 	char tName[420];
-	
-	snprintf(tName, sizeof(tName), "Audio Thread: \"%s\"", filename.c_str());
-	
+
+	// Create an identifier for the thread into the buffer
+	audioData.Filename = filename;
+	snprintf(tName, sizeof(tName), "Audio Stream: \"%s\"", filename.c_str());
+
+	// Create, detach the thread and return true
 	SDL_Thread* aT = SDL_CreateThread(createStreamOnThread, tName, (void*)&audioData);
 	SDL_DetachThread(aT);
 
 	return true;
 }
 
-//void SoundManager::PlayStream(StreamingAudioData* audioData)
-//{
-//    // If we are using an audio data reference that has already played...
-//    if (audioData->Finished)
-//    {
-//        ov_clear(&audioData->OggVorbisFile);
-//
-//        alCall(alSourcei, audioData->Source, AL_BUFFER, 0);
-//        alCall(alDeleteSources, 1, &audioData->Source);
-//        alCall(alDeleteBuffers, NUM_BUFFERS, &audioData->Buffers[0]);
-//    	
-//        // ... recreate the struct to avoid any weird side effects.
-//        CreateStreamFromFile(audioData->Filename, *audioData);
-//        audioData->Finished = false;
-//    }
-//
-//    // Fully stop the source than play.
-//    alCall(alSourceStop, audioData->Source);
-//    alCall(alSourcePlay, audioData->Source);
-//
-//    // Add it to the vector of audio data we will update every frame.
-//    streams.push_back(audioData);
-//}
+// Stream playback control
+void SoundManager::PlayStream(StreamingAudioData* audioData)
+{
+	if (!audioData->File.is_open()) return;
+	
+    // Fully stop the source than play.
+    alCall(alSourceStop, audioData->Source);
+    alCall(alSourcePlay, audioData->Source);
+
+	// Only call the callback if it exists
+	if (audioData->PlayCallback)
+		audioData->PlayCallback(audioData);
+}
+
+void SoundManager::PauseStream(StreamingAudioData* audioData)
+{
+	ALint st;
+	alCall(alGetSourcei, audioData->Source, AL_SOURCE_STATE, &st);
+
+	if (st != AL_PLAYING) return;
+	
+	alCall(alSourcePause, audioData->Source);
+
+	// Only call the callback if it exists
+	if (audioData->PauseCallback)
+		audioData->PauseCallback(audioData);
+}
+
+void SoundManager::StopStream(StreamingAudioData* audioData)
+{
+	ALint st;
+	alCall(alGetSourcei, audioData->Source, AL_SOURCE_STATE, &st);
+
+	if (st != AL_PLAYING) return;
+
+	alCall(alSourceStop, audioData->Source);
+
+	// Only call the callback if it exists
+	if (audioData->StopCallback)
+		audioData->StopCallback(audioData);
+
+	streams.erase(std::remove(streams.begin(),streams.end(), audioData),	streams.end());
+}

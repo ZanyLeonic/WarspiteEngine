@@ -14,7 +14,7 @@
 
 const std::string PlayState::s_playID = "Game";
 StreamingAudioData testStream;
-StreamingAudioData stream2;
+StreamingAudioData testStream2;
 WaveFile testFile;
 
 bool PlayState::OnPlay()
@@ -40,6 +40,37 @@ bool PlayState::OnPlay()
 			return;
 		});
 
+	// This callback code is fucking disgusting - but it works so I don't care.
+	testStream.PlayCallback = [this](StreamingAudioData* as)
+	{
+		std::cout << "Playing: \"" << as->Filename.c_str() << "\"." << std::endl;
+	};
+
+	testStream.PauseCallback = [this](StreamingAudioData* as)
+	{
+		std::cout << "Pause: \"" << as->Filename.c_str() << "\"." << std::endl;
+	};
+
+	testStream.StopCallback = [this](StreamingAudioData* as)
+	{
+		std::cout << "Stopped: \"" << as->Filename.c_str() << "\"." << std::endl;
+	};
+
+	testStream2.PlayCallback = [this](StreamingAudioData* as)
+	{
+		std::cout << "Playing: \"" << as->Filename.c_str() << "\"." << std::endl;
+	};
+
+	testStream2.PauseCallback = [this](StreamingAudioData* as)
+	{
+		std::cout << "Pause: \"" << as->Filename.c_str() << "\"." << std::endl;
+	};
+
+	testStream2.StopCallback = [this](StreamingAudioData* as)
+	{
+		std::cout << "Stopped: \"" << as->Filename.c_str() << "\"." << std::endl;
+	};
+
 	// Load Wave
 	InputHandler::Instance()->AddActionKeyDown(SDL_SCANCODE_0, [this] {
 			SoundManager::Instance()->Load("assets/sound/mycode.wav", testFile);
@@ -59,40 +90,43 @@ bool PlayState::OnPlay()
 	// Load
 	InputHandler::Instance()->AddActionKeyDown(SDL_SCANCODE_1, [this] {
 		SoundManager::Instance()->CreateStreamFromFile("assets/sound/teststream.ogg", testStream);
-		SoundManager::Instance()->CreateStreamFromFile("assets/sound/teststream2.ogg", stream2);
+		SoundManager::Instance()->CreateStreamFromFile("assets/sound/teststream2.ogg", testStream2);
 		});
 	InputHandler::Instance()->AddActionKeyUp(SDL_SCANCODE_1, [this] {
 		return;
 		});
 
-	//// Play
-	//InputHandler::Instance()->AddActionKeyDown(SDL_SCANCODE_2, [this] {
-	//	SoundManager::Instance()->PlayStream(&testStream);
-	//	
-	//	});
-	//InputHandler::Instance()->AddActionKeyUp(SDL_SCANCODE_2, [this] {
-	//	return;
-	//	});
-
-	//InputHandler::Instance()->AddActionKeyDown(SDL_SCANCODE_4, [this] {
-	//	SoundManager::Instance()->PlayStream(&stream2);
-
-	//	});
-	//InputHandler::Instance()->AddActionKeyUp(SDL_SCANCODE_4, [this] {
-	//	return;
-	//	});
-
+	// Stream 1
+	InputHandler::Instance()->AddActionKeyDown(SDL_SCANCODE_2, [this] {
+		SoundManager::Instance()->PlayStream(&testStream);
+		
+		});
+	InputHandler::Instance()->AddActionKeyUp(SDL_SCANCODE_2, [this] {
+		return;
+		});
 	
-	
+	InputHandler::Instance()->AddActionKeyDown(SDL_SCANCODE_3, [this] {
+		SoundManager::Instance()->PauseStream(&testStream);
+		});
+	InputHandler::Instance()->AddActionKeyUp(SDL_SCANCODE_3, [this] {
+		return;
+		});
 
-	//// Pause
-	//InputHandler::Instance()->AddActionKeyDown(SDL_SCANCODE_3, [this] {
-	//	SoundManager::Instance()->StopStream(&testStream);
-	//	SoundManager::Instance()->StopStream(&stream2);
-	//	});
-	//InputHandler::Instance()->AddActionKeyUp(SDL_SCANCODE_3, [this] {
-	//	return;
-	//	});
+	// Stream 2
+	InputHandler::Instance()->AddActionKeyDown(SDL_SCANCODE_4, [this] {
+		SoundManager::Instance()->PlayStream(&testStream2);
+		});
+	InputHandler::Instance()->AddActionKeyUp(SDL_SCANCODE_4, [this] {
+		return;
+		});
+	
+	// Play
+	InputHandler::Instance()->AddActionKeyDown(SDL_SCANCODE_5, [this] {
+		SoundManager::Instance()->PauseStream(&testStream2);
+		});
+	InputHandler::Instance()->AddActionKeyUp(SDL_SCANCODE_5, [this] {
+		return;
+		});
 
 	if (pLevel)
 	{

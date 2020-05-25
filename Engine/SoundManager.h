@@ -11,6 +11,7 @@
 #include <vector>
 #include <iostream>
 #include <fstream>
+#include <functional>
 
 #define alCall(function, ...) alCallImpl(__FILE__, __LINE__, function, __VA_ARGS__)
 #define alcCall(function, device, ...) alcCallImpl(__FILE__, __LINE__, function, device, __VA_ARGS__)
@@ -89,7 +90,14 @@ struct StreamingAudioData
 	OggVorbis_File OggVorbisFile;
 	std::int_fast32_t OggCurrentSection = 0;
 	std::size_t Duration;
-	SDL_threadID threadID = 0;
+
+	// Callbacks
+	std::function<void(StreamingAudioData*)> StreamCreated;
+	std::function<void(StreamingAudioData*)> UpdateCallback;
+	
+	std::function<void(StreamingAudioData*)> PlayCallback;
+	std::function<void(StreamingAudioData*)> PauseCallback;
+	std::function<void(StreamingAudioData*)> StopCallback;
 	
 	bool operator==(const StreamingAudioData s1)
 	{
@@ -187,12 +195,14 @@ public:
 	// Wave methods
 	bool Load(const std::string& fileName, WaveFile& file);
 
-	void PlaySound(WaveFile* file);
-	void DeleteSound(WaveFile* file);
+	static void PlaySound(WaveFile* file);
+	static void StopSound(WaveFile* file);
+	
+	static void DeleteSound(WaveFile* file);
 
 private:
 	// Utility for loading WAVE files
-	std::int32_t convertToInt(char* buffer, std::size_t len);
+	static std::int32_t convertToInt(char* buffer, std::size_t len);
 
 	bool loadWavFileHeader(std::ifstream& file,
 		std::uint8_t& channels,
@@ -207,26 +217,23 @@ private:
 public:
 	// Ogg Implementation
 	bool CreateStreamFromFile(const std::string& filename, StreamingAudioData& audioData);
+	
+	void PlayStream(StreamingAudioData* audioData);
+	void PauseStream(StreamingAudioData* audioData);
 
-	// void PlayStream(StreamingAudioData* audioData);
-	// void StopStream(StreamingAudioData* audioData);
+	void StopStream(StreamingAudioData* audioData);
 
 private:
-	// void UpdateStream(StreamingAudioData& audioData);
-
-	// std::vector<StreamingAudioData> streams;
-
 	// Variables
 	ALCdevice* openALDevice = 0;
 	ALCcontext* openALContext = 0;
 
 	std::vector<StreamingAudioData*> streams;
-	std::vector<SDL_threadID> threads;
 
 	std::vector<std::string> devices;
 
-	// testing!
-	int posi = 0;
+public:
+	std::vector<StreamingAudioData*> GetStreams() const { return streams; };
 };
 
 #endif
