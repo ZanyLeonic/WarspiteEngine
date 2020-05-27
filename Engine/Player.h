@@ -27,6 +27,9 @@ public:
 private:
 	void HandleInput();
 
+	void MoveForward(float axis);
+	void MoveRight(float axis);
+	
 	bool IsPositionFree(Vector2D* pNext);
 
 	void DecideFrame();

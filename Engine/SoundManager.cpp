@@ -36,6 +36,7 @@ int UpdateStream(StreamingAudioData& audioData)
 		{
 			// Continue to read the OGG file
 			std::int32_t result = ov_read(&audioData.OggVorbisFile, &data[sizeRead], BUFFER_SIZE - sizeRead, 0, 2, 1, &audioData.OggCurrentSection);
+
 			if (result == OV_HOLE)
 			{
 				std::cerr << "ERROR: OV_HOLE found in update of buffer " << std::endl;
@@ -111,11 +112,11 @@ int audioStreamUpdate(void* data)
 	if (as->StopCallback)
 		as->StopCallback(as);
 
-	SoundManager::Instance()->GetStreams().erase(
-		std::remove(SoundManager::Instance()->GetStreams().begin(), 
-		SoundManager::Instance()->GetStreams().end(), as), 
-		SoundManager::Instance()->GetStreams().end()
-	);
+	if (as->File.is_open())
+	{
+		as->File.clear();
+		as->File.close();
+	}
 	
 	return 0;
 }
@@ -801,11 +802,7 @@ void SoundManager::StopStream(StreamingAudioData* audioData)
 
 	if (st != AL_PLAYING) return;
 
-	alCall(alSourceStop, audioData->Source);
-
-	// Only call the callback if it exists
-	if (audioData->StopCallback)
-		audioData->StopCallback(audioData);
-
+	audioData->Finished = true;
+	
 	streams.erase(std::remove(streams.begin(),streams.end(), audioData),	streams.end());
 }

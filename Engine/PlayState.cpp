@@ -3,8 +3,6 @@
 #include "Game.h"
 #include "Camera.h"
 #include "Player.h"
-#include "TestObject.h"
-#include "ObjectLayer.h"
 #include "PauseState.h"
 #include "StateParser.h"
 #include "LevelParser.h"
@@ -99,7 +97,6 @@ bool PlayState::OnPlay()
 	// Stream 1
 	InputHandler::Instance()->AddActionKeyDown(SDL_SCANCODE_2, [this] {
 		SoundManager::Instance()->PlayStream(&testStream);
-		
 		});
 	InputHandler::Instance()->AddActionKeyUp(SDL_SCANCODE_2, [this] {
 		return;
@@ -111,6 +108,13 @@ bool PlayState::OnPlay()
 	InputHandler::Instance()->AddActionKeyUp(SDL_SCANCODE_3, [this] {
 		return;
 		});
+	InputHandler::Instance()->AddActionKeyDown(SDL_SCANCODE_6, [this] {
+		SoundManager::Instance()->StopStream(&testStream);
+		});
+	InputHandler::Instance()->AddActionKeyUp(SDL_SCANCODE_6, [this] {
+		return;
+		});
+
 
 	// Stream 2
 	InputHandler::Instance()->AddActionKeyDown(SDL_SCANCODE_4, [this] {
@@ -125,6 +129,12 @@ bool PlayState::OnPlay()
 		SoundManager::Instance()->PauseStream(&testStream2);
 		});
 	InputHandler::Instance()->AddActionKeyUp(SDL_SCANCODE_5, [this] {
+		return;
+		});
+	InputHandler::Instance()->AddActionKeyDown(SDL_SCANCODE_7, [this] {
+		SoundManager::Instance()->StopStream(&testStream2);
+		});
+	InputHandler::Instance()->AddActionKeyUp(SDL_SCANCODE_7, [this] {
 		return;
 		});
 

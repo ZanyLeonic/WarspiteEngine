@@ -100,84 +100,22 @@ void Player::HandleInput()
 {
 	if (m_timeLeft >= 100)
 	{
-		Vector2D curPos = m_position;
-
-		if (InputHandler::Instance()->IsKeyDown(SDL_SCANCODE_UP))
+		// Can this code be improved? (I hope so.)	
+		if (InputHandler::Instance()->IsKeyDown(SDL_SCANCODE_DOWN))
 		{
-			//m_position.SetY(m_position.GetY() - m_moveStep);
-			
-			m_currentRow = 2;
-
-			curPos.SetY(curPos.GetY() - m_moveStep);
-			if (IsPositionFree(&curPos))
-			{
-				moving = true;
-				lastPosition = m_position;
-				nextPosition = curPos;
-				m_timeLeft = 0;
-				m_stepLastFrame = true;
-			}
-			else
-			{
-				std::cout << "Cannot move up - collided!\n";
-			}
+			MoveForward(1);
 		}
-		else if (InputHandler::Instance()->IsKeyDown(SDL_SCANCODE_DOWN))
+		else if (InputHandler::Instance()->IsKeyDown(SDL_SCANCODE_UP))
 		{
-			curPos.SetY(curPos.GetY() + m_moveStep);
-
-			m_currentRow = 1;
-
-			if (IsPositionFree(&curPos))
-			{
-				moving = true;
-				lastPosition = m_position;
-				nextPosition = curPos;
-				m_timeLeft = 0;
-				m_stepLastFrame = true;
-			}
-			else
-			{
-				std::cout << "Cannot move down - collided!\n";
-			}
-		}
-		else if (InputHandler::Instance()->IsKeyDown(SDL_SCANCODE_LEFT))
-		{
-			curPos.SetX(curPos.GetX() - m_moveStep);
-
-			m_currentRow = 3;
-
-			if (IsPositionFree(&curPos))
-			{
-				moving = true;
-				lastPosition = m_position;
-				nextPosition = curPos;
-				m_timeLeft = 0;
-				m_stepLastFrame = true;
-			}
-			else
-			{
-				std::cout << "Cannot move left - collided!\n";
-			}
+			MoveForward(-1);
 		}
 		else if (InputHandler::Instance()->IsKeyDown(SDL_SCANCODE_RIGHT))
 		{
-			curPos.SetX(curPos.GetX() + m_moveStep);
-
-			m_currentRow = 4;
-
-			if (IsPositionFree(&curPos))
-			{
-				moving = true;
-				lastPosition = m_position;
-				nextPosition = curPos;
-				m_timeLeft = 0;
-				m_stepLastFrame = true;
-			}
-			else
-			{
-				std::cout << "Cannot move right - collided!\n";
-			}
+			MoveRight(1);
+		}
+		else if (InputHandler::Instance()->IsKeyDown(SDL_SCANCODE_LEFT))
+		{
+			MoveRight(-1);
 		}
 		else if (m_timeLeft >= 100)
 		{
@@ -190,6 +128,49 @@ void Player::HandleInput()
 	}
 }
 
+void Player::MoveForward(float axis)
+{
+	Vector2D curPos = m_position;
+	
+	m_currentRow = (axis > 0) ? 1 : 2;
+
+	// Analog movement coming never.
+	curPos.SetY(curPos.GetY() + (m_moveStep * axis));
+	if (IsPositionFree(&curPos))
+	{
+		moving = true;
+		lastPosition = m_position;
+		nextPosition = curPos;
+		m_timeLeft = 0;
+		m_stepLastFrame = true;
+	}
+	else
+	{
+		std::cout << "Cannot move " << ((axis > 0) ? "down" : "up") << " - collided!\n";
+	}
+}
+
+void Player::MoveRight(float axis)
+{
+	Vector2D curPos = m_position;
+	
+	m_currentRow = (axis > 0) ? 4 : 3;
+
+	curPos.SetX(curPos.GetX() + (m_moveStep * axis));
+	if (IsPositionFree(&curPos))
+	{
+		moving = true;
+		lastPosition = m_position;
+		nextPosition = curPos;
+		m_timeLeft = 0;
+		m_stepLastFrame = true;
+	}
+	else
+	{
+		std::cout << "Cannot move "<< ((axis > 0) ? "right" : "left") <<" - collided!\n";
+	}
+}
+
 bool Player::IsPositionFree(Vector2D* pNext)
 {
 	// Get the value from the pointer and store it in a rvalue.
@@ -198,7 +179,7 @@ bool Player::IsPositionFree(Vector2D* pNext)
 	// Go through each ObjectLayer we got earlier
 	for (int i = 0; i < m_objects.size(); i++)
 	{
-		if (m_objects[i]) continue;
+		if (!m_objects[i]) continue;
 
 		// Get an rvalue of the list of GameObject's for the iterated layer
 		std::vector<GameObject*>& ir = *m_objects[i];
