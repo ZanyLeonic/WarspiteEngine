@@ -10,7 +10,7 @@ class CGameObject;
 class IObjectFactory
 {
 public:
-	virtual CGameObject* Create(std::string pMapRef) = 0;
+	virtual CGameObject* Create() = 0;
 	virtual size_t GetObjectSize() = 0;
 };
 
@@ -47,9 +47,9 @@ public:
 		GameObjectDictionary::Instance()->RegisterType(pMapRef, this);
 	}
 
-	CGameObject* Create(std::string pMapRef)
+	CGameObject* Create()
 	{
-		return GameObjectDictionary::Instance()->Create(pMapRef);
+		return new T;
 	}
 
 	virtual size_t GetObjectSize()

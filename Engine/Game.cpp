@@ -61,10 +61,6 @@ bool Game::Init(const char* title, int xpos, int ypos, int width, int height, bo
 				SDL_Thread* aT = SDL_CreateThread(audioLoop, "AudioThread", (void*)Game::Instance());
 				SDL_DetachThread(aT);
 
-				// GameObjectFactory::Instance()->RegisterType("Player", new PlayerCreator());
-				// GameObjectFactory::Instance()->RegisterType("Button", new ButtonCreator());
-				// GameObjectFactory::Instance()->RegisterType("TestObject", new TestObjectCreator());
-
 				m_pGameStateManager = new GameStateManager();
 				m_pGameStateManager->ModifyState(new MainMenuState());
 			}

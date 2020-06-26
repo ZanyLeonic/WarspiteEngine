@@ -29,6 +29,6 @@ CGameObject* GameObjectDictionary::Create(std::string typeID)
 		return nullptr;
 	}
 
-	return (*it).second->Create(typeID);
+	return (*it).second->Create();
 }
 
