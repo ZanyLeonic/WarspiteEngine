@@ -3,7 +3,7 @@
 #include <rapidjson/filereadstream.h>
 #include <rapidjson/writer.h>
 #include "TextureManager.h"
-#include "GameObjectFactory.h"
+#include "GameObjectDictionary.h"
 #include "Game.h"
 
 using namespace rapidjson;
@@ -124,7 +124,7 @@ void StateParser::ParseObjects(const rapidjson::Value* pStateRoot, std::vector<G
 
 		// Attempt to create the object type.
 		GameObject* pGameObject =
-			GameObjectFactory::Instance()->Create(b["type"].GetString());
+			GameObjectDictionary::Instance()->Create(b["type"].GetString());
 
 		// Provide the extracting info to the object.
 		pGameObject->Load(new ObjectParams((float)x, (float)y, width, height, textureID,

@@ -55,6 +55,6 @@ private:
 	int m_onLeaveID = 0;
 };
 
-REG_OBJ_TO_REF("Button", Button);
+REG_OBJ_TO_REF(Button, Button);
 
 #endif

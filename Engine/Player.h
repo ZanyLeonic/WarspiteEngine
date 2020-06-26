@@ -53,5 +53,5 @@ private:
 	Vector2D m_CamOffset;
 };
 
-REG_OBJ_TO_REF( "Player", Player ) ;
+REG_OBJ_TO_REF( Player, Player ) ;
 #endif /* defined(__Player__) */

@@ -13,6 +13,6 @@ public:
 	void collide();
 };
 
-REG_OBJ_TO_REF("TestObject", TestObject);
+REG_OBJ_TO_REF(TestObject, TestObject);
 
 #endif

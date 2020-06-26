@@ -4,7 +4,7 @@
 #include "Camera.h"
 #include "InputHandler.h"
 #include "LevelParser.h"
-#include "GameObjectFactory.h"
+#include "GameObjectDictionary.h"
 #include "Button.h"
 #include <iostream>
 

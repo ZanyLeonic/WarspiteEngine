@@ -2,7 +2,7 @@
 #include "Level.h"
 #include "ObjectLayer.h"
 #include "TextureManager.h"
-#include "GameObjectFactory.h"
+#include "GameObjectDictionary.h"
 #include "Game.h"
 #include "TileLayer.h"
 
@@ -304,7 +304,7 @@ void LevelParser::parseObjectLayer(const rapidjson::Value* pObjectVal, std::vect
 		y = b["y"].GetInt();
 		
 		// Create the object that is defined
-		GameObject* pGameObject = GameObjectFactory::Instance()
+		GameObject* pGameObject = GameObjectDictionary::Instance()
 			->Create(b["type"].GetString());
 
 		// fill in any additional information (if provided.)

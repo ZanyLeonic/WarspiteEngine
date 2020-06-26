@@ -34,9 +34,6 @@ public:
 
 	bool RegisterType(std::string typeID, IObjectFactory* pCreator);
 	GameObject* Create(std::string typeID);
-
-	template <class T>
-	T* _CreateObject(T* newObj, std::string className);
 private:
 	std::map<std::string, IObjectFactory*> m_creators;
 
@@ -45,6 +42,7 @@ private:
 template <class T>
 class GameObjectFactory : public IObjectFactory
 {
+public:
 	GameObjectFactory(std::string pMapRef)
 	{
 		GameObjectDictionary::Instance()->RegisterType(pMapRef, this);
@@ -52,8 +50,7 @@ class GameObjectFactory : public IObjectFactory
 
 	GameObject* Create(std::string pMapRef)
 	{
-		T* pObj = GameObjectDictionary::Instance()->Create(pMapRef);
-		return pObj;
+		return GameObjectDictionary::Instance()->Create(pMapRef);
 	}
 
 	virtual size_t GetObjectSize()
@@ -62,7 +59,7 @@ class GameObjectFactory : public IObjectFactory
 	}
 };
 
-#define REG_OBJ_TO_REF(mapRefName, CompiledClassName) \
-	static GameObjectFactory<CompiledClassName> mapRefName( #CompiledClassName );
+#define REG_OBJ_TO_REF(mapRefName, compiledClassName) \
+	static GameObjectFactory<compiledClassName> mapRefName( #mapRefName );
 
 #endif
