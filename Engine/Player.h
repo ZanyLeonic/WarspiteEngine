@@ -1,12 +1,11 @@
 #pragma once
-#pragma once
 #ifndef __Player__
 #define __Player__
 
 #include "WarspiteObject.h"
 #include "InputHandler.h"
 #include "Vector2D.h"
-#include "BaseCreator.h"
+#include "GameObjectDictionary.h"
 #include <string.h>
 
 class Player : public WarspiteObject
@@ -54,12 +53,5 @@ private:
 	Vector2D m_CamOffset;
 };
 
-class PlayerCreator : public BaseCreator
-{
-	GameObject* CreateGameObject() const
-	{
-		return new Player();
-	}
-};
-
+REG_OBJ_TO_REF( "Player", Player ) ;
 #endif /* defined(__Player__) */

@@ -3,7 +3,8 @@
 #define __TestObject_h__
 
 #include "MapObject.h"
-#include "BaseCreator.h"
+#include "GameObjectDictionary.h"
+
 class TestObject :
 	public MapObject
 {
@@ -12,11 +13,6 @@ public:
 	void collide();
 };
 
-class TestObjectCreator : public BaseCreator
-{
-	GameObject* CreateGameObject() const
-	{
-		return new TestObject();
-	}
-};
+REG_OBJ_TO_REF("TestObject", TestObject);
+
 #endif

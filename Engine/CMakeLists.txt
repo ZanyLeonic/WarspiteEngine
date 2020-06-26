@@ -9,7 +9,7 @@ set(WarspiteEngine_Src
     Camera.cpp
     Enemy.cpp
     Game.cpp
-    GameObjectFactory.cpp
+    GameObjectDictionary.cpp
     GameStateBase.cpp
     GameStateManager.cpp
     InputHandler.cpp
@@ -38,7 +38,7 @@ set(WarspiteEngine_Header
     Enemy.h
     Game.h
     GameObject.h
-    GameObjectFactory.h
+    GameObjectDictionary.h
     GameState.h
     GameStateBase.h
     GameStateManager.h
@@ -59,6 +59,7 @@ set(WarspiteEngine_Header
     TestObject.h
     TextureManager.h
     TileLayer.h
+    util.h
     Vector2D.h
     WarspiteObject.h
 )
@@ -81,6 +82,7 @@ if (WIN32)
 
     set(SDL2_LIBRARIES SDL2::SDL2 SDL2::SDL2main)
 	set(SDL2_IMAGE_LIBRARIES SDL2::SDL2_image)
+    set(SDL2_TTF_LIBRARIES SDL2::SDL2_ttf)
 endif()
 
 # Apply some debug options
@@ -91,6 +93,7 @@ endif()
 find_package(Python3 COMPONENTS Interpreter REQUIRED)
 find_package(SDL2 CONFIG REQUIRED)
 find_package(SDL2_image REQUIRED)
+find_package(SDL2_ttf REQUIRED)
 find_package(rapidjson REQUIRED)
 find_package(OpenAL REQUIRED)
 find_package(Vorbis REQUIRED)
@@ -113,6 +116,7 @@ endif()
 set (Warspite_Libs
 	${SDL2_LIBRARIES}
 	${SDL2_IMAGE_LIBRARIES}
+    ${SDL2_TTF_LIBRARIES}
 	${OPENAL_LIBRARY}
     ${VORBIS_LIBRARIES}
 	${ZLIB_LIBRARIES}
@@ -120,6 +124,7 @@ set (Warspite_Libs
 
 include_directories(${SDL2_INCLUDE_DIRS})
 include_directories(${SDL2_IMAGE_INCLUDE_DIRS})
+include_directories(${SDL2_TTF_INCLUDE_DIRS})
 include_directories(${RAPIDJSON_INCLUDE_DIRS})
 include_directories(${OGG_INCLUDE_DIR})
 include_directories(${OPENAL_INCLUDE_DIRS})

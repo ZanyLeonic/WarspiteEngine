@@ -75,7 +75,7 @@ def IncrementBuildNumber():
         f.write(str(buildNum+1))
         f.truncate()
     
-    print("Successfully wrote {0} to disk!".format(str(buildNum+1))) 
+    print("Successfully wrote build number {0} to disk!".format(str(buildNum+1))) 
     
     return buildNum + 1
 

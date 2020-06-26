@@ -4,7 +4,7 @@
 
 #include <functional>
 #include "WarspiteObject.h"
-#include "BaseCreator.h"
+#include "GameObjectDictionary.h"
 
 class Button : public WarspiteObject
 {
@@ -55,12 +55,6 @@ private:
 	int m_onLeaveID = 0;
 };
 
-class ButtonCreator : public BaseCreator
-{
-	GameObject* CreateGameObject() const
-	{
-		return new Button();
-	}
-};
+REG_OBJ_TO_REF("Button", Button);
 
 #endif
