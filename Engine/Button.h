@@ -4,7 +4,6 @@
 
 #include <functional>
 #include "WarspiteObject.h"
-#include "GameObjectDictionary.h"
 
 class CButton : public CWarspiteObject
 {
@@ -13,7 +12,7 @@ protected:
 public:
 	CButton();
 
-	virtual void Load(const ObjectParams* pParams);
+	virtual void Load(const CObjectParams* pParams);
 
 	virtual void Draw();
 	virtual bool OnThink();

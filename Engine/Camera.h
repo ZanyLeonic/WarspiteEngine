@@ -4,14 +4,14 @@
 
 #ifndef __CAMERA_H__
 #define __CAMERA_H__
-class Camera
+class CCamera
 {
 public:
-	static Camera* Instance()
+	static CCamera* Instance()
 	{
 		if (s_pCamera == 0)
 		{
-			s_pCamera = new Camera();
+			s_pCamera = new CCamera();
 		}
 
 		return s_pCamera;
@@ -19,42 +19,42 @@ public:
 
 	void OnThink();
 
-	void SetTarget(Vector2D* target) 
+	void SetTarget(CVector2D* target) 
 	{ 
 		m_pTarget = target; 
 	}
 
-	void SetPosition(const Vector2D& position) 
+	void SetPosition(const CVector2D& position) 
 	{
 		m_position = position;
 	}
 
-	void SetLevelSize(const Vector2D& sz)
+	void SetLevelSize(const CVector2D& sz)
 	{
 		m_levelSize = sz;
 	}
 
-	Vector2D GetLevelSize() const
+	CVector2D GetLevelSize() const
 	{
 		return m_levelSize;
 	}
 
-	Vector2D GetPosition() const
+	CVector2D GetPosition() const
 	{
 		return m_position;
 	}
 
-	Vector2D GetPositionT() const;
+	CVector2D GetPositionT() const;
 
 private:
-	Camera();
-	~Camera();
+	CCamera();
+	~CCamera();
 
-	Vector2D* m_pTarget = 0;
+	CVector2D* m_pTarget = 0;
 	
-	Vector2D m_position;
-	Vector2D m_levelSize;
+	CVector2D m_position;
+	CVector2D m_levelSize;
 
-	static Camera* s_pCamera;
+	static CCamera* s_pCamera;
 };
 #endif

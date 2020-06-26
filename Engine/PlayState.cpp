@@ -10,138 +10,138 @@
 
 #include "PlayState.h"
 
-const std::string PlayState::s_playID = "Game";
-StreamingAudioData testStream;
-StreamingAudioData testStream2;
-WaveFile testFile;
+const std::string CPlayState::s_playID = "Game";
+SStreamingAudioData testStream;
+SStreamingAudioData testStream2;
+SWaveFile testFile;
 
-bool PlayState::OnPlay()
+bool CPlayState::OnPlay()
 {
-	GameStateBase::OnPlay();
+	CGameStateBase::OnPlay();
 
-	m_screenSize = Game::Instance()->GetViewportSize();
+	m_screenSize = CGame::Instance()->GetViewportSize();
 
-	StateParser sp;
+	CStateParser sp;
 	sp.ParseState("assets/states/PlayState.json", s_playID, &m_GameObjects, &m_TextureIDList);
-
-	LevelParser lp;
+	
+	CLevelParser lp;
 	pLevel = lp.ParseLevel("assets/maps/help2.json");
 
-	InputHandler::Instance()->AddActionKeyDown(SDL_SCANCODE_ESCAPE, [this] {
-			if (!dynamic_cast<PauseState*>(Game::Instance()->GetStateManager()->GetCurrentState()))
+	CInputHandler::Instance()->AddActionKeyDown(SDL_SCANCODE_ESCAPE, [this] {
+			if (!dynamic_cast<CPauseState*>(CGame::Instance()->GetStateManager()->GetCurrentState()))
 			{
-				Game::Instance()->GetStateManager()->PushState(new PauseState());
+				CGame::Instance()->GetStateManager()->PushState(new CPauseState());
 			}
 		});
 
-	InputHandler::Instance()->AddActionKeyUp(SDL_SCANCODE_ESCAPE, [this] {
+	CInputHandler::Instance()->AddActionKeyUp(SDL_SCANCODE_ESCAPE, [this] {
 			return;
 		});
 
 	// This callback code is fucking disgusting - but it works so I don't care.
-	testStream.PlayCallback = [this](StreamingAudioData* as)
+	testStream.PlayCallback = [this](SStreamingAudioData* as)
 	{
 		std::cout << "Playing: \"" << as->Filename.c_str() << "\"." << std::endl;
 	};
 
-	testStream.PauseCallback = [this](StreamingAudioData* as)
+	testStream.PauseCallback = [this](SStreamingAudioData* as)
 	{
 		std::cout << "Pause: \"" << as->Filename.c_str() << "\"." << std::endl;
 	};
 
-	testStream.StopCallback = [this](StreamingAudioData* as)
+	testStream.StopCallback = [this](SStreamingAudioData* as)
 	{
 		std::cout << "Stopped: \"" << as->Filename.c_str() << "\"." << std::endl;
 	};
 
-	testStream2.PlayCallback = [this](StreamingAudioData* as)
+	testStream2.PlayCallback = [this](SStreamingAudioData* as)
 	{
 		std::cout << "Playing: \"" << as->Filename.c_str() << "\"." << std::endl;
 	};
 
-	testStream2.PauseCallback = [this](StreamingAudioData* as)
+	testStream2.PauseCallback = [this](SStreamingAudioData* as)
 	{
 		std::cout << "Pause: \"" << as->Filename.c_str() << "\"." << std::endl;
 	};
 
-	testStream2.StopCallback = [this](StreamingAudioData* as)
+	testStream2.StopCallback = [this](SStreamingAudioData* as)
 	{
 		std::cout << "Stopped: \"" << as->Filename.c_str() << "\"." << std::endl;
 	};
 
 	// Load Wave
-	InputHandler::Instance()->AddActionKeyDown(SDL_SCANCODE_0, [this] {
-			SoundManager::Instance()->Load("assets/sound/mycode.wav", testFile);
+	CInputHandler::Instance()->AddActionKeyDown(SDL_SCANCODE_0, [this] {
+			CSoundManager::Instance()->Load("assets/sound/mycode.wav", testFile);
 		});
-	InputHandler::Instance()->AddActionKeyUp(SDL_SCANCODE_0, [this] {
+	CInputHandler::Instance()->AddActionKeyUp(SDL_SCANCODE_0, [this] {
 			return;
 		});
 
 	// Play Wave
-	InputHandler::Instance()->AddActionKeyDown(SDL_SCANCODE_9, [this] {
-		SoundManager::Instance()->PlaySound(&testFile);
+	CInputHandler::Instance()->AddActionKeyDown(SDL_SCANCODE_9, [this] {
+		CSoundManager::Instance()->PlaySound(&testFile);
 		});
-	InputHandler::Instance()->AddActionKeyUp(SDL_SCANCODE_9, [this] {
+	CInputHandler::Instance()->AddActionKeyUp(SDL_SCANCODE_9, [this] {
 		return;
 		});
 
 	// Load
-	InputHandler::Instance()->AddActionKeyDown(SDL_SCANCODE_1, [this] {
-		SoundManager::Instance()->CreateStreamFromFile("assets/sound/teststream.ogg", testStream);
-		SoundManager::Instance()->CreateStreamFromFile("assets/sound/teststream2.ogg", testStream2);
+	CInputHandler::Instance()->AddActionKeyDown(SDL_SCANCODE_1, [this] {
+		CSoundManager::Instance()->CreateStreamFromFile("assets/sound/teststream.ogg", testStream);
+		CSoundManager::Instance()->CreateStreamFromFile("assets/sound/teststream2.ogg", testStream2);
 		});
-	InputHandler::Instance()->AddActionKeyUp(SDL_SCANCODE_1, [this] {
+	CInputHandler::Instance()->AddActionKeyUp(SDL_SCANCODE_1, [this] {
 		return;
 		});
 
 	// Stream 1
-	InputHandler::Instance()->AddActionKeyDown(SDL_SCANCODE_2, [this] {
-		SoundManager::Instance()->PlayStream(&testStream);
+	CInputHandler::Instance()->AddActionKeyDown(SDL_SCANCODE_2, [this] {
+		CSoundManager::Instance()->PlayStream(&testStream);
 		});
-	InputHandler::Instance()->AddActionKeyUp(SDL_SCANCODE_2, [this] {
+	CInputHandler::Instance()->AddActionKeyUp(SDL_SCANCODE_2, [this] {
 		return;
 		});
 	
-	InputHandler::Instance()->AddActionKeyDown(SDL_SCANCODE_3, [this] {
-		SoundManager::Instance()->PauseStream(&testStream);
+	CInputHandler::Instance()->AddActionKeyDown(SDL_SCANCODE_3, [this] {
+		CSoundManager::Instance()->PauseStream(&testStream);
 		});
-	InputHandler::Instance()->AddActionKeyUp(SDL_SCANCODE_3, [this] {
+	CInputHandler::Instance()->AddActionKeyUp(SDL_SCANCODE_3, [this] {
 		return;
 		});
-	InputHandler::Instance()->AddActionKeyDown(SDL_SCANCODE_6, [this] {
-		SoundManager::Instance()->StopStream(&testStream);
+	CInputHandler::Instance()->AddActionKeyDown(SDL_SCANCODE_6, [this] {
+		CSoundManager::Instance()->StopStream(&testStream);
 		});
-	InputHandler::Instance()->AddActionKeyUp(SDL_SCANCODE_6, [this] {
+	CInputHandler::Instance()->AddActionKeyUp(SDL_SCANCODE_6, [this] {
 		return;
 		});
 
 
 	// Stream 2
-	InputHandler::Instance()->AddActionKeyDown(SDL_SCANCODE_4, [this] {
-		SoundManager::Instance()->PlayStream(&testStream2);
+	CInputHandler::Instance()->AddActionKeyDown(SDL_SCANCODE_4, [this] {
+		CSoundManager::Instance()->PlayStream(&testStream2);
 		});
-	InputHandler::Instance()->AddActionKeyUp(SDL_SCANCODE_4, [this] {
+	CInputHandler::Instance()->AddActionKeyUp(SDL_SCANCODE_4, [this] {
 		return;
 		});
 	
 	// Play
-	InputHandler::Instance()->AddActionKeyDown(SDL_SCANCODE_5, [this] {
-		SoundManager::Instance()->PauseStream(&testStream2);
+	CInputHandler::Instance()->AddActionKeyDown(SDL_SCANCODE_5, [this] {
+		CSoundManager::Instance()->PauseStream(&testStream2);
 		});
-	InputHandler::Instance()->AddActionKeyUp(SDL_SCANCODE_5, [this] {
+	CInputHandler::Instance()->AddActionKeyUp(SDL_SCANCODE_5, [this] {
 		return;
 		});
-	InputHandler::Instance()->AddActionKeyDown(SDL_SCANCODE_7, [this] {
-		SoundManager::Instance()->StopStream(&testStream2);
+	CInputHandler::Instance()->AddActionKeyDown(SDL_SCANCODE_7, [this] {
+		CSoundManager::Instance()->StopStream(&testStream2);
 		});
-	InputHandler::Instance()->AddActionKeyUp(SDL_SCANCODE_7, [this] {
+	CInputHandler::Instance()->AddActionKeyUp(SDL_SCANCODE_7, [this] {
 		return;
 		});
 
 	if (pLevel)
 	{
 		// Give the camera the Level size
-		Camera::Instance()->SetLevelSize(pLevel->m_LevelSize);
+		CCamera::Instance()->SetLevelSize(pLevel->m_LevelSize);
 
 		// Execute the OnPlay method on all the GameObjects in all Object Layers
 		pLevel->OnPlay();
@@ -149,8 +149,8 @@ bool PlayState::OnPlay()
 	else
 	{ 
 		// If a failure happens when attempting to load - this will let us know something is up.
-		TextureManager::Instance()->CreateCheckboardPattern(m_screenSize, "levelLoadFail", Game::Instance()->GetRenderer());
-		SDL_SetRenderDrawColor(Game::Instance()->GetRenderer(), 255, 255, 255, 255);
+		CTextureManager::Instance()->CreateCheckboardPattern(m_screenSize, "levelLoadFail", CGame::Instance()->GetRenderer());
+		SDL_SetRenderDrawColor(CGame::Instance()->GetRenderer(), 255, 255, 255, 255);
 	}
 
 	std::cout << "Entering PlayState\n";
@@ -158,7 +158,7 @@ bool PlayState::OnPlay()
 	return true;
 }
 
-void PlayState::Draw()
+void CPlayState::Draw()
 {
 	if (pLevel != 0)
 	{
@@ -166,21 +166,21 @@ void PlayState::Draw()
 	}
 	else
 	{
-		TextureManager::Instance()->Draw("levelLoadFail", 0, 0, (int)m_screenSize.GetX(), (int)m_screenSize.GetY(), Game::Instance()->GetRenderer());
+		CTextureManager::Instance()->Draw("levelLoadFail", 0, 0, (int)m_screenSize.GetX(), (int)m_screenSize.GetY(), CGame::Instance()->GetRenderer());
 	}
 	// gameobjects and stuff
-	GameStateBase::Draw();
+	CGameStateBase::Draw();
 }
 
-void PlayState::OnThink()
+void CPlayState::OnThink()
 {
 	if (pLevel != 0)
 		pLevel->OnThink();
 
-	GameStateBase::OnThink();
+	CGameStateBase::OnThink();
 }
 
-bool PlayState::OnEnd()
+bool CPlayState::OnEnd()
 {
 	std::cout << "Exiting PlayState\n";
 
@@ -188,7 +188,7 @@ bool PlayState::OnEnd()
 	if (pLevel != 0)
 		pLevel->Destroy();
 
-	GameStateBase::OnEnd();
+	CGameStateBase::OnEnd();
 
 	return true;
 }

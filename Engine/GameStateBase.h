@@ -5,8 +5,8 @@
 #include "GameState.h"
 #include "GameObject.h"
 #include <vector>
-class GameStateBase :
-	public GameState
+class CGameStateBase :
+	public CGameState
 {
 public:
 	virtual void OnThink();
@@ -15,7 +15,7 @@ public:
 	virtual bool OnPlay();
 	virtual bool OnEnd();
 
-	virtual inline std::vector<CGameObject*> GetGameObjects()
+	virtual inline std::vector<IGameObject*> GetGameObjects()
 	{
 		return m_GameObjects;
 	}
@@ -29,7 +29,7 @@ public:
 		return m_shouldDraw;
 	};
 protected:
-	std::vector<CGameObject*> m_GameObjects;
+	std::vector<IGameObject*> m_GameObjects;
 	std::vector<std::string> m_TextureIDList;
 
 	bool m_shouldTick = false;

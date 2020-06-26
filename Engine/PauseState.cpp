@@ -3,13 +3,13 @@
 #include "PauseState.h"
 #include "StateParser.h"
 
-const std::string PauseState::s_UIID = "PauseMenu";
+const std::string CPauseState::s_UIID = "PauseMenu";
 
-bool PauseState::OnPlay()
+bool CPauseState::OnPlay()
 {
-	GameStateBase::OnPlay();
+	CGameStateBase::OnPlay();
 
-	StateParser sp;
+	CStateParser sp;
 	sp.ParseState("assets/states/SystemMenus.json", s_UIID, &m_GameObjects, &m_TextureIDList);
 
 	m_callbacks.push_back(0);
@@ -21,12 +21,12 @@ bool PauseState::OnPlay()
 	return true;
 }
 
-bool PauseState::OnEnd()
+bool CPauseState::OnEnd()
 {
-	return GameStateBase::OnEnd();
+	return CGameStateBase::OnEnd();
 }
 
-void PauseState::SetCallbacks(const std::vector<ButtonCallback>& callbacks)
+void CPauseState::SetCallbacks(const std::vector<HButtonCallback>& callbacks)
 {
 	// MenuState::SetCallbacks(callbacks);
 
@@ -45,16 +45,16 @@ void PauseState::SetCallbacks(const std::vector<ButtonCallback>& callbacks)
 }
 
 
-bool PauseState::s_continueGame()
+bool CPauseState::s_continueGame()
 {
-	Game::Instance()->GetStateManager()->PopState();
+	CGame::Instance()->GetStateManager()->PopState();
 
 	return false;
 }
 
-bool PauseState::s_exitToMenu()
+bool CPauseState::s_exitToMenu()
 {
-	Game::Instance()->GetStateManager()->ModifyState(new MainMenuState());
+	CGame::Instance()->GetStateManager()->ModifyState(new CMainMenuState());
 
 	return false;
 }

@@ -2,7 +2,7 @@
 #ifndef __LAYER_H__
 #define __LAYER_H__
 
-class Layer
+class ILayer
 {
 public:
 	virtual void OnPlay() = 0;
@@ -12,6 +12,6 @@ public:
 	virtual void Draw() = 0;
 
 protected:
-	virtual ~Layer() {}
+	virtual ~ILayer() {}
 };
 #endif

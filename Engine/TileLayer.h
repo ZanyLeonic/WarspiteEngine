@@ -9,12 +9,12 @@
 #include "Layer.h"
 #include "Vector2D.h"
 
-class TileLayer :
-	public Layer
+class CTileLayer :
+	public ILayer
 {
 public:
-	TileLayer(int tileSize, int mapWidth, int mapHeight, 
-		const std::vector<Tileset>& tilesets)
+	CTileLayer(int tileSize, int mapWidth, int mapHeight, 
+		const std::vector<STileset>& tilesets)
 		: m_tileSize(tileSize)
 	{
 		m_tilesets = tilesets;
@@ -39,19 +39,19 @@ public:
 		m_tileSize = tileSize;
 	}
 
-	Tileset GetTilesetByID(int tileID);
+	STileset GetTilesetByID(int tileID);
 
 private:
 	int m_numColumns;
 	int m_numRows;
 	int m_tileSize;
 	
-	Vector2D m_lastCamPos;
-	Vector2D m_position;
-	Vector2D m_velocity;
+	CVector2D m_lastCamPos;
+	CVector2D m_position;
+	CVector2D m_velocity;
 
-	std::vector<Tileset> mi_tilesets = std::vector<Tileset>();
-	std::vector<Tileset>& m_tilesets = mi_tilesets;
+	std::vector<STileset> mi_tilesets = std::vector<STileset>();
+	std::vector<STileset>& m_tilesets = mi_tilesets;
 	std::vector<std::vector<int>> m_tileIDs;
 };
 

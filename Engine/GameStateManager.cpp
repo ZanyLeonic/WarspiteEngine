@@ -1,6 +1,6 @@
 #include "GameStateManager.h"
 
-GameStateBase* GameStateManager::GetCurrentState()
+CGameStateBase* CGameStateManager::GetCurrentState()
 {
 	if (!m_GameStates.empty())
 	{
@@ -9,13 +9,13 @@ GameStateBase* GameStateManager::GetCurrentState()
 	return 0;
 }
 
-void GameStateManager::PushState(GameStateBase* pState)
+void CGameStateManager::PushState(CGameStateBase* pState)
 {
 	m_GameStates.push_back(pState);
 	m_GameStates.back()->OnPlay();
 }
 
-void GameStateManager::PopState()
+void CGameStateManager::PopState()
 {
 	// Check if the queue has items before Popping
 	if (!m_GameStates.empty())
@@ -32,7 +32,7 @@ void GameStateManager::PopState()
 	}
 }
 
-void GameStateManager::Draw()
+void CGameStateManager::Draw()
 {
 	if (!m_GameStates.empty())
 	{
@@ -40,7 +40,7 @@ void GameStateManager::Draw()
 	}
 }
 
-void GameStateManager::OnThink()
+void CGameStateManager::OnThink()
 {
 	if (!m_GameStates.empty())
 	{
@@ -48,7 +48,7 @@ void GameStateManager::OnThink()
 	}
 }
 
-void GameStateManager::ModifyState(GameStateBase* pState)
+void CGameStateManager::ModifyState(CGameStateBase* pState)
 {
 	if (!m_GameStates.empty())
 	{

@@ -13,7 +13,7 @@ CButton::CButton() :
 	if (m_OnLeave == 0) m_OnLeave = std::bind(&CButton::onLeave, this);
 }
 
-void CButton::Load(const ObjectParams* pParams)
+void CButton::Load(const CObjectParams* pParams)
 {
 	CWarspiteObject::Load(pParams);
 	
@@ -30,7 +30,7 @@ void CButton::Draw()
 bool CButton::OnThink()
 {
 	// Get the mouse Position on the screen
-	Vector2D* pMousePos = InputHandler::Instance()->
+	CVector2D* pMousePos = CInputHandler::Instance()->
 		GetMousePosition();
 
 	// Is it within the boundaries of the CButton?
@@ -40,7 +40,7 @@ bool CButton::OnThink()
 		&& pMousePos->GetY() > m_position.GetY())
 	{
 		// Have they pressed down on the CButton while within the boundaries?
-		if (InputHandler::Instance()->GetMouseButtonState(LEFT) && m_bReleased)
+		if (CInputHandler::Instance()->GetMouseButtonState(LEFT) && m_bReleased)
 		{
 			m_currentFrame = PRESSED;
 			if (!m_OnClick()) // call the callback noooow!
@@ -49,7 +49,7 @@ bool CButton::OnThink()
 			}
 			m_bReleased = false;
 		}
-		else if (!InputHandler::Instance()->GetMouseButtonState(LEFT))
+		else if (!CInputHandler::Instance()->GetMouseButtonState(LEFT))
 		{
 			m_bReleased = true;
 			m_currentFrame = HOVER;

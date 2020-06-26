@@ -25,7 +25,7 @@ std::string getJSONs(const Value* pStateRoot)
 	return sb.GetString();
 }
 
-Level* LevelParser::ParseLevel(const char* levelFile)
+CLevel* CLevelParser::ParseLevel(const char* levelFile)
 {
 	Document tLevel;
 	FILE* fp = fopen(levelFile, "rb");
@@ -48,7 +48,7 @@ Level* LevelParser::ParseLevel(const char* levelFile)
 
 		fclose(fp);
 
-		Level* pLevel = new Level();
+		CLevel* pLevel = new CLevel();
 
 		assert(tLevel["height"].IsInt() && tLevel["width"].IsInt() && tLevel["tilewidth"].IsInt());
 
@@ -111,7 +111,7 @@ Level* LevelParser::ParseLevel(const char* levelFile)
 	return 0;
 }
 
-void LevelParser::parseTilesets(const rapidjson::Value* pTilesetRoot, std::vector<Tileset>* pTilesets)
+void CLevelParser::parseTilesets(const rapidjson::Value* pTilesetRoot, std::vector<STileset>* pTilesets)
 {
 	const Value::ConstObject& obj = pTilesetRoot->GetObject();
 
@@ -144,10 +144,10 @@ void LevelParser::parseTilesets(const rapidjson::Value* pTilesetRoot, std::vecto
 
 			const Value& t = tileset.GetObject();
 
-			TextureManager::Instance()->Load(t["image"].GetString(),
-				t["name"].GetString(), Game::Instance()->GetRenderer());
+			CTextureManager::Instance()->Load(t["image"].GetString(),
+				t["name"].GetString(), CGame::Instance()->GetRenderer());
 
-			Tileset ts;
+			STileset ts;
 
 			std::cout << getJSONs(&t) << std::endl;
 
@@ -172,13 +172,13 @@ void LevelParser::parseTilesets(const rapidjson::Value* pTilesetRoot, std::vecto
 	}
 }
 
-void LevelParser::parseTileLayer(const rapidjson::Value* pTileElement, std::vector<Layer*>* pLayers, const std::vector<Tileset>* pTilesets)
+void CLevelParser::parseTileLayer(const rapidjson::Value* pTileElement, std::vector<ILayer*>* pLayers, const std::vector<STileset>* pTilesets)
 {
 	// Make the JSON value an object to manipulate better.
 	const Value::ConstObject& obj = pTileElement->GetObject();
 
 	// Another with a new instance of TileLayer to work with and return.
-	TileLayer* pTileLayer = new TileLayer(m_tileSize, m_width, m_height, *pTilesets);
+	CTileLayer* pTileLayer = new CTileLayer(m_tileSize, m_width, m_height, *pTilesets);
 
 	// the final decoded tile data in a 2D integer array
 	std::vector<std::vector<int>> data;
@@ -229,17 +229,17 @@ void LevelParser::parseTileLayer(const rapidjson::Value* pTileElement, std::vect
 	pLayers->push_back(pTileLayer);
 }
 
-void LevelParser::parseTextures(const rapidjson::Value* pTextureRoot)
+void CLevelParser::parseTextures(const rapidjson::Value* pTextureRoot)
 {
 	// Get the correct type of the value. (should be an object)
 	const Value::ConstObject& o = pTextureRoot->GetObject();
 
 	// Load the texture via the TextureManager with the info inside the object.
-	TextureManager::Instance()->Load(o["value"].GetString(), o["name"].GetString(),
-		Game::Instance()->GetRenderer());
+	CTextureManager::Instance()->Load(o["value"].GetString(), o["name"].GetString(),
+		CGame::Instance()->GetRenderer());
 }
 
-void LevelParser::parseBackgroundColour(const std::string* colourVal)
+void CLevelParser::parseBackgroundColour(const std::string* colourVal)
 {
 	int r = 255;
 	int g = 255;
@@ -273,17 +273,17 @@ void LevelParser::parseBackgroundColour(const std::string* colourVal)
 		break;
 	};
 
-	SDL_SetRenderDrawColor(Game::Instance()->GetRenderer(), r, g, b, a);
+	SDL_SetRenderDrawColor(CGame::Instance()->GetRenderer(), r, g, b, a);
 }
 
-void LevelParser::parseObjectLayer(const rapidjson::Value* pObjectVal, std::vector<Layer*>* pLayer)
+void CLevelParser::parseObjectLayer(const rapidjson::Value* pObjectVal, std::vector<ILayer*>* pLayer)
 {
 	// Get our JSON values to their types.
 	const Value::ConstObject& o = pObjectVal->GetObject();
 	const Value::ConstArray& a = o["objects"].GetArray();
 
 	// Create our ObjectLayer we are filling with data.
-	ObjectLayer* pObjectLayer = new ObjectLayer();
+	CObjectLayer* pObjectLayer = new CObjectLayer();
 	
 	// iterate through each object we have.
 	for (SizeType i = 0; i < a.Size(); i++)
@@ -304,7 +304,7 @@ void LevelParser::parseObjectLayer(const rapidjson::Value* pObjectVal, std::vect
 		y = b["y"].GetInt();
 		
 		// Create the object that is defined
-		CGameObject* pGameObject = GameObjectDictionary::Instance()
+		IGameObject* pGameObject = CGameObjectDictionary::Instance()
 			->Create(b["type"].GetString());
 
 		// fill in any additional information (if provided.)
@@ -366,7 +366,7 @@ void LevelParser::parseObjectLayer(const rapidjson::Value* pObjectVal, std::vect
 		}
 
 		// intialise the object with the data obtained.
-		pGameObject->Load(new ObjectParams((float)x, (float)y, width, height, 
+		pGameObject->Load(new CObjectParams((float)x, (float)y, width, height, 
 			textureID, animSpeed, numFrames, onClickCallback, 
 			onEnterCallback, onLeaveCallback));
 		pObjectLayer->GetGameObjects()->push_back(pGameObject);

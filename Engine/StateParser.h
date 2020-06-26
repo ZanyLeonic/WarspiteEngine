@@ -2,23 +2,22 @@
 #ifndef __StateParser_H__
 #define __StateParser_H__
 
-#include <iostream>
 #include <vector>
 #include <rapidjson/document.h>
 
-class CGameObject;
+class IGameObject;
 
-class StateParser
+class CStateParser
 {
 public:
-	StateParser() {}
+	CStateParser() {}
 
 	 bool ParseState(const char* stateFile, std::string stateID,
-		std::vector<CGameObject*>* pObjects, std::vector<std::string>* pTextureIDs);
+		std::vector<IGameObject*>* pObjects, std::vector<std::string>* pTextureIDs);
 
 private:
 	 void ParseObjects(const rapidjson::Value* pStateRoot,
-		std::vector<CGameObject*>* pObjects);
+		std::vector<IGameObject*>* pObjects);
 	 void ParseTextures(const rapidjson::Value* pStateRoot,
 		std::vector<std::string>* pTextureIDs);
 };

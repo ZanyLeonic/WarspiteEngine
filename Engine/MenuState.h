@@ -2,13 +2,13 @@
 #include "GameStateBase.h"
 #include <functional>
 #include <vector>
-class MenuState : public GameStateBase
+class CMenuState : public CGameStateBase
 {
 protected:
-	typedef std::function<bool()> ButtonCallback;
+	typedef std::function<bool()> HButtonCallback;
 	
-	virtual void SetCallbacks(const std::vector<ButtonCallback>& callbacks) = 0;
+	virtual void SetCallbacks(const std::vector<HButtonCallback>& callbacks) = 0;
 
-	std::vector<ButtonCallback> m_callbacks;
+	std::vector<HButtonCallback> m_callbacks;
 };
 

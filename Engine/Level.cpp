@@ -1,11 +1,10 @@
-#include "ObjectLayer.h"
 #include "Level.h"
 
-Level::Level()
+CLevel::CLevel()
 {
 }
 
-void Level::OnPlay()
+void CLevel::OnPlay()
 {
 	// Execute each Layers OnPlay method
 	for (int i = 0; i < m_layers.size(); i++)
@@ -14,7 +13,7 @@ void Level::OnPlay()
 	}
 }
 
-void Level::Destroy()
+void CLevel::Destroy()
 {
 	for (int i = 0; i < m_layers.size(); i++)
 	{
@@ -23,7 +22,7 @@ void Level::Destroy()
 	m_layers.clear();
 }
 
-void Level::OnThink()
+void CLevel::OnThink()
 {
 	for (int i = 0; i < m_layers.size(); i++)
 	{
@@ -31,7 +30,7 @@ void Level::OnThink()
 	}
 }
 
-void Level::Draw()
+void CLevel::Draw()
 {
 	for (int i = 0; i < m_layers.size(); i++)
 	{

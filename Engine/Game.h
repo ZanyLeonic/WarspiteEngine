@@ -5,34 +5,27 @@
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_thread.h>
 #include <vector>
-#include "TextureManager.h"
-#include "InputHandler.h"
-#include "GameObject.h"
-#include "Player.h"
-#include "Enemy.h"
-#include "TestObject.h"
 #include "GameStateManager.h"
 #include "MainMenuState.h"
-#include "PlayState.h"
 #include "Vector2D.h"
 
-class Game
+class CGame
 {
 public:
-	static Game* Instance()
+	static CGame* Instance()
 	{
 		if (s_pInstance == 0)
 		{
-			s_pInstance = new Game();
+			s_pInstance = new CGame();
 			return s_pInstance;
 		}
 		return s_pInstance;
 	}
 private:
-	Game() {}
-	~Game() {}
+	CGame() {}
+	~CGame() {}
 	
-	static Game* s_pInstance;
+	static CGame* s_pInstance;
 
 public:
 	// simply set the running variable to true
@@ -49,14 +42,14 @@ public:
 
 	SDL_Renderer* GetRenderer() const { return m_pRenderer; }
 	SDL_Window* GetWindow() const { return m_pWindow; }
-	GameStateManager* GetStateManager() const { return m_pGameStateManager; }
+	CGameStateManager* GetStateManager() const { return m_pGameStateManager; }
 
-	Vector2D GetViewportSize() const { return m_viewportSize; }
+	CVector2D GetViewportSize() const { return m_viewportSize; }
 
 	SDL_Thread* GetAudioThread() const { return audioThread; }
 
 private:
-	GameStateManager* m_pGameStateManager;
+	CGameStateManager* m_pGameStateManager;
 
 	SDL_Window* m_pWindow = nullptr;
 	SDL_Renderer* m_pRenderer = nullptr;
@@ -67,7 +60,7 @@ private:
 
 	SDL_Thread* audioThread = 0;
 
-	Vector2D m_viewportSize;
+	CVector2D m_viewportSize;
 
 	bool m_bRunning = false;
 };

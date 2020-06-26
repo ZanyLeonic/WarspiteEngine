@@ -5,13 +5,13 @@
 #include "GameStateBase.h"
 #include <vector>
 
-class GameStateManager
+class CGameStateManager
 {
 public:
-	GameStateBase* GetCurrentState();
+	CGameStateBase* GetCurrentState();
 
-	void PushState(GameStateBase* pState);
-	void ModifyState(GameStateBase* pState);
+	void PushState(CGameStateBase* pState);
+	void ModifyState(CGameStateBase* pState);
 
 	void PopState();
 
@@ -19,7 +19,7 @@ public:
 	void OnThink();
 
 private:
-	std::vector<GameStateBase*> m_GameStates;
+	std::vector<CGameStateBase*> m_GameStates;
 };
 
 #endif

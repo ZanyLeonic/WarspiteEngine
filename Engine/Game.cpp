@@ -4,22 +4,20 @@
 #include "Camera.h"
 #include "InputHandler.h"
 #include "LevelParser.h"
-#include "GameObjectDictionary.h"
-#include "Button.h"
 #include <iostream>
 
-Game* Game::s_pInstance = 0;
+CGame* CGame::s_pInstance = 0;
 
 int audioLoop(void* data)
 {
 	// Just create an instance to initialise it.
-	SoundManager::Instance();
-
-	Game* pG = reinterpret_cast<Game*>(data);
+	CSoundManager::Instance();
+	
+	CGame* pG = reinterpret_cast<CGame*>(data);
 
 	while (pG->IsRunning())
 	{
-		SoundManager::Instance()->OnThink();
+		CSoundManager::Instance()->OnThink();
 
 		// SDL_WaitThread(pG->GetAudioThread(), NULL);
 	}
@@ -28,9 +26,9 @@ int audioLoop(void* data)
 }
 
 // Initialises the major parts of the engine
-bool Game::Init(const char* title, int xpos, int ypos, int width, int height, bool fullscreen)
+bool CGame::Init(const char* title, int xpos, int ypos, int width, int height, bool fullscreen)
 {
-	TheInputHandler::Instance()->InitialiseJoysticks();
+	CInputHandler::Instance()->InitialiseJoysticks();
 
 	// attempt to initalize SDL
 	if (SDL_Init(SDL_INIT_EVERYTHING) == 0)
@@ -45,7 +43,7 @@ bool Game::Init(const char* title, int xpos, int ypos, int width, int height, bo
 		std::cout << "SDL init success\n";
 		// init the window
 		m_pWindow = SDL_CreateWindow(title, xpos, ypos, width, height, flags);
-		m_viewportSize = Vector2D((float)width, (float)height);
+		m_viewportSize = CVector2D((float)width, (float)height);
 
 		if (m_pWindow != 0)
 		{
@@ -58,11 +56,11 @@ bool Game::Init(const char* title, int xpos, int ypos, int width, int height, bo
 				SDL_SetRenderDrawColor(m_pRenderer,
 					255, 255, 255, 255);
 
-				SDL_Thread* aT = SDL_CreateThread(audioLoop, "AudioThread", (void*)Game::Instance());
+				SDL_Thread* aT = SDL_CreateThread(audioLoop, "AudioThread", (void*)CGame::Instance());
 				SDL_DetachThread(aT);
 
-				m_pGameStateManager = new GameStateManager();
-				m_pGameStateManager->ModifyState(new MainMenuState());
+				m_pGameStateManager = new CGameStateManager();
+				m_pGameStateManager->ModifyState(new CMainMenuState());
 			}
 			else
 			{
@@ -84,7 +82,7 @@ bool Game::Init(const char* title, int xpos, int ypos, int width, int height, bo
 	return false;
 }
 
-void Game::Draw()
+void CGame::Draw()
 {
 	SDL_RenderClear(m_pRenderer); // clear the renderer to draw color
 	
@@ -94,25 +92,25 @@ void Game::Draw()
 	SDL_RenderPresent(m_pRenderer); // draw to the screen
 }
 
-void Game::OnThink()
+void CGame::OnThink()
 {
 	// Call the current GameState functionality via the GameStateManager.
 	m_pGameStateManager->OnThink();
 	
-	Camera::Instance()->OnThink();
+	CCamera::Instance()->OnThink();
 }
 
-void Game::HandleEvents()
+void CGame::HandleEvents()
 {
-	InputHandler::Instance()->OnThink();
+	CInputHandler::Instance()->OnThink();
 }
 
-void Game::Destroy()
+void CGame::Destroy()
 {
 	std::cout << "Cleaning Game instance...\n";
 
-	InputHandler::Instance()->Destroy();
-	SoundManager::Instance()->Destroy();
+	CInputHandler::Instance()->Destroy();
+	CSoundManager::Instance()->Destroy();
 	m_pGameStateManager->PopState();
 
 	// Destroy the Renderer before the window
@@ -122,7 +120,7 @@ void Game::Destroy()
 	SDL_Quit();
 }
 
-void Game::Quit()
+void CGame::Quit()
 {
 	m_bRunning = false;
 }

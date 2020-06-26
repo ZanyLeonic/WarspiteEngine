@@ -3,16 +3,16 @@
 #include "Game.h"
 
 CWarspiteObject::CWarspiteObject() 
-	: CGameObject(), m_height(0), m_width(0), 
+	: IGameObject(), m_height(0), m_width(0), 
 	m_numFrames(1), m_currentFrame(0), m_currentRow(0)
 {
 }
 
-void CWarspiteObject::Load(const ObjectParams* pParams)
+void CWarspiteObject::Load(const CObjectParams* pParams)
 {
-	m_position = Vector2D(pParams->GetX(), pParams->GetY());
-	m_velocity = Vector2D(0, 0);
-	m_acceleration = Vector2D(0, 0);
+	m_position = CVector2D(pParams->GetX(), pParams->GetY());
+	m_velocity = CVector2D(0, 0);
+	m_acceleration = CVector2D(0, 0);
 
 	m_width = pParams->GetWidth();
 	m_height = pParams->GetHeight();
@@ -31,16 +31,16 @@ void CWarspiteObject::Draw()
 {
 	if (m_velocity.GetX() > 0)
 	{
-		TextureManager::Instance()->DrawFrame(m_textureID, (int)m_position.GetX(),
+		CTextureManager::Instance()->DrawFrame(m_textureID, (int)m_position.GetX(),
 			(int)m_position.GetY(), m_width, m_height, 
-			m_currentRow, m_currentFrame, Game::Instance()->GetRenderer(), 
+			m_currentRow, m_currentFrame, CGame::Instance()->GetRenderer(), 
 			SDL_FLIP_HORIZONTAL);
 	}
 	else
 	{
-		TextureManager::Instance()->DrawFrame(m_textureID, (int)m_position.GetX(),
+		CTextureManager::Instance()->DrawFrame(m_textureID, (int)m_position.GetX(),
 			(int)m_position.GetY(), m_width, m_height,
-			m_currentRow, m_currentFrame, Game::Instance()->GetRenderer());
+			m_currentRow, m_currentFrame, CGame::Instance()->GetRenderer());
 	}
 }
 

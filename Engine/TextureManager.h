@@ -7,18 +7,18 @@
 #include <string>
 #include <map>
 
-class TextureManager
+class CTextureManager
 {
 private:
-	TextureManager() {} ;
-	static TextureManager* s_pInstance;
+	CTextureManager() {} ;
+	static CTextureManager* s_pInstance;
 
 public:
-	static TextureManager* Instance()
+	static CTextureManager* Instance()
 	{
 		if (s_pInstance == 0)
 		{
-			s_pInstance = new TextureManager();
+			s_pInstance = new CTextureManager();
 			return s_pInstance;
 		}
 		return s_pInstance;
@@ -26,7 +26,7 @@ public:
 
 	bool Load(std::string fileName, std::string id, SDL_Renderer* pRenderer);
 
-	void CreateCheckboardPattern(Vector2D size, std::string texName, SDL_Renderer* pRenderer);
+	void CreateCheckboardPattern(CVector2D size, std::string texName, SDL_Renderer* pRenderer);
 
 	// draw
 	void Draw(std::string id, int x, int y, int width, int  height, 
@@ -45,5 +45,5 @@ public:
 
 	std::map<std::string, SDL_Texture*> m_textureMap;
 };
-typedef TextureManager TheTextureManager;
+
 #endif /* defined(__TextureManager__) */

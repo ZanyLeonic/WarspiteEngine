@@ -4,8 +4,6 @@
 
 #include "WarspiteObject.h"
 #include "InputHandler.h"
-#include "Vector2D.h"
-#include "GameObjectDictionary.h"
 
 class CPlayer : public CWarspiteObject
 {
@@ -14,7 +12,7 @@ public:
 
 	void OnPlay();
 
-	void Load(const ObjectParams* pParams);
+	void Load(const CObjectParams* pParams);
 
 	bool OnThink();
 	void Draw();
@@ -28,14 +26,14 @@ private:
 	void MoveForward(float axis);
 	void MoveRight(float axis);
 	
-	bool IsPositionFree(Vector2D* pNext);
+	bool IsPositionFree(CVector2D* pNext);
 
 	void DecideFrame();
 
-	std::vector<std::vector<CGameObject*>*> m_objects;
+	std::vector<std::vector<IGameObject*>*> m_objects;
 
-	Vector2D lastPosition;
-	Vector2D nextPosition;
+	CVector2D lastPosition;
+	CVector2D nextPosition;
 
 	bool moving = false;
 
@@ -49,7 +47,7 @@ private:
 
 	int m_frameOffset = 0;
 
-	Vector2D m_CamOffset;
+	CVector2D m_CamOffset;
 };
 
 REG_OBJ_TO_REF( Player, CPlayer ) ;

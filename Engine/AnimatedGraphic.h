@@ -4,12 +4,12 @@
 
 #include "WarspiteObject.h"
 
-class AnimatedGraphic : public CWarspiteObject
+class CAnimatedGraphic : public CWarspiteObject
 {
 public:
-	AnimatedGraphic() {};
+	CAnimatedGraphic() {};
 
-	virtual void Load(const ObjectParams* pParams);
+	virtual void Load(const CObjectParams* pParams);
 	virtual bool OnThink();
 
 protected:

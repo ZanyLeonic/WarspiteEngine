@@ -32,7 +32,6 @@ set(WarspiteEngine_Src
 
 set(WarspiteEngine_Header
     AnimatedGraphic.h
-    BaseCreator.h
     Button.h
     Camera.h
     Enemy.h
@@ -59,7 +58,6 @@ set(WarspiteEngine_Header
     TestObject.h
     TextureManager.h
     TileLayer.h
-    util.h
     Vector2D.h
     WarspiteObject.h
 )

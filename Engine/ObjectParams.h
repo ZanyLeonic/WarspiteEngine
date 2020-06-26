@@ -3,12 +3,10 @@
 #ifndef __ObjectParams__
 #define __ObjectParams__
 
-
-
-class ObjectParams
+class CObjectParams
 {
 public:
-	ObjectParams(float x, float y, int width, int height,
+	CObjectParams(float x, float y, int width, int height,
 		std::string textureID, int animSpeed = 1, int numFrames = 1,
 		int onClick = 0, int onEnter = 0, int onLeave = 0)
 		: m_x(x), m_y(y), m_width(width), m_height(height),

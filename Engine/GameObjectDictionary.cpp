@@ -2,9 +2,9 @@
 
 #include <iostream>
 
-GameObjectDictionary* GameObjectDictionary::s_pInstance = 0;
+CGameObjectDictionary* CGameObjectDictionary::s_pInstance = 0;
 
-bool GameObjectDictionary::RegisterType(std::string typeID, IObjectFactory* pCreator)
+bool CGameObjectDictionary::RegisterType(std::string typeID, IObjectFactory* pCreator)
 {
 	auto it = m_creators.find(typeID);
 
@@ -19,7 +19,7 @@ bool GameObjectDictionary::RegisterType(std::string typeID, IObjectFactory* pCre
 	return true;
 }
 
-CGameObject* GameObjectDictionary::Create(std::string typeID)
+IGameObject* CGameObjectDictionary::Create(std::string typeID)
 {
 	auto it = m_creators.find(typeID);
 

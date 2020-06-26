@@ -3,23 +3,23 @@
 #include "TileLayer.h"
 #include <iostream>
 
-void TileLayer::OnPlay()
+void CTileLayer::OnPlay()
 {
 }
 
-void TileLayer::Destroy()
+void CTileLayer::Destroy()
 {
 }
 
-void TileLayer::OnThink()
+void CTileLayer::OnThink()
 {
 	m_position += m_velocity;
 }
 
-void TileLayer::Draw()
+void CTileLayer::Draw()
 {
-	Vector2D cCamPos = Camera::Instance()->GetPositionT();
-	Vector2D vPortSz = Game::Instance()->GetViewportSize();
+	CVector2D cCamPos = CCamera::Instance()->GetPositionT();
+	CVector2D vPortSz = CGame::Instance()->GetViewportSize();
 
 	for (int i = 0; i < m_numRows; i++)
 	{
@@ -43,19 +43,19 @@ void TileLayer::Draw()
 				continue;
 			}
 
-			Tileset tileset = GetTilesetByID(id);
+			STileset tileset = GetTilesetByID(id);
 
 			id--;
 
-			TextureManager::Instance()->DrawTile(tileset.Name, tileset.Margin, tileset.Spacing,
+			CTextureManager::Instance()->DrawTile(tileset.Name, tileset.Margin, tileset.Spacing,
 				(int)(((j * m_tileSize)) - cCamPos.GetX()), (int)(((i * m_tileSize)) - cCamPos.GetY()), m_tileSize, m_tileSize, // X, Y, width and height
 				(id - (tileset.FirstGID - 1)) / tileset.NumColumns, (id - (tileset.FirstGID - 1)) % tileset.NumColumns, // Row and frame
-				Game::Instance()->GetRenderer());
+				CGame::Instance()->GetRenderer());
 		}
 	}
 }
 
-Tileset TileLayer::GetTilesetByID(int tileID)
+STileset CTileLayer::GetTilesetByID(int tileID)
 {
 	for (int i = 0; i < m_tilesets.size(); i++)
 	{
@@ -74,5 +74,5 @@ Tileset TileLayer::GetTilesetByID(int tileID)
 		std::cout << "Cannot find tileset, returning an empty tileset\n";
 	}
 
-	return Tileset();
+	return STileset();
 }

@@ -1,9 +1,9 @@
 #include "Game.h"
 #include "GitVersion.h"
-#include "StateParser.h"
+#include <iostream>
 
 // our Game object
-Game* g_game = 0;
+CGame* g_game = 0;
 
 const int FPS = 62;
 const int DELAY_TIME = 1000 / FPS;
@@ -25,15 +25,15 @@ int main(int argc, char* argv[])
 	std::cout << "Attempting Game initialization...\n";
 	std::cout << "Target FPS is " << FPS << " FPS\n";
 
-	if (Game::Instance()->Init(title, 100, 100, 640, 480, false))
+	if (CGame::Instance()->Init(title, 100, 100, 640, 480, false))
 	{
-		while (Game::Instance()->IsRunning())
+		while (CGame::Instance()->IsRunning())
 		{
 			frameStart = SDL_GetTicks();
 
-			Game::Instance()->HandleEvents();
-			Game::Instance()->OnThink();
-			Game::Instance()->Draw();
+			CGame::Instance()->HandleEvents();
+			CGame::Instance()->OnThink();
+			CGame::Instance()->Draw();
 
 			frameTime = SDL_GetTicks() - frameStart;
 
@@ -51,7 +51,7 @@ int main(int argc, char* argv[])
 		return -1;
 	}
 	std::cout << "Cleaning up...\n";
-	Game::Instance()->Destroy();
+	CGame::Instance()->Destroy();
 
 	return 0;
 }

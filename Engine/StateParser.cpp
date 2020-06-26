@@ -2,6 +2,7 @@
 #include <cstdio>
 #include <rapidjson/filereadstream.h>
 #include <rapidjson/writer.h>
+#include <iostream>
 #include "TextureManager.h"
 #include "GameObjectDictionary.h"
 #include "Game.h"
@@ -19,7 +20,7 @@ std::string getJSON(const Value* pStateRoot)
 	return sb.GetString();;
 }
 
-bool StateParser::ParseState(const char* stateFile, std::string stateID, std::vector<CGameObject*>* pObjects, std::vector<std::string>* pTextureIDs)
+bool CStateParser::ParseState(const char* stateFile, std::string stateID, std::vector<IGameObject*>* pObjects, std::vector<std::string>* pTextureIDs)
 {
 	// Read our JSON document.
 	rapidjson::Document jDoc;
@@ -94,7 +95,7 @@ bool StateParser::ParseState(const char* stateFile, std::string stateID, std::ve
 	return false;
 }
 
-void StateParser::ParseObjects(const rapidjson::Value* pStateRoot, std::vector<CGameObject*>* pObjects)
+void CStateParser::ParseObjects(const rapidjson::Value* pStateRoot, std::vector<IGameObject*>* pObjects)
 {
 	// Get the object array.
 	const Value::ConstArray& t = pStateRoot->GetArray();
@@ -123,11 +124,11 @@ void StateParser::ParseObjects(const rapidjson::Value* pStateRoot, std::vector<C
 		onLeaveCallback = b.HasMember("onLeaveID") ? b["onLeaveID"].GetInt() : 0;
 
 		// Attempt to create the object type.
-		CGameObject* pGameObject =
-			GameObjectDictionary::Instance()->Create(b["type"].GetString());
+		IGameObject* pGameObject =
+			CGameObjectDictionary::Instance()->Create(b["type"].GetString());
 
 		// Provide the extracting info to the object.
-		pGameObject->Load(new ObjectParams((float)x, (float)y, width, height, textureID,
+		pGameObject->Load(new CObjectParams((float)x, (float)y, width, height, textureID,
 			animSpeed, numFrames, onClickCallback, onEnterCallback, onLeaveCallback));
 
 		// Add it to the m_GameObjects
@@ -135,7 +136,7 @@ void StateParser::ParseObjects(const rapidjson::Value* pStateRoot, std::vector<C
 	}
 }
 
-void StateParser::ParseTextures(const rapidjson::Value* pStateRoot, std::vector<std::string>* pTextureIDs)
+void CStateParser::ParseTextures(const rapidjson::Value* pStateRoot, std::vector<std::string>* pTextureIDs)
 {
 	// Get the texture array. (For some reason the array is in an array?)
 	const Value::ConstArray& t = pStateRoot->GetArray();
@@ -149,7 +150,7 @@ void StateParser::ParseTextures(const rapidjson::Value* pStateRoot, std::vector<
 		pTextureIDs->push_back(b["id"].GetString());
 
 		// Load our texture into memory.
-		TextureManager::Instance()->Load(b["path"].GetString(), b["id"].GetString(), Game::Instance()->GetRenderer());
+		CTextureManager::Instance()->Load(b["path"].GetString(), b["id"].GetString(), CGame::Instance()->GetRenderer());
 	}
 }
 

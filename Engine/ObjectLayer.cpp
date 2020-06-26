@@ -1,6 +1,6 @@
 #include "ObjectLayer.h"
 
-void ObjectLayer::OnPlay()
+void CObjectLayer::OnPlay()
 {
 	// Initialising objects and stuff
 	for (int i = 0; i < m_GameObjects.size(); i++)
@@ -9,7 +9,7 @@ void ObjectLayer::OnPlay()
 	}
 }
 
-void ObjectLayer::Destroy()
+void CObjectLayer::Destroy()
 {
 	for (int i = 0; i < m_GameObjects.size(); i++)
 	{
@@ -18,7 +18,7 @@ void ObjectLayer::Destroy()
 	m_GameObjects.clear();
 }
 
-void ObjectLayer::OnThink()
+void CObjectLayer::OnThink()
 {
 	for (int i = 0; i < m_GameObjects.size(); i++)
 	{
@@ -26,7 +26,7 @@ void ObjectLayer::OnThink()
 	}
 }
 
-void ObjectLayer::Draw()
+void CObjectLayer::Draw()
 {
 	for (int i = 0; i < m_GameObjects.size(); i++)
 	{

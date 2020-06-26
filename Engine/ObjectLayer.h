@@ -5,8 +5,8 @@
 
 #include "Layer.h"
 #include "GameObject.h"
-class ObjectLayer :
-	public Layer
+class CObjectLayer :
+	public ILayer
 {
 public:
 	virtual void OnPlay();
@@ -15,12 +15,12 @@ public:
 	virtual void OnThink();
 	virtual void Draw();
 
-	std::vector<CGameObject*>* GetGameObjects()
+	std::vector<IGameObject*>* GetGameObjects()
 	{
 		return &m_GameObjects;
 	}
 private:
-	std::vector<CGameObject*> m_GameObjects;
+	std::vector<IGameObject*> m_GameObjects;
 };
 
 #endif // ifndef __OBJECTLAYER_H__

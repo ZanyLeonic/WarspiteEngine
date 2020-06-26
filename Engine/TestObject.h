@@ -3,7 +3,6 @@
 #define __TestObject_h__
 
 #include "MapObject.h"
-#include "GameObjectDictionary.h"
 
 class CTestObject :
 	public CMapObject

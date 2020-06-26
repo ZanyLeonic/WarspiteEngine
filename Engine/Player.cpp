@@ -3,6 +3,8 @@
 #include "Camera.h"
 #include "ObjectLayer.h"
 #include "Game.h"
+#include "PlayState.h"
+#include "TextureManager.h"
 #include <iostream>
 
 #define PLAYER_WIDTH 32
@@ -16,17 +18,17 @@ CPlayer::CPlayer()
 void CPlayer::OnPlay()
 {
 	// Are we in the PlayState?
-	PlayState* ps = static_cast<PlayState*>(Game::Instance()->GetStateManager()->GetCurrentState());
+	CPlayState* ps = static_cast<CPlayState*>(CGame::Instance()->GetStateManager()->GetCurrentState());
 
 	if (ps)
 	{
 		// If so - we can grab the current level and its Layers
-		std::vector<Layer*> objs = *ps->GetLoadedLevel()->GetLayers();
+		std::vector<ILayer*> objs = *ps->GetLoadedLevel()->GetLayers();
 
 		for (int i = 0; i < objs.size(); i++)
 		{
 			// Only care about the ObjectLayers - since that's what we are going to collide with.
-			ObjectLayer* obl = dynamic_cast<ObjectLayer*>(objs[i]);
+			CObjectLayer* obl = dynamic_cast<CObjectLayer*>(objs[i]);
 			if (!obl) continue;
 
 			// Add each GameObject vector to a vector of vectors.
@@ -35,10 +37,10 @@ void CPlayer::OnPlay()
 	}
 }
 
-void CPlayer::Load(const ObjectParams* pParams)
+void CPlayer::Load(const CObjectParams* pParams)
 {
-	InputHandler::Instance()->AddActionKeyDown(SDL_SCANCODE_C, std::bind(&CPlayer::KeyDown, this));
-	InputHandler::Instance()->AddActionKeyUp(SDL_SCANCODE_C, std::bind(&CPlayer::KeyUp, this));
+	CInputHandler::Instance()->AddActionKeyDown(SDL_SCANCODE_C, std::bind(&CPlayer::KeyDown, this));
+	CInputHandler::Instance()->AddActionKeyUp(SDL_SCANCODE_C, std::bind(&CPlayer::KeyUp, this));
 
 	CWarspiteObject::Load(pParams);
 }
@@ -49,13 +51,13 @@ bool CPlayer::OnThink()
 	// std::cout << "PLAYER -> X: " << m_position.GetX() << " Y: " << m_position.GetY() << " CAM -> X: " << Camera::Instance()->GetPosition().GetX() << " Y: " << Camera::Instance()->GetPosition().GetY() << " TimeLeft: " << float(m_timeLeft / 100) <<  " Frame: " << m_frameOffset << "   ";
 	
 	HandleInput();
-
+	
 	m_currentFrame = 0;
 
 	if (moving)
 	{
 		m_position = VectorMath::Lerp(lastPosition, nextPosition, (m_timeLeft / 100));
-		Camera::Instance()->SetTarget(&m_position);
+		CCamera::Instance()->SetTarget(&m_position);
 		
 		DecideFrame();
 	}
@@ -67,22 +69,22 @@ bool CPlayer::OnThink()
 void CPlayer::Draw()
 {
 	// Get the camera position to offset the drawing
-	Vector2D cPos = Camera::Instance()->GetPositionT();
+	CVector2D cPos = CCamera::Instance()->GetPositionT();
 
 	// Flip the sprite automatically if the velocity is negative.
 	if (m_velocity.GetX() > 0)
 	{
-		TextureManager::Instance()->DrawFrame(m_textureID,
+		CTextureManager::Instance()->DrawFrame(m_textureID,
 			int(m_position.GetX() - cPos.GetX()), int(m_position.GetY() - cPos.GetY()),
 			m_width, m_height, m_currentRow, m_currentFrame,
-			Game::Instance()->GetRenderer(), SDL_FLIP_HORIZONTAL);
+			CGame::Instance()->GetRenderer(), SDL_FLIP_HORIZONTAL);
 	}
 	else
 	{
-		TextureManager::Instance()->DrawFrame(m_textureID,
+		CTextureManager::Instance()->DrawFrame(m_textureID,
 			int(m_position.GetX() - cPos.GetX()), int(m_position.GetY() - cPos.GetY()),
 			m_width, m_height, m_currentRow, m_currentFrame,
-			Game::Instance()->GetRenderer());
+			CGame::Instance()->GetRenderer());
 	}
 }
 
@@ -101,19 +103,19 @@ void CPlayer::HandleInput()
 	if (m_timeLeft >= 100)
 	{
 		// Can this code be improved? (I hope so.)	
-		if (InputHandler::Instance()->IsKeyDown(SDL_SCANCODE_DOWN))
+		if (CInputHandler::Instance()->IsKeyDown(SDL_SCANCODE_DOWN))
 		{
 			MoveForward(1);
 		}
-		else if (InputHandler::Instance()->IsKeyDown(SDL_SCANCODE_UP))
+		else if (CInputHandler::Instance()->IsKeyDown(SDL_SCANCODE_UP))
 		{
 			MoveForward(-1);
 		}
-		else if (InputHandler::Instance()->IsKeyDown(SDL_SCANCODE_RIGHT))
+		else if (CInputHandler::Instance()->IsKeyDown(SDL_SCANCODE_RIGHT))
 		{
 			MoveRight(1);
 		}
-		else if (InputHandler::Instance()->IsKeyDown(SDL_SCANCODE_LEFT))
+		else if (CInputHandler::Instance()->IsKeyDown(SDL_SCANCODE_LEFT))
 		{
 			MoveRight(-1);
 		}
@@ -130,7 +132,7 @@ void CPlayer::HandleInput()
 
 void CPlayer::MoveForward(float axis)
 {
-	Vector2D curPos = m_position;
+	CVector2D curPos = m_position;
 	
 	m_currentRow = (axis > 0) ? 1 : 2;
 
@@ -152,7 +154,7 @@ void CPlayer::MoveForward(float axis)
 
 void CPlayer::MoveRight(float axis)
 {
-	Vector2D curPos = m_position;
+	CVector2D curPos = m_position;
 	
 	m_currentRow = (axis > 0) ? 4 : 3;
 
@@ -171,10 +173,10 @@ void CPlayer::MoveRight(float axis)
 	}
 }
 
-bool CPlayer::IsPositionFree(Vector2D* pNext)
+bool CPlayer::IsPositionFree(CVector2D* pNext)
 {
 	// Get the value from the pointer and store it in a rvalue.
-	Vector2D nPos = Vector2D(*pNext);
+	CVector2D nPos = CVector2D(*pNext);
 
 	// Go through each ObjectLayer we got earlier
 	for (int i = 0; i < m_objects.size(); i++)
@@ -182,7 +184,7 @@ bool CPlayer::IsPositionFree(Vector2D* pNext)
 		if (!m_objects[i]) continue;
 
 		// Get an rvalue of the list of GameObject's for the iterated layer
-		std::vector<CGameObject*>& ir = *m_objects[i];
+		std::vector<IGameObject*>& ir = *m_objects[i];
 
 		for (int j = 0; j < ir.size(); j++)
 		{
@@ -195,10 +197,10 @@ bool CPlayer::IsPositionFree(Vector2D* pNext)
 	}
 
 	// Also do a check if we are going off the level
-	PlayState* pPS = static_cast<PlayState*>(Game::Instance()->GetStateManager()->GetCurrentState());
+	CPlayState* pPS = static_cast<CPlayState*>(CGame::Instance()->GetStateManager()->GetCurrentState());
 	if (pPS != 0)
 	{
-		Level* pLevel = pPS->GetLoadedLevel();
+		CLevel* pLevel = pPS->GetLoadedLevel();
 
 		if ((pNext->GetX() < 0) || (pNext->GetX() + PLAYER_WIDTH > pLevel->m_LevelSize.GetX()))
 		{

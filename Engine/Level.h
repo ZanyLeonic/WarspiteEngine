@@ -8,7 +8,7 @@
 #include "Vector2D.h"
 #include "Layer.h"
 
-struct Tileset
+struct STileset
 {
 	int FirstGID = 0;
 	int TileWidth = 0;
@@ -21,10 +21,10 @@ struct Tileset
 	std::string Name = "";
 };
 
-class Level
+class CLevel
 {
 public:
-	~Level() {};
+	~CLevel() {};
 
 	void OnPlay();
 	void Destroy();
@@ -32,23 +32,23 @@ public:
 	void OnThink();
 	void Draw();
 
-	std::vector<Tileset>* GetTilesets()
+	std::vector<STileset>* GetTilesets()
 	{
 		return &m_tilesets;
 	}
 
-	std::vector<Layer*>* GetLayers()
+	std::vector<ILayer*>* GetLayers()
 	{
 		return &m_layers;
 	};
 
-	Vector2D m_LevelSize;
+	CVector2D m_LevelSize;
 
 private:
-	friend class LevelParser;
-	Level();
+	friend class CLevelParser;
+	CLevel();
 
-	std::vector<Tileset> m_tilesets;
-	std::vector<Layer*> m_layers;
+	std::vector<STileset> m_tilesets;
+	std::vector<ILayer*> m_layers;
 };
 #endif

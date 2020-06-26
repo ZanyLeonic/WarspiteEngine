@@ -3,16 +3,17 @@
 #include "Game.h"
 #include "Button.h"
 #include "StateParser.h"
+#include "PlayState.h"
 #include <iostream>
 
-const std::string MainMenuState::s_UIID = "MainMenu";
+const std::string CMainMenuState::s_UIID = "MainMenu";
 
-bool MainMenuState::OnPlay()
+bool CMainMenuState::OnPlay()
 {
-	MenuState::OnPlay();
+	CMenuState::OnPlay();
 
 	// Parse the state
-	StateParser sp;
+	CStateParser sp;
 	sp.ParseState("assets/states/SystemMenus.json", s_UIID, &m_GameObjects, &m_TextureIDList);
 
 	m_callbacks.push_back(0);
@@ -25,15 +26,15 @@ bool MainMenuState::OnPlay()
 	return true;
 }
 
-bool MainMenuState::OnEnd()
+bool CMainMenuState::OnEnd()
 {
-	MenuState::OnEnd();
+	CMenuState::OnEnd();
 
 	std::cout << "Exiting MainMenuState\n";
 	return true;
 }
 
-void MainMenuState::SetCallbacks(const std::vector<ButtonCallback>& callbacks)
+void CMainMenuState::SetCallbacks(const std::vector<HButtonCallback>& callbacks)
 {
 	// MenuState::SetCallbacks(callbacks);
 
@@ -51,16 +52,16 @@ void MainMenuState::SetCallbacks(const std::vector<ButtonCallback>& callbacks)
 	}
 }
 
-bool MainMenuState::s_menuToPlay()
+bool CMainMenuState::s_menuToPlay()
 {
 	std::cout << "Play button clicked\n";
-	Game::Instance()->GetStateManager()->ModifyState(new PlayState());
+	CGame::Instance()->GetStateManager()->ModifyState(new CPlayState());
 	return false;
 }
 
-bool MainMenuState::s_exitFromMenu()
+bool CMainMenuState::s_exitFromMenu()
 {
 	std::cout << "Exit button clicked\n";
-	Game::Instance()->Quit();
+	CGame::Instance()->Quit();
 	return false;
 }

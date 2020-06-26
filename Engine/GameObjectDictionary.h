@@ -5,49 +5,49 @@
 #include <string>
 #include <map>
 
-class CGameObject;
+class IGameObject;
 
 class IObjectFactory
 {
 public:
-	virtual CGameObject* Create() = 0;
+	virtual IGameObject* Create() = 0;
 	virtual size_t GetObjectSize() = 0;
 };
 
-class GameObjectDictionary
+class CGameObjectDictionary
 {
 private:
-	GameObjectDictionary() {};
-	static GameObjectDictionary* s_pInstance;
+	CGameObjectDictionary() {};
+	static CGameObjectDictionary* s_pInstance;
 
 public:
-	static GameObjectDictionary* Instance()
+	static CGameObjectDictionary* Instance()
 	{
 		if (s_pInstance == 0)
 		{
-			s_pInstance = new GameObjectDictionary();
+			s_pInstance = new CGameObjectDictionary();
 			return s_pInstance;
 		}
 		return s_pInstance;
 	}
 
 	bool RegisterType(std::string typeID, IObjectFactory* pCreator);
-	CGameObject* Create(std::string typeID);
+	IGameObject* Create(std::string typeID);
 private:
 	std::map<std::string, IObjectFactory*> m_creators;
 
 };
 
 template <class T>
-class GameObjectFactory : public IObjectFactory
+class CGameObjectFactory : public IObjectFactory
 {
 public:
-	GameObjectFactory(std::string pMapRef)
+	CGameObjectFactory(std::string pMapRef)
 	{
-		GameObjectDictionary::Instance()->RegisterType(pMapRef, this);
+		CGameObjectDictionary::Instance()->RegisterType(pMapRef, this);
 	}
 
-	CGameObject* Create()
+	IGameObject* Create()
 	{
 		return new T;
 	}
@@ -59,6 +59,6 @@ public:
 };
 
 #define REG_OBJ_TO_REF(mapRefName, compiledClassName) \
-	static GameObjectFactory<compiledClassName> mapRefName( #mapRefName );
+	static CGameObjectFactory<compiledClassName> mapRefName( #mapRefName );
 
 #endif

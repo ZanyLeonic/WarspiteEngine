@@ -1,9 +1,9 @@
 #include "SoundManager.h"
 
 // TODO: Clean up and refine this class - it is a mess.
-SoundManager* SoundManager::s_pInstance = 0;
+CSoundManager* CSoundManager::s_pInstance = 0;
 
-int UpdateStream(StreamingAudioData& audioData)
+int UpdateStream(SStreamingAudioData& audioData)
 {
 	ALint st;
 	alCall(alGetSourcei, audioData.Source, AL_SOURCE_STATE, &st);
@@ -92,12 +92,12 @@ int UpdateStream(StreamingAudioData& audioData)
 
 int audioStreamUpdate(void* data)
 {
-	auto* as = reinterpret_cast<StreamingAudioData*>(data);
+	auto* as = reinterpret_cast<SStreamingAudioData*>(data);
 
 	if (as->StreamCreated)
 		as->StreamCreated(as);
 
-	SoundManager::Instance()->GetStreams().push_back(as);
+	CSoundManager::Instance()->GetStreams().push_back(as);
 	
 	while (as->Finished != true)
 	{
@@ -124,7 +124,7 @@ int audioStreamUpdate(void* data)
 
 std::size_t readOggCallback(void* destination, std::size_t size1, std::size_t size2, void* fileHandle)
 {
-	StreamingAudioData* audioData = reinterpret_cast<StreamingAudioData*>(fileHandle);
+	SStreamingAudioData* audioData = reinterpret_cast<SStreamingAudioData*>(fileHandle);
 
 	ALsizei length = (ALsizei)(size1 * size2);
 
@@ -179,7 +179,7 @@ std::size_t readOggCallback(void* destination, std::size_t size1, std::size_t si
 
 std::int32_t seekOggCallback(void* fileHandle, ogg_int64_t to, std::int32_t type)
 {
-	StreamingAudioData* audioData = reinterpret_cast<StreamingAudioData*>(fileHandle);
+	SStreamingAudioData* audioData = reinterpret_cast<SStreamingAudioData*>(fileHandle);
 
 	if (type == SEEK_CUR)
 	{
@@ -212,13 +212,13 @@ std::int32_t seekOggCallback(void* fileHandle, ogg_int64_t to, std::int32_t type
 
 long int tellOggCallback(void* fileHandle)
 {
-	StreamingAudioData* audioData = reinterpret_cast<StreamingAudioData*>(fileHandle);
+	SStreamingAudioData* audioData = reinterpret_cast<SStreamingAudioData*>(fileHandle);
 	return audioData->SizeConsumed;
 }
 
 int createStreamOnThread(void* pdata)
 {
-	auto audioData = reinterpret_cast<StreamingAudioData*>(pdata);
+	auto audioData = reinterpret_cast<SStreamingAudioData*>(pdata);
 
 	// Open the audio file in a filestream
 	audioData->File.open(audioData->Filename, std::ios::binary);
@@ -416,7 +416,7 @@ bool checkALCErrors(const std::string& filename, const std::uint_fast32_t line, 
 	return true;
 }
 
-SoundManager::SoundManager()
+CSoundManager::CSoundManager()
 {
 	std::cout << "Initialising SoundManager..." << std::endl;
 
@@ -453,17 +453,17 @@ SoundManager::SoundManager()
 	std::cout << "SoundManager initialised." << std::endl;
 }
 
-SoundManager::~SoundManager()
+CSoundManager::~CSoundManager()
 {
 	// Just destroy if we are being deconstructed
 	Destroy();
 }
 
-void SoundManager::OnThink()
+void CSoundManager::OnThink()
 {
 }
 
-void SoundManager::Destroy()
+void CSoundManager::Destroy()
 {
 	std::cout << "Destroying active AudioStreams..." << std::endl;
 	for (int i=0;i < streams.size();i++)
@@ -486,7 +486,7 @@ void SoundManager::Destroy()
 	}
 }
 
-bool SoundManager::Load(const std::string& fileName, WaveFile& file)
+bool CSoundManager::Load(const std::string& fileName, SWaveFile& file)
 {
 	// The input already has been loaded! No need to load again.
 	if (file.RawData != nullptr && file.DataSize > 0) return true;
@@ -523,7 +523,7 @@ bool SoundManager::Load(const std::string& fileName, WaveFile& file)
 
 int playWav(void* data)
 {
-	WaveFile* file = reinterpret_cast<WaveFile*>(data);
+	SWaveFile* file = reinterpret_cast<SWaveFile*>(data);
 
 	// play the source
 	alSourcePlay(file->Source);
@@ -538,7 +538,7 @@ int playWav(void* data)
 	return 0;
 }
 
-void SoundManager::PlaySound(WaveFile* file)
+void CSoundManager::PlaySound(SWaveFile* file)
 {
 	// We are dealing with uninitialised data! don't play!
 	if (file->RawData == nullptr || file->DataSize == 0) return;
@@ -547,7 +547,7 @@ void SoundManager::PlaySound(WaveFile* file)
 	SDL_DetachThread(pBThread);
 }
 
-void SoundManager::StopSound(WaveFile* file)
+void CSoundManager::StopSound(SWaveFile* file)
 {
 	// We are dealing with uninitialised data! don't play!
 	if (file->RawData == nullptr || file->DataSize == 0) return;
@@ -555,14 +555,14 @@ void SoundManager::StopSound(WaveFile* file)
 	alCall(alSourceStop, file->Source);
 }
 
-void SoundManager::DeleteSound(WaveFile* file)
+void CSoundManager::DeleteSound(SWaveFile* file)
 {
 	// then free the memory that contained the wav file.
 	alCall(alDeleteSources, 1, &file->Source);
 	alCall(alDeleteBuffers, 1, &file->Buffer);
 }
 
-bool SoundManager::getAvailableDevices(std::vector<std::string>& devicesVec, ALCdevice* device)
+bool CSoundManager::getAvailableDevices(std::vector<std::string>& devicesVec, ALCdevice* device)
 {
 	const ALCchar* devices;
 	if (!alcCall(alcGetString, devices, device, nullptr, ALC_DEVICE_SPECIFIER))
@@ -581,7 +581,7 @@ bool SoundManager::getAvailableDevices(std::vector<std::string>& devicesVec, ALC
 	return true;
 }
 
-std::int32_t SoundManager::convertToInt(char* buffer, std::size_t len)
+std::int32_t CSoundManager::convertToInt(char* buffer, std::size_t len)
 {
 	std::int32_t a = 0;
 	if (endian::native == endian::little)
@@ -592,7 +592,7 @@ std::int32_t SoundManager::convertToInt(char* buffer, std::size_t len)
 	return a;
 }
 
-bool SoundManager::loadWavFileHeader(std::ifstream& file, std::uint8_t& channels, std::int32_t& sampleRate, std::uint8_t& bitsPerSample, ALsizei& size)
+bool CSoundManager::loadWavFileHeader(std::ifstream& file, std::uint8_t& channels, std::int32_t& sampleRate, std::uint8_t& bitsPerSample, ALsizei& size)
 {
 	// a method for casually reading wave file headers.
 	char buffer[4];
@@ -724,7 +724,7 @@ bool SoundManager::loadWavFileHeader(std::ifstream& file, std::uint8_t& channels
 	return true;
 }
 
-bool SoundManager::loadWav(const std::string& filename, WaveFile* wf)
+bool CSoundManager::loadWav(const std::string& filename, SWaveFile* wf)
 {
 	// Open the wave file...
 	std::ifstream in(filename, std::ios::binary);
@@ -748,7 +748,7 @@ bool SoundManager::loadWav(const std::string& filename, WaveFile* wf)
 	return true;
 }
 
-bool SoundManager::CreateStreamFromFile(const std::string& filename, StreamingAudioData& audioData)
+bool CSoundManager::CreateStreamFromFile(const std::string& filename, SStreamingAudioData& audioData)
 {
 	// Don't try to create a new stream in an already created stream
 	if (audioData.File.is_open()) return false;
@@ -768,7 +768,7 @@ bool SoundManager::CreateStreamFromFile(const std::string& filename, StreamingAu
 }
 
 // Stream playback control
-void SoundManager::PlayStream(StreamingAudioData* audioData)
+void CSoundManager::PlayStream(SStreamingAudioData* audioData)
 {
 	if (!audioData->File.is_open()) return;
 	
@@ -781,7 +781,7 @@ void SoundManager::PlayStream(StreamingAudioData* audioData)
 		audioData->PlayCallback(audioData);
 }
 
-void SoundManager::PauseStream(StreamingAudioData* audioData)
+void CSoundManager::PauseStream(SStreamingAudioData* audioData)
 {
 	ALint st;
 	alCall(alGetSourcei, audioData->Source, AL_SOURCE_STATE, &st);
@@ -795,7 +795,7 @@ void SoundManager::PauseStream(StreamingAudioData* audioData)
 		audioData->PauseCallback(audioData);
 }
 
-void SoundManager::StopStream(StreamingAudioData* audioData)
+void CSoundManager::StopStream(SStreamingAudioData* audioData)
 {
 	ALint st;
 	alCall(alGetSourcei, audioData->Source, AL_SOURCE_STATE, &st);

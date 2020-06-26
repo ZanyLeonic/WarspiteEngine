@@ -16,7 +16,7 @@
 #define alCall(function, ...) alCallImpl(__FILE__, __LINE__, function, __VA_ARGS__)
 #define alcCall(function, device, ...) alcCallImpl(__FILE__, __LINE__, function, device, __VA_ARGS__)
 
-enum class SoundType
+enum class ESoundType
 {
 	SOUND_MUSIC = 0,
 	SOUND_SFX = 1
@@ -36,7 +36,7 @@ enum class endian
 #endif
 };
 
-struct WaveFile
+struct SWaveFile
 {
 	ALuint			Buffer;
 	std::uint8_t	BitRate = 0;
@@ -74,7 +74,7 @@ struct WaveFile
 const std::size_t NUM_BUFFERS = 4;
 const ALsizei BUFFER_SIZE = 65536;
 
-struct StreamingAudioData
+struct SStreamingAudioData
 {
 	ALuint Buffers[NUM_BUFFERS];
 	std::string Filename;
@@ -92,14 +92,14 @@ struct StreamingAudioData
 	std::size_t Duration;
 
 	// Callbacks
-	std::function<void(StreamingAudioData*)> StreamCreated;
-	std::function<void(StreamingAudioData*)> UpdateCallback;
+	std::function<void(SStreamingAudioData*)> StreamCreated;
+	std::function<void(SStreamingAudioData*)> UpdateCallback;
 	
-	std::function<void(StreamingAudioData*)> PlayCallback;
-	std::function<void(StreamingAudioData*)> PauseCallback;
-	std::function<void(StreamingAudioData*)> StopCallback;
+	std::function<void(SStreamingAudioData*)> PlayCallback;
+	std::function<void(SStreamingAudioData*)> PauseCallback;
+	std::function<void(SStreamingAudioData*)> StopCallback;
 	
-	bool operator==(const StreamingAudioData s1)
+	bool operator==(const SStreamingAudioData s1)
 	{
 		// Compare some of the fields - may need to change to include more in the future.
 		// TODO
@@ -166,24 +166,24 @@ auto alcCallImpl(const char* filename,
 bool checkALErrors(const std::string& filename, const std::uint_fast32_t line);
 bool checkALCErrors(const std::string& filename, const std::uint_fast32_t line, ALCdevice* device);
 
-class SoundManager
+class CSoundManager
 {
 private:
 	// Singleton stuff
-	static SoundManager* s_pInstance;
+	static CSoundManager* s_pInstance;
 
-	SoundManager();
-	~SoundManager();
+	CSoundManager();
+	~CSoundManager();
 
-	SoundManager(const SoundManager&);
+	CSoundManager(const CSoundManager&);
 
 public:
 	// more singleton stuff
-	static SoundManager* Instance()
+	static CSoundManager* Instance()
 	{
 		if (s_pInstance == 0)
 		{
-			s_pInstance = new SoundManager();
+			s_pInstance = new CSoundManager();
 		}
 
 		return s_pInstance;
@@ -193,12 +193,12 @@ public:
 	void Destroy();
 
 	// Wave methods
-	bool Load(const std::string& fileName, WaveFile& file);
+	bool Load(const std::string& fileName, SWaveFile& file);
 
-	static void PlaySound(WaveFile* file);
-	static void StopSound(WaveFile* file);
+	static void PlaySound(SWaveFile* file);
+	static void StopSound(SWaveFile* file);
 	
-	static void DeleteSound(WaveFile* file);
+	static void DeleteSound(SWaveFile* file);
 
 private:
 	// Utility for loading WAVE files
@@ -210,30 +210,30 @@ private:
 		std::uint8_t& bitsPerSample,
 		ALsizei& size);
 
-	bool loadWav(const std::string& filename, WaveFile* wf);
+	bool loadWav(const std::string& filename, SWaveFile* wf);
 
 	bool getAvailableDevices(std::vector<std::string>& devicesVec, ALCdevice* device);
 
 public:
 	// Ogg Implementation
-	bool CreateStreamFromFile(const std::string& filename, StreamingAudioData& audioData);
+	bool CreateStreamFromFile(const std::string& filename, SStreamingAudioData& audioData);
 	
-	void PlayStream(StreamingAudioData* audioData);
-	void PauseStream(StreamingAudioData* audioData);
+	void PlayStream(SStreamingAudioData* audioData);
+	void PauseStream(SStreamingAudioData* audioData);
 
-	void StopStream(StreamingAudioData* audioData);
+	void StopStream(SStreamingAudioData* audioData);
 
 private:
 	// Variables
 	ALCdevice* openALDevice = 0;
 	ALCcontext* openALContext = 0;
 
-	std::vector<StreamingAudioData*> streams;
+	std::vector<SStreamingAudioData*> streams;
 
 	std::vector<std::string> devices;
 
 public:
-	std::vector<StreamingAudioData*> GetStreams() const { return streams; };
+	std::vector<SStreamingAudioData*> GetStreams() const { return streams; };
 };
 
 #endif

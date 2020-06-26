@@ -5,8 +5,8 @@
 #include "GameStateBase.h"
 #include "Level.h"
 
-class PlayState :
-	public GameStateBase
+class CPlayState :
+	public CGameStateBase
 {
 public:
 	virtual bool OnPlay();
@@ -15,12 +15,12 @@ public:
 	virtual bool OnEnd();
 
 	virtual std::string GetStateID() const { return s_playID; }
-	virtual Level* GetLoadedLevel() const { return pLevel; }
+	virtual CLevel* GetLoadedLevel() const { return pLevel; }
 
 private:
 	static const std::string s_playID;
-	Level* pLevel;
+	CLevel* pLevel;
 
-	Vector2D m_screenSize;
+	CVector2D m_screenSize;
 };
 #endif

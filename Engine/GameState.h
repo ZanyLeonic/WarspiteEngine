@@ -4,7 +4,7 @@
 
 #include <string>
 
-class GameState
+class CGameState
 {
 public:
 	virtual void OnThink() = 0;

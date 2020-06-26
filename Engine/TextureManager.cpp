@@ -1,9 +1,9 @@
 #include "TextureManager.h"
 #include <SDL2/SDL_image.h>
 
-TextureManager* TextureManager::s_pInstance = 0;
+CTextureManager* CTextureManager::s_pInstance = 0;
 
-bool TextureManager::Load(std::string fileName, std::string id, 
+bool CTextureManager::Load(std::string fileName, std::string id, 
 	SDL_Renderer* pRenderer)
 {
 	SDL_Surface* pTempSurface = IMG_Load(fileName.c_str());
@@ -29,7 +29,7 @@ bool TextureManager::Load(std::string fileName, std::string id,
 	return false;
 }
 
-void TextureManager::CreateCheckboardPattern(Vector2D size, std::string texName, SDL_Renderer* pRenderer)
+void CTextureManager::CreateCheckboardPattern(CVector2D size, std::string texName, SDL_Renderer* pRenderer)
 {
 	const int cSize = 32;
 	
@@ -86,7 +86,7 @@ void TextureManager::CreateCheckboardPattern(Vector2D size, std::string texName,
 	SDL_RenderPresent(pRenderer);
 }
 
-void TextureManager::Draw(std::string id, int x, int y, 
+void CTextureManager::Draw(std::string id, int x, int y, 
 	int width, int height, SDL_Renderer* pRenderer, 
 	SDL_RendererFlip flip)
 {
@@ -107,7 +107,7 @@ void TextureManager::Draw(std::string id, int x, int y,
 		&destRect, 0, 0, flip);
 }
 
-void TextureManager::DrawFrame(std::string id, int x, int y, 
+void CTextureManager::DrawFrame(std::string id, int x, int y, 
 	int width, int height, int currentRow, int currentFrame, 
 	SDL_Renderer* pRenderer, SDL_RendererFlip flip)
 {
@@ -127,7 +127,7 @@ void TextureManager::DrawFrame(std::string id, int x, int y,
 		&srcRect, &destRect, 0, 0, flip);
 }
 
-void TextureManager::DrawTile(std::string id, int margin, int spacing, 
+void CTextureManager::DrawTile(std::string id, int margin, int spacing, 
 	int x, int y, int width, int height, int currentRow, 
 	int currentFrame, SDL_Renderer* pRenderer)
 {
@@ -148,7 +148,7 @@ void TextureManager::DrawTile(std::string id, int margin, int spacing,
 		&srcRect, &destRect, 0, 0, SDL_FLIP_NONE);
 }
 
-void TextureManager::Remove(std::string id)
+void CTextureManager::Remove(std::string id)
 {
 	SDL_DestroyTexture(m_textureMap[id]);
 	m_textureMap.erase(id);
