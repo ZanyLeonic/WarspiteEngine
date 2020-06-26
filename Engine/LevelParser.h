@@ -5,6 +5,7 @@
 
 #include <rapidjson/document.h>
 #include <vector>
+#include <string>
 
 class Level;
 struct Tileset;
