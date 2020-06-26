@@ -1,22 +1,21 @@
 #pragma once
-#pragma once
 #ifndef __Player__
 #define __Player__
 
-#include "SDLGameObject.h"
+#include "WarspiteObject.h"
 #include "InputHandler.h"
-#include "Vector2D.h"
-#include "BaseCreator.h"
-#include <string.h>
 
-class Player : public SDLGameObject
+class CPlayer : public CWarspiteObject
 {
 public:
-	Player();
+	CPlayer();
 
-	void Load(const ObjectParams* pParams);
+	void OnPlay();
+
+	void Load(const CObjectParams* pParams);
 
 	bool OnThink();
+	void Draw();
 
 	void KeyDown();
 	void KeyUp();
@@ -24,26 +23,32 @@ public:
 private:
 	void HandleInput();
 
-	bool IsPositionFree(Vector2D* pNext);
+	void MoveForward(float axis);
+	void MoveRight(float axis);
+	
+	bool IsPositionFree(CVector2D* pNext);
 
-	Vector2D lastPosition;
-	Vector2D nextPosition;
+	void DecideFrame();
+
+	std::vector<std::vector<IGameObject*>*> m_objects;
+
+	CVector2D lastPosition;
+	CVector2D nextPosition;
 
 	bool moving = false;
 
 	bool moveUp = false;
 	bool moveRight = false;
 
-	float timeLeft = 100;
-	const int moveStep = 20;
+	bool m_stepLastFrame = false;
+
+	float m_timeLeft = 100;
+	const int m_moveStep = 32;
+
+	int m_frameOffset = 0;
+
+	CVector2D m_CamOffset;
 };
 
-class PlayerCreator : public BaseCreator
-{
-	GameObject* CreateGameObject() const
-	{
-		return new Player();
-	}
-};
-
+REG_OBJ_TO_REF( Player, CPlayer ) ;
 #endif /* defined(__Player__) */

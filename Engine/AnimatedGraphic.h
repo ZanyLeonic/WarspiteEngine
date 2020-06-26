@@ -2,14 +2,14 @@
 #ifndef __AnimatedGraphic_H__
 #define __AnimatedGraphic_H__
 
-#include "SDLGameObject.h"
+#include "WarspiteObject.h"
 
-class AnimatedGraphic : public SDLGameObject
+class CAnimatedGraphic : public CWarspiteObject
 {
 public:
-	AnimatedGraphic() {};
+	CAnimatedGraphic() {};
 
-	virtual void Load(const ObjectParams* pParams);
+	virtual void Load(const CObjectParams* pParams);
 	virtual bool OnThink();
 
 protected:

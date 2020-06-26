@@ -4,7 +4,7 @@
 
 #include <string>
 
-class GameState
+class CGameState
 {
 public:
 	virtual void OnThink() = 0;
@@ -14,7 +14,5 @@ public:
 	virtual bool OnEnd() = 0;
 
 	virtual std::string GetStateID() const = 0;
-
 };
-
 #endif

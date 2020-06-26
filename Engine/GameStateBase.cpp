@@ -1,7 +1,8 @@
 #include "GameStateBase.h"
 #include "Game.h"
+#include "TextureManager.h"
 
-bool GameStateBase::OnPlay()
+bool CGameStateBase::OnPlay()
 {
 	m_shouldTick = true;
 	m_shouldDraw = true;
@@ -9,7 +10,7 @@ bool GameStateBase::OnPlay()
 	return true;
 }
 
-bool GameStateBase::OnEnd()
+bool CGameStateBase::OnEnd()
 {
 	// Stop accessing pointers that are about to be destroyed!
 	m_shouldTick = false;
@@ -23,7 +24,7 @@ bool GameStateBase::OnEnd()
 
 	for (int i = 0; i < m_TextureIDList.size(); i++)
 	{
-		TextureManager::Instance()->Remove(m_TextureIDList[i]);
+		CTextureManager::Instance()->Remove(m_TextureIDList[i]);
 	}
 
 	m_GameObjects.clear();
@@ -32,7 +33,7 @@ bool GameStateBase::OnEnd()
 	return true;
 }
 
-void GameStateBase::OnThink()
+void CGameStateBase::OnThink()
 {
 	if (!m_shouldTick) return;
 	for (int i = 0; i < m_GameObjects.size(); i++)
@@ -41,7 +42,7 @@ void GameStateBase::OnThink()
 	}
 }
 
-void GameStateBase::Draw()
+void CGameStateBase::Draw()
 {
 	if (!m_shouldDraw) return;
 

@@ -2,13 +2,13 @@
 #ifndef __InputHandler__
 #define __InputHandler__
 
-#include <SDL.h>
+#include <SDL2/SDL.h>
 #include <vector>
 #include <map>
 #include <functional>
 #include "Vector2D.h"
 
-enum MouseButtons
+enum EMouseButtons
 {
 	LEFT = 0,
 	MIDDLE = 1,
@@ -17,14 +17,14 @@ enum MouseButtons
 
 typedef std::function<void()> KeyCallback;
 
-class InputHandler
+class CInputHandler
 {
 public:
-	static InputHandler* Instance()
+	static CInputHandler* Instance()
 	{
 		if (s_pInstance == 0)
 		{
-			s_pInstance = new InputHandler();
+			s_pInstance = new CInputHandler();
 		}
 
 		return s_pInstance;
@@ -48,14 +48,13 @@ public:
 	bool IsKeyDown(SDL_Scancode key);
 	void SetReleaseState(SDL_Scancode key, bool state);
 
-	Vector2D* GetMousePosition()
+	CVector2D* GetMousePosition()
 	{
 		return m_mousePosition;
 	}
-
+	
 private:
-
-	InputHandler();
+	CInputHandler();
 
 	// private functions to handle the different event types
 
@@ -78,7 +77,7 @@ private:
 	std::vector<SDL_Joystick*> m_joysticks;
 	bool m_bJoysticksInitialised;
 
-	std::vector<std::pair<Vector2D*, Vector2D*>> m_joystickValues;
+	std::vector<std::pair<CVector2D*, CVector2D*>> m_joystickValues;
 	std::vector<std::vector<bool>> m_buttonStates;
 
 	std::map<SDL_Scancode, KeyCallback> m_keyDownCallbacks;
@@ -90,12 +89,11 @@ private:
 
 	const int m_joystickDeadZone = 10000;
 	
-	Vector2D* m_mousePosition = new Vector2D(0,0);
+	CVector2D* m_mousePosition = new CVector2D(0,0);
 
 	Uint8* m_keystates = 0;
 
-	static InputHandler* s_pInstance;
+	static CInputHandler* s_pInstance;
 };
-typedef InputHandler TheInputHandler;
 
 #endif /* defined(__InputHandler__) */

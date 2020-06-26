@@ -5,7 +5,8 @@
 
 trigger:
 - master
-- last-iteration
+- develop
+- ldevelop
 
 jobs:
 - job: Windows
@@ -14,9 +15,9 @@ jobs:
   steps:
   - task: Cache@2
     inputs:
-      key: 'v2 | vcpkg | "$(Agent.OS)" | "C:\vcpkg\.git\HEAD"'
+      key: 'v6 | vcpkg | "$(Agent.OS)" | "C:\vcpkg\.git\HEAD"'
       restoreKeys: |
-        v2 | vcpkg | "$(Agent.OS)"
+        v6 | vcpkg | "$(Agent.OS)"
         vcpkg | "$(Agent.OS)"
         vcpkg
       path: 'C:\vcpkg\'
@@ -30,17 +31,15 @@ jobs:
       script: |
         cd %VCPKG_INSTALLATION_ROOT%
         bootstrap-vcpkg.bat -disableMetrics
-        
-  - script: C:\vcpkg\vcpkg.exe install sdl2 sdl2-image rapidjson --triplet x64-windows
+  - script: C:\vcpkg\vcpkg.exe install sdl2 sdl2-image[libjpeg-turbo,libwebp,tiff] sdl2-ttf libvorbis openal-soft rapidjson zlib --triplet x64-windows
     condition: ne(variables.VCPKG_CACHE_RESTORED, 'true')
-    displayName: "Installing SDL2 and SDL2-image"
-
+    displayName: "Installing dependencies"
   - script: mkdir build
     displayName: "Making build folder"
   - task: CMake@1
     displayName: "Generating build files"
     inputs:
-        cmakeArgs: '-DCMAKE_TOOLCHAIN_FILE=C:\vcpkg\scripts\buildsystems\vcpkg.cmake -DCMAKE_BUILD_TYPE="Debug" -DVCPKG_TARGET_TRIPLET=x64-windows -DCMAKE_INSTALL_PREFIX=$(System.DefaultWorkingDirectory) ..'
+        cmakeArgs: '-DCMAKE_TOOLCHAIN_FILE=C:\vcpkg\scripts\buildsystems\vcpkg.cmake -DVCPKG_TARGET_TRIPLET=x64-windows -DCMAKE_INSTALL_PREFIX=$(Build.ArtifactStagingDirectory) ..'
   - task: PythonScript@0
     displayName: "Generating build metadata"
     inputs:
@@ -53,11 +52,11 @@ jobs:
       msbuildArchitecture: 'x64'
       platform: 'x64'
       configuration: 'Debug'
+      maximumCpuCount: true
       createLogFile: true
-
   - task: PublishBuildArtifacts@1
     displayName: "Publishing build artifacts"
     inputs:
-      PathtoPublish: '$(System.DefaultWorkingDirectory)/Warspite/'
+      PathtoPublish: '$(Build.ArtifactStagingDirectory)'
       ArtifactName: 'drop'
       publishLocation: 'Container'

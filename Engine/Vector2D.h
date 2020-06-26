@@ -3,11 +3,11 @@
 #define __Vector2D__
 
 #include <cmath>
-class Vector2D
+class CVector2D
 {
 public:
-	Vector2D() : m_x(0), m_y(0) {}
-	Vector2D(float x, float y) : m_x(x), m_y(y) {}
+	CVector2D() : m_x(0), m_y(0) {}
+	CVector2D(float x, float y) : m_x(x), m_y(y) {}
 
 	// Returns the X value of the vector
 	float GetX() { return m_x; }
@@ -37,12 +37,17 @@ private:
 public:
 	// Implement support for various common operators.
 
-	Vector2D operator+(const Vector2D& v2) const
+	CVector2D operator+(const CVector2D& v2) const
 	{
-		return Vector2D(m_x + v2.m_x, m_y + v2.m_y);
+		return CVector2D(m_x + v2.m_x, m_y + v2.m_y);
 	}
 
-	friend Vector2D& operator+=(Vector2D& v1, const Vector2D& v2)
+	CVector2D operator+(float i) const
+	{
+		return CVector2D(m_x + i, m_y + i);
+	}
+
+	friend CVector2D& operator+=(CVector2D& v1, const CVector2D& v2)
 	{
 		v1.m_x += v2.m_x;
 		v1.m_y += v2.m_y;
@@ -50,12 +55,12 @@ public:
 		return v1;
 	}
 
-	Vector2D operator*(float scalar)
+	CVector2D operator*(float scalar)
 	{
-		return Vector2D(m_x * scalar, m_y * scalar);
+		return CVector2D(m_x * scalar, m_y * scalar);
 	}
 
-	Vector2D& operator*=(float scalar)
+	CVector2D& operator*=(float scalar)
 	{
 		m_x *= scalar;
 		m_y *= scalar;
@@ -63,12 +68,17 @@ public:
 		return *this;
 	}
 
-	Vector2D operator-(const Vector2D& v2) const
+	CVector2D operator-(const CVector2D& v2) const
 	{
-		return Vector2D(m_x - v2.m_x, m_y - v2.m_y);
+		return CVector2D(m_x - v2.m_x, m_y - v2.m_y);
 	}
 
-	friend Vector2D& operator-=(Vector2D& v1, const Vector2D& v2)
+	CVector2D operator-(float i) const
+	{
+		return CVector2D(m_x - i, m_y - i);
+	}
+
+	friend CVector2D& operator-=(CVector2D& v1, const CVector2D& v2)
 	{
 		v1.m_x -= v2.m_x;
 		v1.m_y -= v2.m_y;
@@ -76,12 +86,12 @@ public:
 		return v1;
 	}
 
-	Vector2D operator/(float scalar)
+	CVector2D operator/(float scalar)
 	{
-		return Vector2D(m_x / scalar, m_y / scalar);
+		return CVector2D(m_x / scalar, m_y / scalar);
 	}
 
-	Vector2D& operator/=(float scalar)
+	CVector2D& operator/=(float scalar)
 	{
 		m_x /= scalar;
 		m_y /= scalar;
@@ -89,9 +99,14 @@ public:
 		return *this;
 	}
 
-	bool operator==(Vector2D& b)
+	bool operator==(CVector2D& b)
 	{
 		return (m_x == b.m_x) && (m_y == b.m_y);
+	}
+
+	bool operator!=(CVector2D& b)
+	{
+		return (m_x != b.m_x) && (m_y != b.m_y);
 	}
 };
 
@@ -99,9 +114,9 @@ class VectorMath
 {
 public:
 	// Linear interpolates between two points (v1 and v2) by the value of t [0-1]
-	inline static Vector2D Lerp(Vector2D v1, Vector2D v2, float t)
+	inline static CVector2D Lerp(CVector2D v1, CVector2D v2, float t)
 	{
-		return Vector2D(
+		return CVector2D(
 			(1 - t) * v1.GetX() + t * v2.GetX(), // X
 			(1 - t) * v1.GetY() + t * v2.GetY()  // Y
 		);

@@ -3,18 +3,16 @@
 #define __BUTTON_H__
 
 #include <functional>
-#include "SDLGameObject.h"
-#include "BaseCreator.h"
+#include "WarspiteObject.h"
 
-class Button : public SDLGameObject
+class CButton : public CWarspiteObject
 {
 protected:
 	typedef std::function<bool()> ButtonCallback;
 public:
+	CButton();
 
-	Button();
-
-	virtual void Load(const ObjectParams* pParams);
+	virtual void Load(const CObjectParams* pParams);
 
 	virtual void Draw();
 	virtual bool OnThink();
@@ -54,14 +52,9 @@ private:
 	int m_onClickID = 0;
 	int m_onEnterID = 0;
 	int m_onLeaveID = 0;
+	
 };
 
-class ButtonCreator : public BaseCreator
-{
-	GameObject* CreateGameObject() const
-	{
-		return new Button();
-	}
-};
+REG_OBJ_TO_REF(Button, CButton);
 
 #endif

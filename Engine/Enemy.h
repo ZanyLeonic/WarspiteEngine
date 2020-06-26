@@ -2,15 +2,13 @@
 #ifndef __Enemy__
 #define __Enemy__
 
-#include "SDLGameObject.h"
+#include "WarspiteObject.h"
 
-class Enemy : public SDLGameObject
+class CEnemy : public CWarspiteObject
 {
 public:
-	Enemy();
+	CEnemy();
 
 	bool OnThink();
-
 };
-
 #endif /* defined(__Enemy__) */

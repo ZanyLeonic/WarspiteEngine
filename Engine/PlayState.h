@@ -3,16 +3,24 @@
 #define __PLAYSTATE_H__
 
 #include "GameStateBase.h"
-class PlayState :
-	public GameStateBase
+#include "Level.h"
+
+class CPlayState :
+	public CGameStateBase
 {
 public:
 	virtual bool OnPlay();
+	virtual void Draw();
+	virtual void OnThink();
 	virtual bool OnEnd();
 
 	virtual std::string GetStateID() const { return s_playID; }
+	virtual CLevel* GetLoadedLevel() const { return pLevel; }
 
 private:
 	static const std::string s_playID;
+	CLevel* pLevel;
+
+	CVector2D m_screenSize;
 };
 #endif

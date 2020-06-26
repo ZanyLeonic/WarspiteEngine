@@ -2,9 +2,9 @@
 #include <iostream>
 #include "Game.h"
 
-InputHandler* InputHandler::s_pInstance = 0;
+CInputHandler* CInputHandler::s_pInstance = 0;
 
-InputHandler::InputHandler()
+CInputHandler::CInputHandler()
 {
 	m_bJoysticksInitialised = false;
 
@@ -14,7 +14,7 @@ InputHandler::InputHandler()
 	}
 }
 
-void InputHandler::OnThink()
+void CInputHandler::OnThink()
 {
 	SDL_Event e;
 	
@@ -24,7 +24,7 @@ void InputHandler::OnThink()
 		switch (e.type)
 		{
 			case SDL_QUIT:
-				Game::Instance()->Quit();
+				CGame::Instance()->Quit();
 				break;
 
 			case SDL_JOYAXISMOTION:
@@ -65,7 +65,7 @@ void InputHandler::OnThink()
 	}
 }
 
-void InputHandler::Destroy()
+void CInputHandler::Destroy()
 {
 	if (m_bJoysticksInitialised)
 	{
@@ -76,7 +76,7 @@ void InputHandler::Destroy()
 	}
 }
 
-void InputHandler::InitialiseJoysticks()
+void CInputHandler::InitialiseJoysticks()
 {
 	if (SDL_WasInit(SDL_INIT_JOYSTICK) == 0)
 	{
@@ -93,7 +93,7 @@ void InputHandler::InitialiseJoysticks()
 			{
 				m_joysticks.push_back(joy);
 				m_joystickValues.push_back(std::make_pair(new
-					Vector2D(0, 0), new Vector2D(0, 0)));
+					CVector2D(0, 0), new CVector2D(0, 0)));
 
 				std::vector<bool> tempButtons;
 
@@ -121,7 +121,7 @@ void InputHandler::InitialiseJoysticks()
 	}
 }
 
-float InputHandler::GetXAxis(int joy, int stick)
+float CInputHandler::GetXAxis(int joy, int stick)
 {
 	if (m_joystickValues.size() > 0) {
 		if (stick == 1)
@@ -136,7 +136,7 @@ float InputHandler::GetXAxis(int joy, int stick)
 	return 0;
 }
 
-float InputHandler::GetYAxis(int joy, int stick)
+float CInputHandler::GetYAxis(int joy, int stick)
 {
 	if (m_joystickValues.size() > 0)
 	{
@@ -152,7 +152,7 @@ float InputHandler::GetYAxis(int joy, int stick)
 	return 0;
 }
 
-void InputHandler::AddActionKeyDown(SDL_Scancode key, KeyCallback callBack)
+void CInputHandler::AddActionKeyDown(SDL_Scancode key, KeyCallback callBack)
 {
 	if (!m_keyReleased[key])
 	{
@@ -161,7 +161,7 @@ void InputHandler::AddActionKeyDown(SDL_Scancode key, KeyCallback callBack)
 	m_keyDownCallbacks[key] = callBack;
 }
 
-void InputHandler::AddActionKeyUp(SDL_Scancode key, KeyCallback callBack)
+void CInputHandler::AddActionKeyUp(SDL_Scancode key, KeyCallback callBack)
 {
 	if (!m_keyReleased[key])
 	{
@@ -170,7 +170,7 @@ void InputHandler::AddActionKeyUp(SDL_Scancode key, KeyCallback callBack)
 	m_keyUpCallbacks[key] = callBack;
 }
 
-bool InputHandler::IsKeyDown(SDL_Scancode key)
+bool CInputHandler::IsKeyDown(SDL_Scancode key)
 {
 	if (m_keystates != 0)
 	{
@@ -187,12 +187,12 @@ bool InputHandler::IsKeyDown(SDL_Scancode key)
 	return false;
 }
 
-void InputHandler::SetReleaseState(SDL_Scancode key, bool state)
+void CInputHandler::SetReleaseState(SDL_Scancode key, bool state)
 {
 	m_keyReleased[key] = state;
 }
 
-void InputHandler::onKeyDown()
+void CInputHandler::onKeyDown()
 {
 	m_keystates = (Uint8*)SDL_GetKeyboardState(0);
 
@@ -212,7 +212,7 @@ void InputHandler::onKeyDown()
 	}
 }
 
-void InputHandler::onKeyUp()
+void CInputHandler::onKeyUp()
 {
 	m_keystates = (Uint8*)SDL_GetKeyboardState(0);
 
@@ -232,13 +232,13 @@ void InputHandler::onKeyUp()
 	}
 }
 
-void InputHandler::onMouseMove(SDL_Event& event)
+void CInputHandler::onMouseMove(SDL_Event& event)
 {
 	m_mousePosition->SetX((float)event.motion.x);
 	m_mousePosition->SetY((float)event.motion.y);
 }
 
-void InputHandler::onMouseButtonDown(SDL_Event& event)
+void CInputHandler::onMouseButtonDown(SDL_Event& event)
 {
 	if (event.button.button == SDL_BUTTON_LEFT)
 	{
@@ -256,7 +256,7 @@ void InputHandler::onMouseButtonDown(SDL_Event& event)
 	}
 }
 
-void InputHandler::onMouseButtonUp(SDL_Event& event)
+void CInputHandler::onMouseButtonUp(SDL_Event& event)
 {
 	if (event.button.button == SDL_BUTTON_LEFT)
 	{
@@ -274,7 +274,7 @@ void InputHandler::onMouseButtonUp(SDL_Event& event)
 	}
 }
 
-void InputHandler::onJoystickAxisMove(SDL_Event& event)
+void CInputHandler::onJoystickAxisMove(SDL_Event& event)
 {
 	int whichOne = event.jaxis.which;
 
@@ -346,21 +346,21 @@ void InputHandler::onJoystickAxisMove(SDL_Event& event)
 	}
 }
 
-void InputHandler::onJoystickButtonDown(SDL_Event& event)
+void CInputHandler::onJoystickButtonDown(SDL_Event& event)
 {
 	int whichOne = event.jaxis.which;
 
 	m_buttonStates[whichOne][event.jbutton.button] = true;
 }
 
-void InputHandler::onJoystickButtonUp(SDL_Event& event)
+void CInputHandler::onJoystickButtonUp(SDL_Event& event)
 {
 	int whichOne = event.jaxis.which;
 
 	m_buttonStates[whichOne][event.jbutton.button] = false;
 }
 
-void InputHandler::keyDownTest()
+void CInputHandler::keyDownTest()
 {
 	std::cout << "Key has been pressed down!";
 }

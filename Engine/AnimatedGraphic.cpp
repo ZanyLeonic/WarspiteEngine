@@ -1,16 +1,17 @@
 #include "AnimatedGraphic.h"
+#include <SDL.h>
 
-void AnimatedGraphic::Load(const ObjectParams* pParams)
+void CAnimatedGraphic::Load(const CObjectParams* pParams)
 {
-	SDLGameObject::Load(pParams);
+	CWarspiteObject::Load(pParams);
 
 	m_animSpeed = pParams->GetAnimSpeed();
 }
 
-bool AnimatedGraphic::OnThink()
+bool CAnimatedGraphic::OnThink()
 {
 	m_currentFrame = int(((SDL_GetTicks() / (1000 / m_animSpeed)) % m_numFrames));
-	SDLGameObject::OnThink();
+	CWarspiteObject::OnThink();
 	
 	return true;
 }

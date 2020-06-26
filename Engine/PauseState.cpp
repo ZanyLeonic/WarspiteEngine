@@ -3,13 +3,13 @@
 #include "PauseState.h"
 #include "StateParser.h"
 
-const std::string PauseState::s_UIID = "PauseMenu";
+const std::string CPauseState::s_UIID = "PauseMenu";
 
-bool PauseState::OnPlay()
+bool CPauseState::OnPlay()
 {
-	GameStateBase::OnPlay();
+	CGameStateBase::OnPlay();
 
-	StateParser sp;
+	CStateParser sp;
 	sp.ParseState("assets/states/SystemMenus.json", s_UIID, &m_GameObjects, &m_TextureIDList);
 
 	m_callbacks.push_back(0);
@@ -21,21 +21,21 @@ bool PauseState::OnPlay()
 	return true;
 }
 
-bool PauseState::OnEnd()
+bool CPauseState::OnEnd()
 {
-	return GameStateBase::OnEnd();
+	return CGameStateBase::OnEnd();
 }
 
-void PauseState::SetCallbacks(const std::vector<ButtonCallback>& callbacks)
+void CPauseState::SetCallbacks(const std::vector<HButtonCallback>& callbacks)
 {
 	// MenuState::SetCallbacks(callbacks);
 
 	for (int i = 0; i < m_GameObjects.size(); i++)
 	{
-		if (dynamic_cast<Button*>(m_GameObjects[i]))
+		if (dynamic_cast<CButton*>(m_GameObjects[i]))
 		{
-			Button* pButton =
-				dynamic_cast<Button*>(m_GameObjects[i]);
+			CButton* pButton =
+				dynamic_cast<CButton*>(m_GameObjects[i]);
 
 			pButton->OnClick(callbacks[pButton->GetOnClickID()]);
 			pButton->OnEnter(callbacks[pButton->GetOnEnterID()]);
@@ -45,17 +45,16 @@ void PauseState::SetCallbacks(const std::vector<ButtonCallback>& callbacks)
 }
 
 
-bool PauseState::s_continueGame()
+bool CPauseState::s_continueGame()
 {
-	InputHandler::Instance()->SetReleaseState(SDL_SCANCODE_ESCAPE, true);
-	Game::Instance()->GetStateManager()->PopState();
+	CGame::Instance()->GetStateManager()->PopState();
 
 	return false;
 }
 
-bool PauseState::s_exitToMenu()
+bool CPauseState::s_exitToMenu()
 {
-	Game::Instance()->GetStateManager()->ModifyState(new MainMenuState());
+	CGame::Instance()->GetStateManager()->ModifyState(new CMainMenuState());
 
 	return false;
 }
