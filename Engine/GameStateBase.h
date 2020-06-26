@@ -15,7 +15,7 @@ public:
 	virtual bool OnPlay();
 	virtual bool OnEnd();
 
-	virtual inline std::vector<GameObject*> GetGameObjects()
+	virtual inline std::vector<CGameObject*> GetGameObjects()
 	{
 		return m_GameObjects;
 	}
@@ -29,7 +29,7 @@ public:
 		return m_shouldDraw;
 	};
 protected:
-	std::vector<GameObject*> m_GameObjects;
+	std::vector<CGameObject*> m_GameObjects;
 	std::vector<std::string> m_TextureIDList;
 
 	bool m_shouldTick = false;

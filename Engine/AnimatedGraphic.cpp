@@ -1,8 +1,9 @@
 #include "AnimatedGraphic.h"
+#include <SDL.h>
 
 void AnimatedGraphic::Load(const ObjectParams* pParams)
 {
-	WarspiteObject::Load(pParams);
+	CWarspiteObject::Load(pParams);
 
 	m_animSpeed = pParams->GetAnimSpeed();
 }
@@ -10,7 +11,7 @@ void AnimatedGraphic::Load(const ObjectParams* pParams)
 bool AnimatedGraphic::OnThink()
 {
 	m_currentFrame = int(((SDL_GetTicks() / (1000 / m_animSpeed)) % m_numFrames));
-	WarspiteObject::OnThink();
+	CWarspiteObject::OnThink();
 	
 	return true;
 }

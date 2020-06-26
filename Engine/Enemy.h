@@ -4,10 +4,10 @@
 
 #include "WarspiteObject.h"
 
-class Enemy : public WarspiteObject
+class CEnemy : public CWarspiteObject
 {
 public:
-	Enemy();
+	CEnemy();
 
 	bool OnThink();
 };

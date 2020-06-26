@@ -5,14 +5,14 @@
 #include "MapObject.h"
 #include "GameObjectDictionary.h"
 
-class TestObject :
-	public MapObject
+class CTestObject :
+	public CMapObject
 {
 public:
-	TestObject();
+	CTestObject();
 	void collide();
 };
 
-REG_OBJ_TO_REF(TestObject, TestObject);
+REG_OBJ_TO_REF(TestObject, CTestObject);
 
 #endif

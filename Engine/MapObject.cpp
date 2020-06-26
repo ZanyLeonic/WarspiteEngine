@@ -3,12 +3,12 @@
 #include "TextureManager.h"
 #include "Game.h"
 
-MapObject::MapObject()
-	: WarspiteObject()
+CMapObject::CMapObject()
+	: CWarspiteObject()
 {
 }
 
-void MapObject::Draw()
+void CMapObject::Draw()
 {
 	// Get the camera position to offset the drawing
 	Vector2D cPos = Camera::Instance()->GetPositionT();

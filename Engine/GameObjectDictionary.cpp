@@ -11,7 +11,7 @@ bool GameObjectDictionary::RegisterType(std::string typeID, IObjectFactory* pCre
 	// Delete if it already exists in the creator map.
 	if (it != m_creators.end())
 	{
-		delete pCreator;
+		// delete pCreator;
 		return false;
 	}
 	m_creators[typeID] = pCreator;
@@ -19,7 +19,7 @@ bool GameObjectDictionary::RegisterType(std::string typeID, IObjectFactory* pCre
 	return true;
 }
 
-GameObject* GameObjectDictionary::Create(std::string typeID)
+CGameObject* GameObjectDictionary::Create(std::string typeID)
 {
 	auto it = m_creators.find(typeID);
 

@@ -6,12 +6,12 @@
 #include "WarspiteObject.h"
 #include "GameObjectDictionary.h"
 
-class Button : public WarspiteObject
+class CButton : public CWarspiteObject
 {
 protected:
 	typedef std::function<bool()> ButtonCallback;
 public:
-	Button();
+	CButton();
 
 	virtual void Load(const ObjectParams* pParams);
 
@@ -53,8 +53,9 @@ private:
 	int m_onClickID = 0;
 	int m_onEnterID = 0;
 	int m_onLeaveID = 0;
+	
 };
 
-REG_OBJ_TO_REF(Button, Button);
+REG_OBJ_TO_REF(Button, CButton);
 
 #endif

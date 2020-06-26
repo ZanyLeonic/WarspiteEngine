@@ -1,16 +1,16 @@
 #pragma once
 #pragma once
-#ifndef __WarspiteObject__
-#define __WarspiteObject__
+#ifndef __CWarspiteObject__
+#define __CWarspiteObject__
 
 #include "GameObject.h"
 #include "Vector2D.h"
 
-class WarspiteObject :
-	public GameObject
+class CWarspiteObject :
+	public CGameObject
 {
 public:
-	WarspiteObject();
+	CWarspiteObject();
 
 	virtual void OnPlay();
 	virtual void Draw();
@@ -49,4 +49,4 @@ protected:
 	std::string m_textureID = "";
 };
 
-#endif /* defined(__WarspiteObject__) */
+#endif /* defined(__CWarspiteObject__) */

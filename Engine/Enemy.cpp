@@ -1,11 +1,12 @@
 #include "Enemy.h"
+#include <SDL.h>
 
-Enemy::Enemy()
-	: WarspiteObject()
+CEnemy::CEnemy()
+	: CWarspiteObject()
 {
 }
 
-bool Enemy::OnThink()
+bool CEnemy::OnThink()
 {
 	m_position.SetX(m_position.GetX() + 1);  
 	m_position.SetY(m_position.GetY() + 1);

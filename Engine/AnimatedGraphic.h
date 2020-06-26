@@ -4,7 +4,7 @@
 
 #include "WarspiteObject.h"
 
-class AnimatedGraphic : public WarspiteObject
+class AnimatedGraphic : public CWarspiteObject
 {
 public:
 	AnimatedGraphic() {};

@@ -2,13 +2,13 @@
 #include "TextureManager.h"
 #include "Game.h"
 
-WarspiteObject::WarspiteObject() 
-	: GameObject(), m_height(0), m_width(0), 
+CWarspiteObject::CWarspiteObject() 
+	: CGameObject(), m_height(0), m_width(0), 
 	m_numFrames(1), m_currentFrame(0), m_currentRow(0)
 {
 }
 
-void WarspiteObject::Load(const ObjectParams* pParams)
+void CWarspiteObject::Load(const ObjectParams* pParams)
 {
 	m_position = Vector2D(pParams->GetX(), pParams->GetY());
 	m_velocity = Vector2D(0, 0);
@@ -23,11 +23,11 @@ void WarspiteObject::Load(const ObjectParams* pParams)
 	m_numFrames = pParams->GetNumberOfFrames();
 }
 
-void WarspiteObject::OnPlay()
+void CWarspiteObject::OnPlay()
 {
 }
 
-void WarspiteObject::Draw()
+void CWarspiteObject::Draw()
 {
 	if (m_velocity.GetX() > 0)
 	{
@@ -44,7 +44,7 @@ void WarspiteObject::Draw()
 	}
 }
 
-bool WarspiteObject::OnThink()
+bool CWarspiteObject::OnThink()
 {
 	m_velocity += m_acceleration;  
 	m_position += m_velocity;
@@ -52,6 +52,6 @@ bool WarspiteObject::OnThink()
 	return true;
 }
 
-void WarspiteObject::Destroy()
+void CWarspiteObject::Destroy()
 {
 }

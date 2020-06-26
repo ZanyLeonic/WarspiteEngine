@@ -1,12 +1,10 @@
 #pragma once
 #ifndef __GameObject__
 #define __GameObject__
-#include <SDL.h>
-#include <iostream>
 #include "ObjectParams.h"
 #include "Vector2D.h"
 
-class GameObject
+class CGameObject
 {
 public:
 	virtual void OnPlay() = 0;
@@ -19,7 +17,7 @@ public:
 	virtual Vector2D GetPosition() = 0;
 	
 protected:
-	GameObject() {} 
-	virtual ~GameObject() {}
+	CGameObject() {} 
+	virtual ~CGameObject() {}
 };
 #endif /* defined(__GameObject__) */

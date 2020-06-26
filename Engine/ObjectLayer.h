@@ -15,12 +15,12 @@ public:
 	virtual void OnThink();
 	virtual void Draw();
 
-	std::vector<GameObject*>* GetGameObjects()
+	std::vector<CGameObject*>* GetGameObjects()
 	{
 		return &m_GameObjects;
 	}
 private:
-	std::vector<GameObject*> m_GameObjects;
+	std::vector<CGameObject*> m_GameObjects;
 };
 
 #endif // ifndef __OBJECTLAYER_H__

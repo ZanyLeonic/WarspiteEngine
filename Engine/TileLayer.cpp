@@ -1,6 +1,7 @@
 #include "TextureManager.h"
 #include "Camera.h"
 #include "TileLayer.h"
+#include <iostream>
 
 void TileLayer::OnPlay()
 {

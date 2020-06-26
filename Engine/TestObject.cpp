@@ -1,11 +1,12 @@
 #include "TestObject.h"
+#include <iostream>
 
-TestObject::TestObject()
-	: MapObject()
+CTestObject::CTestObject()
+	: CMapObject()
 {
 }
 
-void TestObject::collide()
+void CTestObject::collide()
 {
 	std::cout << "Collided!\n";
 }

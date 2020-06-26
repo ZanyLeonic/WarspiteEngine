@@ -32,10 +32,10 @@ void PauseState::SetCallbacks(const std::vector<ButtonCallback>& callbacks)
 
 	for (int i = 0; i < m_GameObjects.size(); i++)
 	{
-		if (dynamic_cast<Button*>(m_GameObjects[i]))
+		if (dynamic_cast<CButton*>(m_GameObjects[i]))
 		{
-			Button* pButton =
-				dynamic_cast<Button*>(m_GameObjects[i]);
+			CButton* pButton =
+				dynamic_cast<CButton*>(m_GameObjects[i]);
 
 			pButton->OnClick(callbacks[pButton->GetOnClickID()]);
 			pButton->OnEnter(callbacks[pButton->GetOnEnterID()]);

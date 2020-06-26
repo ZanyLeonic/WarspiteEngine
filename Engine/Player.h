@@ -6,12 +6,11 @@
 #include "InputHandler.h"
 #include "Vector2D.h"
 #include "GameObjectDictionary.h"
-#include <string.h>
 
-class Player : public WarspiteObject
+class CPlayer : public CWarspiteObject
 {
 public:
-	Player();
+	CPlayer();
 
 	void OnPlay();
 
@@ -33,7 +32,7 @@ private:
 
 	void DecideFrame();
 
-	std::vector<std::vector<GameObject*>*> m_objects;
+	std::vector<std::vector<CGameObject*>*> m_objects;
 
 	Vector2D lastPosition;
 	Vector2D nextPosition;
@@ -53,5 +52,5 @@ private:
 	Vector2D m_CamOffset;
 };
 
-REG_OBJ_TO_REF( Player, Player ) ;
+REG_OBJ_TO_REF( Player, CPlayer ) ;
 #endif /* defined(__Player__) */

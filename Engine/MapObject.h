@@ -3,11 +3,11 @@
 #define __MAPOBJECT_H__
 
 #include "WarspiteObject.h"
-class MapObject :
-	public WarspiteObject
+class CMapObject :
+	public CWarspiteObject
 {
 public:
-	MapObject();
+	CMapObject();
 	virtual void Draw();
 };
 

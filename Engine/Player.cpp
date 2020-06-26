@@ -8,12 +8,12 @@
 #define PLAYER_WIDTH 32
 #define PLAYER_HEIGHT 32
 
-Player::Player()
-	: WarspiteObject()
+CPlayer::CPlayer()
+	: CWarspiteObject()
 {
 }
 
-void Player::OnPlay()
+void CPlayer::OnPlay()
 {
 	// Are we in the PlayState?
 	PlayState* ps = static_cast<PlayState*>(Game::Instance()->GetStateManager()->GetCurrentState());
@@ -35,15 +35,15 @@ void Player::OnPlay()
 	}
 }
 
-void Player::Load(const ObjectParams* pParams)
+void CPlayer::Load(const ObjectParams* pParams)
 {
-	InputHandler::Instance()->AddActionKeyDown(SDL_SCANCODE_C, std::bind(&Player::KeyDown, this));
-	InputHandler::Instance()->AddActionKeyUp(SDL_SCANCODE_C, std::bind(&Player::KeyUp, this));
+	InputHandler::Instance()->AddActionKeyDown(SDL_SCANCODE_C, std::bind(&CPlayer::KeyDown, this));
+	InputHandler::Instance()->AddActionKeyUp(SDL_SCANCODE_C, std::bind(&CPlayer::KeyUp, this));
 
-	WarspiteObject::Load(pParams);
+	CWarspiteObject::Load(pParams);
 }
 
-bool Player::OnThink()
+bool CPlayer::OnThink()
 {
 	// std::cout << "\r";
 	// std::cout << "PLAYER -> X: " << m_position.GetX() << " Y: " << m_position.GetY() << " CAM -> X: " << Camera::Instance()->GetPosition().GetX() << " Y: " << Camera::Instance()->GetPosition().GetY() << " TimeLeft: " << float(m_timeLeft / 100) <<  " Frame: " << m_frameOffset << "   ";
@@ -60,11 +60,11 @@ bool Player::OnThink()
 		DecideFrame();
 	}
 
-	WarspiteObject::OnThink();
+	CWarspiteObject::OnThink();
 	return true;
 }
 
-void Player::Draw()
+void CPlayer::Draw()
 {
 	// Get the camera position to offset the drawing
 	Vector2D cPos = Camera::Instance()->GetPositionT();
@@ -86,17 +86,17 @@ void Player::Draw()
 	}
 }
 
-void Player::KeyDown()
+void CPlayer::KeyDown()
 {
 	std::cout << "Key has been pressed down!\n";
 }
 
-void Player::KeyUp()
+void CPlayer::KeyUp()
 {
 	std::cout << "Key has been released!\n";
 }
 
-void Player::HandleInput()
+void CPlayer::HandleInput()
 {
 	if (m_timeLeft >= 100)
 	{
@@ -128,7 +128,7 @@ void Player::HandleInput()
 	}
 }
 
-void Player::MoveForward(float axis)
+void CPlayer::MoveForward(float axis)
 {
 	Vector2D curPos = m_position;
 	
@@ -150,7 +150,7 @@ void Player::MoveForward(float axis)
 	}
 }
 
-void Player::MoveRight(float axis)
+void CPlayer::MoveRight(float axis)
 {
 	Vector2D curPos = m_position;
 	
@@ -171,7 +171,7 @@ void Player::MoveRight(float axis)
 	}
 }
 
-bool Player::IsPositionFree(Vector2D* pNext)
+bool CPlayer::IsPositionFree(Vector2D* pNext)
 {
 	// Get the value from the pointer and store it in a rvalue.
 	Vector2D nPos = Vector2D(*pNext);
@@ -182,7 +182,7 @@ bool Player::IsPositionFree(Vector2D* pNext)
 		if (!m_objects[i]) continue;
 
 		// Get an rvalue of the list of GameObject's for the iterated layer
-		std::vector<GameObject*>& ir = *m_objects[i];
+		std::vector<CGameObject*>& ir = *m_objects[i];
 
 		for (int j = 0; j < ir.size(); j++)
 		{
@@ -215,7 +215,7 @@ bool Player::IsPositionFree(Vector2D* pNext)
 	return true;
 }
 
-void Player::DecideFrame()
+void CPlayer::DecideFrame()
 {
 	int nFrame = (SDL_GetTicks() / 100) % 3;
 

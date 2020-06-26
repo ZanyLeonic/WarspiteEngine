@@ -5,13 +5,12 @@
 #include <string>
 #include <map>
 
-class GameObject;
-class BaseCreator;
+class CGameObject;
 
 class IObjectFactory
 {
 public:
-	virtual GameObject* Create(std::string pMapRef) = 0;
+	virtual CGameObject* Create(std::string pMapRef) = 0;
 	virtual size_t GetObjectSize() = 0;
 };
 
@@ -33,7 +32,7 @@ public:
 	}
 
 	bool RegisterType(std::string typeID, IObjectFactory* pCreator);
-	GameObject* Create(std::string typeID);
+	CGameObject* Create(std::string typeID);
 private:
 	std::map<std::string, IObjectFactory*> m_creators;
 
@@ -48,7 +47,7 @@ public:
 		GameObjectDictionary::Instance()->RegisterType(pMapRef, this);
 	}
 
-	GameObject* Create(std::string pMapRef)
+	CGameObject* Create(std::string pMapRef)
 	{
 		return GameObjectDictionary::Instance()->Create(pMapRef);
 	}

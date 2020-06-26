@@ -6,7 +6,7 @@
 #include <vector>
 #include <rapidjson/document.h>
 
-class GameObject;
+class CGameObject;
 
 class StateParser
 {
@@ -14,11 +14,11 @@ public:
 	StateParser() {}
 
 	 bool ParseState(const char* stateFile, std::string stateID,
-		std::vector<GameObject*>* pObjects, std::vector<std::string>* pTextureIDs);
+		std::vector<CGameObject*>* pObjects, std::vector<std::string>* pTextureIDs);
 
 private:
 	 void ParseObjects(const rapidjson::Value* pStateRoot,
-		std::vector<GameObject*>* pObjects);
+		std::vector<CGameObject*>* pObjects);
 	 void ParseTextures(const rapidjson::Value* pStateRoot,
 		std::vector<std::string>* pTextureIDs);
 };

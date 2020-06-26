@@ -2,44 +2,44 @@
 #include "InputHandler.h"
 #include "Game.h"
 
-Button::Button() :
-	WarspiteObject()
+CButton::CButton() :
+	CWarspiteObject()
 {
 	m_currentFrame = NO_HOVER; // Frame 0
 
 	// Initial callbacks
-	if (m_OnClick == 0) m_OnClick = std::bind(&Button::onClick, this);
-	if (m_OnEnter == 0) m_OnEnter = std::bind(&Button::onEnter, this);
-	if (m_OnLeave == 0) m_OnLeave = std::bind(&Button::onLeave, this);
+	if (m_OnClick == 0) m_OnClick = std::bind(&CButton::onClick, this);
+	if (m_OnEnter == 0) m_OnEnter = std::bind(&CButton::onEnter, this);
+	if (m_OnLeave == 0) m_OnLeave = std::bind(&CButton::onLeave, this);
 }
 
-void Button::Load(const ObjectParams* pParams)
+void CButton::Load(const ObjectParams* pParams)
 {
-	WarspiteObject::Load(pParams);
+	CWarspiteObject::Load(pParams);
 	
 	m_onClickID = pParams->GetOnClickID();
 	m_onEnterID = pParams->GetOnEnterID();
 	m_onLeaveID = pParams->GetOnLeaveID();
 }
 
-void Button::Draw()
+void CButton::Draw()
 {
-	WarspiteObject::Draw();
+	CWarspiteObject::Draw();
 }
 
-bool Button::OnThink()
+bool CButton::OnThink()
 {
 	// Get the mouse Position on the screen
 	Vector2D* pMousePos = InputHandler::Instance()->
 		GetMousePosition();
 
-	// Is it within the boundaries of the button?
+	// Is it within the boundaries of the CButton?
 	if (pMousePos->GetX() < (m_position.GetX() + m_width)
 		&& pMousePos->GetX() > m_position.GetX()
 		&& pMousePos->GetY() < (m_position.GetY() + m_height)
 		&& pMousePos->GetY() > m_position.GetY())
 	{
-		// Have they pressed down on the button while within the boundaries?
+		// Have they pressed down on the CButton while within the boundaries?
 		if (InputHandler::Instance()->GetMouseButtonState(LEFT) && m_bReleased)
 		{
 			m_currentFrame = PRESSED;
@@ -66,40 +66,40 @@ bool Button::OnThink()
 	return true;
 }
 
-bool Button::onClick()
+bool CButton::onClick()
 {
 	// default for the callback
 	return true;
 }
 
-bool Button::onEnter()
+bool CButton::onEnter()
 {
 	// default for the callback
 	return true;
 }
 
-bool Button::onLeave()
+bool CButton::onLeave()
 {
 	// default for the callback
 	return true;
 }
 
-void Button::Destroy()
+void CButton::Destroy()
 {
-	WarspiteObject::Destroy();
+	CWarspiteObject::Destroy();
 }
 
-void Button::OnClick(ButtonCallback e)
+void CButton::OnClick(ButtonCallback e)
 {
-	m_OnClick = e != 0 ? e : std::bind(&Button::onClick, this);
+	m_OnClick = e != 0 ? e : std::bind(&CButton::onClick, this);
 }
 
-void Button::OnEnter(ButtonCallback e)
+void CButton::OnEnter(ButtonCallback e)
 {
-	m_OnEnter = e != 0 ? e : std::bind(&Button::onEnter, this);
+	m_OnEnter = e != 0 ? e : std::bind(&CButton::onEnter, this);
 }
 
-void Button::OnLeave(ButtonCallback e)
+void CButton::OnLeave(ButtonCallback e)
 {
-	m_OnLeave = e != 0 ? e : std::bind(&Button::onLeave, this);
+	m_OnLeave = e != 0 ? e : std::bind(&CButton::onLeave, this);
 }

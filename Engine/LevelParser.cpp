@@ -304,7 +304,7 @@ void LevelParser::parseObjectLayer(const rapidjson::Value* pObjectVal, std::vect
 		y = b["y"].GetInt();
 		
 		// Create the object that is defined
-		GameObject* pGameObject = GameObjectDictionary::Instance()
+		CGameObject* pGameObject = GameObjectDictionary::Instance()
 			->Create(b["type"].GetString());
 
 		// fill in any additional information (if provided.)
