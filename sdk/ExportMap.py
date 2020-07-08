@@ -5,15 +5,24 @@ import json
 from pathlib import Path
 from shutil import copyfile
 
-appName="Warspite Map Exporter"
-appVer="1.0.0.0"
-appDesc="""Corrects paths and moves maps and their dependencies."""
+appName = "Warspite Map Exporter"
+appVer = "1.0.0.0"
+appDesc = """Corrects paths and moves maps and their dependencies."""
+
+sImgFormats = [
+    ".png",
+    ".jpg",
+    ".webp",
+    ".tiff"
+]
+
 
 def DoesParameterExist(parmName):
     for i in sys.argv:
         if i == parmName:
             return True
     return False
+
 
 def GetParameterValue(parmName, required=False):
     for i, j in enumerate(sys.argv):
@@ -25,6 +34,7 @@ def GetParameterValue(parmName, required=False):
         raise RuntimeError("Cannot find specified required parameter \"{0}\"!".format(parmName))
         
     return 0
+
 
 print("{0}".format(appName))
 print("Version: {0}".format(appVer))
@@ -104,7 +114,7 @@ for j, i in enumerate(mapData["tilesets"]):
     cTileset["image"] = str(dTileSet.relative_to(workingDir))
 
     # If we are dealing with an external file...
-    if (pTileset != mapFile):
+    if pTileset != mapFile:
         try:
             ws = open(npTileset, "w")
         except OSError as e:
@@ -123,16 +133,24 @@ for j, i in enumerate(mapData["tilesets"]):
 print("Copied tilesets!")
 
 # Does the map have custom properties?
-if ("properties" in mapData):
+if "properties" in mapData:
     for i, j in enumerate(mapData["properties"]):
-        if(j["type"] == "file"):
+        if j["type"] == "file":
             propFile=Path(mapFile.parent, j["value"])
-            nPropFile=Path(workingDir, baseFolder, propFile.name)
-            if (propFile.resolve() != nPropFile.resolve()):
+
+            if (propFile.suffix in sImgFormats) and (propFile.parent.name == "dev"):
+                nPropFile = Path(workingDir, baseFolder, "textures", "dev", propFile.name)
+            elif propFile.suffix in sImgFormats:
+                nPropFile=Path(workingDir, baseFolder, "textures", propFile.name)
+            else:
+                nPropFile=Path(workingDir, baseFolder, propFile.name)
+
+            if propFile.resolve() != nPropFile.resolve():
                 copyfile(propFile, nPropFile)
+                print("Moving file from {0} to {1}...".format(propFile, nPropFile))
 
             mapData["properties"][i]["value"] = str(nPropFile.relative_to(workingDir))
-print ("Checked property values")
+print("Checked property values")
 
 nMapFile = Path(os.path.join(workingDir, baseFolder, "maps", mapFile.name))
 try:

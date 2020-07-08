@@ -22,10 +22,10 @@ bool CPlayState::OnPlay()
 	m_screenSize = CGame::Instance()->GetViewportSize();
 
 	CStateParser sp;
-	sp.ParseState("assets/states/PlayState.json", s_playID, &m_GameObjects, &m_TextureIDList);
+	sp.ParseState("assets/resource/states/PlayState.json", s_playID, &m_GameObjects, &m_TextureIDList);
 	
 	CLevelParser lp;
-	pLevel = lp.ParseLevel("assets/maps/help2.json");
+	pLevel = lp.ParseLevel("assets/maps/map01.json");
 
 	CInputHandler::Instance()->AddActionKeyDown(SDL_SCANCODE_ESCAPE, [this] {
 			if (!dynamic_cast<CPauseState*>(CGame::Instance()->GetStateManager()->GetCurrentState()))

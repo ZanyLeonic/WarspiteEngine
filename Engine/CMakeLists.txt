@@ -97,10 +97,17 @@ find_package(OpenAL REQUIRED)
 find_package(Vorbis REQUIRED)
 find_package(ZLIB REQUIRED)
 
+if (WIN32)
+add_custom_target(ProjectMetadata
+	COMMAND "py" "-3" "${CMAKE_CURRENT_SOURCE_DIR}/GitVersion.py"
+	COMMENT "Generating build metadata..."
+)
+else()
 add_custom_target(ProjectMetadata
 	COMMAND ${Python_EXECUTABLE} "${CMAKE_CURRENT_SOURCE_DIR}/GitVersion.py"
 	COMMENT "Generating build metadata..."
 )
+endif()
 
 # Add this because apparently find_package(SDL2 REQUIRED) doesn't work right on Arch?
 if("${SDL2_LIBRARIES}" STREQUAL "")
@@ -136,7 +143,7 @@ add_dependencies(${PROJECT_NAME} ProjectMetadata)
 # As a last ditch effort...
 if ("${Python_EXECUTABLE}" STREQUAL "")
 	if (WIN32)
-		set(Python_EXECUTABLE "python")
+		set(Python_EXECUTABLE "py -3")
 	else()
 		set(Python_EXECUTABLE "python3")
 	endif()

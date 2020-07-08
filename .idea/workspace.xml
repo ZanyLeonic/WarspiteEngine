@@ -10,9 +10,33 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="543719c6-8c94-4a69-8f9a-51660507439a" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/Engine/Player.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Engine/Player.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Engine/SoundManager.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Engine/SoundManager.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Engine/MainMenuState.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Engine/MainMenuState.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Engine/PlayState.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Engine/PlayState.cpp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Engine/WarspiteGame.Build.txt" beforeDir="false" afterPath="$PROJECT_DIR$/Engine/WarspiteGame.Build.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Engine/assets/ExitButton.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Engine/assets/P6290084.JPG" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Engine/assets/PlayButton.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Engine/assets/ResumeButton.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Engine/assets/demongirl.bmp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Engine/assets/dev/Black_22x27.bmp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Engine/assets/maps/help.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Engine/assets/maps/help2.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Engine/assets/maps/lamo.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Engine/assets/maps/meow.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Engine/assets/maps/testMap.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Engine/assets/player.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Engine/assets/sonic_test.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Engine/assets/states/PlayState.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Engine/assets/states/SystemMenus.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Engine/assets/textures/62ccabb5dd1364c2f5774f92b233d3c4c2dab403_full.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Engine/assets/textures/Warspite.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build-deps.ps1" beforeDir="false" afterPath="$PROJECT_DIR$/build-deps.ps1" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sdk/ExportMap.py" beforeDir="false" afterPath="$PROJECT_DIR$/sdk/ExportMap.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sdk/maps/help.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/sdk/maps/help2.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/sdk/maps/testMap.json" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -35,7 +59,37 @@
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="cf.first.check.clang-format" value="false" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/sdk/ExportMap.py" />
+    <property name="node.js.detected.package.eslint" value="true" />
+    <property name="node.js.detected.package.tslint" value="true" />
+    <property name="node.js.path.for.package.eslint" value="project" />
+    <property name="node.js.path.for.package.tslint" value="project" />
+    <property name="node.js.selected.package.eslint" value="(autodetect)" />
+    <property name="node.js.selected.package.tslint" value="(autodetect)" />
+  </component>
+  <component name="RunManager">
+    <configuration name="Test Map" type="PythonConfigurationType" factoryName="Python">
+      <module name="WarspiteGame" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="E:\Users\Kurisu\anaconda3\envs\WarspiteGame\python.exe" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/sdk" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/sdk/ExportMap.py" />
+      <option name="PARAMETERS" value="-map &quot;E:\Projects\WarspiteGame\sdk\maps\map02.json&quot; -baseFolder &quot;assets&quot; -workDir E:\Projects\WarspiteGame\Engine\" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
   </component>
   <component name="SvnConfiguration">
     <configuration />
@@ -47,10 +101,67 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1589226498810</updated>
+      <workItem from="1593190162533" duration="3753000" />
     </task>
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="2" />
+  </component>
+  <component name="WindowStateProjectService">
+    <state x="384" y="179" width="1265" height="845" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1593191507008">
+      <screen x="0" y="0" width="1920" height="1050" />
+    </state>
+    <state x="384" y="179" width="1265" height="845" key="#com.intellij.execution.impl.EditConfigurationsDialog/-1280.54.1280.994/0.0.1920.1050@0.0.1920.1050" timestamp="1593191507008" />
+    <state x="773" y="311" key="FileChooserDialogImpl" timestamp="1593191215096">
+      <screen x="0" y="0" width="1920" height="1050" />
+    </state>
+    <state x="773" y="311" key="FileChooserDialogImpl/-1280.54.1280.994/0.0.1920.1050@0.0.1920.1050" timestamp="1593191215096" />
+    <state width="1877" height="352" key="GridCell.Tab.0.bottom" timestamp="1593197578477">
+      <screen x="0" y="0" width="1920" height="1050" />
+    </state>
+    <state width="1877" height="352" key="GridCell.Tab.0.bottom/-1280.54.1280.994/0.0.1920.1050@0.0.1920.1050" timestamp="1593197578477" />
+    <state width="1877" height="352" key="GridCell.Tab.0.center" timestamp="1593197578477">
+      <screen x="0" y="0" width="1920" height="1050" />
+    </state>
+    <state width="1877" height="352" key="GridCell.Tab.0.center/-1280.54.1280.994/0.0.1920.1050@0.0.1920.1050" timestamp="1593197578477" />
+    <state width="1877" height="352" key="GridCell.Tab.0.left" timestamp="1593197578477">
+      <screen x="0" y="0" width="1920" height="1050" />
+    </state>
+    <state width="1877" height="352" key="GridCell.Tab.0.left/-1280.54.1280.994/0.0.1920.1050@0.0.1920.1050" timestamp="1593197578477" />
+    <state width="1877" height="352" key="GridCell.Tab.0.right" timestamp="1593197578477">
+      <screen x="0" y="0" width="1920" height="1050" />
+    </state>
+    <state width="1877" height="352" key="GridCell.Tab.0.right/-1280.54.1280.994/0.0.1920.1050@0.0.1920.1050" timestamp="1593197578477" />
+    <state width="1877" height="352" key="GridCell.Tab.1.bottom" timestamp="1593197578478">
+      <screen x="0" y="0" width="1920" height="1050" />
+    </state>
+    <state width="1877" height="352" key="GridCell.Tab.1.bottom/-1280.54.1280.994/0.0.1920.1050@0.0.1920.1050" timestamp="1593197578478" />
+    <state width="1877" height="352" key="GridCell.Tab.1.center" timestamp="1593197578477">
+      <screen x="0" y="0" width="1920" height="1050" />
+    </state>
+    <state width="1877" height="352" key="GridCell.Tab.1.center/-1280.54.1280.994/0.0.1920.1050@0.0.1920.1050" timestamp="1593197578477" />
+    <state width="1877" height="352" key="GridCell.Tab.1.left" timestamp="1593197578477">
+      <screen x="0" y="0" width="1920" height="1050" />
+    </state>
+    <state width="1877" height="352" key="GridCell.Tab.1.left/-1280.54.1280.994/0.0.1920.1050@0.0.1920.1050" timestamp="1593197578477" />
+    <state width="1877" height="352" key="GridCell.Tab.1.right" timestamp="1593197578477">
+      <screen x="0" y="0" width="1920" height="1050" />
+    </state>
+    <state width="1877" height="352" key="GridCell.Tab.1.right/-1280.54.1280.994/0.0.1920.1050@0.0.1920.1050" timestamp="1593197578477" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/sdk/ExportMap.py</url>
+          <line>140</line>
+          <option name="timeStamp" value="4" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
+  </component>
+  <component name="com.intellij.coverage.CoverageDataManagerImpl">
+    <SUITE FILE_PATH="coverage/WarspiteGame$Test_Map.coverage" NAME="Test Map Coverage Results" MODIFIED="1593194234286" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/sdk" />
   </component>
 </project>

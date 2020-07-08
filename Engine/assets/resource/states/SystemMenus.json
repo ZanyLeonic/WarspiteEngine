@@ -4,11 +4,11 @@
 		  "id": "MainMenu",
 		  "textures": [
 			{
-			  "path": "assets\\PlayButton.png",
+			  "path": "assets\\textures\\UI\\PlayButton.png",
 			  "id": "PlayButton"
 			},
 			{
-			  "path": "assets\\ExitButton.png",
+			  "path": "assets\\textures\\UI\\ExitButton.png",
 			  "id": "ExitButton"
 			}
 		  ],
@@ -39,11 +39,11 @@
 		  "id": "PauseMenu",
 		  "textures": [
 			{
-			  "path": "assets\\ResumeButton.png",
+			  "path": "assets\\textures\\UI\\ResumeButton.png",
 			  "id": "ResumeButton"
 			},
 			{
-			  "path": "assets\\ExitButton.png",
+			  "path": "assets\\textures\\UI\\ExitButton.png",
 			  "id": "ExitButton"
 			}
 		  ],

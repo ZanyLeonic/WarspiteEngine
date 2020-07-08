@@ -19,12 +19,12 @@ function GenerateProjectFiles() {
     if (!(Get-Command cmake -ErrorAction SilentlyContinue)) {
         SetEnv
     }
-    $args = @( 
+    $bargs = @( 
     "-DCMAKE_TOOLCHAIN_FILE=$VcpkgDir\scripts\buildsystems\vcpkg.cmake",
     '-DCMAKE_BUILD_TYPE="Debug"', 
     "-DVCPKG_TARGET_TRIPLET=$Arch-windows",
     ".")
-    & cmake $args
+    & cmake $bargs
 }
 
 function InstallPackages() {
