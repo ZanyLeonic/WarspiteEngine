@@ -4,6 +4,7 @@
 
 CGameObjectDictionary* CGameObjectDictionary::s_pInstance = 0;
 
+// Registers our GameObjectFactory
 bool CGameObjectDictionary::RegisterType(std::string typeID, IObjectFactory* pCreator)
 {
 	auto it = m_creators.find(typeID);
@@ -19,6 +20,7 @@ bool CGameObjectDictionary::RegisterType(std::string typeID, IObjectFactory* pCr
 	return true;
 }
 
+// Returns a GameObject that our GameObjectFactory created
 IGameObject* CGameObjectDictionary::Create(std::string typeID)
 {
 	auto it = m_creators.find(typeID);
@@ -31,4 +33,3 @@ IGameObject* CGameObjectDictionary::Create(std::string typeID)
 
 	return (*it).second->Create();
 }
-

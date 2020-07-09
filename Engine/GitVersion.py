@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 import os
-import pathlib
 import time
+import pathlib
 import sys
 
 headerTemplate =  """#pragma once
