@@ -2,11 +2,14 @@
 #include "Level.h"
 #include "ObjectLayer.h"
 #include "TextureManager.h"
+#include "ScriptManager.h"
 #include "GameObjectDictionary.h"
 #include "ObjectParams.h"
 #include "Game.h"
 #include "TileLayer.h"
+#include "WarspiteUtil.h"
 
+#include <boost/filesystem.hpp>
 #include <iostream>
 #include <rapidjson/filereadstream.h>
 #include <rapidjson/writer.h>
@@ -81,9 +84,9 @@ CLevel* CLevelParser::ParseLevel(const char* levelFile)
 			const Value& properties = tLevel["properties"].GetArray();
 			for (SizeType i = 0; i < properties.Size(); i++)
 			{
-				// Ignore any other types of properties when attempting to load textures.
+				// Ignore any other types of properties when attempting to load textures + scripts.
 				if (properties[i]["type"] == "file")
-					parseTextures(&properties[i]);
+					parseFiles(&properties[i]);
 			}
 		}
 
@@ -230,11 +233,17 @@ void CLevelParser::parseTileLayer(const rapidjson::Value* pTileElement, std::vec
 	pLayers->push_back(pTileLayer);
 }
 
-void CLevelParser::parseTextures(const rapidjson::Value* pTextureRoot)
+void CLevelParser::parseFiles(const rapidjson::Value* pFileRoot)
 {
 	// Get the correct type of the value. (should be an object)
-	const Value::ConstObject& o = pTextureRoot->GetObject();
+	const Value::ConstObject& o = pFileRoot->GetObject();
 
+	if (WarspiteUtil::GetFileExtenstion(o["value"].GetString()) == ".py")
+	{
+		CScriptManager::Instance()->Load(SGameScript::file(o["name"].GetString(), o["value"].GetString()));
+		return;
+	}
+	
 	// Load the texture via the TextureManager with the info inside the object.
 	CTextureManager::Instance()->Load(o["value"].GetString(), o["name"].GetString(),
 		CGame::Instance()->GetRenderer());
@@ -299,7 +308,8 @@ void CLevelParser::parseObjectLayer(const rapidjson::Value* pObjectVal, std::vec
 			onClickCallback = 0, onEnterCallback = 0, onLeaveCallback = 0;
 		int numFrames = 1, animSpeed = 1;
 		std::string textureID;
-
+		const char* scriptName = "";
+		
 		// Get the desired coordinates
 		x = b["x"].GetInt();
 		y = b["y"].GetInt();
@@ -318,6 +328,11 @@ void CLevelParser::parseObjectLayer(const rapidjson::Value* pObjectVal, std::vec
 				// Maybe use a switch
 				std::string propName = d[j]["name"].GetString();
 
+				if (propName == "RunScript")
+				{
+					scriptName = d[j]["value"].GetString();
+					continue;
+				}
 				if (propName == "textureWidth")
 				{
 					width = d[j]["value"].GetInt();
@@ -361,7 +376,7 @@ void CLevelParser::parseObjectLayer(const rapidjson::Value* pObjectVal, std::vec
 				else
 				{
 					// Future proofing incase new properties get added for newer engine version.
-					std::cout << "Warning: Unrecongised property\"" << propName << "\"!" << std::endl;
+					std::cout << "Warning: Unrecongised property \"" << propName << "\"!" << std::endl;
 				}
 			}
 		}
@@ -369,7 +384,7 @@ void CLevelParser::parseObjectLayer(const rapidjson::Value* pObjectVal, std::vec
 		// intialise the object with the data obtained.
 		pGameObject->Load(new CObjectParams((float)x, (float)y, width, height, 
 			textureID, animSpeed, numFrames, onClickCallback, 
-			onEnterCallback, onLeaveCallback));
+			onEnterCallback, onLeaveCallback, scriptName));
 		pObjectLayer->GetGameObjects()->push_back(pGameObject);
 	}
 

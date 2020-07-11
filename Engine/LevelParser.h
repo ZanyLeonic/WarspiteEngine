@@ -24,7 +24,7 @@ private:
 		std::vector<ILayer*>* pLayers,
 		const std::vector<STileset>* pTilesets);
 
-	void parseTextures(const rapidjson::Value* pTextureRoot);
+	void parseFiles(const rapidjson::Value* pFileRoot);
 
 	void parseBackgroundColour(const std::string* colourVal);
 

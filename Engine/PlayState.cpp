@@ -25,7 +25,7 @@ bool CPlayState::OnPlay()
 	sp.ParseState("assets/resource/states/PlayState.json", s_playID, &m_GameObjects, &m_TextureIDList);
 	
 	CLevelParser lp;
-	pLevel = lp.ParseLevel("assets/maps/map01.json");
+	pLevel = lp.ParseLevel("assets/maps/map02.json");
 
 	CInputHandler::Instance()->AddActionKeyDown(SDL_SCANCODE_ESCAPE, [this] {
 			if (!dynamic_cast<CPauseState*>(CGame::Instance()->GetStateManager()->GetCurrentState()))

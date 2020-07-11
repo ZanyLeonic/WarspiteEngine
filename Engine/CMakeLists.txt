@@ -15,6 +15,7 @@ set(WarspiteEngine_Src
     InputHandler.cpp
     Level.cpp
     LevelParser.cpp
+    LogicAuto.cpp
     main.cpp
     MainMenuState.cpp
     MapObject.cpp
@@ -29,6 +30,7 @@ set(WarspiteEngine_Src
     TextureManager.cpp
     TileLayer.cpp
     WarspiteObject.cpp
+    WarspiteUtil.cpp
 )
 
 set(WarspiteEngine_Header
@@ -46,6 +48,7 @@ set(WarspiteEngine_Header
     Layer.h
     Level.h
     LevelParser.h
+    LogicAuto.h
     MainMenuState.h
     MapObject.h
     MenuState.h
@@ -62,6 +65,7 @@ set(WarspiteEngine_Header
     TileLayer.h
     Vector2D.h
     WarspiteObject.h
+    WarspiteUtil.h
 )
 
 # Thirdparty code
@@ -91,6 +95,7 @@ if (CMAKE_BUILD_TYPE STREQUAL "Debug")
 endif()
 
 find_package(Python3 COMPONENTS Interpreter Development REQUIRED)
+find_package(Boost COMPONENTS system filesystem REQUIRED)
 find_package(SDL2 CONFIG REQUIRED)
 find_package(SDL2_image REQUIRED)
 find_package(SDL2_ttf REQUIRED)
@@ -131,6 +136,8 @@ endif()
 
 set (Warspite_Libs
     ${Boost_LIBRARIES}
+    ${Boost_FILESYSTEM_LIBRARY}
+    ${Boost_SYSTEM_LIBRARY}
     ${Python3_LIBRARIES}
 	${SDL2_LIBRARIES}
 	${SDL2_IMAGE_LIBRARIES}

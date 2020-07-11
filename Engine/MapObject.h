@@ -9,6 +9,9 @@ class CMapObject :
 public:
 	CMapObject();
 	virtual void Draw();
+	virtual void DoDraw(bool newVis);
+private:
+	bool bDrawObject = true;
 };
 
 #endif // __MAPOBJECT_H__

@@ -13,16 +13,49 @@ CScriptManager::CScriptManager()
 	main_namespace = main_module.attr("__dict__");
 
 	// Show that the ScriptManager is ready
-	Run("import sys\nprint(\"Using Python Runtime %s.%s.%s\" % (sys.version_info.major, sys.version_info.minor, sys.version_info.micro))\n");
-	Run("print(\"ScriptManager ready!\")");
+	SGameScript *test = SGameScript::source("test", "import sys\nprint(\"Using Python Runtime %s.%s.%s\" % (sys.version_info.major, sys.version_info.minor, sys.version_info.micro))\nprint(\"Script Manager is ready!\")");
+	Run(test);
 }
 
-bool CScriptManager::Run(const char* script, boost::python::object* ns)
+
+void CScriptManager::Load(SGameScript* script)
+{
+	loadedScripts[script->GetScriptName()] = script;
+}
+
+bool CScriptManager::Remove(const char* scriptRef)
+{
+	auto search = loadedScripts.find(scriptRef);
+	if (search != loadedScripts.end())
+	{
+		loadedScripts.erase(search);
+		return true;
+	}
+	return false;
+}
+
+void CScriptManager::RemoveAll()
+{
+	loadedScripts.clear();
+}
+
+bool CScriptManager::Run(SGameScript* script, boost::python::object* ns)
 {
 	try
 	{
 		// Use the namespace provided (if there is one)
-		exec(script, ns != nullptr ? *ns : main_namespace);
+		switch (script->GetScriptType())
+		{
+		case EGameScriptType::SCRIPT_INLINE:
+			exec(script->GetSource().c_str(), main_namespace);
+			break;
+		case EGameScriptType::SCRIPT_FILE:
+			exec_file(script->GetFilename().c_str(), main_namespace);
+			break;
+		default:
+			return false; // No type defined? what?
+		}
+		
 		return true;
 	}
 	catch(boost::python::error_already_set const &)
@@ -32,17 +65,7 @@ bool CScriptManager::Run(const char* script, boost::python::object* ns)
 	return false;
 }
 
-bool CScriptManager::RunScript(const char* filename, boost::python::object* ns)
+bool CScriptManager::RunFromRef(std::string scriptRef, boost::python::object* ns)
 {
-	try
-	{
-		// Use the namespace provided (if there is one)
-		exec_file(filename, ns != nullptr ? *ns : main_namespace);
-		return true;
-	}
-	catch (boost::python::error_already_set const&)
-	{
-		PyErr_Print();
-	}
-	return false;
+	return Run(loadedScripts[scriptRef], ns);
 }

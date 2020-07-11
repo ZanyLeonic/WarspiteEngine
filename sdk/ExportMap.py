@@ -6,7 +6,7 @@ from pathlib import Path
 from shutil import copyfile
 
 appName = "Warspite Map Exporter"
-appVer = "1.0.0.0"
+appVer = "1.0.1.0"
 appDesc = """Corrects paths and moves maps and their dependencies."""
 
 sImgFormats = [
@@ -142,6 +142,8 @@ if "properties" in mapData:
                 nPropFile = Path(workingDir, baseFolder, "textures", "dev", propFile.name)
             elif propFile.suffix in sImgFormats:
                 nPropFile=Path(workingDir, baseFolder, "textures", propFile.name)
+            elif propFile.suffix in ".py":
+                nPropFile = Path(workingDir, baseFolder, "scripts", propFile.name)
             else:
                 nPropFile=Path(workingDir, baseFolder, propFile.name)
 
