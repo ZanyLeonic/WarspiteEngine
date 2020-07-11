@@ -1,6 +1,7 @@
 #include "Game.h"
 #include "TextureManager.h"
 #include "SoundManager.h"
+#include "ScriptManager.h"
 #include "Camera.h"
 #include "InputHandler.h"
 #include "LevelParser.h"
@@ -56,11 +57,14 @@ bool CGame::Init(const char* title, int xpos, int ypos, int width, int height, b
 				SDL_SetRenderDrawColor(m_pRenderer,
 					255, 255, 255, 255);
 
-				SDL_Thread* aT = SDL_CreateThread(audioLoop, "AudioThread", (void*)CGame::Instance());
+				SDL_Thread* aT = SDL_CreateThread(audioLoop, "AudioThread", (void*)Instance());
 				SDL_DetachThread(aT);
 
 				m_pGameStateManager = new CGameStateManager();
 				m_pGameStateManager->ModifyState(new CMainMenuState());
+
+				// Start the script manager
+				CScriptManager::Instance();
 			}
 			else
 			{

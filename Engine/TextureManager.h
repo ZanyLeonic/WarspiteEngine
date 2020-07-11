@@ -2,21 +2,21 @@
 #ifndef __TextureManager__
 #define __TextureManager__
 
-#include "Vector2D.h"
 #include <SDL2\SDL.h>
 #include <string>
 #include <map>
 
+class CVector2D;
+
 class CTextureManager
 {
-private:
-	CTextureManager() {} ;
 	static CTextureManager* s_pInstance;
+	CTextureManager() {}
 
 public:
 	static CTextureManager* Instance()
 	{
-		if (s_pInstance == 0)
+		if (s_pInstance == nullptr)
 		{
 			s_pInstance = new CTextureManager();
 			return s_pInstance;

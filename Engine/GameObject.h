@@ -1,8 +1,8 @@
 #pragma once
 #ifndef __GameObject__
 #define __GameObject__
-#include "ObjectParams.h"
-#include "Vector2D.h"
+class CObjectParams;
+class CVector2D;
 
 class IGameObject
 {

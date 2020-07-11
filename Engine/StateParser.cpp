@@ -3,8 +3,10 @@
 #include <rapidjson/filereadstream.h>
 #include <rapidjson/writer.h>
 #include <iostream>
+#include <string>
 #include "TextureManager.h"
 #include "GameObjectDictionary.h"
+#include "ObjectParams.h"
 #include "Game.h"
 
 using namespace rapidjson;

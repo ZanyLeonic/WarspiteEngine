@@ -2,8 +2,8 @@
 #ifndef __GAMESTATEMANAGER_H__
 #define __GAMESTATEMANAGER_H__
 
-#include "GameStateBase.h"
 #include <vector>
+class CGameStateBase;
 
 class CGameStateManager
 {
@@ -23,4 +23,3 @@ private:
 };
 
 #endif
-

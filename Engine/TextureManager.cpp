@@ -1,4 +1,5 @@
 #include "TextureManager.h"
+#include "Vector2D.h"
 #include <SDL2/SDL_image.h>
 
 CTextureManager* CTextureManager::s_pInstance = 0;

@@ -1,4 +1,5 @@
 #include "GameStateManager.h"
+#include "GameStateBase.h"
 
 CGameStateBase* CGameStateManager::GetCurrentState()
 {

@@ -22,6 +22,7 @@ set(WarspiteEngine_Src
     PauseState.cpp
     Player.cpp
     PlayState.cpp
+    ScriptManager.cpp
     SoundManager.cpp
     StateParser.cpp
     TestObject.cpp
@@ -53,6 +54,7 @@ set(WarspiteEngine_Header
     PauseState.h
     Player.h
     PlayState.h
+    ScriptManager.h
     SoundManager.h
     StateParser.h
     TestObject.h
@@ -88,7 +90,7 @@ if (CMAKE_BUILD_TYPE STREQUAL "Debug")
     add_compile_definitions(WARDEBUG)
 endif()
 
-find_package(Python3 COMPONENTS Interpreter REQUIRED)
+find_package(Python3 COMPONENTS Interpreter Development REQUIRED)
 find_package(SDL2 CONFIG REQUIRED)
 find_package(SDL2_image REQUIRED)
 find_package(SDL2_ttf REQUIRED)
@@ -96,6 +98,22 @@ find_package(rapidjson REQUIRED)
 find_package(OpenAL REQUIRED)
 find_package(Vorbis REQUIRED)
 find_package(ZLIB REQUIRED)
+
+# Boost-Python stuff
+if (Python3_Interpreter_FOUND)
+  if (UNIX AND NOT APPLE)
+    FIND_PACKAGE(Boost COMPONENTS python${Python3_VERSION_PATCH})
+  else()	
+    FIND_PACKAGE(Boost COMPONENTS python${Python3_VERSION_MAJOR}${Python3_VERSION_MINOR})
+  endif()
+else()
+    message("Python not found")
+endif()
+
+message(STATUS "Python3_LIBRARIES = ${Python3_LIBRARIES}")
+message(STATUS "Python3_EXECUTABLE = ${Python3_EXECUTABLE}")
+message(STATUS "Python3_INCLUDE_DIRS = ${Python3_INCLUDE_DIRS}")
+message(STATUS "Boost_LIBRARIES = ${Boost_LIBRARIES}")
 
 add_custom_target(ProjectMetadata
 	COMMAND "${Python_EXECUTABLE}" "${CMAKE_CURRENT_SOURCE_DIR}/GitVersion.py"
@@ -112,6 +130,8 @@ if("${SDL2_IMAGE_LIBRARIES}" STREQUAL "")
 endif()
 
 set (Warspite_Libs
+    ${Boost_LIBRARIES}
+    ${Python3_LIBRARIES}
 	${SDL2_LIBRARIES}
 	${SDL2_IMAGE_LIBRARIES}
     ${SDL2_TTF_LIBRARIES}
@@ -120,6 +140,8 @@ set (Warspite_Libs
 	${ZLIB_LIBRARIES}
 )
 
+include_directories(${Boost_INCLUDE_DIRS})
+include_directories(${Python3_INCLUDE_DIRS})
 include_directories(${SDL2_INCLUDE_DIRS})
 include_directories(${SDL2_IMAGE_INCLUDE_DIRS})
 include_directories(${SDL2_TTF_INCLUDE_DIRS})

@@ -3,6 +3,7 @@
 #include "ObjectLayer.h"
 #include "TextureManager.h"
 #include "GameObjectDictionary.h"
+#include "ObjectParams.h"
 #include "Game.h"
 #include "TileLayer.h"
 

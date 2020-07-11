@@ -168,20 +168,15 @@ bool checkALCErrors(const std::string& filename, const std::uint_fast32_t line, 
 
 class CSoundManager
 {
-private:
 	// Singleton stuff
 	static CSoundManager* s_pInstance;
-
 	CSoundManager();
 	~CSoundManager();
-
-	CSoundManager(const CSoundManager&);
-
 public:
 	// more singleton stuff
 	static CSoundManager* Instance()
 	{
-		if (s_pInstance == 0)
+		if (s_pInstance == nullptr)
 		{
 			s_pInstance = new CSoundManager();
 		}

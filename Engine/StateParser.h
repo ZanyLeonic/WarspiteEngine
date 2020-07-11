@@ -2,6 +2,7 @@
 #ifndef __StateParser_H__
 #define __StateParser_H__
 
+#include <string>
 #include <vector>
 #include <rapidjson/document.h>
 

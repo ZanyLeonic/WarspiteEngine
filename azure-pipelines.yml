@@ -15,9 +15,9 @@ jobs:
   steps:
   - task: Cache@2
     inputs:
-      key: 'v6 | vcpkg | "$(Agent.OS)" | "C:\vcpkg\.git\HEAD"'
+      key: 'v7 | vcpkg | "$(Agent.OS)" | "C:\vcpkg\.git\HEAD"'
       restoreKeys: |
-        v6 | vcpkg | "$(Agent.OS)"
+        v7 | vcpkg | "$(Agent.OS)"
         vcpkg | "$(Agent.OS)"
         vcpkg
       path: 'C:\vcpkg\'
@@ -31,7 +31,7 @@ jobs:
       script: |
         cd %VCPKG_INSTALLATION_ROOT%
         bootstrap-vcpkg.bat -disableMetrics
-  - script: C:\vcpkg\vcpkg.exe install sdl2 sdl2-image[libjpeg-turbo,libwebp,tiff] sdl2-ttf libvorbis openal-soft rapidjson zlib --triplet x64-windows
+  - script: C:\vcpkg\vcpkg.exe install sdl2 sdl2-image[libjpeg-turbo,libwebp,tiff] sdl2-ttf libvorbis openal-soft rapidjson zlib python3 boost-python --triplet x64-windows
     condition: ne(variables.VCPKG_CACHE_RESTORED, 'true')
     displayName: "Installing dependencies"
   - script: mkdir build

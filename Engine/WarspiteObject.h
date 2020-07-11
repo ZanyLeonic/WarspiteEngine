@@ -4,7 +4,8 @@
 #define __CWarspiteObject__
 
 #include "GameObject.h"
-#include "GameObjectDictionary.h"
+#include "GameObjectDictionary.h" // Include used for classes that derive it! Do not remove!!!
+#include "ObjectParams.h"
 #include "Vector2D.h"
 
 class CWarspiteObject :
