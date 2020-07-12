@@ -27,7 +27,7 @@ int UpdateStream(SStreamingAudioData& audioData)
 		alCall(alSourceUnqueueBuffers, audioData.Source, 1, &buffer);
 
 		char* data = new char[BUFFER_SIZE];
-		std::memset(data, 0, BUFFER_SIZE);
+		memset(data, 0, BUFFER_SIZE);
 
 		ALsizei dataSizeToBuffer = 0;
 		std::int32_t sizeRead = 0;
@@ -35,7 +35,8 @@ int UpdateStream(SStreamingAudioData& audioData)
 		while ((sizeRead < BUFFER_SIZE) && !reachedEnd)
 		{
 			// Continue to read the OGG file
-			std::int32_t result = ov_read(&audioData.OggVorbisFile, &data[sizeRead], BUFFER_SIZE - sizeRead, 0, 2, 1, &audioData.OggCurrentSection);
+			std::int32_t result = ov_read(&audioData.OggVorbisFile, &data[sizeRead], BUFFER_SIZE - sizeRead, 0, 2, 1,
+										  reinterpret_cast<int *>(&audioData.OggCurrentSection));
 
 			if (result == OV_HOLE)
 			{
@@ -168,7 +169,7 @@ std::size_t readOggCallback(void* destination, std::size_t size1, std::size_t si
 	}
 	audioData->SizeConsumed += length;
 
-	std::memcpy(destination, &moreData[0], length);
+	memcpy(destination, &moreData[0], length);
 
 	delete[] moreData;
 
@@ -295,7 +296,8 @@ int createStreamOnThread(void* pdata)
 		while (dataSoFar < BUFFER_SIZE)
 		{
 			// Read a part of the OGG file
-			std::int32_t result = ov_read(&audioData->OggVorbisFile, &data[dataSoFar], BUFFER_SIZE - dataSoFar, 0, 2, 1, &audioData->OggCurrentSection);
+			std::int32_t result = ov_read(&audioData->OggVorbisFile, &data[dataSoFar], BUFFER_SIZE - dataSoFar, 0, 2, 1,
+										  reinterpret_cast<int *>(&audioData->OggCurrentSection));
 			if (result == OV_HOLE)
 			{
 				std::cerr << "ERROR: OV_HOLE found in initial read of buffer " << i << std::endl;
@@ -585,7 +587,7 @@ std::int32_t CSoundManager::convertToInt(char* buffer, std::size_t len)
 {
 	std::int32_t a = 0;
 	if (endian::native == endian::little)
-		std::memcpy(&a, buffer, len);
+		memcpy(&a, buffer, len);
 	else
 		for (std::size_t i = 0; i < len; ++i)
 			reinterpret_cast<char*>(&a)[3 - i] = buffer[i];
@@ -605,7 +607,7 @@ bool CSoundManager::loadWavFileHeader(std::ifstream& file, std::uint8_t& channel
 		std::cerr << "ERROR: could not read RIFF" << std::endl;
 		return false;
 	}
-	if (std::strncmp(buffer, "RIFF", 4) != 0)
+	if (strncmp(buffer, "RIFF", 4) != 0)
 	{
 		std::cerr << "ERROR: file is not a valid WAVE file (header doesn't begin with RIFF)" << std::endl;
 		return false;
@@ -624,7 +626,7 @@ bool CSoundManager::loadWavFileHeader(std::ifstream& file, std::uint8_t& channel
 		std::cerr << "ERROR: could not read WAVE" << std::endl;
 		return false;
 	}
-	if (std::strncmp(buffer, "WAVE", 4) != 0)
+	if (strncmp(buffer, "WAVE", 4) != 0)
 	{
 		std::cerr << "ERROR: file is not a valid WAVE file (header doesn't contain WAVE)" << std::endl;
 		return false;
@@ -695,7 +697,7 @@ bool CSoundManager::loadWavFileHeader(std::ifstream& file, std::uint8_t& channel
 		std::cerr << "ERROR: could not read data chunk header" << std::endl;
 		return false;
 	}
-	if (std::strncmp(buffer, "data", 4) != 0)
+	if (strncmp(buffer, "data", 4) != 0)
 	{
 		std::cerr << "ERROR: file is not a valid WAVE file (doesn't have 'data' tag)" << std::endl;
 		return false;

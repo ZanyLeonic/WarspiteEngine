@@ -1,42 +1,24 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="CMakeRunConfigurationManager" shouldGenerate="true" shouldDeleteObsolete="true">
-    <generated />
+    <generated>
+      <config projectName="Warspite" targetName="ProjectMetadata" />
+      <config projectName="Warspite" targetName="Warspite" />
+    </generated>
   </component>
   <component name="CMakeSettings">
     <configurations>
-      <configuration PROFILE_NAME="Debug" CONFIG_NAME="Debug" GENERATION_DIR="." />
+      <configuration PROFILE_NAME="Debug" CONFIG_NAME="Debug" GENERATION_OPTIONS="-DCMAKE_TOOLCHAIN_FILE=/usr/local/bin/vcpkg/scripts/buildsystems/vcpkg.cmake" GENERATION_DIR="." />
     </configurations>
   </component>
   <component name="ChangeListManager">
     <list default="true" id="543719c6-8c94-4a69-8f9a-51660507439a" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Engine/MainMenuState.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Engine/MainMenuState.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Engine/PlayState.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Engine/PlayState.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Engine/WarspiteGame.Build.txt" beforeDir="false" afterPath="$PROJECT_DIR$/Engine/WarspiteGame.Build.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Engine/assets/ExitButton.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Engine/assets/P6290084.JPG" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Engine/assets/PlayButton.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Engine/assets/ResumeButton.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Engine/assets/demongirl.bmp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Engine/assets/dev/Black_22x27.bmp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Engine/assets/maps/help.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Engine/assets/maps/help2.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Engine/assets/maps/lamo.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Engine/assets/maps/meow.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Engine/assets/maps/testMap.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Engine/assets/player.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Engine/assets/sonic_test.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Engine/assets/states/PlayState.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Engine/assets/states/SystemMenus.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Engine/assets/textures/62ccabb5dd1364c2f5774f92b233d3c4c2dab403_full.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Engine/assets/textures/Warspite.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build-deps.ps1" beforeDir="false" afterPath="$PROJECT_DIR$/build-deps.ps1" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/sdk/ExportMap.py" beforeDir="false" afterPath="$PROJECT_DIR$/sdk/ExportMap.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/sdk/maps/help.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/sdk/maps/help2.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/sdk/maps/testMap.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/CMakeLists.txt" beforeDir="false" afterPath="$PROJECT_DIR$/CMakeLists.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Engine/CMakeLists.txt" beforeDir="false" afterPath="$PROJECT_DIR$/Engine/CMakeLists.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Engine/SoundManager.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Engine/SoundManager.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Engine/SoundManager.h" beforeDir="false" afterPath="$PROJECT_DIR$/Engine/SoundManager.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Engine/TextureManager.h" beforeDir="false" afterPath="$PROJECT_DIR$/Engine/TextureManager.h" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -66,8 +48,19 @@
     <property name="node.js.path.for.package.tslint" value="project" />
     <property name="node.js.selected.package.eslint" value="(autodetect)" />
     <property name="node.js.selected.package.tslint" value="(autodetect)" />
+    <property name="settings.editor.selected.configurable" value="CMakeSettings" />
   </component>
-  <component name="RunManager">
+  <component name="RunManager" selected="Python.Test Map">
+    <configuration name="ProjectMetadata" type="CMakeRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" PASS_PARENT_ENVS_2="true" PROJECT_NAME="Warspite" TARGET_NAME="ProjectMetadata" CONFIG_NAME="Debug">
+      <method v="2">
+        <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="Warspite" type="CMakeRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" PASS_PARENT_ENVS_2="true" PROJECT_NAME="Warspite" TARGET_NAME="Warspite" CONFIG_NAME="Debug" RUN_TARGET_PROJECT_NAME="Warspite" RUN_TARGET_NAME="Warspite">
+      <method v="2">
+        <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
+      </method>
+    </configuration>
     <configuration name="Test Map" type="PythonConfigurationType" factoryName="Python">
       <module name="WarspiteGame" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -90,6 +83,11 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
+    <list>
+      <item itemvalue="CMake Application.ProjectMetadata" />
+      <item itemvalue="CMake Application.Warspite" />
+      <item itemvalue="Python.Test Map" />
+    </list>
   </component>
   <component name="SvnConfiguration">
     <configuration />
@@ -102,6 +100,8 @@
       <option name="presentableId" value="Default" />
       <updated>1589226498810</updated>
       <workItem from="1593190162533" duration="3753000" />
+      <workItem from="1594568312794" duration="100000" />
+      <workItem from="1594568468068" duration="661000" />
     </task>
     <servers />
   </component>
@@ -149,6 +149,10 @@
       <screen x="0" y="0" width="1920" height="1050" />
     </state>
     <state width="1877" height="352" key="GridCell.Tab.1.right/-1280.54.1280.994/0.0.1920.1050@0.0.1920.1050" timestamp="1593197578477" />
+    <state x="304" y="225" key="SettingsEditor" timestamp="1594567510584">
+      <screen x="0" y="0" width="1600" height="1175" />
+    </state>
+    <state x="304" y="225" key="SettingsEditor/0.0.1600.1175@0.0.1600.1175" timestamp="1594567510584" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -160,8 +164,5 @@
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
-  </component>
-  <component name="com.intellij.coverage.CoverageDataManagerImpl">
-    <SUITE FILE_PATH="coverage/WarspiteGame$Test_Map.coverage" NAME="Test Map Coverage Results" MODIFIED="1593194234286" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/sdk" />
   </component>
 </project>

@@ -1,0 +1,368 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CodeBlocks_project_file>
+	<FileVersion major="1" minor="6"/>
+	<Project>
+		<Option title="Warspite"/>
+		<Option makefile_is_custom="1"/>
+		<Option compiler="clang"/>
+		<Option virtualFolders="CMake Files\;CMake Files\..\;CMake Files\..\..\;CMake Files\..\..\..\;CMake Files\..\..\..\..\;CMake Files\..\..\..\..\usr\;CMake Files\..\..\..\..\usr\local\;CMake Files\..\..\..\..\usr\local\bin\;CMake Files\..\..\..\..\usr\local\bin\vcpkg\;CMake Files\..\..\..\..\usr\local\bin\vcpkg\scripts\;CMake Files\..\..\..\..\usr\local\bin\vcpkg\scripts\buildsystems\;CMake Files\..\..\..\..\usr\local\bin\vcpkg\installed\;CMake Files\..\..\..\..\usr\local\bin\vcpkg\installed\x64-linux\;CMake Files\..\..\..\..\usr\local\bin\vcpkg\installed\x64-linux\share\;CMake Files\..\..\..\..\usr\local\bin\vcpkg\installed\x64-linux\share\sdl2\;CMake Files\Engine\;CMake Files\CMakeModules\;"/>
+		<Build>
+			<Target title="all">
+				<Option working_dir="/home/zany/Projects/WarspiteGame"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j4 -f &quot;/home/zany/Projects/WarspiteGame/Makefile&quot;  VERBOSE=1 all"/>
+					<CompileFile command="/usr/bin/make -j4 -f &quot;/home/zany/Projects/WarspiteGame/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j4 -f &quot;/home/zany/Projects/WarspiteGame/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j4 -f &quot;/home/zany/Projects/WarspiteGame/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="install/strip">
+				<Option working_dir="/home/zany/Projects/WarspiteGame"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j4 -f &quot;/home/zany/Projects/WarspiteGame/Makefile&quot;  VERBOSE=1 install/strip"/>
+					<CompileFile command="/usr/bin/make -j4 -f &quot;/home/zany/Projects/WarspiteGame/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j4 -f &quot;/home/zany/Projects/WarspiteGame/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j4 -f &quot;/home/zany/Projects/WarspiteGame/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="install/local">
+				<Option working_dir="/home/zany/Projects/WarspiteGame"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j4 -f &quot;/home/zany/Projects/WarspiteGame/Makefile&quot;  VERBOSE=1 install/local"/>
+					<CompileFile command="/usr/bin/make -j4 -f &quot;/home/zany/Projects/WarspiteGame/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j4 -f &quot;/home/zany/Projects/WarspiteGame/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j4 -f &quot;/home/zany/Projects/WarspiteGame/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="edit_cache">
+				<Option working_dir="/home/zany/Projects/WarspiteGame"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j4 -f &quot;/home/zany/Projects/WarspiteGame/Makefile&quot;  VERBOSE=1 edit_cache"/>
+					<CompileFile command="/usr/bin/make -j4 -f &quot;/home/zany/Projects/WarspiteGame/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j4 -f &quot;/home/zany/Projects/WarspiteGame/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j4 -f &quot;/home/zany/Projects/WarspiteGame/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="rebuild_cache">
+				<Option working_dir="/home/zany/Projects/WarspiteGame"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j4 -f &quot;/home/zany/Projects/WarspiteGame/Makefile&quot;  VERBOSE=1 rebuild_cache"/>
+					<CompileFile command="/usr/bin/make -j4 -f &quot;/home/zany/Projects/WarspiteGame/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j4 -f &quot;/home/zany/Projects/WarspiteGame/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j4 -f &quot;/home/zany/Projects/WarspiteGame/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="list_install_components">
+				<Option working_dir="/home/zany/Projects/WarspiteGame"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j4 -f &quot;/home/zany/Projects/WarspiteGame/Makefile&quot;  VERBOSE=1 list_install_components"/>
+					<CompileFile command="/usr/bin/make -j4 -f &quot;/home/zany/Projects/WarspiteGame/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j4 -f &quot;/home/zany/Projects/WarspiteGame/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j4 -f &quot;/home/zany/Projects/WarspiteGame/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="install">
+				<Option working_dir="/home/zany/Projects/WarspiteGame"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j4 -f &quot;/home/zany/Projects/WarspiteGame/Makefile&quot;  VERBOSE=1 install"/>
+					<CompileFile command="/usr/bin/make -j4 -f &quot;/home/zany/Projects/WarspiteGame/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j4 -f &quot;/home/zany/Projects/WarspiteGame/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j4 -f &quot;/home/zany/Projects/WarspiteGame/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="Warspite">
+				<Option output="/home/zany/Projects/WarspiteGame/Engine/Warspite" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/home/zany/Projects/WarspiteGame/Engine"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="clang"/>
+				<Compiler>
+					<Add option="-DWARDEBUG"/>
+					<Add option="-DENV64BIT"/>
+					<Add directory="/usr/include/python3.8"/>
+					<Add directory="/usr/local/bin/vcpkg/installed/x64-linux/include"/>
+					<Add directory="/usr/local/bin/vcpkg/installed/x64-linux/include/SDL2"/>
+					<Add directory="/usr/bin/../lib/gcc/x86_64-linux-gnu/9/../../../../include/c++/9"/>
+					<Add directory="/usr/bin/../lib/gcc/x86_64-linux-gnu/9/../../../../include/x86_64-linux-gnu/c++/9"/>
+					<Add directory="/usr/bin/../lib/gcc/x86_64-linux-gnu/9/../../../../include/c++/9/backward"/>
+					<Add directory="/usr/local/include"/>
+					<Add directory="/usr/lib/llvm-10/lib/clang/10.0.0/include"/>
+					<Add directory="/usr/include/x86_64-linux-gnu"/>
+					<Add directory="/usr/include"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j4 -f &quot;/home/zany/Projects/WarspiteGame/Engine/Makefile&quot;  VERBOSE=1 Warspite"/>
+					<CompileFile command="/usr/bin/make -j4 -f &quot;/home/zany/Projects/WarspiteGame/Engine/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j4 -f &quot;/home/zany/Projects/WarspiteGame/Engine/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j4 -f &quot;/home/zany/Projects/WarspiteGame/Engine/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="Warspite/fast">
+				<Option output="/home/zany/Projects/WarspiteGame/Engine/Warspite" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/home/zany/Projects/WarspiteGame/Engine"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="clang"/>
+				<Compiler>
+					<Add option="-DWARDEBUG"/>
+					<Add option="-DENV64BIT"/>
+					<Add directory="/usr/include/python3.8"/>
+					<Add directory="/usr/local/bin/vcpkg/installed/x64-linux/include"/>
+					<Add directory="/usr/local/bin/vcpkg/installed/x64-linux/include/SDL2"/>
+					<Add directory="/usr/bin/../lib/gcc/x86_64-linux-gnu/9/../../../../include/c++/9"/>
+					<Add directory="/usr/bin/../lib/gcc/x86_64-linux-gnu/9/../../../../include/x86_64-linux-gnu/c++/9"/>
+					<Add directory="/usr/bin/../lib/gcc/x86_64-linux-gnu/9/../../../../include/c++/9/backward"/>
+					<Add directory="/usr/local/include"/>
+					<Add directory="/usr/lib/llvm-10/lib/clang/10.0.0/include"/>
+					<Add directory="/usr/include/x86_64-linux-gnu"/>
+					<Add directory="/usr/include"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j4 -f &quot;/home/zany/Projects/WarspiteGame/Engine/Makefile&quot;  VERBOSE=1 Warspite/fast"/>
+					<CompileFile command="/usr/bin/make -j4 -f &quot;/home/zany/Projects/WarspiteGame/Engine/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j4 -f &quot;/home/zany/Projects/WarspiteGame/Engine/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j4 -f &quot;/home/zany/Projects/WarspiteGame/Engine/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="ProjectMetadata">
+				<Option working_dir="/home/zany/Projects/WarspiteGame/Engine"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j4 -f &quot;/home/zany/Projects/WarspiteGame/Engine/Makefile&quot;  VERBOSE=1 ProjectMetadata"/>
+					<CompileFile command="/usr/bin/make -j4 -f &quot;/home/zany/Projects/WarspiteGame/Engine/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j4 -f &quot;/home/zany/Projects/WarspiteGame/Engine/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j4 -f &quot;/home/zany/Projects/WarspiteGame/Engine/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+		</Build>
+		<Unit filename="/home/zany/Projects/WarspiteGame/Engine/AnimatedGraphic.cpp">
+			<Option target="Warspite"/>
+		</Unit>
+		<Unit filename="/home/zany/Projects/WarspiteGame/Engine/AnimatedGraphic.h">
+			<Option target="Warspite"/>
+		</Unit>
+		<Unit filename="/home/zany/Projects/WarspiteGame/Engine/Button.cpp">
+			<Option target="Warspite"/>
+		</Unit>
+		<Unit filename="/home/zany/Projects/WarspiteGame/Engine/Button.h">
+			<Option target="Warspite"/>
+		</Unit>
+		<Unit filename="/home/zany/Projects/WarspiteGame/Engine/Camera.cpp">
+			<Option target="Warspite"/>
+		</Unit>
+		<Unit filename="/home/zany/Projects/WarspiteGame/Engine/Camera.h">
+			<Option target="Warspite"/>
+		</Unit>
+		<Unit filename="/home/zany/Projects/WarspiteGame/Engine/Enemy.cpp">
+			<Option target="Warspite"/>
+		</Unit>
+		<Unit filename="/home/zany/Projects/WarspiteGame/Engine/Enemy.h">
+			<Option target="Warspite"/>
+		</Unit>
+		<Unit filename="/home/zany/Projects/WarspiteGame/Engine/Game.cpp">
+			<Option target="Warspite"/>
+		</Unit>
+		<Unit filename="/home/zany/Projects/WarspiteGame/Engine/Game.h">
+			<Option target="Warspite"/>
+		</Unit>
+		<Unit filename="/home/zany/Projects/WarspiteGame/Engine/GameObject.h">
+			<Option target="Warspite"/>
+		</Unit>
+		<Unit filename="/home/zany/Projects/WarspiteGame/Engine/GameObjectDictionary.cpp">
+			<Option target="Warspite"/>
+		</Unit>
+		<Unit filename="/home/zany/Projects/WarspiteGame/Engine/GameObjectDictionary.h">
+			<Option target="Warspite"/>
+		</Unit>
+		<Unit filename="/home/zany/Projects/WarspiteGame/Engine/GameState.h">
+			<Option target="Warspite"/>
+		</Unit>
+		<Unit filename="/home/zany/Projects/WarspiteGame/Engine/GameStateBase.cpp">
+			<Option target="Warspite"/>
+		</Unit>
+		<Unit filename="/home/zany/Projects/WarspiteGame/Engine/GameStateBase.h">
+			<Option target="Warspite"/>
+		</Unit>
+		<Unit filename="/home/zany/Projects/WarspiteGame/Engine/GameStateManager.cpp">
+			<Option target="Warspite"/>
+		</Unit>
+		<Unit filename="/home/zany/Projects/WarspiteGame/Engine/GameStateManager.h">
+			<Option target="Warspite"/>
+		</Unit>
+		<Unit filename="/home/zany/Projects/WarspiteGame/Engine/InputHandler.cpp">
+			<Option target="Warspite"/>
+		</Unit>
+		<Unit filename="/home/zany/Projects/WarspiteGame/Engine/InputHandler.h">
+			<Option target="Warspite"/>
+		</Unit>
+		<Unit filename="/home/zany/Projects/WarspiteGame/Engine/Layer.h">
+			<Option target="Warspite"/>
+		</Unit>
+		<Unit filename="/home/zany/Projects/WarspiteGame/Engine/Level.cpp">
+			<Option target="Warspite"/>
+		</Unit>
+		<Unit filename="/home/zany/Projects/WarspiteGame/Engine/Level.h">
+			<Option target="Warspite"/>
+		</Unit>
+		<Unit filename="/home/zany/Projects/WarspiteGame/Engine/LevelParser.cpp">
+			<Option target="Warspite"/>
+		</Unit>
+		<Unit filename="/home/zany/Projects/WarspiteGame/Engine/LevelParser.h">
+			<Option target="Warspite"/>
+		</Unit>
+		<Unit filename="/home/zany/Projects/WarspiteGame/Engine/LogicAuto.cpp">
+			<Option target="Warspite"/>
+		</Unit>
+		<Unit filename="/home/zany/Projects/WarspiteGame/Engine/LogicAuto.h">
+			<Option target="Warspite"/>
+		</Unit>
+		<Unit filename="/home/zany/Projects/WarspiteGame/Engine/MainMenuState.cpp">
+			<Option target="Warspite"/>
+		</Unit>
+		<Unit filename="/home/zany/Projects/WarspiteGame/Engine/MainMenuState.h">
+			<Option target="Warspite"/>
+		</Unit>
+		<Unit filename="/home/zany/Projects/WarspiteGame/Engine/MapObject.cpp">
+			<Option target="Warspite"/>
+		</Unit>
+		<Unit filename="/home/zany/Projects/WarspiteGame/Engine/MapObject.h">
+			<Option target="Warspite"/>
+		</Unit>
+		<Unit filename="/home/zany/Projects/WarspiteGame/Engine/MenuState.h">
+			<Option target="Warspite"/>
+		</Unit>
+		<Unit filename="/home/zany/Projects/WarspiteGame/Engine/ObjectLayer.cpp">
+			<Option target="Warspite"/>
+		</Unit>
+		<Unit filename="/home/zany/Projects/WarspiteGame/Engine/ObjectLayer.h">
+			<Option target="Warspite"/>
+		</Unit>
+		<Unit filename="/home/zany/Projects/WarspiteGame/Engine/ObjectParams.h">
+			<Option target="Warspite"/>
+		</Unit>
+		<Unit filename="/home/zany/Projects/WarspiteGame/Engine/PauseState.cpp">
+			<Option target="Warspite"/>
+		</Unit>
+		<Unit filename="/home/zany/Projects/WarspiteGame/Engine/PauseState.h">
+			<Option target="Warspite"/>
+		</Unit>
+		<Unit filename="/home/zany/Projects/WarspiteGame/Engine/PlayState.cpp">
+			<Option target="Warspite"/>
+		</Unit>
+		<Unit filename="/home/zany/Projects/WarspiteGame/Engine/PlayState.h">
+			<Option target="Warspite"/>
+		</Unit>
+		<Unit filename="/home/zany/Projects/WarspiteGame/Engine/Player.cpp">
+			<Option target="Warspite"/>
+		</Unit>
+		<Unit filename="/home/zany/Projects/WarspiteGame/Engine/Player.h">
+			<Option target="Warspite"/>
+		</Unit>
+		<Unit filename="/home/zany/Projects/WarspiteGame/Engine/ScriptManager.cpp">
+			<Option target="Warspite"/>
+		</Unit>
+		<Unit filename="/home/zany/Projects/WarspiteGame/Engine/ScriptManager.h">
+			<Option target="Warspite"/>
+		</Unit>
+		<Unit filename="/home/zany/Projects/WarspiteGame/Engine/SoundManager.cpp">
+			<Option target="Warspite"/>
+		</Unit>
+		<Unit filename="/home/zany/Projects/WarspiteGame/Engine/SoundManager.h">
+			<Option target="Warspite"/>
+		</Unit>
+		<Unit filename="/home/zany/Projects/WarspiteGame/Engine/StateParser.cpp">
+			<Option target="Warspite"/>
+		</Unit>
+		<Unit filename="/home/zany/Projects/WarspiteGame/Engine/StateParser.h">
+			<Option target="Warspite"/>
+		</Unit>
+		<Unit filename="/home/zany/Projects/WarspiteGame/Engine/TestObject.cpp">
+			<Option target="Warspite"/>
+		</Unit>
+		<Unit filename="/home/zany/Projects/WarspiteGame/Engine/TestObject.h">
+			<Option target="Warspite"/>
+		</Unit>
+		<Unit filename="/home/zany/Projects/WarspiteGame/Engine/TextureManager.cpp">
+			<Option target="Warspite"/>
+		</Unit>
+		<Unit filename="/home/zany/Projects/WarspiteGame/Engine/TextureManager.h">
+			<Option target="Warspite"/>
+		</Unit>
+		<Unit filename="/home/zany/Projects/WarspiteGame/Engine/TileLayer.cpp">
+			<Option target="Warspite"/>
+		</Unit>
+		<Unit filename="/home/zany/Projects/WarspiteGame/Engine/TileLayer.h">
+			<Option target="Warspite"/>
+		</Unit>
+		<Unit filename="/home/zany/Projects/WarspiteGame/Engine/Vector2D.h">
+			<Option target="Warspite"/>
+		</Unit>
+		<Unit filename="/home/zany/Projects/WarspiteGame/Engine/WarspiteObject.cpp">
+			<Option target="Warspite"/>
+		</Unit>
+		<Unit filename="/home/zany/Projects/WarspiteGame/Engine/WarspiteObject.h">
+			<Option target="Warspite"/>
+		</Unit>
+		<Unit filename="/home/zany/Projects/WarspiteGame/Engine/WarspiteUtil.cpp">
+			<Option target="Warspite"/>
+		</Unit>
+		<Unit filename="/home/zany/Projects/WarspiteGame/Engine/WarspiteUtil.h">
+			<Option target="Warspite"/>
+		</Unit>
+		<Unit filename="/home/zany/Projects/WarspiteGame/Engine/etc/Base64.cpp">
+			<Option target="Warspite"/>
+		</Unit>
+		<Unit filename="/home/zany/Projects/WarspiteGame/Engine/etc/Base64.h">
+			<Option target="Warspite"/>
+		</Unit>
+		<Unit filename="/home/zany/Projects/WarspiteGame/Engine/main.cpp">
+			<Option target="Warspite"/>
+		</Unit>
+		<Unit filename="/home/zany/Projects/WarspiteGame/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\"/>
+		</Unit>
+		<Unit filename="/home/zany/Projects/WarspiteGame/../../../../usr/local/bin/vcpkg/scripts/buildsystems/vcpkg.cmake">
+			<Option virtualFolder="CMake Files\..\..\..\..\usr\local\bin\vcpkg\scripts\buildsystems\"/>
+		</Unit>
+		<Unit filename="/home/zany/Projects/WarspiteGame/../../../../usr/local/bin/vcpkg/installed/x64-linux/share/sdl2/SDL2Config.cmake">
+			<Option virtualFolder="CMake Files\..\..\..\..\usr\local\bin\vcpkg\installed\x64-linux\share\sdl2\"/>
+		</Unit>
+		<Unit filename="/home/zany/Projects/WarspiteGame/../../../../usr/local/bin/vcpkg/installed/x64-linux/share/sdl2/SDL2ConfigVersion.cmake">
+			<Option virtualFolder="CMake Files\..\..\..\..\usr\local\bin\vcpkg\installed\x64-linux\share\sdl2\"/>
+		</Unit>
+		<Unit filename="/home/zany/Projects/WarspiteGame/../../../../usr/local/bin/vcpkg/installed/x64-linux/share/sdl2/SDL2Targets-debug.cmake">
+			<Option virtualFolder="CMake Files\..\..\..\..\usr\local\bin\vcpkg\installed\x64-linux\share\sdl2\"/>
+		</Unit>
+		<Unit filename="/home/zany/Projects/WarspiteGame/../../../../usr/local/bin/vcpkg/installed/x64-linux/share/sdl2/SDL2Targets-release.cmake">
+			<Option virtualFolder="CMake Files\..\..\..\..\usr\local\bin\vcpkg\installed\x64-linux\share\sdl2\"/>
+		</Unit>
+		<Unit filename="/home/zany/Projects/WarspiteGame/../../../../usr/local/bin/vcpkg/installed/x64-linux/share/sdl2/SDL2Targets.cmake">
+			<Option virtualFolder="CMake Files\..\..\..\..\usr\local\bin\vcpkg\installed\x64-linux\share\sdl2\"/>
+		</Unit>
+		<Unit filename="/home/zany/Projects/WarspiteGame/../../../../usr/local/bin/vcpkg/installed/x64-linux/share/sdl2/vcpkg-cmake-wrapper.cmake">
+			<Option virtualFolder="CMake Files\..\..\..\..\usr\local\bin\vcpkg\installed\x64-linux\share\sdl2\"/>
+		</Unit>
+		<Unit filename="/home/zany/Projects/WarspiteGame/Engine/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\Engine\"/>
+		</Unit>
+		<Unit filename="/home/zany/Projects/WarspiteGame/CMakeModules/FindSDL2_image.cmake">
+			<Option virtualFolder="CMake Files\CMakeModules\"/>
+		</Unit>
+		<Unit filename="/home/zany/Projects/WarspiteGame/CMakeModules/FindSDL2_ttf.cmake">
+			<Option virtualFolder="CMake Files\CMakeModules\"/>
+		</Unit>
+		<Unit filename="/home/zany/Projects/WarspiteGame/CMakeModules/FindVorbis.cmake">
+			<Option virtualFolder="CMake Files\CMakeModules\"/>
+		</Unit>
+		<Unit filename="/home/zany/Projects/WarspiteGame/CMakeModules/Findrapidjson.cmake">
+			<Option virtualFolder="CMake Files\CMakeModules\"/>
+		</Unit>
+	</Project>
+</CodeBlocks_project_file>

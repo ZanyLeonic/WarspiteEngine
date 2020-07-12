@@ -16,6 +16,7 @@
 #define alCall(function, ...) alCallImpl(__FILE__, __LINE__, function, __VA_ARGS__)
 #define alcCall(function, device, ...) alcCallImpl(__FILE__, __LINE__, function, device, __VA_ARGS__)
 
+
 enum class ESoundType
 {
 	SOUND_MUSIC = 0,
@@ -110,6 +111,9 @@ struct SStreamingAudioData
 			Duration == s1.Duration;
 	}
 };
+// Reports errors encountered with OpenAL
+bool checkALErrors(const std::string& filename, const std::uint_fast32_t line);
+bool checkALCErrors(const std::string& filename, const std::uint_fast32_t line, ALCdevice* device);
 
 // Wrapper for OpenAL (AL and ALC) calls
 	// Template for methods that return a non-void type
@@ -161,10 +165,6 @@ auto alcCallImpl(const char* filename,
 	returnValue = function(std::forward<Params>(params)...);
 	return checkALCErrors(filename, line, device);
 }
-
-// Reports errors encountered with OpenAL
-bool checkALErrors(const std::string& filename, const std::uint_fast32_t line);
-bool checkALCErrors(const std::string& filename, const std::uint_fast32_t line, ALCdevice* device);
 
 class CSoundManager
 {
