@@ -3,7 +3,10 @@
 #
 cmake_minimum_required (VERSION 3.8)
 
+set (MOD_NAME "Engine")
+
 set(WarspiteEngine_Src
+        api.hpp
         AnimatedGraphic.cpp
         Button.cpp
         Camera.cpp
@@ -89,11 +92,6 @@ if (WIN32)
     set(SDL2_TTF_LIBRARIES SDL2::SDL2_ttf)
 endif()
 
-# Apply some debug options
-if (CMAKE_BUILD_TYPE STREQUAL "Debug")
-    add_compile_definitions(WARDEBUG)
-endif()
-
 find_package(Python3 COMPONENTS Interpreter Development REQUIRED)
 find_package(Boost COMPONENTS system filesystem REQUIRED)
 find_package(SDL2 CONFIG REQUIRED)
@@ -141,7 +139,7 @@ set (Warspite_Libs
         ${OPENAL_LIBRARY}
         ${VORBIS_LIBRARIES}
         ${ZLIB_LIBRARIES}
-        )
+)
 
 include_directories(${Boost_INCLUDE_DIRS})
 include_directories(${Python3_INCLUDE_DIRS})
@@ -154,9 +152,10 @@ include_directories(${OPENAL_INCLUDE_DIRS})
 include_directories(${VORBIS_INCLUDE_DIR})
 include_directories(${ZLIB_INCLUDE_DIRS})
 
+include (GenerateExportHeader)
 # Add source to this project's executable.
-add_executable (${PROJECT_NAME} ${WarspiteEngine_Src} ${WarspiteEngine_Header})
-add_dependencies(${PROJECT_NAME} ProjectMetadata)
+add_library (${MOD_NAME} SHARED ${WarspiteEngine_Src} ${WarspiteEngine_Header})
+add_dependencies(${MOD_NAME} ProjectMetadata)
 
 # As a last ditch effort...
 if ("${Python_EXECUTABLE}" STREQUAL "")
@@ -167,7 +166,7 @@ if ("${Python_EXECUTABLE}" STREQUAL "")
     endif()
 endif()
 
-target_link_libraries(${PROJECT_NAME} PUBLIC ${Warspite_Libs})
+target_link_libraries(${MOD_NAME} PUBLIC ${Warspite_Libs})
 
 if(CMAKE_SIZEOF_VOID_P EQUAL 8)
     add_definitions(-DENV64BIT)
@@ -175,7 +174,7 @@ else()
     add_definitions(-DENV32BIT)
 endif()
 
-install(TARGETS ${PROJECT_NAME} RUNTIME DESTINATION ./Warspite)
+install(TARGETS ${MOD_NAME} RUNTIME DESTINATION ./Warspite)
 
 if (WIN32)
     install(DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/

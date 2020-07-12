@@ -11,5 +11,11 @@ set(CMAKE_CXX_EXTENSIONS OFF)
 
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/CMakeModules/")
 
+# Apply some debug options
+if (CMAKE_BUILD_TYPE STREQUAL "Debug")
+    add_compile_definitions(WARDEBUG)
+endif()
+
 # Include sub-projects.
 add_subdirectory ("Engine")
+add_subdirectory ("Launcher")

@@ -8,6 +8,9 @@
 #include "GameStateManager.h"
 #include "MainMenuState.h"
 #include "Vector2D.h"
+#include <memory>
+#include <boost/python.hpp>
+#include <utility>
 
 class CGame
 {
@@ -37,6 +40,8 @@ public:
 	void Destroy();
 	void Quit();
 
+	void TestMethod();
+
 	// a function to access the private running variable
 	bool IsRunning() { return m_bRunning; }
 
@@ -47,7 +52,7 @@ public:
 	CVector2D GetViewportSize() const { return m_viewportSize; }
 
 	SDL_Thread* GetAudioThread() const { return audioThread; }
-
+	
 private:
 	CGameStateManager* m_pGameStateManager;
 
@@ -64,4 +69,5 @@ private:
 
 	bool m_bRunning = false;
 };
+
 #endif /* defined(__Game__) */

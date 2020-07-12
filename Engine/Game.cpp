@@ -128,3 +128,8 @@ void CGame::Quit()
 {
 	m_bRunning = false;
 }
+
+void CGame::TestMethod()
+{
+	std::cout << "This is a test method!" << std::endl;
+}

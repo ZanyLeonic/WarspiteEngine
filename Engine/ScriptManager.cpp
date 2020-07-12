@@ -14,7 +14,10 @@ CScriptManager::CScriptManager()
 
 	// Show that the ScriptManager is ready
 	SGameScript *test = SGameScript::source("test", "import sys\nprint(\"Using Python Runtime %s.%s.%s\" % (sys.version_info.major, sys.version_info.minor, sys.version_info.micro))\nprint(\"Script Manager is ready!\")");
+	SGameScript* tt = SGameScript::source("test2", "import game\ns=game.get_it()\nprint(s.test())");
+	
 	Run(test);
+	Run(tt);
 }
 
 

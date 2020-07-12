@@ -8,7 +8,7 @@ CGame* g_game = 0;
 const int FPS = 62;
 const int DELAY_TIME = 1000 / FPS;
 
-int main(int argc, char* argv[])
+extern "C" __declspec(dllexport) int __cdecl Engine(int argc, char** argv)
 {
 	Uint32 frameStart, frameTime;
 
