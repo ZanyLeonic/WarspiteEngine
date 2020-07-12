@@ -168,7 +168,6 @@ if ("${Python_EXECUTABLE}" STREQUAL "")
 endif()
 
 target_link_libraries(${PROJECT_NAME} PUBLIC ${Warspite_Libs})
-set_property(TARGET ${PROJECT_NAME} PROPERTY CXX_STANDARD 17)
 
 if(CMAKE_SIZEOF_VOID_P EQUAL 8)
     add_definitions(-DENV64BIT)
