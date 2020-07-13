@@ -8,5 +8,6 @@ class WarspiteUtil
 {
 public:
 	static std::string GetFileExtenstion(std::string path);
+	static std::string ReadAllText(std::string path);
 };
 #endif

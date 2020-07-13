@@ -1,13 +1,16 @@
 #include "ScriptManager.h"
 #include <iostream>
+#include <pybind11/embed.h>
+#include "WarspiteUtil.h"
 
 CScriptManager* CScriptManager::s_pInstance = 0;
 
 // Wrapper code
 // Define Python module "bar" and Python class "bar.Foo" wrapping the C++ class
 PYBIND11_MODULE(game, m) {
-	py::class_<GameWrapper, WrapPtr>(m, "GameWrapper")
-		.def("test", &GameWrapper::test);
+	py::class_<CGame,std::unique_ptr<CGame, py::nodelete>>(m, "Game")
+		.def_static("__new__", [](py::object) { return std::shared_ptr<CGame>(CGame::Instance()); },
+			py::return_value_policy::reference_internal);
 }
 
 CScriptManager::CScriptManager()
@@ -21,29 +24,25 @@ CScriptManager::CScriptManager()
 		// Initialize Python interpreter and import bar module
 		PyImport_AppendInittab("game", PyInit_game);
 		Py_Initialize();
-		PyRun_SimpleString("import game");
-
+		//PyRun_SimpleString("import game");
+		
 		// Make C++ instance accessible in Python as a variable named "foo"
-		py::module main = py::module::import("__main__");
-		main.attr("inst") = foo;
-
-		// Run some Python code using foo
-		PyRun_SimpleString("print(inst.test())");
+		main_module = py::module::import("__main__");
+		// main_module.attr("inst") = foo;
+		main_namespace = main_module.attr("__dict__");
 	}
 	catch(pybind11::error_already_set const&)
 	{
 		PyErr_Print();
 	}
-	//
-	//main_module = boost::python::import("__main__");
-	//main_namespace = main_module.attr("__dict__");
 
-	//// Show that the ScriptManager is ready
-	//SGameScript *test = SGameScript::source("test", "import sys\nprint(\"Using Python Runtime %s.%s.%s\" % (sys.version_info.major, sys.version_info.minor, sys.version_info.micro))\nprint(\"Script Manager is ready!\")");
-	//SGameScript* tt = SGameScript::source("test2","import emb\nprint(\"Number of arguments\", emb.numargs())");
+	// Run some Python code using foo
+	// Show that the ScriptManager is ready
+	SGameScript* test = SGameScript::source("test", "import sys\nprint(\"Using Python Runtime %s.%s.%s\" % (sys.version_info.major, sys.version_info.minor, sys.version_info.micro))\nprint(\"Script Manager is ready!\")");
+	SGameScript* tt = SGameScript::source("test2", "import game\nprint(game)");
 
-	//Run(test);
-	//Run(tt);
+	Run(test);
+	Run(tt);
 }
 
 
@@ -68,33 +67,33 @@ void CScriptManager::RemoveAll()
 	loadedScripts.clear();
 }
 
-//bool CScriptManager::Run(SGameScript* script, boost::python::object* ns)
-//{
-//	try
-//	{
-//		// Use the namespace provided (if there is one)
-//		switch (script->GetScriptType())
-//		{
-//		case EGameScriptType::SCRIPT_INLINE:
-//			exec(script->GetSource().c_str(), main_namespace);
-//			break;
-//		case EGameScriptType::SCRIPT_FILE:
-//			exec_file(script->GetFilename().c_str(), main_namespace);
-//			break;
-//		default:
-//			return false; // No type defined? what?
-//		}
-//		
-//		return true;
-//	}
-//	catch(boost::python::error_already_set const &)
-//	{
-//		PyErr_Print();
-//	}
-//	return false;
-//}
-//
-//bool CScriptManager::RunFromRef(std::string scriptRef, boost::python::object* ns)
-//{
-//	return Run(loadedScripts[scriptRef], ns);
-//}
+bool CScriptManager::Run(SGameScript* script)
+{
+	try
+	{
+		// Use the namespace provided (if there is one)
+		switch (script->GetScriptType())
+		{
+		case EGameScriptType::SCRIPT_INLINE:
+			PyRun_SimpleString(script->GetSource().c_str());
+			break;
+		case EGameScriptType::SCRIPT_FILE:
+			PyRun_SimpleString(WarspiteUtil::ReadAllText(script->GetFilename()).c_str());
+			break;
+		default:
+			return false; // No type defined? what?
+		}
+		
+		return true;
+	}
+	catch(pybind11::error_already_set const &)
+	{
+		PyErr_Print(); // print all errors for now
+	}
+	return false;
+}
+
+bool CScriptManager::RunFromRef(std::string scriptRef)
+{
+	return Run(loadedScripts[scriptRef]);
+}

@@ -5,6 +5,7 @@
 #include <iostream>
 #include <map>
 
+
 #include "Game.h"
 
 enum class EGameScriptType
@@ -84,6 +85,7 @@ class CScriptManager
 {
 	static CScriptManager* s_pInstance;
 	CScriptManager();
+	
 public:
 	// more singleton stuff
 	static CScriptManager* Instance()
@@ -96,15 +98,18 @@ public:
 		return s_pInstance;
 	}
 
+	void Destroy();
+	
 	void Load(SGameScript* script);
 	bool Remove(const char* scriptRef);
 	void RemoveAll();
 	
-	//bool Run(SGameScript* script, boost::python::object* ns = 0);
-	//bool RunFromRef(std::string scriptRef, boost::python::object* ns = 0);
+	
+	bool Run(SGameScript* script);
+	bool RunFromRef(std::string scriptRef);
 private:
-	//boost::python::object main_module;
-	//boost::python::object main_namespace;
+	py::module main_module;
+	py::object main_namespace;
 
 	std::map<std::string, SGameScript*> loadedScripts;
 };
