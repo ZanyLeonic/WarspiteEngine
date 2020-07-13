@@ -8,10 +8,8 @@ CScriptManager* CScriptManager::s_pInstance = 0;
 // Wrapper code
 // Define Python module "bar" and Python class "bar.Foo" wrapping the C++ class
 PYBIND11_MODULE(game, m) {
-	py::class_<CGame, std::unique_ptr<CGame, py::nodelete>>(m, "CGame")
-		.def("instance", &CGame::Instance, py::return_value_policy::reference);
-
-	m.def("test", &CGame::TestMethod);
+	py::class_<GameWrapper, WrapPtr>(m, "GameWrapper")
+		.def("test", &GameWrapper::test);
 }
 
 CScriptManager::CScriptManager()
