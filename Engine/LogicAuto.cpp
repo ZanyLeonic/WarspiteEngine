@@ -8,7 +8,7 @@ CLogicAuto::CLogicAuto()
 
 void CLogicAuto::OnPlay()
 {
-	CScriptManager::Instance()->RunFromRef(m_scriptName);
+	// CScriptManager::Instance()->RunFromRef(m_scriptName);
 }
 
 void CLogicAuto::Load(const CObjectParams* pParams)

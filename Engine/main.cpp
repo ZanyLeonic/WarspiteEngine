@@ -1,6 +1,7 @@
 #include "Game.h"
 #include "GitVersion.h"
 #include <iostream>
+#include <chrono>
 
 // our Game object
 CGame* g_game = 0;
@@ -20,8 +21,15 @@ int main(int argc, char* argv[])
 	snprintf(title, sizeof(title), "Engine (DEBUG) (Build: %d git: %s)", GAME_BUILD_NUMBER, GAME_GIT_HASH);
 	std::cout << "This is a debug build.\n";
 #endif
+
+	std::chrono::seconds dur((long)GAME_BUILD_TIME);
+	std::chrono::time_point<std::chrono::system_clock> dt(dur);
+	auto ptr = std::chrono::system_clock::to_time_t(dt);
+	char time[255];
+	auto frm = ctime_s(time, 255, &ptr);
 	
 	std::cout << "Build: "<< GAME_BUILD_NUMBER << "\nUsing source: " << GAME_GIT_HASH << "\n";
+	std::cout << "Build Date: " << time << std::endl;
 	std::cout << "Attempting Game initialization...\n";
 	std::cout << "Target FPS is " << FPS << " FPS\n";
 

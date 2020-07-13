@@ -95,7 +95,17 @@ if (CMAKE_BUILD_TYPE STREQUAL "Debug")
 endif()
 
 find_package(Python3 COMPONENTS Interpreter Development REQUIRED)
-find_package(Boost COMPONENTS system REQUIRED)
+
+message(STATUS "Python3_LIBRARIES = ${Python3_LIBRARIES}")
+message(STATUS "Python3_EXECUTABLE = ${Python3_EXECUTABLE}")
+message(STATUS "Python3_INCLUDE_DIRS = ${Python3_INCLUDE_DIRS}")
+
+add_custom_target(ProjectMetadata
+        COMMAND "${Python3_EXECUTABLE}" "${CMAKE_CURRENT_SOURCE_DIR}/GitVersion.py"
+        COMMENT "Generating build metadata..."
+)
+
+find_package(pybind11 CONFIG REQUIRED)
 find_package(SDL2 CONFIG REQUIRED)
 find_package(SDL2_image REQUIRED)
 find_package(SDL2_ttf REQUIRED)
@@ -103,23 +113,6 @@ find_package(rapidjson REQUIRED)
 find_package(OpenAL REQUIRED)
 find_package(Vorbis REQUIRED)
 find_package(ZLIB REQUIRED)
-
-# Boost-Python stuff
-if (Python3_Interpreter_FOUND)
-    FIND_PACKAGE(Boost COMPONENTS python${Python3_VERSION_MAJOR}${Python3_VERSION_MINOR})
-else()
-    message("Python not found")
-endif()
-
-message(STATUS "Python3_LIBRARIES = ${Python3_LIBRARIES}")
-message(STATUS "Python3_EXECUTABLE = ${Python3_EXECUTABLE}")
-message(STATUS "Python3_INCLUDE_DIRS = ${Python3_INCLUDE_DIRS}")
-message(STATUS "Boost_LIBRARIES = ${Boost_LIBRARIES}")
-
-add_custom_target(ProjectMetadata
-        COMMAND "${Python_EXECUTABLE}" "${CMAKE_CURRENT_SOURCE_DIR}/GitVersion.py"
-        COMMENT "Generating build metadata..."
-        )
 
 # Add this because apparently find_package(SDL2 REQUIRED) doesn't work right on Arch?
 if("${SDL2_LIBRARIES}" STREQUAL "")
@@ -131,19 +124,18 @@ if("${SDL2_IMAGE_LIBRARIES}" STREQUAL "")
 endif()
 
 set (Warspite_Libs
-        ${Boost_LIBRARIES}
-        ${Boost_SYSTEM_LIBRARY}
         ${Python3_LIBRARIES}
+        ${PYBIND11_LIBRARIES}
         ${SDL2_LIBRARIES}
         ${SDL2_IMAGE_LIBRARIES}
         ${SDL2_TTF_LIBRARIES}
         ${OPENAL_LIBRARY}
         ${VORBIS_LIBRARIES}
         ${ZLIB_LIBRARIES}
-        )
+)
 
-include_directories(${Boost_INCLUDE_DIRS})
 include_directories(${Python3_INCLUDE_DIRS})
+include_directories(${PYBIND11_INCLUDE_DIRS})
 include_directories(${SDL2_INCLUDE_DIRS})
 include_directories(${SDL2_IMAGE_INCLUDE_DIRS})
 include_directories(${SDL2_TTF_INCLUDE_DIRS})

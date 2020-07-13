@@ -3,9 +3,6 @@
 #define __SCRIPTMANAGER_H__
 
 #include <iostream>
-#include <boost/shared_ptr.hpp>
-#include <boost/make_shared.hpp>
-#include <boost/python.hpp>
 #include <map>
 
 #include "Game.h"
@@ -17,16 +14,29 @@ enum class EGameScriptType
 	SCRIPT_FILE = 2
 };
 
-struct Foo {
-	Foo() {}
-	Foo(std::string const& s) : m_string(s) {}
-	void doSomething() {
-		std::cout << "Foo:" << m_string << std::endl;
+#include <pybind11/pybind11.h>
+namespace py = pybind11;
+
+struct GameWrapper
+{
+	GameWrapper()
+	{
+		inst = CGame::Instance();
 	}
-	std::string m_string;
+
+	const char* test()
+	{
+		if (inst != nullptr)
+		{
+			return inst->TestMethod();
+		}
+		return 0;
+	}
+
+	CGame* inst = nullptr;
 };
 
-typedef boost::shared_ptr<Foo> foo_ptr;
+typedef std::shared_ptr<GameWrapper> WrapPtr;
 
 struct SGameScript
 {
@@ -90,11 +100,11 @@ public:
 	bool Remove(const char* scriptRef);
 	void RemoveAll();
 	
-	bool Run(SGameScript* script, boost::python::object* ns = 0);
-	bool RunFromRef(std::string scriptRef, boost::python::object* ns = 0);
+	//bool Run(SGameScript* script, boost::python::object* ns = 0);
+	//bool RunFromRef(std::string scriptRef, boost::python::object* ns = 0);
 private:
-	boost::python::object main_module;
-	boost::python::object main_namespace;
+	//boost::python::object main_module;
+	//boost::python::object main_namespace;
 
 	std::map<std::string, SGameScript*> loadedScripts;
 };

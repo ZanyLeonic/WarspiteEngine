@@ -37,7 +37,7 @@ public:
 	void Destroy();
 	void Quit();
 
-	void TestMethod();
+	const char* TestMethod();
 
 	// a function to access the private running variable
 	bool IsRunning() { return m_bRunning; }
@@ -66,4 +66,7 @@ private:
 
 	bool m_bRunning = false;
 };
+
+typedef std::shared_ptr<CGame> CGamePtr;
+
 #endif /* defined(__Game__) */

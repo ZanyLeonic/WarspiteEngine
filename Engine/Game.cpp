@@ -129,7 +129,8 @@ void CGame::Quit()
 	m_bRunning = false;
 }
 
-void CGame::TestMethod()
+const char* CGame::TestMethod()
 {
-	std::cout << "Hello world!" << std::endl;
+	std::cout << "This will be called by Python..." << std::endl;
+	return "...and we will obey.";
 }
