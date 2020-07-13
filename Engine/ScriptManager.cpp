@@ -37,26 +37,13 @@ CScriptManager::CScriptManager()
 		PyErr_Print();
 	}
 
-	//// Run some Python code using foo
-	//// Show that the ScriptManager is ready
-	//SGameScript* test = SGameScript::source("test", "import sys\nprint(\"Using Python Runtime %s.%s.%s\" % (sys.version_info.major, sys.version_info.minor, sys.version_info.micro))\nprint(\"Script Manager is ready!\")");
-	//SGameScript* tt = SGameScript::source("test2", "from game import *\ninst = CGame.instance()\nprint(inst.instance().test())");
+	// Run some Python code using foo
+	// Show that the ScriptManager is ready
+	SGameScript* test = SGameScript::source("test", "import sys\nprint(\"Using Python Runtime %s.%s.%s\" % (sys.version_info.major, sys.version_info.minor, sys.version_info.micro))\nprint(\"Script Manager is ready!\")");
+	SGameScript* tt = SGameScript::source("test2", "from game import *\ninst = CGame.instance()\nprint(dir(inst))");
 
-	//Run(test);
-	//Run(tt);
-	
-	while(true)
-	{
-		std::string in;
-		std::cin >> in;
-		try{
-			PyRun_SimpleString(in.c_str());
-		}
-		catch (pybind11::error_already_set const&)
-		{
-			PyErr_Print();
-		}
-	}
+	Run(test);
+	Run(tt);
 }
 
 
