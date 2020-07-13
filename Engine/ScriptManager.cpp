@@ -8,9 +8,10 @@ CScriptManager* CScriptManager::s_pInstance = 0;
 // Wrapper code
 // Define Python module "bar" and Python class "bar.Foo" wrapping the C++ class
 PYBIND11_MODULE(game, m) {
-	py::class_<CGame,std::unique_ptr<CGame, py::nodelete>>(m, "Game")
-		.def_static("__new__", [](py::object) { return std::shared_ptr<CGame>(CGame::Instance()); },
-			py::return_value_policy::reference_internal);
+	py::class_<CGame, std::unique_ptr<CGame, py::nodelete>>(m, "CGame")
+		.def("instance", &CGame::Instance, py::return_value_policy::reference);
+
+	m.def("test", &CGame::TestMethod);
 }
 
 CScriptManager::CScriptManager()
@@ -36,13 +37,26 @@ CScriptManager::CScriptManager()
 		PyErr_Print();
 	}
 
-	// Run some Python code using foo
-	// Show that the ScriptManager is ready
-	SGameScript* test = SGameScript::source("test", "import sys\nprint(\"Using Python Runtime %s.%s.%s\" % (sys.version_info.major, sys.version_info.minor, sys.version_info.micro))\nprint(\"Script Manager is ready!\")");
-	SGameScript* tt = SGameScript::source("test2", "import game\nprint(game)");
+	//// Run some Python code using foo
+	//// Show that the ScriptManager is ready
+	//SGameScript* test = SGameScript::source("test", "import sys\nprint(\"Using Python Runtime %s.%s.%s\" % (sys.version_info.major, sys.version_info.minor, sys.version_info.micro))\nprint(\"Script Manager is ready!\")");
+	//SGameScript* tt = SGameScript::source("test2", "from game import *\ninst = CGame.instance()\nprint(inst.instance().test())");
 
-	Run(test);
-	Run(tt);
+	//Run(test);
+	//Run(tt);
+	
+	while(true)
+	{
+		std::string in;
+		std::cin >> in;
+		try{
+			PyRun_SimpleString(in.c_str());
+		}
+		catch (pybind11::error_already_set const&)
+		{
+			PyErr_Print();
+		}
+	}
 }
 
 
