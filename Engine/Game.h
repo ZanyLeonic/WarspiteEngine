@@ -37,6 +37,8 @@ public:
 	void Destroy();
 	void Quit();
 
+	void TestMethod();
+
 	// a function to access the private running variable
 	bool IsRunning() { return m_bRunning; }
 

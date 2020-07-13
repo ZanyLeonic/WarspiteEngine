@@ -2,8 +2,13 @@
 #ifndef __SCRIPTMANAGER_H__
 #define __SCRIPTMANAGER_H__
 
+#include <iostream>
+#include <boost/shared_ptr.hpp>
+#include <boost/make_shared.hpp>
 #include <boost/python.hpp>
 #include <map>
+
+#include "Game.h"
 
 enum class EGameScriptType
 {
@@ -11,6 +16,17 @@ enum class EGameScriptType
 	SCRIPT_INLINE = 1,
 	SCRIPT_FILE = 2
 };
+
+struct Foo {
+	Foo() {}
+	Foo(std::string const& s) : m_string(s) {}
+	void doSomething() {
+		std::cout << "Foo:" << m_string << std::endl;
+	}
+	std::string m_string;
+};
+
+typedef boost::shared_ptr<Foo> foo_ptr;
 
 struct SGameScript
 {

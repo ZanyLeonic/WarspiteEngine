@@ -3,9 +3,6 @@
 #define __WARSPITEUTIL_H__
 
 #include <string>
-#include <boost/filesystem.hpp>
-
-namespace filesys = boost::filesystem;
 
 class WarspiteUtil
 {

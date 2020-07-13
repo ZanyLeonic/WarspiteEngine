@@ -3,18 +3,63 @@
 
 CScriptManager* CScriptManager::s_pInstance = 0;
 
+// Wrapper code
+namespace bp = boost::python;
+BOOST_PYTHON_MODULE(hello)
+{
+	bp::class_<Foo, foo_ptr>("Foo")
+		.def("doSomething", &Foo::doSomething)
+		;
+};
+
 CScriptManager::CScriptManager()
 {
 	std::cout << "Initialising ScriptManager..." << std::endl;
 
 	Py_Initialize();
+	try {
+		PyRun_SimpleString(
+			"a_foo = None\n"
+			"\n"
+			"def setup(a_foo_from_cxx):\n"
+			"    print('setup called with', a_foo_from_cxx)\n"
+			"    global a_foo\n"
+			"    a_foo = a_foo_from_cxx\n"
+			"\n"
+			"def run():\n"
+			"    a_foo.doSomething()\n"
+			"\n"
+			"print('main module loaded')\n"
+		);
 
-	main_module = boost::python::import("__main__");
-	main_namespace = main_module.attr("__dict__");
+		foo_ptr a_cxx_foo = boost::make_shared<Foo>("c++");
 
-	// Show that the ScriptManager is ready
-	SGameScript *test = SGameScript::source("test", "import sys\nprint(\"Using Python Runtime %s.%s.%s\" % (sys.version_info.major, sys.version_info.minor, sys.version_info.micro))\nprint(\"Script Manager is ready!\")");
-	Run(test);
+		bp::object main = bp::object(bp::handle<>(bp::borrowed(
+			PyImport_AddModule("__main__")
+		)));
+
+		// pass the reference to a_cxx_foo into python:
+		bp::object setup_func = main.attr("setup");
+		setup_func(a_cxx_foo);
+
+		// now run the python 'main' function
+		bp::object run_func = main.attr("run");
+		run_func();
+	}
+	catch (bp::error_already_set) {
+		PyErr_Print();
+	}
+	
+	//
+	//main_module = boost::python::import("__main__");
+	//main_namespace = main_module.attr("__dict__");
+
+	//// Show that the ScriptManager is ready
+	//SGameScript *test = SGameScript::source("test", "import sys\nprint(\"Using Python Runtime %s.%s.%s\" % (sys.version_info.major, sys.version_info.minor, sys.version_info.micro))\nprint(\"Script Manager is ready!\")");
+	//SGameScript* tt = SGameScript::source("test2","import emb\nprint(\"Number of arguments\", emb.numargs())");
+
+	//Run(test);
+	//Run(tt);
 }
 
 

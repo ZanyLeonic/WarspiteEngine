@@ -2,11 +2,11 @@
 
 std::string WarspiteUtil::GetFileExtenstion(std::string path)
 {
-	filesys::path pObj(path);
+	std::size_t pos = path.rfind('.');
 
-	if (pObj.has_extension())
+	if (pos != std::string::npos)
 	{
-		return pObj.extension().string();
+		return path.substr(pos);
 	}
 	
 	return "";
