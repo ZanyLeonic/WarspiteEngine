@@ -2,9 +2,7 @@
 #include "ScriptManager.h"
 
 CLogicAuto::CLogicAuto()
-{
-	
-}
+{}
 
 void CLogicAuto::OnPlay()
 {

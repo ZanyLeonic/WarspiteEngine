@@ -20,51 +20,21 @@ public:
 	void Destroy() override;
 
 	void Load(const CObjectParams* pParams) override;
+	
+	CVector2D GetPosition() override { return m_position; }
+	void SetPosition(CVector2D& nPos) override { m_position = nPos; }
+	
+	virtual CVector2D GetVelocity() {  return m_velocity; }
+	virtual CVector2D GetAcceleration() { return m_acceleration; }
+	virtual CVector2D GetSize() { return CVector2D((float)m_width, (float)m_height); }
 
-	CVector2D GetPosition() override
-	{
-		return m_position;
-	}
+	virtual int GetCurrentAnimRow() { return m_currentRow; }
+	virtual int GetCurrentAnimFrame() { return m_currentFrame; }
+	virtual int GetTotalAnimFrames() { return m_numFrames; }
 
-	virtual CVector2D GetVelocity()
-	{
-		return m_velocity;
-	}
-
-	virtual CVector2D GetAcceleration()
-	{
-		return m_acceleration;
-	}
-
-	virtual CVector2D GetSize()
-	{
-		return CVector2D(m_width, m_height);
-	}
-
-	virtual int GetCurrentAnimRow()
-	{
-		return m_currentRow;
-	}
-
-	virtual int GetCurrentAnimFrame()
-	{
-		return m_currentFrame;
-	}
-
-	virtual int GetTotalAnimFrames()
-	{
-		return m_numFrames;
-	}
-
-	virtual std::string GetTextureID()
-	{
-		return m_textureID;
-	}
-
-	virtual std::string GetMapRefID()
-	{
-		return "";
-	}
+	const char* GetName() override { return m_objectName.c_str(); }
+	virtual std::string GetTextureID() { return m_textureID; }
+	virtual std::string GetFactoryID() { return m_factoryID; }
 	
 protected:
 	CVector2D m_position;
@@ -78,6 +48,7 @@ protected:
 	int m_currentFrame;
 	int m_numFrames;
 
+	std::string m_objectName = "";
 	std::string m_factoryID = "";
 	std::string m_textureID = "";
 };

@@ -1,4 +1,9 @@
-print("This is a test script!")
+from game import Vector2D
 
-for i in range(0,10):
-    print(i)
+v = Vector2D()
+
+v.set_x(10)
+v.set_y(25)
+
+print (v)
+print (v.length())

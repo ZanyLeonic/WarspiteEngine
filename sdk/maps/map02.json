@@ -116,7 +116,7 @@
                  "name":"TestLogic",
                  "properties":[
                         {
-                         "name":"RunScript",
+                         "name":"runScript",
                          "type":"string",
                          "value":"TestScript"
                         }],

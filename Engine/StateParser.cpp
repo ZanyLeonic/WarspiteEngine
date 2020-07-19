@@ -106,32 +106,35 @@ void CStateParser::ParseObjects(const rapidjson::Value* pStateRoot, std::vector<
 	{
 		// Get the current object we are working with.
 		const Value& b = t[i];
-		int x, y, width, height, numFrames, animSpeed, onClickCallback, onEnterCallback, onLeaveCallback;
-		std::string textureID;
-
-		// Retrieve the relevant information from the object declaration...
-		// Required
-		x = b["x"].GetInt();
-		y = b["y"].GetInt();
-		width = b["width"].GetInt();
-		height = b["height"].GetInt();
-		textureID = b["textureID"].GetString();
-
-		// Optional
-		numFrames = b.HasMember("numFrames") ? b["numFrames"].GetInt() : 1;
-		animSpeed = b.HasMember("animSpeed") ? b["animSpeed"].GetInt() : 1;
-
-		onClickCallback = b.HasMember("onClickID") ? b["onClickID"].GetInt() : 0;
-		onEnterCallback = b.HasMember("onEnterID") ? b["onEnterID"].GetInt() : 0;
-		onLeaveCallback = b.HasMember("onLeaveID") ? b["onLeaveID"].GetInt() : 0;
 
 		// Attempt to create the object type.
 		IGameObject* pGameObject =
 			CGameObjectDictionary::Instance()->Create(b["type"].GetString());
 
+		auto *p = new CObjectParams((float)b["x"].GetInt(), (float)b["y"].GetInt());
+
+		// Retrieve the relevant information from the object declaration...
+		// Required
+		p->SetName(t[i]["name"].GetString());
+		p->SetFactoryID(b["type"].GetString());
+		
+		p->SetWidth(b["width"].GetInt());
+		p->SetHeight(b["height"].GetInt());
+
+		p->SetTextureID(b["textureID"].GetString());
+
+		// Optional
+		p->SetAnimSpeed(b.HasMember("animSpeed") ? b["animSpeed"].GetInt() : 1);
+		p->SetNumFrames(b.HasMember("numFrames") ? b["numFrames"].GetInt() : 1);
+
+		p->SetOnClick(b.HasMember("onClickID") ? b["onClickID"].GetInt() : 0);
+		p->SetOnEnter(b.HasMember("onEnterID") ? b["onEnterID"].GetInt() : 0);
+		p->SetOnLeave(b.HasMember("onLeaveID") ? b["onLeaveID"].GetInt() : 0);
+
+		p->SetScript(b.HasMember("runScript") ? b["runScript"].GetString() : "");
+		
 		// Provide the extracting info to the object.
-		pGameObject->Load(new CObjectParams((float)x, (float)y, width, height, textureID,
-			animSpeed, numFrames, onClickCallback, onEnterCallback, onLeaveCallback));
+		pGameObject->Load(p);
 
 		// Add it to the m_GameObjects
 		pObjects->push_back(pGameObject);

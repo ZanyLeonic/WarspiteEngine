@@ -115,6 +115,30 @@ CLevel* CLevelParser::ParseLevel(const char* levelFile)
 	return 0;
 }
 
+MapProperties CLevelParser::GetMapProp(const std::string prop)
+{
+	static const std::map<std::string, MapProperties> propStrings
+	{
+		{"runScript", MapProperties::PROP_SCRIPT},
+		{"textureID", MapProperties::PROP_TEXTUREID},
+		{"textureWidth", MapProperties::PROP_TEXWIDTH},
+		{"textureHeight", MapProperties::PROP_TEXHEIGHT},
+		{"numFrames", MapProperties::PROP_NUMFRAMES},
+		{"animSpeed", MapProperties::PROP_ANIMSPEED},
+		{"onClickCallback", MapProperties::PROP_ONCLICKCALL},
+		{"onEnterCallback", MapProperties::PROP_ONENTERCALL},
+		{"onLeaveCallback", MapProperties::PROP_ONLEAVECALL}
+	};
+
+	auto itr = propStrings.find(prop);
+	if (itr != propStrings.end())
+	{
+		return itr->second;
+	}
+
+	return MapProperties::PROP_INVALID;
+}
+
 void CLevelParser::parseTilesets(const rapidjson::Value* pTilesetRoot, std::vector<STileset>* pTilesets)
 {
 	const Value::ConstObject& obj = pTilesetRoot->GetObject();
@@ -152,8 +176,6 @@ void CLevelParser::parseTilesets(const rapidjson::Value* pTilesetRoot, std::vect
 				t["name"].GetString(), CGame::Instance()->GetRenderer());
 
 			STileset ts;
-
-			std::cout << getJSONs(&t) << std::endl;
 
 			ts.Width = t["imagewidth"].GetInt();
 			ts.Height = t["imageheight"].GetInt();
@@ -266,7 +288,6 @@ void CLevelParser::parseBackgroundColour(const std::string* colourVal)
 		g = std::stoi(colourVal->substr(3, 2), 0, 16);
 		// Blue
 		b = std::stoi(colourVal->substr(5, 2), 0, 16);
-
 		break;
 	
 	// Alpha channel
@@ -275,7 +296,6 @@ void CLevelParser::parseBackgroundColour(const std::string* colourVal)
 		r = std::stoi(colourVal->substr(3, 2), 0, 16);
 		g = std::stoi(colourVal->substr(5, 2), 0, 16);
 		b = std::stoi(colourVal->substr(7, 2), 0, 16);
-
 		break;
 
 	default:
@@ -298,93 +318,67 @@ void CLevelParser::parseObjectLayer(const rapidjson::Value* pObjectVal, std::vec
 	// iterate through each object we have.
 	for (SizeType i = 0; i < a.Size(); i++)
 	{
-		// debug
-		std::cout << "i: " << i << " a size: " << a.Size() << std::endl;
-
 		// get our current object as a JSON object to get data from.
 		const Value::ConstObject& b = a[i].GetObject();
-		// intialise variables for the data we are getting from the JSON.
-		int x = 0, y = 0, width = 0, height = 0, 
-			onClickCallback = 0, onEnterCallback = 0, onLeaveCallback = 0;
-		int numFrames = 1, animSpeed = 1;
-		std::string textureID;
-		const char* scriptName = "";
-		
-		// Get the desired coordinates
-		x = b["x"].GetInt();
-		y = b["y"].GetInt();
+
+		auto *p = new CObjectParams((float)b["x"].GetInt(), (float)b["y"].GetInt());
 		
 		// Create the object that is defined
 		IGameObject* pGameObject = CGameObjectDictionary::Instance()
 			->Create(b["type"].GetString());
 
+		p->SetName(b["name"].GetString());
+		p->SetFactoryID(b["type"].GetString());
+		
 		// fill in any additional information (if provided.)
 		if (b.HasMember("properties"))
 		{
 			// iterate
 			const Value::ConstArray& d = b["properties"].GetArray();
+			
 			for (SizeType j = 0; j < d.Size(); j++)
 			{
-				// Maybe use a switch
 				std::string propName = d[j]["name"].GetString();
 
-				if (propName == "RunScript")
+				switch (GetMapProp(propName))
 				{
-					scriptName = d[j]["value"].GetString();
-					continue;
-				}
-				if (propName == "textureWidth")
-				{
-					width = d[j]["value"].GetInt();
-					continue;
-				}
-				else if (propName == "textureHeight")
-				{
-					height = d[j]["value"].GetInt();
-					continue;
-				}
-				else if (propName == "numFrames")
-				{
-					numFrames = d[j]["value"].GetInt();
-					continue;
-				}
-				else if (propName == "animSpeed")
-				{
-					animSpeed = d[j]["value"].GetInt();
-					continue;
-				}
-				else if (propName == "onClickCallback")
-				{
-					onClickCallback = d[j]["value"].GetInt();
-					continue;
-				}
-				else if (propName == "onEnterCallback")
-				{
-					onClickCallback = d[j]["value"].GetInt();
-					continue;
-				}
-				else if (propName == "onLeaveCallback")
-				{
-					onClickCallback = d[j]["value"].GetInt();
-					continue;
-				}
-				else if (propName == "textureID")
-				{
-					textureID = d[j]["value"].GetString();
-					continue;
-				}
-				else
-				{
+				case MapProperties::PROP_SCRIPT:
+					p->SetScript(d[j]["value"].GetString());
+					break;
+				case MapProperties::PROP_TEXTUREID:
+					p->SetTextureID(d[j]["value"].GetString());
+					break;
+				case MapProperties::PROP_TEXWIDTH:
+					p->SetWidth(d[j]["value"].GetInt());
+					break;
+				case MapProperties::PROP_TEXHEIGHT:
+					p->SetHeight(d[j]["value"].GetInt());
+					break;
+				case MapProperties::PROP_NUMFRAMES:
+					p->SetNumFrames(d[j]["value"].GetInt());
+					break;
+				case MapProperties::PROP_ANIMSPEED:
+					p->SetAnimSpeed(d[j]["value"].GetInt());
+					break;
+				case MapProperties::PROP_ONCLICKCALL:
+					p->SetOnClick(d[j]["value"].GetInt());
+					break;
+				case MapProperties::PROP_ONENTERCALL:
+					p->SetOnEnter(d[j]["value"].GetInt());
+					break;
+				case MapProperties::PROP_ONLEAVECALL:
+					p->SetOnLeave(d[j]["value"].GetInt());
+					break;	
+				default:
 					// Future proofing incase new properties get added for newer engine version.
 					std::cout << "Warning: Unrecongised property \"" << propName << "\"!" << std::endl;
+					break;
 				}
 			}
 		}
-
+		
 		// intialise the object with the data obtained.
-		pGameObject->Load(new CObjectParams((float)x, (float)y, width, height, 
-			textureID, animSpeed, numFrames, onClickCallback, 
-			onEnterCallback, onLeaveCallback, scriptName));
+		pGameObject->Load(p);
 		pObjectLayer->GetGameObjects()->push_back(pGameObject);
 	}
 
