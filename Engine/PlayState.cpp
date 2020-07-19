@@ -22,7 +22,7 @@ bool CPlayState::OnPlay()
 	m_screenSize = CGame::Instance()->GetViewportSize();
 
 	CStateParser sp;
-	sp.ParseState("assets/resource/states/PlayState.json", s_playID, &m_GameObjects, &m_TextureIDList);
+	sp.ParseState("assets/resource/states/PlayState.json", s_playID, &m_GameObjects, &m_TextureIDList, &m_ScriptIDList);
 	
 	CLevelParser lp;
 	pLevel = lp.ParseLevel("assets/maps/map02.json");

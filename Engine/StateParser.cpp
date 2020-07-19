@@ -5,6 +5,7 @@
 #include <iostream>
 #include <string>
 #include "TextureManager.h"
+#include "ScriptManager.h"
 #include "GameObjectDictionary.h"
 #include "ObjectParams.h"
 #include "Game.h"
@@ -22,7 +23,8 @@ std::string getJSON(const Value* pStateRoot)
 	return sb.GetString();;
 }
 
-bool CStateParser::ParseState(const char* stateFile, std::string stateID, std::vector<IGameObject*>* pObjects, std::vector<std::string>* pTextureIDs)
+bool CStateParser::ParseState(const char* stateFile, std::string stateID, std::vector<IGameObject*>* pObjects, 
+	std::vector<std::string>* pTextureIDs, std::vector<std::string>* pScriptRefs)
 {
 	// Read our JSON document.
 	rapidjson::Document jDoc;
@@ -88,6 +90,12 @@ bool CStateParser::ParseState(const char* stateFile, std::string stateID, std::v
 		// Add the Objects to the passed m_GameObjects
 		ParseObjects(&objects, pObjects);
 
+		const Value& scripts = state["scripts"].GetArray();
+		assert(scripts.IsArray());
+
+		// Load the scripts into the ScriptManager
+		ParseScripts(&scripts, pScriptRefs);
+		
 		return true;
 	}
 
@@ -111,30 +119,32 @@ void CStateParser::ParseObjects(const rapidjson::Value* pStateRoot, std::vector<
 		IGameObject* pGameObject =
 			CGameObjectDictionary::Instance()->Create(b["type"].GetString());
 
-		auto *p = new CObjectParams((float)b["x"].GetInt(), (float)b["y"].GetInt());
+		int x, y, width, height, numFrames, animSpeed, onClickCallback, onEnterCallback, onLeaveCallback;
+		std::string textureID, name, factID, script;
 
 		// Retrieve the relevant information from the object declaration...
 		// Required
-		p->SetName(t[i]["name"].GetString());
-		p->SetFactoryID(b["type"].GetString());
-		
-		p->SetWidth(b["width"].GetInt());
-		p->SetHeight(b["height"].GetInt());
-
-		p->SetTextureID(b["textureID"].GetString());
+		x = b["x"].GetInt();
+		y = b["y"].GetInt();
+		width = b["width"].GetInt();
+		height = b["height"].GetInt();
+		textureID = b["textureID"].GetString();
+		name = b["name"].GetString();
+		factID = b["type"].GetString();
 
 		// Optional
-		p->SetAnimSpeed(b.HasMember("animSpeed") ? b["animSpeed"].GetInt() : 1);
-		p->SetNumFrames(b.HasMember("numFrames") ? b["numFrames"].GetInt() : 1);
+		numFrames = b.HasMember("numFrames") ? b["numFrames"].GetInt() : 1;
+		animSpeed = b.HasMember("animSpeed") ? b["animSpeed"].GetInt() : 1;
 
-		p->SetOnClick(b.HasMember("onClickID") ? b["onClickID"].GetInt() : 0);
-		p->SetOnEnter(b.HasMember("onEnterID") ? b["onEnterID"].GetInt() : 0);
-		p->SetOnLeave(b.HasMember("onLeaveID") ? b["onLeaveID"].GetInt() : 0);
+		onClickCallback = b.HasMember("onClickID") ? b["onClickID"].GetInt() : 0;
+		onEnterCallback = b.HasMember("onEnterID") ? b["onEnterID"].GetInt() : 0;
+		onLeaveCallback = b.HasMember("onLeaveID") ? b["onLeaveID"].GetInt() : 0;
 
-		p->SetScript(b.HasMember("runScript") ? b["runScript"].GetString() : "");
-		
+		script = b.HasMember("script") ? b["script"].GetString() : "";
+
 		// Provide the extracting info to the object.
-		pGameObject->Load(p);
+		pGameObject->Load(new CObjectParams((float)x, (float)y, width, height, textureID,
+			animSpeed, numFrames, onClickCallback, onEnterCallback, onLeaveCallback, script, name, factID));
 
 		// Add it to the m_GameObjects
 		pObjects->push_back(pGameObject);
@@ -159,4 +169,20 @@ void CStateParser::ParseTextures(const rapidjson::Value* pStateRoot, std::vector
 	}
 }
 
+void CStateParser::ParseScripts(const rapidjson::Value* pStateRoot, std::vector<std::string>* pScriptsID)
+{
+	// Get the script array. (For some reason the array is in an array?)
+	const Value::ConstArray& t = pStateRoot->GetArray();
 
+	for (SizeType i = 0; i < t.Size(); i++)
+	{
+		// Gets the current script we are working with.
+		const Value& b = t[i];
+
+		// Add it to a list so it can be destroyed later.
+		pScriptsID->push_back(b["id"].GetString());
+
+		// Load our script path and name into memory so it can be loaded later
+		CScriptManager::Instance()->Load(SGameScript::file(b["id"].GetString(), b["path"].GetString()));
+	}
+}

@@ -10,7 +10,7 @@ bool CPauseState::OnPlay()
 	CGameStateBase::OnPlay();
 
 	CStateParser sp;
-	sp.ParseState("assets/resource/states/SystemMenus.json", s_UIID, &m_GameObjects, &m_TextureIDList);
+	sp.ParseState("assets/resource/states/SystemMenus.json", s_UIID, &m_GameObjects, &m_TextureIDList, &m_ScriptIDList);
 
 	m_callbacks.push_back(0);
 	m_callbacks.push_back(s_continueGame);

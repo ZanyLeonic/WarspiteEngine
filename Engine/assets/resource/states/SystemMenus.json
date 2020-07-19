@@ -2,6 +2,8 @@
 	"states": [
 		{
 		  "id": "MainMenu",
+		  "scripts": [
+		  ],
 		  "textures": [
 			{
 			  "path": "assets\\textures\\UI\\PlayButton.png",
@@ -39,6 +41,8 @@
 		},
 		{
 		  "id": "PauseMenu",
+		  "scripts": [
+		  ],
 		  "textures": [
 			{
 			  "path": "assets\\textures\\UI\\ResumeButton.png",

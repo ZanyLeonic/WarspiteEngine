@@ -119,12 +119,12 @@ MapProperties CLevelParser::GetMapProp(const std::string prop)
 {
 	static const std::map<std::string, MapProperties> propStrings
 	{
-		{"runScript", MapProperties::PROP_SCRIPT},
-		{"textureID", MapProperties::PROP_TEXTUREID},
-		{"textureWidth", MapProperties::PROP_TEXWIDTH},
-		{"textureHeight", MapProperties::PROP_TEXHEIGHT},
-		{"numFrames", MapProperties::PROP_NUMFRAMES},
-		{"animSpeed", MapProperties::PROP_ANIMSPEED},
+		{"runScript",		MapProperties::PROP_SCRIPT},
+		{"textureID",		MapProperties::PROP_TEXTUREID},
+		{"textureWidth",	MapProperties::PROP_TEXWIDTH},
+		{"textureHeight",	MapProperties::PROP_TEXHEIGHT},
+		{"numFrames",		MapProperties::PROP_NUMFRAMES},
+		{"animSpeed",		MapProperties::PROP_ANIMSPEED},
 		{"onClickCallback", MapProperties::PROP_ONCLICKCALL},
 		{"onEnterCallback", MapProperties::PROP_ONENTERCALL},
 		{"onLeaveCallback", MapProperties::PROP_ONLEAVECALL}
@@ -320,15 +320,22 @@ void CLevelParser::parseObjectLayer(const rapidjson::Value* pObjectVal, std::vec
 	{
 		// get our current object as a JSON object to get data from.
 		const Value::ConstObject& b = a[i].GetObject();
-
-		auto *p = new CObjectParams((float)b["x"].GetInt(), (float)b["y"].GetInt());
 		
+		int x = 0, y = 0, width = 0, height = 0,
+			onClickCallback = 0, onEnterCallback = 0, onLeaveCallback = 0;
+		int numFrames = 1, animSpeed = 1;
+		std::string textureID, objN, scriptName, type;
+
+		// Get the desired coordinates
+		x = b["x"].GetInt();
+		y = b["y"].GetInt();
+		
+		type = b["type"].GetString();
+		objN = b["name"].GetString();
+
 		// Create the object that is defined
 		IGameObject* pGameObject = CGameObjectDictionary::Instance()
-			->Create(b["type"].GetString());
-
-		p->SetName(b["name"].GetString());
-		p->SetFactoryID(b["type"].GetString());
+			->Create(type);
 		
 		// fill in any additional information (if provided.)
 		if (b.HasMember("properties"))
@@ -343,31 +350,31 @@ void CLevelParser::parseObjectLayer(const rapidjson::Value* pObjectVal, std::vec
 				switch (GetMapProp(propName))
 				{
 				case MapProperties::PROP_SCRIPT:
-					p->SetScript(d[j]["value"].GetString());
+					scriptName = d[j]["value"].GetString();
 					break;
 				case MapProperties::PROP_TEXTUREID:
-					p->SetTextureID(d[j]["value"].GetString());
+					textureID = d[j]["value"].GetString();
 					break;
 				case MapProperties::PROP_TEXWIDTH:
-					p->SetWidth(d[j]["value"].GetInt());
+					width = d[j]["value"].GetInt();
 					break;
 				case MapProperties::PROP_TEXHEIGHT:
-					p->SetHeight(d[j]["value"].GetInt());
+					height = d[j]["value"].GetInt();
 					break;
 				case MapProperties::PROP_NUMFRAMES:
-					p->SetNumFrames(d[j]["value"].GetInt());
+					numFrames = d[j]["value"].GetInt();
 					break;
 				case MapProperties::PROP_ANIMSPEED:
-					p->SetAnimSpeed(d[j]["value"].GetInt());
+					animSpeed = d[j]["value"].GetInt();
 					break;
 				case MapProperties::PROP_ONCLICKCALL:
-					p->SetOnClick(d[j]["value"].GetInt());
+					onClickCallback = d[j]["value"].GetInt();
 					break;
 				case MapProperties::PROP_ONENTERCALL:
-					p->SetOnEnter(d[j]["value"].GetInt());
+					onEnterCallback = d[j]["value"].GetInt();
 					break;
 				case MapProperties::PROP_ONLEAVECALL:
-					p->SetOnLeave(d[j]["value"].GetInt());
+					onLeaveCallback = d[j]["value"].GetInt();
 					break;	
 				default:
 					// Future proofing incase new properties get added for newer engine version.
@@ -378,7 +385,9 @@ void CLevelParser::parseObjectLayer(const rapidjson::Value* pObjectVal, std::vec
 		}
 		
 		// intialise the object with the data obtained.
-		pGameObject->Load(p);
+		pGameObject->Load(new CObjectParams((float)x, (float)y, width, height,
+			textureID, animSpeed, numFrames, onClickCallback,
+			onEnterCallback, onLeaveCallback, scriptName, objN, type));
 		pObjectLayer->GetGameObjects()->push_back(pGameObject);
 	}
 

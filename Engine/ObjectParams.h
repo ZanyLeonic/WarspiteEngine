@@ -11,8 +11,16 @@ public:
 		: m_x(x), m_y(y), m_script(script) {}
 	
 	CObjectParams(float x, float y)
-		: m_x(x), m_y(y)
-	{}
+		: m_x(x), m_y(y) {}
+
+	CObjectParams(float x, float y, int width, int height,
+		std::string textureID, int animSpeed = 1, int numFrames = 1,
+		int onClick = 0, int onEnter = 0, int onLeave = 0, std::string script = "",
+		std::string objN = "", std::string factID = "")
+		: m_x(x), m_y(y), m_width(width), m_height(height),
+		m_textureID(textureID), m_animSpeed(animSpeed), m_numFrames(numFrames),
+		m_OnClick(onClick), m_OnEnter(onEnter), m_OnLeave(onLeave), m_script(script),
+		m_objName(objN), m_factoryID(factID) {}
 
 	// Setters
 	void SetName(std::string n) { m_objName = n; }
@@ -52,7 +60,8 @@ public:
 	std::string GetScript() const { return m_script; }
 
 private:
-	// Metadata
+	// Metadata + Map Logic
+	std::string m_script = "";
 	std::string m_textureID = "";
 	std::string m_objName = "";
 	std::string m_factoryID = "";
@@ -63,15 +72,14 @@ private:
 	int m_width = 0;
 	int m_height = 0;
 
-	int m_animSpeed = 0;
-	int m_numFrames = 0;
+	int m_animSpeed = 1;
+	int m_numFrames = 1;
 
 	int m_OnClick = 0;
 	int m_OnEnter = 0;
 	int m_OnLeave = 0;
 	
-	// Map Logic
-	std::string m_script = "";
+
 };
 
 #endif /* defined (__ObjectParams__) */
