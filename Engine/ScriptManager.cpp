@@ -27,7 +27,18 @@ PYBIND11_MODULE(game, m) {
 		);
 
 	py::class_<CWarspiteObject>(m, "WarspiteObject")
-		.def(py::init<>());
+		.def(py::init<>())
+		.def("get_position", &CWarspiteObject::GetPosition)
+		.def("set_position", &CWarspiteObject::SetPosition)
+		.def("get_type", &CWarspiteObject::GetFactoryID)
+		.def("get_name", &CWarspiteObject::GetName)
+		.def("get_textureid", &CWarspiteObject::GetTextureID)
+		.def("__repr__", [](CWarspiteObject& o)
+			{
+				return "<CWarspiteObject \"" + std::string(o.GetName()) + 
+					"\"of type \"" + o.GetFactoryID() + "\"";
+			}
+	);
 }
 
 CScriptManager::CScriptManager()
@@ -35,17 +46,11 @@ CScriptManager::CScriptManager()
 	std::cout << "Initialising ScriptManager..." << std::endl;
 
 	try {
-		// Create a C++ instance of Foo
-		WrapPtr foo = std::make_shared<GameWrapper>();
-
 		// Initialize Python interpreter and import bar module
 		PyImport_AppendInittab("game", PyInit_game);
 		Py_Initialize();
-		// PyRun_SimpleString("from game import *");
 		
-		// Make C++ instance accessible in Python as a variable named "foo"
 		main_module = py::module::import("__main__");
-		// main_module.attr("inst") = foo;
 		main_namespace = main_module.attr("__dict__");
 	}
 	catch(pybind11::error_already_set const&)
@@ -53,13 +58,10 @@ CScriptManager::CScriptManager()
 		PyErr_Print();
 	}
 
-	// Run some Python code using foo
 	// Show that the ScriptManager is ready
 	SGameScript* test = SGameScript::source("test", "import sys\nprint(\"Using Python Runtime %s.%s.%s\" % (sys.version_info.major, sys.version_info.minor, sys.version_info.micro))\nprint(\"Script Manager is ready!\")");
-	SGameScript* tt = SGameScript::source("test2", "from game import *\nv = Vector2D()\nv.set_x(1)\nv.set_y(5)\nprint(str(v.get_x()))\nprint(str(v.get_y()))\nprint(len(v))\nprint(v)");
 
 	Run(test);
-	Run(tt);
 }
 
 

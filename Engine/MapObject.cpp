@@ -6,6 +6,7 @@
 CMapObject::CMapObject()
 	: CWarspiteObject()
 {
+	m_collidable = true;
 }
 
 void CMapObject::Draw()

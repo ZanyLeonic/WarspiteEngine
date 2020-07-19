@@ -78,8 +78,5 @@ private:
 	int m_OnClick = 0;
 	int m_OnEnter = 0;
 	int m_OnLeave = 0;
-	
-
 };
-
 #endif /* defined (__ObjectParams__) */

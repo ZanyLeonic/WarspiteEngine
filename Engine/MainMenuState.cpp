@@ -36,9 +36,7 @@ bool CMainMenuState::OnEnd()
 
 void CMainMenuState::SetCallbacks(const std::vector<HButtonCallback>& callbacks)
 {
-	// MenuState::SetCallbacks(callbacks);
-
-	for (int i = 0; i < m_GameObjects.size(); i++)
+	for (size_t i = 0; i < m_GameObjects.size(); i++)
 	{
 		if (dynamic_cast<CButton*>(m_GameObjects[i]))
 		{

@@ -2,7 +2,9 @@
 #include "ScriptManager.h"
 
 CLogicAuto::CLogicAuto()
-{}
+{
+	m_collidable = false;
+}
 
 void CLogicAuto::OnPlay()
 {

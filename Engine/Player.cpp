@@ -179,17 +179,17 @@ bool CPlayer::IsPositionFree(CVector2D* pNext)
 	CVector2D nPos = CVector2D(*pNext);
 
 	// Go through each ObjectLayer we got earlier
-	for (int i = 0; i < m_objects.size(); i++)
+	for (size_t i = 0; i < m_objects.size(); i++)
 	{
 		if (!m_objects[i]) continue;
 
 		// Get an rvalue of the list of GameObject's for the iterated layer
 		std::vector<IGameObject*>& ir = *m_objects[i];
 
-		for (int j = 0; j < ir.size(); j++)
+		for (size_t j = 0; j < ir.size(); j++)
 		{
 			// Check if the GameObject is in the way and isn't us
-			if (ir[j] != this && ir[j]->GetPosition() == nPos)
+			if (ir[j] != this && ir[j]->GetPosition() == nPos && ir[j]->ShouldCollide())
 			{
 				return false;
 			}
@@ -198,7 +198,7 @@ bool CPlayer::IsPositionFree(CVector2D* pNext)
 
 	// Also do a check if we are going off the level
 	CPlayState* pPS = static_cast<CPlayState*>(CGame::Instance()->GetStateManager()->GetCurrentState());
-	if (pPS != 0)
+	if (pPS != nullptr)
 	{
 		CLevel* pLevel = pPS->GetLoadedLevel();
 

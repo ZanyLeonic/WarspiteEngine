@@ -35,12 +35,14 @@ public:
 	const char* GetName() override { return m_objectName.c_str(); }
 	virtual std::string GetTextureID() { return m_textureID; }
 	virtual std::string GetFactoryID() { return m_factoryID; }
+
+	bool ShouldCollide() override { return m_collidable; }
 	
 protected:
 	CVector2D m_position;
 	CVector2D m_velocity;
 	CVector2D m_acceleration;
-
+	
 	int m_width;
 	int m_height;
 
@@ -51,6 +53,7 @@ protected:
 	std::string m_objectName = "";
 	std::string m_factoryID = "";
 	std::string m_textureID = "";
-};
 
+	bool m_collidable = false;
+};
 #endif /* defined(__CWarspiteObject__) */

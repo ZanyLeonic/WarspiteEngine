@@ -6,7 +6,8 @@ CButton::CButton() :
 	CWarspiteObject()
 {
 	m_currentFrame = NO_HOVER; // Frame 0
-
+	m_collidable = false;
+	
 	// Initial callbacks
 	if (m_OnClick == 0) m_OnClick = std::bind(&CButton::onClick, this);
 	if (m_OnEnter == 0) m_OnEnter = std::bind(&CButton::onEnter, this);
