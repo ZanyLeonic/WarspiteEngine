@@ -10,9 +10,9 @@ public:
 	CVector2D(float x, float y) : m_x(x), m_y(y) {}
 
 	// Returns the X value of the vector
-	float GetX() { return m_x; }
+	float GetX() const { return m_x; }
 	// Returns the Y value of the vector
-	float GetY() { return m_y; }
+	float GetY() const { return m_y; }
 
 	// Assigns a new X value to the vector
 	void SetX(float x) { m_x = x; }
@@ -20,8 +20,9 @@ public:
 	void SetY(float y) { m_y = y; }
 
 	// Returns the magnitude of the vector
-	float Length() { return sqrt(pow(m_x, 2) + pow(m_y, 2)); }
-	void Normalize()
+	float Length() const { return sqrt(pow(m_x, 2) + pow(m_y, 2)); }
+	int Length_i() const { return static_cast<int>(sqrt(pow(m_x, 2) + pow(m_y, 2))); }
+	void Normalize() 
 	{
 		float l = Length();
 		if (l > 0) // We never should divide by 0

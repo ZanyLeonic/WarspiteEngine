@@ -14,28 +14,58 @@ class CWarspiteObject :
 public:
 	CWarspiteObject();
 
-	virtual void OnPlay();
-	virtual void Draw();
-	virtual bool OnThink();
-	virtual void Destroy();
+	void OnPlay() override;
+	void Draw() override;
+	bool OnThink() override;
+	void Destroy() override;
 
-	virtual void Load(const CObjectParams* pParams);
+	void Load(const CObjectParams* pParams) override;
 
-	virtual inline CVector2D GetPosition()
+	CVector2D GetPosition() override
 	{
 		return m_position;
-	};
+	}
 
-	virtual inline CVector2D GetVelocity()
+	virtual CVector2D GetVelocity()
 	{
 		return m_velocity;
-	};
+	}
 
-	virtual inline CVector2D GetAcceleration()
+	virtual CVector2D GetAcceleration()
 	{
 		return m_acceleration;
-	};
+	}
 
+	virtual CVector2D GetSize()
+	{
+		return CVector2D(m_width, m_height);
+	}
+
+	virtual int GetCurrentAnimRow()
+	{
+		return m_currentRow;
+	}
+
+	virtual int GetCurrentAnimFrame()
+	{
+		return m_currentFrame;
+	}
+
+	virtual int GetTotalAnimFrames()
+	{
+		return m_numFrames;
+	}
+
+	virtual std::string GetTextureID()
+	{
+		return m_textureID;
+	}
+
+	virtual std::string GetMapRefID()
+	{
+		return "";
+	}
+	
 protected:
 	CVector2D m_position;
 	CVector2D m_velocity;
@@ -48,6 +78,7 @@ protected:
 	int m_currentFrame;
 	int m_numFrames;
 
+	std::string m_factoryID = "";
 	std::string m_textureID = "";
 };
 

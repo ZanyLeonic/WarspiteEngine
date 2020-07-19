@@ -27,6 +27,7 @@ std::string WarspiteUtil::ReadAllText(std::string path)
 		while(std::getline(nFile, tl))
 		{
 			fStr += tl;
+			fStr += "\n";
 		}
 	}
 

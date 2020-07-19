@@ -4,8 +4,6 @@
 
 #include <iostream>
 #include <map>
-
-
 #include "Game.h"
 
 enum class EGameScriptType
