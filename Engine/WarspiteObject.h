@@ -20,16 +20,26 @@ public:
 	void Destroy() override;
 
 	void Load(const CObjectParams* pParams) override;
-	
+
 	CVector2D GetPosition() override { return m_position; }
 	void SetPosition(CVector2D& nPos) override { m_position = nPos; }
-	
-	virtual CVector2D GetVelocity() {  return m_velocity; }
+
+	virtual CVector2D GetVelocity() { return m_velocity; }
+	virtual void SetVelocity(CVector2D nV) { m_velocity = nV; }
+	virtual void AddVelocity(CVector2D aV) { m_velocity += aV; }
+
 	virtual CVector2D GetAcceleration() { return m_acceleration; }
+	virtual void SetAcceleration(CVector2D nA) { m_acceleration = nA; }
+	virtual void AddAcceleration(CVector2D nA) { m_acceleration += nA; }
+
 	virtual CVector2D GetSize() { return CVector2D((float)m_width, (float)m_height); }
 
 	virtual int GetCurrentAnimRow() { return m_currentRow; }
+	virtual void SetAnimRow(int nR) { m_currentRow = nR; }
+	
 	virtual int GetCurrentAnimFrame() { return m_currentFrame; }
+	virtual void SetAnimFrame(int aF) { m_currentFrame = aF; }
+	
 	virtual int GetTotalAnimFrames() { return m_numFrames; }
 
 	const char* GetName() override { return m_objectName.c_str(); }
@@ -37,6 +47,7 @@ public:
 	virtual std::string GetFactoryID() { return m_factoryID; }
 
 	bool ShouldCollide() override { return m_collidable; }
+	void SetCollision(bool nC) { m_collidable = nC; }
 	
 protected:
 	CVector2D m_position;

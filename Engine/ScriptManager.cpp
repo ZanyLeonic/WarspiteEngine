@@ -32,11 +32,25 @@ PYBIND11_MODULE(game, m) {
 		.def("set_position", &CWarspiteObject::SetPosition)
 		.def("get_type", &CWarspiteObject::GetFactoryID)
 		.def("get_name", &CWarspiteObject::GetName)
-		.def("get_textureid", &CWarspiteObject::GetTextureID)
+		.def("get_texid", &CWarspiteObject::GetTextureID)
+		.def("get_velocity", &CWarspiteObject::GetVelocity)
+		.def("set_velocity", &CWarspiteObject::SetVelocity)
+		.def("add_velocity", &CWarspiteObject::AddVelocity)
+		.def("get_acceleration", &CWarspiteObject::GetAcceleration)
+		.def("set_acceleration", &CWarspiteObject::SetAcceleration)
+		.def("add_acceleration", &CWarspiteObject::AddAcceleration)
+		.def("get_size", &CWarspiteObject::GetSize)
+		.def("get_current_anim_row", &CWarspiteObject::GetCurrentAnimRow)
+		.def("set_anim_row", &CWarspiteObject::SetAnimRow)
+		.def("get_current_anim_frame", &CWarspiteObject::GetCurrentAnimFrame)
+		.def("set_anim_row", &CWarspiteObject::SetAnimRow)
+		.def("get_total_anim_frames", &CWarspiteObject::GetTotalAnimFrames)
+		.def("should_collide", &CWarspiteObject::ShouldCollide)
+		.def("set_collision", &CWarspiteObject::SetCollision)
 		.def("__repr__", [](CWarspiteObject& o)
 			{
 				return "<CWarspiteObject \"" + std::string(o.GetName()) + 
-					"\"of type \"" + o.GetFactoryID() + "\"";
+					"\"of type \"" + o.GetFactoryID() + "\">";
 			}
 	);
 }
