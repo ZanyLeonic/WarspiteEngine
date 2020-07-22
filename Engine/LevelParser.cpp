@@ -52,7 +52,8 @@ CLevel* CLevelParser::ParseLevel(const char* levelFile)
 
 		fclose(fp);
 
-		CLevel* pLevel = new CLevel();
+		std::string sL = levelFile;
+		CLevel* pLevel = new CLevel(sL);
 
 		assert(tLevel["height"].IsInt() && tLevel["width"].IsInt() && tLevel["tilewidth"].IsInt());
 

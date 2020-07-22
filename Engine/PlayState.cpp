@@ -10,6 +10,8 @@
 
 #include "PlayState.h"
 
+#include "WarspiteUtil.h"
+
 const std::string CPlayState::s_playID = "Game";
 SStreamingAudioData testStream;
 SStreamingAudioData testStream2;
@@ -22,10 +24,10 @@ bool CPlayState::OnPlay()
 	m_screenSize = CGame::Instance()->GetViewportSize();
 
 	CStateParser sp;
-	sp.ParseState("assets/resource/states/PlayState.json", s_playID, &m_GameObjects, &m_TextureIDList, &m_ScriptIDList);
+	sp.ParseState("assets\\resource\\states\\PlayState.json", s_playID, &m_GameObjects, &m_TextureIDList, &m_ScriptIDList);
 	
 	CLevelParser lp;
-	pLevel = lp.ParseLevel("assets/maps/map02.json");
+	pLevel = lp.ParseLevel("assets\\maps\\map02.json");
 
 	CInputHandler::Instance()->AddActionKeyDown(SDL_SCANCODE_ESCAPE, [this] {
 			if (!dynamic_cast<CPauseState*>(CGame::Instance()->GetStateManager()->GetCurrentState()))
@@ -38,7 +40,10 @@ bool CPlayState::OnPlay()
 			return;
 		});
 
-	// This callback code is fucking disgusting - but it works so I don't care.
+	std::cout << WarspiteUtil::GetFileName("assets\\maps\\map02.json") << std::endl;
+	std::cout << WarspiteUtil::GetFileName("assets\\maps\\map02.json", false) << std::endl;
+	
+	// This callback code is disgusting - but it works so I don't care.
 	testStream.PlayCallback = [this](SStreamingAudioData* as)
 	{
 		std::cout << "Playing: \"" << as->Filename.c_str() << "\"." << std::endl;

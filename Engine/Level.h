@@ -7,6 +7,7 @@
 
 #include "Vector2D.h"
 #include "Layer.h"
+#include "WarspiteUtil.h"
 
 struct STileset
 {
@@ -40,15 +41,22 @@ public:
 	std::vector<ILayer*>* GetLayers()
 	{
 		return &m_layers;
-	};
+	}
 
+	std::string GetName() const
+	{
+		return WarspiteUtil::GetFileName(m_path);
+	}
+	
 	CVector2D m_LevelSize;
 
 private:
 	friend class CLevelParser;
-	CLevel();
+	CLevel(std::string& path) : m_path(path) {}
 
 	std::vector<STileset> m_tilesets;
 	std::vector<ILayer*> m_layers;
+
+	std::string m_path;
 };
 #endif

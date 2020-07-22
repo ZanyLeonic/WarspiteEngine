@@ -4,6 +4,7 @@
 
 #include <iostream>
 #include <map>
+#include "Level.h"
 #include "Game.h"
 
 enum class EGameScriptType
@@ -16,26 +17,7 @@ enum class EGameScriptType
 #include <pybind11/pybind11.h>
 namespace py = pybind11;
 
-struct GameWrapper
-{
-	GameWrapper()
-	{
-		inst = CGame::Instance();
-	}
-
-	const char* test()
-	{
-		if (inst != nullptr)
-		{
-			return inst->TestMethod();
-		}
-		return 0;
-	}
-
-	CGame* inst = nullptr;
-};
-
-typedef std::shared_ptr<GameWrapper> WrapPtr;
+// typedef std::shared_ptr<GameWrapper> WrapPtr;
 
 struct SGameScript
 {
