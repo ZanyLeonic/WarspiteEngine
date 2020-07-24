@@ -58,6 +58,7 @@ set(WarspiteEngine_Header
         Player.h
         PlayState.h
         ScriptManager.h
+        ScriptWrappers.h
         SoundManager.h
         StateParser.h
         TestObject.h

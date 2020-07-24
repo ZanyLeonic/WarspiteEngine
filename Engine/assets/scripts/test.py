@@ -1,4 +1,6 @@
-from game import Vector2D, WarspiteObject
+import engine
+from engine import Vector2D, WarspiteObject
+import __main__
 
 v = Vector2D()
 o = WarspiteObject()
@@ -11,3 +13,6 @@ o.set_position(v)
 print (v)
 print (o)
 print (o.get_position())
+
+print(dir(engine))
+print(engine.level)

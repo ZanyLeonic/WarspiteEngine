@@ -1,8 +1,6 @@
 #include "Level.h"
 
-CLevel::CLevel()
-{
-}
+#include "ObjectLayer.h"
 
 void CLevel::OnPlay()
 {
@@ -36,4 +34,21 @@ void CLevel::Draw()
 	{
 		m_layers[i]->Draw();
 	}
+}
+
+std::vector<std::vector<IGameObject*>*> CLevel::GetGameObjects()
+{
+	std::vector<std::vector<IGameObject*>*> out;
+	
+	for(size_t i = 0; i < m_layers.size(); i++)
+	{
+		CObjectLayer* cL = dynamic_cast<CObjectLayer*>(m_layers[i]);
+		
+		if (cL != nullptr)
+		{
+			out.push_back(cL->GetGameObjects());
+		}
+	}
+
+	return out;
 }

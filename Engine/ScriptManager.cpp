@@ -2,13 +2,14 @@
 #include <iostream>
 #include <pybind11/embed.h>
 
+#include "ScriptWrappers.h"
 #include "WarspiteObject.h"
 #include "WarspiteUtil.h"
 
 CScriptManager* CScriptManager::s_pInstance = 0;
 
 // Exposing some classes to Python
-PYBIND11_MODULE(game, m) {
+PYBIND11_MODULE(engine, m) {
 	py::class_<CVector2D>(m, "Vector2D")
 		.def(py::init<>())
 		.def("set_x", &CVector2D::SetX)
@@ -50,9 +51,49 @@ PYBIND11_MODULE(game, m) {
 		.def("__repr__", [](CWarspiteObject& o)
 			{
 				return "<CWarspiteObject \"" + std::string(o.GetName()) + 
-					"\"of type \"" + o.GetFactoryID() + "\">";
+					   "\" of type \"" + o.GetFactoryID() + "\">";
 			}
 	);
+	
+	py::class_<SLevelObject>(m, "LevelObject")
+		.def(py::init<CLevel*>())
+		.def("get_name", &SLevelObject::GetName)
+		.def("get_level_size", &SLevelObject::GetLevelSize)
+		.def("find_gameobject", &SLevelObject::FindGameObject)
+		.def("get_gameobjects", &SLevelObject::GetGameObjects)
+		.def("__repr__", [](SLevelObject& o)
+			{
+				return "<SLevelObject named \"" + o.GetName() + "\">";
+			}
+	);
+
+	py::class_<SCameraObject>(m, "CameraObject")
+		.def(py::init<CCamera*>())
+		.def("get_position", &SCameraObject::GetPosition)
+		.def("get_position_with_offset", &SCameraObject::GetOffsetedPosition)
+		.def("get_target", &SCameraObject::GetTarget)
+		.def("set_position", &SCameraObject::SetPosition)
+		.def("set_target", &SCameraObject::SetTarget)
+		.def("get_level_size", &SCameraObject::GetLevelSize)
+		.def("__repr__", [](SCameraObject& o)
+			{
+				return "<SCameraObject with target (" + 
+						std::to_string(o.GetTarget()->GetX()) + ", " + 
+						std::to_string(o.GetTarget()->GetY()) + 
+						")>";
+			}
+		);
+
+	py::class_<SInputObject>(m, "InputObject")
+		.def(py::init<CInputHandler*>())
+		.def("get_button_state", &SInputObject::GetButtonState)
+		.def("get_mouse_button_state", &SInputObject::GetMouseButtonState)
+		.def("is_keydown", &SInputObject::IsKeyDown)
+		.def("get_x_axis", &SInputObject::GetXAxis)
+		.def("get_y_axis", &SInputObject::GetYAxis)
+		.def("set_release_state", &SInputObject::SetReleaseState)
+		.def("add_action_keydown", &SInputObject::AddActionKeyDown)
+		.def("add_action_keyup", &SInputObject::AddActionKeyUp);
 }
 
 CScriptManager::CScriptManager()
@@ -61,15 +102,18 @@ CScriptManager::CScriptManager()
 
 	try {
 		// Initialize Python interpreter and import bar module
-		PyImport_AppendInittab("game", PyInit_game);
+		PyImport_AppendInittab("engine", PyInit_engine);
 		Py_Initialize();
 		
 		main_module = py::module::import("__main__");
+		engine_module = py::module::import("engine");
 		main_namespace = main_module.attr("__dict__");
 	}
-	catch(pybind11::error_already_set const&)
+	catch (pybind11::error_already_set const&)
 	{
+		std::cout << "***AN ERROR OCCURRED DURING INITIALISATION OF PYTHON!***" << std::endl;
 		PyErr_Print();
+		std::cout << "***************************END**************************" << std::endl;
 	}
 
 	// Show that the ScriptManager is ready
@@ -78,6 +122,9 @@ CScriptManager::CScriptManager()
 	Run(test);
 }
 
+void CScriptManager::Destroy()
+{
+}
 
 void CScriptManager::Load(SGameScript* script)
 {
@@ -108,10 +155,10 @@ bool CScriptManager::Run(SGameScript* script)
 		switch (script->GetScriptType())
 		{
 		case EGameScriptType::SCRIPT_INLINE:
-			PyRun_SimpleString(script->GetSource().c_str());
+			exec(script->GetSource().c_str(), main_namespace);
 			break;
 		case EGameScriptType::SCRIPT_FILE:
-			PyRun_SimpleString(WarspiteUtil::ReadAllText(script->GetFilename()).c_str());
+			eval_file(script->GetFilename().c_str(), main_namespace);
 			break;
 		default:
 			return false; // No type defined? what?
@@ -119,8 +166,18 @@ bool CScriptManager::Run(SGameScript* script)
 		
 		return true;
 	}
-	catch(pybind11::error_already_set const &)
+	catch(py::error_already_set const &)
 	{
+		switch(script->GetScriptType())
+		{
+		case EGameScriptType::SCRIPT_INLINE:
+			std::cout << "An internal error occurred when executing an inline script named: \"" + script->GetScriptName() + "\"" << std::endl;
+		case EGameScriptType::SCRIPT_FILE:
+			std::cout << "An internal error occurred when executing an external script named: \"" + script->GetScriptName() + "\"" << std::endl;
+		default:
+			std::cout << "An internal error occurred when executing script named: \"" + script->GetScriptName() + "\"" << std::endl;
+		}
+		
 		PyErr_Print(); // print all errors for now
 	}
 	return false;

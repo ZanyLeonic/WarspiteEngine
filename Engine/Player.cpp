@@ -5,6 +5,7 @@
 #include "Game.h"
 #include "PlayState.h"
 #include "TextureManager.h"
+#include "ScriptManager.h"
 #include <iostream>
 
 #define PLAYER_WIDTH 32
@@ -18,14 +19,14 @@ CPlayer::CPlayer()
 void CPlayer::OnPlay()
 {
 	// Are we in the PlayState?
-	CPlayState* ps = static_cast<CPlayState*>(CGame::Instance()->GetStateManager()->GetCurrentState());
+	CPlayState* ps = dynamic_cast<CPlayState*>(CGame::Instance()->GetStateManager()->GetCurrentState());
 
 	if (ps)
 	{
 		// If so - we can grab the current level and its Layers
 		std::vector<ILayer*> objs = *ps->GetLoadedLevel()->GetLayers();
 
-		for (int i = 0; i < objs.size(); i++)
+		for (size_t i = 0; i < objs.size(); i++)
 		{
 			// Only care about the ObjectLayers - since that's what we are going to collide with.
 			CObjectLayer* obl = dynamic_cast<CObjectLayer*>(objs[i]);
@@ -188,7 +189,7 @@ bool CPlayer::IsPositionFree(CVector2D* pNext)
 
 		for (size_t j = 0; j < ir.size(); j++)
 		{
-			// Check if the GameObject is in the way and isn't us
+			// Check if the GameObject is in the way and isn't us + collision flag
 			if (ir[j] != this && ir[j]->GetPosition() == nPos && ir[j]->ShouldCollide())
 			{
 				return false;

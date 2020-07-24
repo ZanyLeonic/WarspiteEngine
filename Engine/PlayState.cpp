@@ -11,6 +11,8 @@
 #include "PlayState.h"
 
 #include "WarspiteUtil.h"
+#include "ScriptWrappers.h"
+#include "ScriptManager.h"
 
 const std::string CPlayState::s_playID = "Game";
 SStreamingAudioData testStream;
@@ -25,10 +27,26 @@ bool CPlayState::OnPlay()
 
 	CStateParser sp;
 	sp.ParseState("assets\\resource\\states\\PlayState.json", s_playID, &m_GameObjects, &m_TextureIDList, &m_ScriptIDList);
-	
+
 	CLevelParser lp;
 	pLevel = lp.ParseLevel("assets\\maps\\map02.json");
 
+	PLevelPtr te = std::make_shared<SLevelObject>(SLevelObject(pLevel));
+	//std::cout << "Q: Is our levelObject valid?\nA: " << (te.get()->IsValid() ? "Yes" : "No") << std::endl;
+	//if (te.get()->IsValid())
+	//	std::cout << "Q: What is the name of our level?\nA: " << te.get()->GetName() << std::endl;
+
+	try
+	{
+		CScriptManager::Instance()->GetEngineModule().attr("level") = te;
+	}
+	catch (const py::error_already_set&)
+	{
+		std::cout << "AAAA" << std::endl;
+		PyErr_Print();
+		std::cout << "AAAA" << std::endl;
+	}
+	
 	CInputHandler::Instance()->AddActionKeyDown(SDL_SCANCODE_ESCAPE, [this] {
 			if (!dynamic_cast<CPauseState*>(CGame::Instance()->GetStateManager()->GetCurrentState()))
 			{
@@ -48,7 +66,7 @@ bool CPlayState::OnPlay()
 	{
 		std::cout << "Playing: \"" << as->Filename.c_str() << "\"." << std::endl;
 	};
-
+	
 	testStream.PauseCallback = [this](SStreamingAudioData* as)
 	{
 		std::cout << "Pause: \"" << as->Filename.c_str() << "\"." << std::endl;

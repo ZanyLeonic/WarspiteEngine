@@ -65,7 +65,7 @@ class CScriptManager
 {
 	static CScriptManager* s_pInstance;
 	CScriptManager();
-	
+
 public:
 	// more singleton stuff
 	static CScriptManager* Instance()
@@ -79,16 +79,21 @@ public:
 	}
 
 	void Destroy();
-	
+
 	void Load(SGameScript* script);
 	bool Remove(const char* scriptRef);
 	void RemoveAll();
-	
-	
+
 	bool Run(SGameScript* script);
 	bool RunFromRef(std::string scriptRef);
+
+	py::module GetMainModule() const { return main_module; }
+	py::module GetEngineModule() const { return engine_module; }
+	py::object GetMainNamespace() const { return main_namespace; }
+	
 private:
 	py::module main_module;
+	py::module engine_module;
 	py::object main_namespace;
 
 	std::map<std::string, SGameScript*> loadedScripts;

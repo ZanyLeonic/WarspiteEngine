@@ -2,6 +2,8 @@
 #ifndef __LEVEL_H__
 #define __LEVEL_H__
 
+class IGameObject;
+
 #include <string>
 #include <vector>
 
@@ -45,8 +47,15 @@ public:
 
 	std::string GetName() const
 	{
-		return WarspiteUtil::GetFileName(m_path);
+		return WarspiteUtil::GetFileName(m_path, false);
 	}
+
+	std::string GetPath() const
+	{
+		return m_path;
+	}
+
+	std::vector<std::vector<IGameObject*>*> GetGameObjects();
 	
 	CVector2D m_LevelSize;
 
