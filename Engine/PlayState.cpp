@@ -31,22 +31,6 @@ bool CPlayState::OnPlay()
 	CLevelParser lp;
 	pLevel = lp.ParseLevel("assets\\maps\\map02.json");
 
-	te = std::make_shared<SLevelObject>(SLevelObject(pLevel));
-	std::cout << "Q: Is our levelObject valid?\nA: " << (te.get()->IsValid() ? "Yes" : "No") << std::endl;
-	if (te.get()->IsValid())
-		std::cout << "Q: What is the name of our level?\nA: " << te.get()->GetName() << std::endl;
-
-	try
-	{
-		CScriptManager::Instance()->GetEngineModule().attr("level") = te;
-	}
-	catch (const py::error_already_set&)
-	{
-		std::cout << "AAAA" << std::endl;
-		PyErr_Print();
-		std::cout << "AAAA" << std::endl;
-	}
-	
 	CInputHandler::Instance()->AddActionKeyDown(SDL_SCANCODE_ESCAPE, [this] {
 			if (!dynamic_cast<CPauseState*>(CGame::Instance()->GetStateManager()->GetCurrentState()))
 			{
@@ -138,7 +122,6 @@ bool CPlayState::OnPlay()
 		return;
 		});
 
-
 	// Stream 2
 	CInputHandler::Instance()->AddActionKeyDown(SDL_SCANCODE_4, [this] {
 		CSoundManager::Instance()->PlayStream(&testStream2);
@@ -161,18 +144,18 @@ bool CPlayState::OnPlay()
 		return;
 		});
 
-	CInputHandler::Instance()->AddActionKeyDown(SDL_SCANCODE_8, [this] {
-		CScriptManager::Instance()->RunFromRef("TestScript");
-		});
-	CInputHandler::Instance()->AddActionKeyUp(SDL_SCANCODE_8, [this] {
-		return;
-		});
-
 	if (pLevel)
 	{
 		// Give the camera the Level size
 		CCamera::Instance()->SetLevelSize(pLevel->m_LevelSize);
 
+		// Assign the Level attribute to the current loaded level
+		if (CScriptManager::Instance()->GetEngineModule().attr(LEVELOBJECT_NAME).is_none())
+		{
+			m_levelPtr = std::make_shared<SLevelObject>(SLevelObject(pLevel));
+			CScriptManager::Instance()->GetEngineModule().attr(LEVELOBJECT_NAME) = m_levelPtr;
+		}
+		
 		// Execute the OnPlay method on all the GameObjects in all Object Layers
 		pLevel->OnPlay();
 	}
@@ -213,12 +196,10 @@ void CPlayState::OnThink()
 bool CPlayState::OnEnd()
 {
 	std::cout << "Exiting PlayState\n";
-
+	
 	// Execute the OnPlay method on all the GameObjects in all Object Layers
 	if (pLevel != 0)
 		pLevel->Destroy();
-	
-	CScriptManager::Instance()->GetEngineModule().attr("level") = py::none();
 
 	CGameStateBase::OnEnd();
 

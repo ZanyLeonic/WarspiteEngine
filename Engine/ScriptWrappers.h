@@ -2,12 +2,20 @@
 #ifndef __SCRIPTWRAPPERS_H__
 #define __SCRIPTWRAPPERS_H__
 
+// The current APIs we are exposing
 #include "Camera.h"
 #include "InputHandler.h"
 #include "Level.h"
-#include <pybind11/embed.h>
-#include "WarspiteObject.h"
 
+// To make it easier to change how these are referenced throughout the codebase
+// You can reference these objects in Python by engine module followed by any of the below.
+// (e.g. engine.level)
+#define LEVELOBJECT_NAME "level"
+#define CAMERAOBJECT_NAME "camera"
+#define INPUTOBJECT_NAME "inputh"
+#define GAMEOBJECT_NAME "game"
+
+// Create a base set of methods to prevent the repeat of code
 template<class T>
 struct SBaseWrapper
 {
@@ -22,7 +30,7 @@ struct SBaseWrapper
 	}
 	
 protected:
-	T* m_inst = nullptr;
+	T* m_inst = nullptr; // Each of these will be containing a pointer of something.
 };
 
 struct SLevelObject : SBaseWrapper<CLevel>
@@ -49,7 +57,7 @@ struct SLevelObject : SBaseWrapper<CLevel>
 		if (!IsValid()) return nullptr;
 
 		std::vector<std::vector<IGameObject*>*> m_objects;
-		
+
 		// Go through each ObjectLayer we got earlier
 		for (size_t i = 0; i < m_objects.size(); i++)
 		{
@@ -72,12 +80,12 @@ struct SLevelObject : SBaseWrapper<CLevel>
 		return nullptr;
 	}
 	
-	//std::vector<std::vector<IGameObject*>*> GetGameObjects() const
-	//{
-	//	if (!IsValid()) return std::vector<std::vector<IGameObject*>*>();
-	//	
-	//	return m_inst->GetGameObjects();
-	//}
+	std::vector<std::vector<IGameObject*>*> GetGameObjects() const
+	{
+		if (!IsValid()) return std::vector<std::vector<IGameObject*>*>();
+		
+		return m_inst->GetGameObjects();
+	}
 };
 
 struct SCameraObject : SBaseWrapper<CCamera>
@@ -184,9 +192,5 @@ struct SInputObject : SBaseWrapper<CInputHandler>
 		return true;
 	}
 };
-
-typedef std::shared_ptr<SLevelObject>  PLevelPtr;
-typedef std::shared_ptr<SCameraObject> PCameraPtr;
-typedef std::shared_ptr<SInputObject>  PInputPtr;
 
 #endif

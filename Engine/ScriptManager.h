@@ -6,6 +6,9 @@
 #include <map>
 #include "Level.h"
 #include "Game.h"
+#include <pybind11/pybind11.h>
+
+namespace py = pybind11;
 
 enum class EGameScriptType
 {
@@ -14,10 +17,8 @@ enum class EGameScriptType
 	SCRIPT_FILE = 2
 };
 
-#include <pybind11/pybind11.h>
-namespace py = pybind11;
-
-// typedef std::shared_ptr<GameWrapper> WrapPtr;
+struct SKeyScancodes
+{};
 
 struct SGameScript
 {

@@ -15,7 +15,10 @@ enum EMouseButtons
 	RIGHT = 2
 };
 
+struct SInputObject;
+
 typedef std::function<void()> KeyCallback;
+typedef std::shared_ptr<SInputObject> PInputPtr;
 
 class CInputHandler
 {
@@ -92,6 +95,8 @@ private:
 	CVector2D* m_mousePosition = new CVector2D(0,0);
 
 	Uint8* m_keystates = 0;
+
+	PInputPtr m_inputPtr;
 
 	static CInputHandler* s_pInstance;
 };

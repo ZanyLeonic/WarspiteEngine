@@ -1,10 +1,19 @@
 #include "Game.h"
 #include "Camera.h"
+#include "ScriptManager.h"
+#include "ScriptWrappers.h"
 
 CCamera* CCamera::s_pCamera = 0;
 
 CCamera::CCamera()
-{}
+{
+	// Expose the current camera to the Python API
+	if(CScriptManager::Instance()->GetEngineModule().attr(CAMERAOBJECT_NAME).is_none())
+	{
+		m_cameraPtr = std::make_shared<SCameraObject>(SCameraObject(this));
+		CScriptManager::Instance()->GetEngineModule().attr(CAMERAOBJECT_NAME) = m_cameraPtr;
+	}
+}
 
 void CCamera::OnThink()
 {
