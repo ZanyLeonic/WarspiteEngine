@@ -34,7 +34,7 @@ std::string WarspiteUtil::GetFileName(std::string path, bool ext, char sep)
 	{
 		auto fa = fN.rfind('.');
 		
-		fN.erase(fa, (fN.length() - fa) -1 );
+		fN.erase(fa, fN.length() - fa);
 	}
 	
 	return fN;

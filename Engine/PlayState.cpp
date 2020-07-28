@@ -31,10 +31,10 @@ bool CPlayState::OnPlay()
 	CLevelParser lp;
 	pLevel = lp.ParseLevel("assets\\maps\\map02.json");
 
-	PLevelPtr te = std::make_shared<SLevelObject>(SLevelObject(pLevel));
-	//std::cout << "Q: Is our levelObject valid?\nA: " << (te.get()->IsValid() ? "Yes" : "No") << std::endl;
-	//if (te.get()->IsValid())
-	//	std::cout << "Q: What is the name of our level?\nA: " << te.get()->GetName() << std::endl;
+	te = std::make_shared<SLevelObject>(SLevelObject(pLevel));
+	std::cout << "Q: Is our levelObject valid?\nA: " << (te.get()->IsValid() ? "Yes" : "No") << std::endl;
+	if (te.get()->IsValid())
+		std::cout << "Q: What is the name of our level?\nA: " << te.get()->GetName() << std::endl;
 
 	try
 	{
@@ -161,6 +161,13 @@ bool CPlayState::OnPlay()
 		return;
 		});
 
+	CInputHandler::Instance()->AddActionKeyDown(SDL_SCANCODE_8, [this] {
+		CScriptManager::Instance()->RunFromRef("TestScript");
+		});
+	CInputHandler::Instance()->AddActionKeyUp(SDL_SCANCODE_8, [this] {
+		return;
+		});
+
 	if (pLevel)
 	{
 		// Give the camera the Level size
@@ -210,6 +217,8 @@ bool CPlayState::OnEnd()
 	// Execute the OnPlay method on all the GameObjects in all Object Layers
 	if (pLevel != 0)
 		pLevel->Destroy();
+	
+	CScriptManager::Instance()->GetEngineModule().attr("level") = py::none();
 
 	CGameStateBase::OnEnd();
 

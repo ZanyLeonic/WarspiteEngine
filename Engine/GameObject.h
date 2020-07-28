@@ -20,7 +20,14 @@ public:
 	virtual const char* GetName() = 0;
 	virtual bool ShouldCollide() = 0;
 protected:
+	friend class IGameObjectDeleter;
 	IGameObject() {} 
 	virtual ~IGameObject() {}
+};
+
+class IGameObjectDeleter
+{
+public:
+	void operator()(IGameObject* p) { delete p; }
 };
 #endif /* defined(__GameObject__) */

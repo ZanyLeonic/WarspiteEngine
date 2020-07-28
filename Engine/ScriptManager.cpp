@@ -8,8 +8,37 @@
 
 CScriptManager* CScriptManager::s_pInstance = 0;
 
+PYBIND11_MAKE_OPAQUE(std::vector<std::vector<IGameObject*>*>&);
+PYBIND11_MAKE_OPAQUE(std::vector<IGameObject*>&);
+
 // Exposing some classes to Python
 PYBIND11_MODULE(engine, m) {
+	//py::class_<std::vector<std::vector<IGameObject*>*>>(m, "GOVector")
+	//	.def(py::init<>())
+	//	.def("__iter__", [](std::vector<std::vector<IGameObject*>*>& v)
+	//		{
+	//			return py::make_iterator(v.begin(), v.end());
+	//		}, py::keep_alive<0, 1>()
+	//);
+
+	//py::class_<std::vector<IGameObject*>*>(m, "InGOVector")
+	//	.def(py::init<>())
+	//	.def("__iter__", [](std::vector<IGameObject*>& v)
+	//		{
+	//			return py::make_iterator(v.begin(), v.end());
+	//		}, py::keep_alive<0, 1>()
+	//);
+
+	//py::class_<IGameObject, std::unique_ptr<IGameObject, py::nodelete>>(m, "GameObject")
+	//	.def(py::init<>())
+	//	.def("get_name", &IGameObject::GetName)
+	//	.def("should_collide", &IGameObject::ShouldCollide)
+	//	.def("__repr__", [](IGameObject& o)
+	//		{
+	//			return "<IGameObject \"" + std::string(o.GetName()) + "\">";
+	//		}
+	//);
+
 	py::class_<CVector2D>(m, "Vector2D")
 		.def(py::init<>())
 		.def("set_x", &CVector2D::SetX)
@@ -25,14 +54,13 @@ PYBIND11_MODULE(engine, m) {
 					std::to_string(v.GetX()) + ", "
 					+ std::to_string(v.GetY()) + ")>";
 			}
-		);
-
-	py::class_<CWarspiteObject>(m, "WarspiteObject")
+	);
+	
+	py::class_<CWarspiteObject, IGameObject>(m, "WarspiteObject")
 		.def(py::init<>())
 		.def("get_position", &CWarspiteObject::GetPosition)
 		.def("set_position", &CWarspiteObject::SetPosition)
 		.def("get_type", &CWarspiteObject::GetFactoryID)
-		.def("get_name", &CWarspiteObject::GetName)
 		.def("get_texid", &CWarspiteObject::GetTextureID)
 		.def("get_velocity", &CWarspiteObject::GetVelocity)
 		.def("set_velocity", &CWarspiteObject::SetVelocity)
@@ -46,7 +74,6 @@ PYBIND11_MODULE(engine, m) {
 		.def("get_current_anim_frame", &CWarspiteObject::GetCurrentAnimFrame)
 		.def("set_anim_row", &CWarspiteObject::SetAnimRow)
 		.def("get_total_anim_frames", &CWarspiteObject::GetTotalAnimFrames)
-		.def("should_collide", &CWarspiteObject::ShouldCollide)
 		.def("set_collision", &CWarspiteObject::SetCollision)
 		.def("__repr__", [](CWarspiteObject& o)
 			{
@@ -59,8 +86,7 @@ PYBIND11_MODULE(engine, m) {
 		.def(py::init<CLevel*>())
 		.def("get_name", &SLevelObject::GetName)
 		.def("get_level_size", &SLevelObject::GetLevelSize)
-		.def("find_gameobject", &SLevelObject::FindGameObject)
-		.def("get_gameobjects", &SLevelObject::GetGameObjects)
+		//.def("find_wobject", &SLevelObject::FindGameObject<CWarspiteObject>)
 		.def("__repr__", [](SLevelObject& o)
 			{
 				return "<SLevelObject named \"" + o.GetName() + "\">";
@@ -82,7 +108,7 @@ PYBIND11_MODULE(engine, m) {
 						std::to_string(o.GetTarget()->GetY()) + 
 						")>";
 			}
-		);
+	);
 
 	py::class_<SInputObject>(m, "InputObject")
 		.def(py::init<CInputHandler*>())
@@ -93,7 +119,8 @@ PYBIND11_MODULE(engine, m) {
 		.def("get_y_axis", &SInputObject::GetYAxis)
 		.def("set_release_state", &SInputObject::SetReleaseState)
 		.def("add_action_keydown", &SInputObject::AddActionKeyDown)
-		.def("add_action_keyup", &SInputObject::AddActionKeyUp);
+		.def("add_action_keyup", &SInputObject::AddActionKeyUp
+	);
 }
 
 CScriptManager::CScriptManager()
@@ -158,7 +185,7 @@ bool CScriptManager::Run(SGameScript* script)
 			exec(script->GetSource().c_str(), main_namespace);
 			break;
 		case EGameScriptType::SCRIPT_FILE:
-			eval_file(script->GetFilename().c_str(), main_namespace);
+			PyRun_SimpleString(WarspiteUtil::ReadAllText(script->GetFilename()).c_str());
 			break;
 		default:
 			return false; // No type defined? what?
@@ -172,13 +199,15 @@ bool CScriptManager::Run(SGameScript* script)
 		{
 		case EGameScriptType::SCRIPT_INLINE:
 			std::cout << "An internal error occurred when executing an inline script named: \"" + script->GetScriptName() + "\"" << std::endl;
+			PyErr_Print(); // print all errors for now
+			break;
 		case EGameScriptType::SCRIPT_FILE:
 			std::cout << "An internal error occurred when executing an external script named: \"" + script->GetScriptName() + "\"" << std::endl;
+			PyErr_Print(); // print all errors for now
+			break;
 		default:
 			std::cout << "An internal error occurred when executing script named: \"" + script->GetScriptName() + "\"" << std::endl;
 		}
-		
-		PyErr_Print(); // print all errors for now
 	}
 	return false;
 }

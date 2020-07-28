@@ -5,6 +5,8 @@
 #include "Camera.h"
 #include "InputHandler.h"
 #include "Level.h"
+#include <pybind11/embed.h>
+#include "WarspiteObject.h"
 
 template<class T>
 struct SBaseWrapper
@@ -41,19 +43,28 @@ struct SLevelObject : SBaseWrapper<CLevel>
 		return m_inst->m_LevelSize;
 	}
 
-	IGameObject* FindGameObject(std::string id)
+	template<class T>
+	std::shared_ptr<T> FindGameObject(std::string id)
 	{
 		if (!IsValid()) return nullptr;
+
+		std::vector<std::vector<IGameObject*>*> m_objects;
 		
-		std::vector<std::vector<IGameObject*>*> objs = m_inst->GetGameObjects();
-		
-		for (size_t i = 0; i < objs.size(); i++)
+		// Go through each ObjectLayer we got earlier
+		for (size_t i = 0; i < m_objects.size(); i++)
 		{
-			for (size_t j = 0; j < objs[i]->size(); j++)
+			if (!m_objects[i]) continue;
+
+			// Get an rvalue of the list of GameObject's for the iterated layer
+			std::vector<IGameObject*>& ir = *m_objects[i];
+
+			for (size_t j = 0; j < ir.size(); j++)
 			{
-				for (size_t k = 0; k < objs[i][j].size(); k++)
+				if (ir[j]->GetName() == id)
 				{
-					if (objs[i][j][k]->GetName() == id) return objs[i][j][k];
+					auto pCWO = std::unique_ptr<T>(dynamic_cast<T*>(ir[j]));
+
+					return pCWO;
 				}
 			}
 		}
@@ -61,12 +72,12 @@ struct SLevelObject : SBaseWrapper<CLevel>
 		return nullptr;
 	}
 	
-	std::vector<std::vector<IGameObject*>*> GetGameObjects() const
-	{
-		if (!IsValid()) return std::vector<std::vector<IGameObject*>*>();
-		
-		return m_inst->GetGameObjects();
-	}
+	//std::vector<std::vector<IGameObject*>*> GetGameObjects() const
+	//{
+	//	if (!IsValid()) return std::vector<std::vector<IGameObject*>*>();
+	//	
+	//	return m_inst->GetGameObjects();
+	//}
 };
 
 struct SCameraObject : SBaseWrapper<CCamera>

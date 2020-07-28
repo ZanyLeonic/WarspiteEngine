@@ -4,6 +4,7 @@
 
 #include "GameStateBase.h"
 #include "Level.h"
+#include "ScriptWrappers.h"
 
 class CPlayState :
 	public CGameStateBase
@@ -20,6 +21,7 @@ public:
 private:
 	static const std::string s_playID;
 	CLevel* pLevel;
+	PLevelPtr te;
 
 	CVector2D m_screenSize;
 };
