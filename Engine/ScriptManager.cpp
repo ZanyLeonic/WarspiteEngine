@@ -31,7 +31,7 @@ PYBIND11_MODULE(engine, m) {
 			}
 	);
 
-	py::class_<CWarspiteObject>(m, "WarspiteObject")
+	py::class_<CWarspiteObject>(m, "WarspiteObject", "An object that exists as the base for the majority of GameObjects in levels")
 		.def(py::init<>())
 		.def("get_position", &CWarspiteObject::GetPosition, "Returns the position of the specified object")
 		.def("set_position", &CWarspiteObject::SetPosition, "Sets the position of the specified object")
@@ -59,6 +59,12 @@ PYBIND11_MODULE(engine, m) {
 			}
 	);
 
+	py::class_<CGameStateBase>(m, "GameState", "An object that supplies custom functionality for the Engine depending on scenario")
+		.def("get_loaded_textures", &CGameStateBase::GetLoadedTextures, "Returns a vector of loaded texture IDs related to the state")
+		.def("get_loaded_scripts", &CGameStateBase::GetLoadedScripts, "Returns a vector of loaded script IDs related to the state")
+		.def("should_be_ticking", &CGameStateBase::ShouldBeTicking, "Returns whether the state should be ticking or not")
+		.def("should_be_drawing", &CGameStateBase::ShouldBeDrawing, "Returns whether the state should be drawing or not");
+	
 	py::class_<SLevelObject>(m, "LevelObject", "A container that allows interaction with the currently loaded level. (Do not call this - use engine.level)")
 		.def(py::init<CLevel*>())
 		.def("get_name", &SLevelObject::GetName, "Returns the name of the map currently loaded. (Extension removed.)")
@@ -98,6 +104,20 @@ PYBIND11_MODULE(engine, m) {
 		.def("add_action_keydown", &SInputObject::AddActionKeyDown, "Binds the execution of the specified method when the specified key is down")
 		.def("add_action_keyup", &SInputObject::AddActionKeyUp, "Binds the execution of the specified method when the specified key is released");
 
+	py::class_<SGameObject>(m, "GameObject", "A container that allows interaction with more misc aspects of the Engine's APIs. (Do not call this - use engine.game)")
+		.def(py::init<CGame*>())
+		.def("get_current_state", &SGameObject::GetCurrentState, "Returns the state that is currently loaded")
+		.def("change_state", &SGameObject::ChangeState, "Changes the current state to the specified state")
+		// .def("get_player", &SGameObject::GetPlayer<CPlayer>, "Returns the currently registered player object")
+		.def("create_object", &SGameObject::CreateObject, "Creates the object specified - returns the object in success and nullptr when failed")
+		.def("load_texture", &SGameObject::LoadTexture, "Loads the specified texture into the manager with the specified ID");
+
+	py::class_<CObjectParams>(m, "ObjectParams", "A container used to initalise objects")
+		.def(py::init<float, float>(), "Used for certain objects that just need to be spawned")
+		.def(py::init<float, float, const char*>(), "Used for objects that use scripts")
+		.def(py::init<float, float, int, int, std::string, int, int, int, int, int, std::string, std::string, std::string>()
+			, "Used for most object initalisation");
+	
 	py::class_<SKeyScancodes> sc(m, "WS_Scancode", "A wrapper for specifying some of SDL_Scancode. (For use with engine.level methods)");
 	
 	py::enum_<SDL_Scancode>(sc, "SDL_Scancode")

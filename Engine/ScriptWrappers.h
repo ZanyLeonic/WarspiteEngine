@@ -6,6 +6,10 @@
 #include "Camera.h"
 #include "InputHandler.h"
 #include "Level.h"
+#include "GameStateBase.h"
+#include "GameObjectDictionary.h"
+#include "TextureManager.h"
+#include "WarspiteObject.h"
 
 // To make it easier to change how these are referenced throughout the codebase
 // You can reference these objects in Python by engine module followed by any of the below.
@@ -193,4 +197,49 @@ struct SInputObject : SBaseWrapper<CInputHandler>
 	}
 };
 
+// This maybe moved from this codebase to the game codebase soon.
+// Internal APIs in the codebase need to be updated for further work!
+struct SGameObject : SBaseWrapper<CGame>
+{
+	SGameObject(CGame* pClass) : SBaseWrapper<CGame>(pClass) {}
+
+	std::shared_ptr<CGameStateBase> GetCurrentState() const
+	{
+		if (!IsValid()) return nullptr;
+		return std::shared_ptr<CGameStateBase>(m_inst->GetStateManager()->GetCurrentState());
+	}
+
+	bool ChangeState(std::string stateID)
+	{
+		// TODO: Need to change the State system to match the GameObject system
+		throw NotImplemented();
+	}
+
+	template<class T>
+	std::shared_ptr<T> GetPlayer() const
+	{
+		// TODO: Implement a way to register what is the player class when loading
+		throw NotImplemented();
+	}
+
+	// These next one doesn't really use CGame, but it was the only place I thought it would fit
+	// May split it off later.
+	std::shared_ptr<CWarspiteObject> CreateObject(std::string factID, CObjectParams params) const
+	{
+		// Create the object and load the params provided.
+		IGameObject* pObj = CGameObjectDictionary::Instance()->Create(factID);
+		if (pObj == nullptr) return nullptr; // a bit redundant but it prevents a reference of a nullptr
+		
+		pObj->Load(&params);
+
+		// lul will this work? nope.
+		return std::shared_ptr<CWarspiteObject>(dynamic_cast<CWarspiteObject*>(pObj));
+	}
+
+	bool LoadTexture(std::string texPath, std::string texID) const
+	{
+		if (!IsValid()) return false;
+		return CTextureManager::Instance()->Load(texPath, texID, m_inst->GetRenderer());
+	}
+};
 #endif

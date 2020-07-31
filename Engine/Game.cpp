@@ -6,25 +6,9 @@
 #include "InputHandler.h"
 #include "LevelParser.h"
 #include <iostream>
+#include "ScriptWrappers.h"
 
 CGame* CGame::s_pInstance = 0;
-
-int audioLoop(void* data)
-{
-	// Just create an instance to initialise it.
-	CSoundManager::Instance();
-	
-	CGame* pG = reinterpret_cast<CGame*>(data);
-
-	while (pG->IsRunning())
-	{
-		CSoundManager::Instance()->OnThink();
-
-		// SDL_WaitThread(pG->GetAudioThread(), NULL);
-	}
-
-	return 0;
-}
 
 // Initialises the major parts of the engine
 bool CGame::Init(const char* title, int xpos, int ypos, int width, int height, bool fullscreen)
@@ -57,15 +41,15 @@ bool CGame::Init(const char* title, int xpos, int ypos, int width, int height, b
 				SDL_SetRenderDrawColor(m_pRenderer,
 					255, 255, 255, 255);
 
-				// Not actually doing anything but sucking CPU cycles lol
-				// SDL_Thread* aT = SDL_CreateThread(audioLoop, "AudioThread", (void*)Instance());
-				// SDL_DetachThread(aT);
-
 				m_pGameStateManager = new CGameStateManager();
 				m_pGameStateManager->ModifyState(new CMainMenuState());
 
-				// Start the script manager
-				CScriptManager::Instance();
+				// Assign the Game attribute with a game object
+				if (CScriptManager::Instance()->GetEngineModule().attr(GAMEOBJECT_NAME).is_none())
+				{
+					m_gamePtr = std::make_shared<SGameObject>(SGameObject(this));
+					CScriptManager::Instance()->GetEngineModule().attr(GAMEOBJECT_NAME) = m_gamePtr;
+				}
 			}
 			else
 			{

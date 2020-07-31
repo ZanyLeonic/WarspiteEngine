@@ -42,6 +42,18 @@ bool CPlayState::OnPlay()
 			return;
 		});
 
+	CInputHandler::Instance()->AddActionKeyDown(SDL_SCANCODE_8, [this] {
+		if (!dynamic_cast<CPauseState*>(CGame::Instance()->GetStateManager()->GetCurrentState()))
+		{
+			CScriptManager::Instance()->RunFromRef("TestScript");
+		}
+		});
+
+	CInputHandler::Instance()->AddActionKeyUp(SDL_SCANCODE_8, [this] {
+		return;
+		});
+
+	
 	std::cout << WarspiteUtil::GetFileName("assets\\maps\\map02.json") << std::endl;
 	std::cout << WarspiteUtil::GetFileName("assets\\maps\\map02.json", false) << std::endl;
 	

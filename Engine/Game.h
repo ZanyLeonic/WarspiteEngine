@@ -9,6 +9,9 @@
 #include "MainMenuState.h"
 #include "Vector2D.h"
 
+struct SGameObject;
+typedef std::shared_ptr<SGameObject>  PGamePtr;
+
 class CGame
 {
 public:
@@ -64,9 +67,9 @@ private:
 
 	CVector2D m_viewportSize;
 
+	PGamePtr m_gamePtr;
+
 	bool m_bRunning = false;
 };
-
-typedef std::shared_ptr<CGame> CGamePtr;
 
 #endif /* defined(__Game__) */
