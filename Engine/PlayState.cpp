@@ -54,8 +54,8 @@ bool CPlayState::OnPlay()
 		});
 
 	
-	std::cout << WarspiteUtil::GetFileName("assets\\maps\\map02.json") << std::endl;
-	std::cout << WarspiteUtil::GetFileName("assets\\maps\\map02.json", false) << std::endl;
+	std::cout << CWarspiteUtil::GetFileName("assets\\maps\\map02.json") << std::endl;
+	std::cout << CWarspiteUtil::GetFileName("assets\\maps\\map02.json", false) << std::endl;
 	
 	// This callback code is disgusting - but it works so I don't care.
 	testStream.PlayCallback = [this](SStreamingAudioData* as)

@@ -13,7 +13,7 @@ PYBIND11_MODULE(engine, m) {
 	m.attr(CAMERAOBJECT_NAME) = py::none();
 	m.attr(INPUTOBJECT_NAME) = py::none();
 	m.attr(GAMEOBJECT_NAME) = py::none();
-
+	
 	py::class_<CVector2D>(m, "Vector2D", "A two dimensional vector object")
 		.def(py::init<>())
 		.def("set_x", &CVector2D::SetX, "Sets the X value from inside this Vector")
@@ -117,6 +117,11 @@ PYBIND11_MODULE(engine, m) {
 		.def(py::init<float, float, const char*>(), "Used for objects that use scripts")
 		.def(py::init<float, float, int, int, std::string, int, int, int, int, int, std::string, std::string, std::string>()
 			, "Used for most object initalisation");
+
+	py::class_<CWarspiteUtil>(m, "util", "")
+		.def("get_file_ext", CWarspiteUtil::GetFileExtenstion, "Returns the file extension ")
+		.def("get_file_name", CWarspiteUtil::GetFileName)
+		.def("read_all_text", CWarspiteUtil::ReadAllText);
 	
 	py::class_<SKeyScancodes> sc(m, "WS_Scancode", "A wrapper for specifying some of SDL_Scancode. (For use with engine.level methods)");
 	
@@ -248,7 +253,8 @@ CScriptManager::CScriptManager()
 {
 	std::cout << "Initialising ScriptManager..." << std::endl;
 	
-	try {
+	try 
+	{
 		// Initialize Python interpreter and import bar module
 		PyImport_AppendInittab("engine", PyInit_engine);
 		Py_Initialize();

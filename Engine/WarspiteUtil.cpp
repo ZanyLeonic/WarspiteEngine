@@ -2,7 +2,7 @@
 #include <fstream>
 #include <sstream>
 
-std::string WarspiteUtil::GetFileExtenstion(std::string path)
+std::string CWarspiteUtil::GetFileExtenstion(std::string path)
 {
 	std::size_t pos = path.rfind('.');
 
@@ -14,7 +14,7 @@ std::string WarspiteUtil::GetFileExtenstion(std::string path)
 	return "";
 }
 
-std::string WarspiteUtil::GetFileName(std::string path, bool ext, char sep)
+std::string CWarspiteUtil::GetFileName(std::string path, bool ext, char sep)
 {
 #ifdef _WIN32
 	std::string pathDis = "\\";
@@ -40,7 +40,7 @@ std::string WarspiteUtil::GetFileName(std::string path, bool ext, char sep)
 	return fN;
 }
 
-std::string WarspiteUtil::ReadAllText(std::string path)
+std::string CWarspiteUtil::ReadAllText(std::string path)
 {
 	std::fstream nFile;
 	std::string fStr;

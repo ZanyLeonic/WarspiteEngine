@@ -261,7 +261,7 @@ void CLevelParser::parseFiles(const rapidjson::Value* pFileRoot)
 	// Get the correct type of the value. (should be an object)
 	const Value::ConstObject& o = pFileRoot->GetObject();
 
-	if (WarspiteUtil::GetFileExtenstion(o["value"].GetString()) == ".py")
+	if (CWarspiteUtil::GetFileExtenstion(o["value"].GetString()) == ".py")
 	{
 		CScriptManager::Instance()->Load(SGameScript::file(o["name"].GetString(), o["value"].GetString()));
 		return;

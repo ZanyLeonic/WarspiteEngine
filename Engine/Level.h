@@ -47,7 +47,7 @@ public:
 
 	std::string GetName() const
 	{
-		return WarspiteUtil::GetFileName(m_path, false);
+		return CWarspiteUtil::GetFileName(m_path, false);
 	}
 
 	std::string GetPath() const

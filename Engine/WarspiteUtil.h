@@ -1,11 +1,11 @@
 #pragma once
-#ifndef __WARSPITEUTIL_H__
-#define __WARSPITEUTIL_H__
+#ifndef __CWarspiteUtil_H__
+#define __CWarspiteUtil_H__
 
 #include <string>
 #include <stdexcept>
 
-class WarspiteUtil
+class CWarspiteUtil
 {
 public:
 	static std::string GetFileExtenstion(std::string path);
