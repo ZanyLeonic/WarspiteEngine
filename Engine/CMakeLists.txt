@@ -125,14 +125,14 @@ if("${SDL2_IMAGE_LIBRARIES}" STREQUAL "")
 endif()
 
 set (Warspite_Libs
-        ${Python3_LIBRARIES}
-        ${PYBIND11_LIBRARIES}
-        ${SDL2_LIBRARIES}
-        ${SDL2_IMAGE_LIBRARIES}
-        ${SDL2_TTF_LIBRARIES}
-        ${OPENAL_LIBRARY}
-        ${VORBIS_LIBRARIES}
-        ${ZLIB_LIBRARIES}
+    ${Python3_LIBRARIES}
+    ${PYBIND11_LIBRARIES}
+    ${SDL2_LIBRARIES}
+    ${SDL2_IMAGE_LIBRARIES}
+    ${SDL2_TTF_LIBRARIES}
+    ${OPENAL_LIBRARY}
+    ${VORBIS_LIBRARIES}
+    ${ZLIB_LIBRARIES}
 )
 
 include_directories(${Python3_INCLUDE_DIRS})
@@ -145,6 +145,8 @@ include_directories(${OGG_INCLUDE_DIR})
 include_directories(${OPENAL_INCLUDE_DIRS})
 include_directories(${VORBIS_INCLUDE_DIR})
 include_directories(${ZLIB_INCLUDE_DIRS})
+
+link_directories(${Python3_LIBRARY_DIRS})
 
 # Add source to this project's executable.
 add_executable (${PROJECT_NAME} ${WarspiteEngine_Src} ${WarspiteEngine_Header})

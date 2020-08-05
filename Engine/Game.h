@@ -40,8 +40,6 @@ public:
 	void Destroy();
 	void Quit();
 
-	const char* TestMethod();
-
 	// a function to access the private running variable
 	bool IsRunning() { return m_bRunning; }
 
@@ -50,8 +48,6 @@ public:
 	CGameStateManager* GetStateManager() const { return m_pGameStateManager; }
 
 	CVector2D GetViewportSize() const { return m_viewportSize; }
-
-	SDL_Thread* GetAudioThread() const { return audioThread; }
 
 private:
 	CGameStateManager* m_pGameStateManager;
@@ -63,10 +59,7 @@ private:
 	SDL_Rect m_sourceRectangle = {}; // the first rectangle
 	SDL_Rect m_destinationRectangle = {}; // another rectangle
 
-	SDL_Thread* audioThread = 0;
-
 	CVector2D m_viewportSize;
-
 	PGamePtr m_gamePtr;
 
 	bool m_bRunning = false;

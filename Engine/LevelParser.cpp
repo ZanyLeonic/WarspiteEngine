@@ -9,7 +9,6 @@
 #include "TileLayer.h"
 #include "WarspiteUtil.h"
 
-#include <boost/filesystem.hpp>
 #include <iostream>
 #include <rapidjson/filereadstream.h>
 #include <rapidjson/writer.h>

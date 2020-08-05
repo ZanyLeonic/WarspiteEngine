@@ -46,7 +46,7 @@ function InstallPackages() {
         $local_vcpkg = $true
     }
 
-    & $vcpkg install sdl2 sdl2-image[libjpeg-turbo,libwebp,tiff] sdl2-ttf libvorbis rapidjson zlib python3 pybind11 --triplet $Arch-windows
+    & $vcpkg install sdl2 sdl2-image[libjpeg-turbo,libwebp,tiff] sdl2-ttf libvorbis rapidjson zlib openal-soft python3 pybind11 --triplet $Arch-windows
     if ($local_vcpkg) {
         & $vcpkg integrate install
         Write-Output "Cleaning up..."

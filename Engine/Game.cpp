@@ -44,6 +44,9 @@ bool CGame::Init(const char* title, int xpos, int ypos, int width, int height, b
 				m_pGameStateManager = new CGameStateManager();
 				m_pGameStateManager->ModifyState(new CMainMenuState());
 
+				// Initialise the SoundManager
+				CSoundManager::Instance();
+
 				// Assign the Game attribute with a game object
 				if (CScriptManager::Instance()->GetEngineModule().attr(GAMEOBJECT_NAME).is_none())
 				{
@@ -112,10 +115,4 @@ void CGame::Destroy()
 void CGame::Quit()
 {
 	m_bRunning = false;
-}
-
-const char* CGame::TestMethod()
-{
-	std::cout << "This will be called by Python..." << std::endl;
-	return "...and we will obey.";
 }
