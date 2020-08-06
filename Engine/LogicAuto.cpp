@@ -8,7 +8,7 @@ CLogicAuto::CLogicAuto()
 
 void CLogicAuto::OnPlay()
 {
-	if (m_scriptName == "")
+	if (m_scriptName.empty())
 		return;
 	
 	CScriptManager::Instance()->RunFromRef(m_scriptName);

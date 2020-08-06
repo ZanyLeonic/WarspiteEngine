@@ -257,17 +257,17 @@ CScriptManager::CScriptManager()
 	{
 		// Initialize Python interpreter and import bar module
 		PyImport_AppendInittab("engine", PyInit_engine);
-		Py_Initialize();
+		py::initialize_interpreter();
 		
 		main_module = py::module::import("__main__");
 		engine_module = py::module::import("engine");
 		main_namespace = main_module.attr("__dict__");
 	}
-	catch (pybind11::error_already_set const&)
+	catch (pybind11::error_already_set const& e)
 	{
-		std::cout << "***AN ERROR OCCURRED DURING INITIALISATION OF PYTHON!***" << std::endl;
-		PyErr_Print();
-		std::cout << "***************************END**************************" << std::endl;
+		std::cerr << "***AN ERROR OCCURRED DURING INITIALISATION OF PYTHON!***" << std::endl;
+		std::cerr << e.what() << std::endl;
+		std::cerr << "***************************END**************************" << std::endl;
 	}
 
 	// Show that the ScriptManager is ready
@@ -278,6 +278,8 @@ CScriptManager::CScriptManager()
 
 void CScriptManager::Destroy()
 {
+	// Destroy our interpreter
+	py::finalize_interpreter();
 }
 
 void CScriptManager::Load(SGameScript* script)
@@ -301,7 +303,7 @@ void CScriptManager::RemoveAll()
 	loadedScripts.clear();
 }
 
-bool CScriptManager::Run(SGameScript* script)
+bool CScriptManager::Run(SGameScript* script, py::object* ns)
 {
 	try
 	{
@@ -309,10 +311,10 @@ bool CScriptManager::Run(SGameScript* script)
 		switch (script->GetScriptType())
 		{
 		case EGameScriptType::SCRIPT_INLINE:
-			exec(script->GetSource().c_str(), main_namespace);
+			py::exec(script->GetSource().c_str(), ns != nullptr ? *ns : main_namespace);
 			break;
 		case EGameScriptType::SCRIPT_FILE:
-			eval_file(script->GetFilename().c_str(), main_namespace);
+			py::eval_file(script->GetFilename().c_str(), ns != nullptr ? *ns : main_namespace);
 			break;
 		default:
 			return false; // No type defined? what?
@@ -320,7 +322,7 @@ bool CScriptManager::Run(SGameScript* script)
 		
 		return true;
 	}
-	catch(py::error_already_set const &)
+	catch(py::error_already_set const & e)
 	{
 		switch(script->GetScriptType())
 		{
@@ -334,12 +336,14 @@ bool CScriptManager::Run(SGameScript* script)
 			std::cerr << "An internal error occurred when executing script named: \"" + script->GetScriptName() + "\"" << std::endl;
 		}
 
-		PyErr_Print(); // WHY DOES PyErr_Print NOT PRINT ANYTHING?!?
+		// Print what happened to not make debugging hell.
+		std::cerr << "Error:\n " << e.what() << std::endl;
+		std::cerr << "***Error End***" << std::endl;
 	}
 	return false;
 }
 
-bool CScriptManager::RunFromRef(std::string scriptRef)
+bool CScriptManager::RunFromRef(std::string scriptRef, py::object* ns)
 {
-	return Run(loadedScripts[scriptRef]);
+	return Run(loadedScripts[scriptRef], ns);
 }

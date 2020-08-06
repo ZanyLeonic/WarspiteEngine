@@ -85,8 +85,8 @@ public:
 	bool Remove(const char* scriptRef);
 	void RemoveAll();
 
-	bool Run(SGameScript* script);
-	bool RunFromRef(std::string scriptRef);
+	bool Run(SGameScript* script, py::object* ns = nullptr);
+	bool RunFromRef(std::string scriptRef, py::object* ns = nullptr);
 
 	py::module GetMainModule() const { return main_module; }
 	py::module GetEngineModule() const { return engine_module; }
