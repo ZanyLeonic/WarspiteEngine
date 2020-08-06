@@ -41,9 +41,6 @@ bool CGame::Init(const char* title, int xpos, int ypos, int width, int height, b
 				SDL_SetRenderDrawColor(m_pRenderer,
 					255, 255, 255, 255);
 
-				m_pGameStateManager = new CGameStateManager();
-				m_pGameStateManager->ModifyState(new CMainMenuState());
-
 				// Initialise the SoundManager
 				CSoundManager::Instance();
 
@@ -53,6 +50,9 @@ bool CGame::Init(const char* title, int xpos, int ypos, int width, int height, b
 					m_gamePtr = std::make_shared<SGameObject>(SGameObject(this));
 					CScriptManager::Instance()->GetEngineModule().attr(GAMEOBJECT_NAME) = m_gamePtr;
 				}
+
+				m_pGameStateManager = new CGameStateManager();
+				m_pGameStateManager->ModifyState(new CMainMenuState());
 			}
 			else
 			{

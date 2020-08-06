@@ -16,6 +16,11 @@ bool CMainMenuState::OnPlay()
 	CStateParser sp;
 	sp.ParseState("assets/resource/states/SystemMenus.json", s_UIID, &m_GameObjects, &m_TextureIDList, &m_ScriptIDList);
 
+	for(size_t i = 0; i < m_GameObjects.size(); i++)
+	{
+		m_GameObjects[i]->OnPlay();
+	}
+	
 	m_callbacks.push_back(0);
 	m_callbacks.push_back(s_menuToPlay);
 	m_callbacks.push_back(s_exitFromMenu);
