@@ -9,13 +9,14 @@
 // Exposing some classes to Python
 PYBIND11_MODULE(engine, m) {
 	// define these so they can be assigned later.
-	m.attr(LEVELOBJECT_NAME) = py::none();
-	m.attr(CAMERAOBJECT_NAME) = py::none();
-	m.attr(INPUTOBJECT_NAME) = py::none();
-	m.attr(GAMEOBJECT_NAME) = py::none();
+	m.attr(LEVELOBJECT_NAME)		= py::none();
+	m.attr(CAMERAOBJECT_NAME)	= py::none();
+	m.attr(INPUTOBJECT_NAME)		= py::none();
+	m.attr(GAMEOBJECT_NAME)		= py::none();
 	
 	py::class_<CVector2D>(m, "Vector2D", "A two dimensional vector object")
 		.def(py::init<>())
+		.def(py::init<float,float>())
 		.def("set_x", &CVector2D::SetX, "Sets the X value from inside this Vector")
 		.def("set_y", &CVector2D::SetY, "Sets the Y value from inside this Vector")
 		.def("get_x", &CVector2D::GetX, "Returns the X value from inside this vector")
@@ -54,8 +55,8 @@ PYBIND11_MODULE(engine, m) {
 		.def("set_collision", &CWarspiteObject::SetCollision, "Sets whether this object should collide with other objects")
 		.def("__repr__", [](CWarspiteObject& o)
 			{
-				return "<CWarspiteObject \"" + std::string(o.GetName()) +
-					"\" of type \"" + o.GetFactoryID() + "\">";
+				return "<CWarspiteObject \"" + (std::string(o.GetName()).empty() ? std::string(o.GetName()) : "UNDEFINED") +
+					"\" of type \"" + (o.GetFactoryID().empty() ? o.GetFactoryID() : "UNDEFINED") + "\">";
 			}
 	);
 
@@ -72,7 +73,7 @@ PYBIND11_MODULE(engine, m) {
 		.def("find_wobject", &SLevelObject::FindGameObject<CWarspiteObject>, "Returns a WarspiteObject that matches the specified ID")
 		.def("__repr__", [](SLevelObject& o)
 			{
-				return "<SLevelObject for map \"" + o.GetName() + "\">";
+				return "<SLevelObject for map \"" + (o.GetName().empty() ? "UNDEFINED" : o.GetName()) + "\">";
 			}
 	);
 
@@ -112,18 +113,18 @@ PYBIND11_MODULE(engine, m) {
 		.def("create_object", &SGameObject::CreateObject, "Creates the object specified - returns the object in success and nullptr when failed")
 		.def("load_texture", &SGameObject::LoadTexture, "Loads the specified texture into the manager with the specified ID");
 
-	py::class_<CObjectParams>(m, "ObjectParams", "A container used to initalise objects")
+	py::class_<CObjectParams>(m, "ObjectParams", "A container used to initialise objects")
 		.def(py::init<float, float>(), "Used for certain objects that just need to be spawned")
 		.def(py::init<float, float, const char*>(), "Used for objects that use scripts")
 		.def(py::init<float, float, int, int, std::string, int, int, int, int, int, std::string, std::string, std::string>()
-			, "Used for most object initalisation");
+			, "Used for most object initialisation");
 
-	py::class_<CWarspiteUtil>(m, "util", "")
-		.def("get_file_ext", CWarspiteUtil::GetFileExtenstion, "Returns the file extension ")
-		.def("get_file_name", CWarspiteUtil::GetFileName)
-		.def("read_all_text", CWarspiteUtil::ReadAllText);
+	py::class_<CWarspiteUtil>(m, "util", "Commonly used methods that get reused throughout the codebase")
+		.def("get_file_ext", CWarspiteUtil::GetFileExtenstion, "Returns the file extension from the provided path")
+		.def("get_file_name", CWarspiteUtil::GetFileName, "Returns the filename from the provided path")
+		.def("read_all_text", CWarspiteUtil::ReadAllText, "Returns the text from the path provided");
 	
-	py::class_<SKeyScancodes> sc(m, "WS_Scancode", "A wrapper for specifying some of SDL_Scancode. (For use with engine.level methods)");
+	py::class_<SKeyScancodes> sc(m, "WS_Scancode", "A wrapper for specifying some of SDL_Scancode. (For use with engine.inputh methods)");
 	
 	py::enum_<SDL_Scancode>(sc, "SDL_Scancode")
 		.value("UNKNOWN", SDL_SCANCODE_UNKNOWN)
