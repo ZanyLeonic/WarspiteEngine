@@ -4,7 +4,15 @@
 
 #include "GameState.h"
 #include "GameObject.h"
+#include "EngineFileSystem.h"
+#include "GameStateDictionary.h"
 #include <vector>
+
+// This part is where the IDs are defined
+#define SID_MM "MainMenu"
+#define SID_PLAY "PlayState"
+#define SID_PAUSE "PauseState"
+
 class CGameStateBase :
 	public CGameState
 {
@@ -21,6 +29,7 @@ public:
 	
 	virtual bool ShouldBeTicking() const { return m_shouldTick; }
 	virtual bool ShouldBeDrawing() const { return m_shouldDraw; }
+	
 protected:
 	std::vector<IGameObject*> m_GameObjects;
 	std::vector<std::string> m_TextureIDList;
@@ -28,5 +37,7 @@ protected:
 
 	bool m_shouldTick = false;
 	bool m_shouldDraw = false;
+	
+	std::string s_UIID;
 };
 #endif

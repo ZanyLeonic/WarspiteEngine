@@ -3,7 +3,6 @@
 #include "Game.h"
 #include "Camera.h"
 #include "Player.h"
-#include "PauseState.h"
 #include "StateParser.h"
 #include "LevelParser.h"
 #include <iostream>
@@ -14,7 +13,6 @@
 #include "ScriptWrappers.h"
 #include "ScriptManager.h"
 
-const std::string CPlayState::s_playID = "Game";
 SStreamingAudioData testStream;
 SStreamingAudioData testStream2;
 SWaveFile testFile;
@@ -23,18 +21,19 @@ bool CPlayState::OnPlay()
 {
 	CGameStateBase::OnPlay();
 
+	s_UIID = SID_PLAY;
 	m_screenSize = CGame::Instance()->GetViewportSize();
 
 	CStateParser sp;
-	sp.ParseState("assets\\resource\\states\\PlayState.json", s_playID, &m_GameObjects, &m_TextureIDList, &m_ScriptIDList);
+	sp.ParseState(CEngineFileSystem::ResolvePath("PlayState.json", EPathType::STATE).c_str(), GetStateID(), &m_GameObjects, &m_TextureIDList, &m_ScriptIDList);
 
 	CLevelParser lp;
-	pLevel = lp.ParseLevel("assets\\maps\\map02.json");
+	pLevel = lp.ParseLevel(CEngineFileSystem::ResolvePath("map02.json", EPathType::MAP).c_str());
 
 	CInputHandler::Instance()->AddActionKeyDown(SDL_SCANCODE_ESCAPE, [this] {
-			if (!dynamic_cast<CPauseState*>(CGame::Instance()->GetStateManager()->GetCurrentState()))
+			if (CGame::Instance()->GetStateManager()->GetCurrentState()->GetStateID() != SID_PAUSE)
 			{
-				CGame::Instance()->GetStateManager()->PushState(new CPauseState());
+				CGame::Instance()->GetStateManager()->PushState(CGameStateDictionary::Instance()->Create(SID_PAUSE));
 			}
 		});
 
@@ -43,7 +42,7 @@ bool CPlayState::OnPlay()
 		});
 
 	CInputHandler::Instance()->AddActionKeyDown(SDL_SCANCODE_8, [this] {
-		if (!dynamic_cast<CPauseState*>(CGame::Instance()->GetStateManager()->GetCurrentState()))
+		if (CGame::Instance()->GetStateManager()->GetCurrentState()->GetStateID() != SID_PAUSE)
 		{
 			CScriptManager::Instance()->RunFromRef("TestScript");
 		}
@@ -54,8 +53,8 @@ bool CPlayState::OnPlay()
 		});
 
 	
-	std::cout << CWarspiteUtil::GetFileName("assets\\maps\\map02.json") << std::endl;
-	std::cout << CWarspiteUtil::GetFileName("assets\\maps\\map02.json", false) << std::endl;
+	std::cout << CWarspiteUtil::GetFileName(CEngineFileSystem::ResolvePath("map02.json", EPathType::MAP)) << std::endl;
+	std::cout << CWarspiteUtil::GetFileName(CEngineFileSystem::ResolvePath("map02.json", EPathType::MAP), false) << std::endl;
 	
 	// This callback code is disgusting - but it works so I don't care.
 	testStream.PlayCallback = [this](SStreamingAudioData* as)
@@ -90,7 +89,7 @@ bool CPlayState::OnPlay()
 
 	// Load Wave
 	CInputHandler::Instance()->AddActionKeyDown(SDL_SCANCODE_0, [this] {
-			CSoundManager::Instance()->Load("assets/sound/mycode.wav", testFile);
+			CSoundManager::Instance()->Load(CEngineFileSystem::ResolvePath("mycode.wav", EPathType::SOUND), testFile);
 		});
 	CInputHandler::Instance()->AddActionKeyUp(SDL_SCANCODE_0, [this] {
 			return;
@@ -106,8 +105,8 @@ bool CPlayState::OnPlay()
 
 	// Load
 	CInputHandler::Instance()->AddActionKeyDown(SDL_SCANCODE_1, [this] {
-		CSoundManager::Instance()->CreateStreamFromFile("assets/sound/teststream.ogg", testStream);
-		CSoundManager::Instance()->CreateStreamFromFile("assets/sound/teststream2.ogg", testStream2);
+		CSoundManager::Instance()->CreateStreamFromFile(CEngineFileSystem::ResolvePath("teststream.ogg", EPathType::SOUND), testStream);
+		CSoundManager::Instance()->CreateStreamFromFile(CEngineFileSystem::ResolvePath("teststream2.ogg", EPathType::SOUND), testStream2);
 		});
 	CInputHandler::Instance()->AddActionKeyUp(SDL_SCANCODE_1, [this] {
 		return;

@@ -8,6 +8,7 @@ set(WarspiteEngine_Src
         Button.cpp
         Camera.cpp
         Enemy.cpp
+        EngineFilesystem.cpp
         Game.cpp
         GameObjectDictionary.cpp
         GameStateBase.cpp
@@ -39,6 +40,7 @@ set(WarspiteEngine_Header
         Button.h
         Camera.h
         Enemy.h
+        EngineFilesystem.h
         Game.h
         GameObject.h
         GameObjectDictionary.h

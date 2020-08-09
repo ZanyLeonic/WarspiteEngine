@@ -17,10 +17,9 @@ public:
 private:
 	virtual void SetCallbacks(const std::vector<HButtonCallback>& callbacks);
 
-	static const std::string s_UIID;
-
 	static bool s_menuToPlay();
 	static bool s_exitFromMenu();
 };
 
+REG_STATE_TO_REF(MainMenu, CMainMenuState)
 #endif

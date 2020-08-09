@@ -2,6 +2,7 @@
 #include "TextureManager.h"
 #include "SoundManager.h"
 #include "ScriptManager.h"
+#include "GameStateDictionary.h"
 #include "Camera.h"
 #include "InputHandler.h"
 #include "LevelParser.h"
@@ -52,7 +53,7 @@ bool CGame::Init(const char* title, int xpos, int ypos, int width, int height, b
 				}
 
 				m_pGameStateManager = new CGameStateManager();
-				m_pGameStateManager->ModifyState(new CMainMenuState());
+				m_pGameStateManager->ModifyState(CGameStateDictionary::Instance()->Create(SID_MM));
 			}
 			else
 			{

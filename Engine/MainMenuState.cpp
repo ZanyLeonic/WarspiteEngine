@@ -3,18 +3,17 @@
 #include "Game.h"
 #include "Button.h"
 #include "StateParser.h"
-#include "PlayState.h"
 #include <iostream>
-
-const std::string CMainMenuState::s_UIID = "MainMenu";
 
 bool CMainMenuState::OnPlay()
 {
 	CMenuState::OnPlay();
-
+	
+	s_UIID = SID_MM;
+	
 	// Parse the state
 	CStateParser sp;
-	sp.ParseState("assets/resource/states/SystemMenus.json", s_UIID, &m_GameObjects, &m_TextureIDList, &m_ScriptIDList);
+	sp.ParseState(CEngineFileSystem::ResolvePath("SystemMenus.json", EPathType::STATE).c_str(), s_UIID, &m_GameObjects, &m_TextureIDList, &m_ScriptIDList);
 
 	for(size_t i = 0; i < m_GameObjects.size(); i++)
 	{
@@ -58,7 +57,7 @@ void CMainMenuState::SetCallbacks(const std::vector<HButtonCallback>& callbacks)
 bool CMainMenuState::s_menuToPlay()
 {
 	std::cout << "Play button clicked\n";
-	CGame::Instance()->GetStateManager()->ModifyState(new CPlayState());
+	CGame::Instance()->GetStateManager()->ModifyState(CGameStateDictionary::Instance()->Create(SID_PLAY));
 	return false;
 }
 

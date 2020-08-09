@@ -25,10 +25,10 @@ public:
 		return s_pInstance;
 	}
 
-	bool RegisterType(std::string typeID, IObjectFactory* pCreator);
+	bool RegisterType(std::string typeID, IObjectFactory<IGameObject>* pCreator);
 	IGameObject* Create(std::string typeID);
 private:
-	std::map<std::string, IObjectFactory*> m_creators;
+	std::map<std::string, IObjectFactory<IGameObject>*> m_creators;
 };
 
 // For real - what will create our GameObject.

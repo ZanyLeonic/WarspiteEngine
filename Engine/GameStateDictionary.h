@@ -25,10 +25,10 @@ public:
 		return s_pInstance;
 	}
 
-	bool RegisterType(std::string stateID, IObjectFactory* pCreator);
+	bool RegisterType(std::string stateID, IObjectFactory<CGameStateBase>* pCreator);
 	CGameStateBase* Create(std::string stateID);
 private:
-	std::map<std::string, IObjectFactory*> m_creators;
+	std::map<std::string, IObjectFactory<CGameStateBase>*> m_creators;
 };
 
 template<class T>
@@ -54,4 +54,8 @@ public:
 		return sizeof(T);
 	}
 };
+// Macro to make registering classes easier
+#define REG_STATE_TO_REF(stateRefName, compiledClassName) \
+	static CGameStateFactory<compiledClassName> stateRefName( #stateRefName );
+
 #endif

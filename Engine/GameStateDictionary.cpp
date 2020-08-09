@@ -4,7 +4,7 @@
 CGameStateDictionary* CGameStateDictionary::s_pInstance = 0;
 
 // Registers our GameObjectFactory
-bool CGameStateDictionary::RegisterType(std::string stateID, IObjectFactory* pCreator)
+bool CGameStateDictionary::RegisterType(std::string stateID, IObjectFactory<CGameStateBase>* pCreator)
 {
 	auto it = m_creators.find(stateID);
 

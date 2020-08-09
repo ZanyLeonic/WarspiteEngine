@@ -17,14 +17,15 @@ public:
 	virtual void OnThink();
 	virtual bool OnEnd();
 
-	virtual std::string GetStateID() const { return s_playID; }
+	virtual std::string GetStateID() const { return s_UIID; }
 	virtual CLevel* GetLoadedLevel() const { return pLevel; }
 
 private:
-	static const std::string s_playID;
 	CLevel* pLevel;
 	PLevelPtr m_levelPtr;
 	
 	CVector2D m_screenSize;
 };
+
+REG_STATE_TO_REF(PlayState, CPlayState)
 #endif
