@@ -10,7 +10,7 @@ bool CPauseState::OnPlay()
 	s_UIID = SID_PAUSE;
 	
 	CStateParser sp;
-	sp.ParseState(CEngineFileSystem::ResolvePath("SystemMenus.json", EPathType::STATE).c_str(), s_UIID, &m_GameObjects, &m_TextureIDList, &m_ScriptIDList);
+	sp.ParseState(CEngineFileSystem::ResolvePath("SystemMenus.json", CEngineFileSystem::EPathType::STATE).c_str(), s_UIID, &m_GameObjects, &m_TextureIDList, &m_ScriptIDList);
 
 	m_callbacks.push_back(0);
 	m_callbacks.push_back(s_continueGame);

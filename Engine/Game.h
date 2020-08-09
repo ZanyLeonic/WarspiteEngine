@@ -49,6 +49,9 @@ public:
 
 	CVector2D GetViewportSize() const { return m_viewportSize; }
 
+	void SetPlayer(IGameObject* pNO) { m_player = pNO; }
+	IGameObject* GetPlayer() const { return m_player; }
+
 private:
 	CGameStateManager* m_pGameStateManager;
 
@@ -59,6 +62,8 @@ private:
 	SDL_Rect m_sourceRectangle = {}; // the first rectangle
 	SDL_Rect m_destinationRectangle = {}; // another rectangle
 
+	IGameObject* m_player = nullptr;
+	
 	CVector2D m_viewportSize;
 	PGamePtr m_gamePtr;
 

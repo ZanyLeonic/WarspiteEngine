@@ -123,6 +123,20 @@ PYBIND11_MODULE(engine, m) {
 		.def("get_file_ext", CWarspiteUtil::GetFileExtenstion, "Returns the file extension from the provided path")
 		.def("get_file_name", CWarspiteUtil::GetFileName, "Returns the filename from the provided path")
 		.def("read_all_text", CWarspiteUtil::ReadAllText, "Returns the text from the path provided");
+
+	py::class_<CEngineFileSystem> fs(m, "fs", "Filesystem methods that help locating files and commonly used IO");
+	fs.def("resolve_path", CEngineFileSystem::ResolvePath, "Returns a path depending on the resource type");
+
+	py::enum_<CEngineFileSystem::EPathType>(fs, "PathType")
+		.value("NONE", CEngineFileSystem::EPathType::NONE)
+		.value("TEXTURE", CEngineFileSystem::EPathType::TEXTURE)
+		.value("MAP", CEngineFileSystem::EPathType::MAP)
+		.value("SCRIPT", CEngineFileSystem::EPathType::SCRIPT)
+		.value("TILESET", CEngineFileSystem::EPathType::TILESET)
+		.value("STATE", CEngineFileSystem::EPathType::STATE)
+		.value("SOUND", CEngineFileSystem::EPathType::SOUND)
+
+		.export_values();	
 	
 	py::class_<SKeyScancodes> sc(m, "WS_Scancode", "A wrapper for specifying some of SDL_Scancode. (For use with engine.inputh methods)");
 	

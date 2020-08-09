@@ -8,16 +8,18 @@
 #include "Level.h"
 #include "GameStateBase.h"
 #include "GameObjectDictionary.h"
+#include "GameStateDictionary.h"
+#include "GameStateManager.h"
 #include "TextureManager.h"
 #include "WarspiteObject.h"
 
 // To make it easier to change how these are referenced throughout the codebase
 // You can reference these objects in Python by engine module followed by any of the below.
 // (e.g. engine.level)
-#define LEVELOBJECT_NAME "level"
-#define CAMERAOBJECT_NAME "camera"
-#define INPUTOBJECT_NAME "inputh"
-#define GAMEOBJECT_NAME "game"
+#define LEVELOBJECT_NAME	"level"
+#define CAMERAOBJECT_NAME	"camera"
+#define INPUTOBJECT_NAME	"inputh"
+#define GAMEOBJECT_NAME		"game"
 
 // Create a base set of methods to prevent the repeat of code
 template<class T>
@@ -211,15 +213,18 @@ struct SGameObject : SBaseWrapper<CGame>
 
 	bool ChangeState(std::string stateID)
 	{
-		// TODO: Need to change the State system to match the GameObject system
-		throw NotImplemented();
+		if (m_inst->GetStateManager()->GetCurrentState()->GetStateID() != stateID)
+		{
+			m_inst->GetStateManager()->ModifyState(CGameStateDictionary::Instance()->Create(stateID));
+		}
+		return false;
 	}
 
 	template<class T>
 	std::shared_ptr<T> GetPlayer() const
 	{
-		// TODO: Implement a way to register what is the player class when loading
-		throw NotImplemented();
+		if (m_inst->GetPlayer() == nullptr) return nullptr;
+		return dynamic_cast<T*>(m_inst->GetPlayer());
 	}
 
 	// These next one doesn't really use CGame, but it was the only place I thought it would fit

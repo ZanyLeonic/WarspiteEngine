@@ -13,7 +13,7 @@ bool CMainMenuState::OnPlay()
 	
 	// Parse the state
 	CStateParser sp;
-	sp.ParseState(CEngineFileSystem::ResolvePath("SystemMenus.json", EPathType::STATE).c_str(), s_UIID, &m_GameObjects, &m_TextureIDList, &m_ScriptIDList);
+	sp.ParseState(CEngineFileSystem::ResolvePath("SystemMenus.json", CEngineFileSystem::EPathType::STATE).c_str(), s_UIID, &m_GameObjects, &m_TextureIDList, &m_ScriptIDList);
 
 	for(size_t i = 0; i < m_GameObjects.size(); i++)
 	{
