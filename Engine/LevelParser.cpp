@@ -1,6 +1,7 @@
 #include "LevelParser.h"
 #include "Level.h"
 #include "ObjectLayer.h"
+#include "EngineFileSystem.h"
 #include "TextureManager.h"
 #include "ScriptManager.h"
 #include "GameObjectDictionary.h"
@@ -10,47 +11,17 @@
 #include "WarspiteUtil.h"
 
 #include <iostream>
-#include <rapidjson/filereadstream.h>
-#include <rapidjson/writer.h>
 #include "etc/Base64.h"
 #include <zlib.h>
 
 using namespace rapidjson;
 
-// Debug: Serializes JSON
-std::string getJSONs(const Value* pStateRoot)
-{
-	StringBuffer sb;
-	Writer<StringBuffer> writer(sb);
-
-	pStateRoot->Accept(writer);
-
-	return sb.GetString();
-}
-
 CLevel* CLevelParser::ParseLevel(const char* levelFile)
 {
 	Document tLevel;
-	FILE* fp = fopen(levelFile, "rb");
 
-	if (fp != NULL)
+	if (CEngineFileSystem::ReadJSON(levelFile, &tLevel))
 	{
-		char readBuffer[4096];
-		FileReadStream is(fp, readBuffer, sizeof(readBuffer));
-
-		tLevel.ParseStream(is);
-
-		// Have we parsed the JSON correctly?
-		if (tLevel.HasParseError())
-		{
-			std::cout << "An error has occurred when loading \"" << levelFile << "\"\n";
-			std::cout << tLevel.GetParseError() << "\n";
-
-			return 0;
-		}
-
-		fclose(fp);
-
 		std::string sL = levelFile;
 		CLevel* pLevel = new CLevel(sL);
 
@@ -150,26 +121,9 @@ void CLevelParser::parseTilesets(const rapidjson::Value* pTilesetRoot, std::vect
 		Document tileset;
 
 		const char* fileName = obj["source"].GetString();
-		FILE* tHandle = fopen(fileName, "rb");
 
-		if (tHandle != NULL)
+		if (CEngineFileSystem::ReadJSON(fileName, &tileset))
 		{
-			char readBuffer[4096];
-			FileReadStream is(tHandle, readBuffer, sizeof(readBuffer));
-
-			tileset.ParseStream(is);
-
-			// Have we parsed the JSON correctly?
-			if (tileset.HasParseError())
-			{
-				std::cout << "An error has occurred when loading \"" << fileName << "\"\n";
-				std::cout << tileset.GetParseError() << "\n";
-
-				return;
-			}
-
-			fclose(tHandle);
-
 			const Value& t = tileset.GetObject();
 
 			CTextureManager::Instance()->Load(t["image"].GetString(),

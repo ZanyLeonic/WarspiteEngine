@@ -26,7 +26,7 @@ class CEngineFileSystem
 {
 public:
 	static std::string ResolvePath(std::string ePath, EPathType pathType = EPathType::NONE, std::string base = "");
-	static rapidjson::Document* ReadJSON(std::string path);
+	static bool ReadJSON(std::string path, rapidjson::Document* inDoc);
 };
 
 #endif

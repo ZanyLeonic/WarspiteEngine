@@ -1,5 +1,7 @@
 #include "EngineFileSystem.h"
 #include <filesystem>
+#include <iostream>
+#include <rapidjson/filereadstream.h>
 
 namespace fs = std::filesystem;
 
@@ -40,7 +42,27 @@ std::string CEngineFileSystem::ResolvePath(std::string ePath, EPathType pathType
 	return rPath.string();
 }
 
-rapidjson::Document* CEngineFileSystem::ReadJSON(std::string path)
+bool CEngineFileSystem::ReadJSON(std::string path, rapidjson::Document* inDoc)
 {
-	return nullptr;
+	FILE* fp = fopen(path.c_str(), "rb");
+
+	if (fp != NULL)
+	{
+		char readBuffer[4096];
+		rapidjson::FileReadStream is(fp, readBuffer, sizeof(readBuffer));
+
+		inDoc->ParseStream(is);
+
+		// Have we parsed the JSON correctly?
+		if (inDoc->HasParseError())
+		{
+			std::cout << "An error has occurred when loading \"" << path << "\"\n";
+			std::cout << inDoc->GetParseError() << "\n";
+			return false;
+		}
+		fclose(fp);
+		return true;
+	}
+		
+	return false;
 }

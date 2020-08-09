@@ -1,7 +1,4 @@
 #include "StateParser.h"
-#include <cstdio>
-#include <rapidjson/filereadstream.h>
-#include <rapidjson/writer.h>
 #include <iostream>
 #include <string>
 #include "TextureManager.h"
@@ -12,43 +9,15 @@
 
 using namespace rapidjson;
 
-// Debug: Serializes JSON
-std::string getJSON(const Value* pStateRoot)
-{
-	StringBuffer sb;
-	Writer<StringBuffer> writer(sb);
-
-	pStateRoot->Accept(writer);
-
-	return sb.GetString();;
-}
-
 bool CStateParser::ParseState(const char* stateFile, std::string stateID, std::vector<IGameObject*>* pObjects, 
 	std::vector<std::string>* pTextureIDs, std::vector<std::string>* pScriptRefs)
 {
 	// Read our JSON document.
-	rapidjson::Document jDoc;
-	FILE* fp = fopen(stateFile, "rb");
+	Document jDoc;
 
 	// load state file
-	if (fp != NULL)
+	if (CEngineFileSystem::ReadJSON(stateFile, &jDoc))
 	{
-		char readBuffer[4096];
-		FileReadStream is(fp, readBuffer, sizeof(readBuffer));
-
-		jDoc.ParseStream(is);
-
-		fclose(fp);
-
-		// Have we parsed the JSON correctly?
-		if (jDoc.HasParseError())
-		{
-			std::cout << "An error has occurred when loading \"" << stateFile << "\"\n";
-			std::cout << jDoc.GetParseError() << "\n";
-
-			return false;
-		}
-		
 		// Create a new Value to store our state (if we find it.)
 		Value iState = Value(false);
 		Value& state = iState;
