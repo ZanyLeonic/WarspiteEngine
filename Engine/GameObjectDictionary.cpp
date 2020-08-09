@@ -1,5 +1,4 @@
 #include "GameObjectDictionary.h"
-
 #include <iostream>
 
 CGameObjectDictionary* CGameObjectDictionary::s_pInstance = 0;

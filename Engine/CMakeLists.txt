@@ -11,6 +11,7 @@ set(WarspiteEngine_Src
         Game.cpp
         GameObjectDictionary.cpp
         GameStateBase.cpp
+        GameStateDictionary.cpp
         GameStateManager.cpp
         InputHandler.cpp
         Level.cpp
@@ -43,6 +44,7 @@ set(WarspiteEngine_Header
         GameObjectDictionary.h
         GameState.h
         GameStateBase.h
+        GameStateDictionary.h
         GameStateManager.h
         InputHandler.h
         Layer.h
@@ -53,6 +55,7 @@ set(WarspiteEngine_Header
         MapObject.h
         MenuState.h
         ObjectLayer.h
+        ObjectFactory.h
         ObjectParams.h
         PauseState.h
         Player.h
@@ -92,6 +95,7 @@ endif()
 
 # Apply some debug options
 if (CMAKE_BUILD_TYPE STREQUAL "Debug")
+    message(STATUS "Debug build")
     add_compile_definitions(WARDEBUG)
 endif()
 
@@ -146,6 +150,7 @@ include_directories(${OPENAL_INCLUDE_DIRS})
 include_directories(${VORBIS_INCLUDE_DIR})
 include_directories(${ZLIB_INCLUDE_DIRS})
 
+# Linking errors if we don't do this.
 link_directories(${Python3_LIBRARY_DIRS})
 
 # Add source to this project's executable.
