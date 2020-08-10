@@ -6,7 +6,7 @@
 trigger:
 - master
 - develop
-- ldevelop
+- pybind
 
 jobs:
 - job: Windows
@@ -20,31 +20,15 @@ jobs:
         v7 | vcpkg | "$(Agent.OS)"
         vcpkg | "$(Agent.OS)"
         vcpkg
-      path: 'C:\vcpkg\'
+      path: '$(System.DefaultWorkingDirectory)/build/vcpkg/'
       cacheHitVar: VCPKG_CACHE_RESTORED
     displayName: Cache vcpkg
 
-  - task: CmdLine@2
-    condition: ne(variables.VCPKG_CACHE_RESTORED, 'true')
-    displayName: Bootstrapping vcpkg
+  - task: PowerShell@2
     inputs:
-      script: |
-        cd %VCPKG_INSTALLATION_ROOT%
-        bootstrap-vcpkg.bat -disableMetrics
-  - script: C:\vcpkg\vcpkg.exe install sdl2 sdl2-image[libjpeg-turbo,libwebp,tiff] sdl2-ttf libvorbis openal-soft rapidjson zlib python3 pybind11 --triplet x64-windows
-    condition: ne(variables.VCPKG_CACHE_RESTORED, 'true')
-    displayName: "Installing dependencies"
-  - script: mkdir build
-    displayName: "Making build folder"
-  - task: CMake@1
-    displayName: "Generating build files"
-    inputs:
-        cmakeArgs: '-DCMAKE_TOOLCHAIN_FILE=C:\vcpkg\scripts\buildsystems\vcpkg.cmake -DVCPKG_TARGET_TRIPLET=x64-windows -DCMAKE_INSTALL_PREFIX=$(Build.ArtifactStagingDirectory) ..'
-  - task: PythonScript@0
-    displayName: "Generating build metadata"
-    inputs:
-      scriptSource: 'filePath'
-      scriptPath: '$(System.DefaultWorkingDirectory)\Engine\GitVersion.py'
+     filePath: 'build-deps.ps1'
+     workingDirectory: '$(System.DefaultWorkingDirectory)'
+
   - task: MSBuild@1
     displayName: "Compiling project"
     inputs:
