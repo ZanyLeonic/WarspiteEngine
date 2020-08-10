@@ -20,7 +20,7 @@ jobs:
         v7 | vcpkg | "$(Agent.OS)"
         vcpkg | "$(Agent.OS)"
         vcpkg
-      path: '$(System.DefaultWorkingDirectory)/build/vcpkg/'
+      path: 'C:\vcpkg'
       cacheHitVar: VCPKG_CACHE_RESTORED
     displayName: Cache vcpkg
 
