@@ -4,6 +4,7 @@
 
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_thread.h>
+#include <memory>
 #include <vector>
 #include "GameStateManager.h"
 #include "MainMenuState.h"
