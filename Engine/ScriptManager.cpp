@@ -9,16 +9,35 @@ CScriptManager::CScriptManager()
 {
 	std::cout << "Initialising ScriptManager..." << std::endl;
 
-	if (CScriptWrappers::Init_Interpreter(&main_module, &engine_module, &main_namespace))
+	if (CScriptWrappers::Init_Engine())
 	{
-		// Show that the ScriptManager is ready
-		SGameScript* test = SGameScript::source("test", "import sys\nprint(\"Using Python Runtime %s.%s.%s\" % (sys.version_info.major, sys.version_info.minor, sys.version_info.micro))\nprint(\"Script Manager is ready!\")");
+		try
+		{
+			py::initialize_interpreter();
 
-		Run(test);
+			main_module = py::module::import("__main__");
+			engine_module = py::module::import("engine");
+			main_namespace = main_module.attr("__dict__");
+
+			// Show that the ScriptManager is ready
+			SGameScript* test = SGameScript::source("test", "import sys\nprint(\"Using Python Runtime %s.%s.%s\" % (sys.version_info.major, sys.version_info.minor, sys.version_info.micro))\nprint(\"Script Manager is ready!\")");
+
+			Run(test);
+		}
+		catch (pybind11::error_already_set const& e)
+		{
+			std::cerr << "***AN ERROR OCCURRED DURING INITIALISATION OF PYTHON!***" << std::endl;
+			std::cerr << e.what() << std::endl;
+			std::cerr << "***************************END**************************" << std::endl;
+
+			std::cerr << "Initialisation of ScriptManager failed!" << std::endl;
+			Destroy();
+		}
 	}
 	else
 	{
 		std::cerr << "Initialisation of ScriptManager failed!" << std::endl;
+		Destroy();
 	}
 }
 

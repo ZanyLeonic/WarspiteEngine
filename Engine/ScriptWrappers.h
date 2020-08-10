@@ -25,7 +25,7 @@ namespace py = pybind11;
 class CScriptWrappers
 {
 public:
-	static bool Init_Interpreter(py::module* pMM, py::module* pEM, py::object* pMN);
+	static bool Init_Engine();
 };
 
 // To make it easier to change how these are referenced throughout the codebase

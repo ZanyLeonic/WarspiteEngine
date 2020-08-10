@@ -273,23 +273,13 @@ PYBIND11_MODULE(engine, m) {
 		.export_values();
 }
 
-bool CScriptWrappers::Init_Interpreter(py::module* pMM, py::module* pEM, py::object* pMN)
+bool CScriptWrappers::Init_Engine()
 {
 	try
 	{
-		// Initialize Python interpreter and import bar module
+		// Import the engine module
 		PyImport_AppendInittab("engine", PyInit_engine);
-		py::initialize_interpreter();
-
-		py::module mm = py::module::import("__main__");
-		pMM = &mm;
 		
-		py::module em = py::module::import("engine");
-		pEM = &em;
-		
-		py::object mn = pMM->attr("__dict__");
-		pMN = &mn;
-
 		return true;
 	}
 	catch (pybind11::error_already_set const& e)
