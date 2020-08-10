@@ -28,6 +28,7 @@ function GenerateProjectFiles() {
 }
 
 function InstallPackages() {
+    Write-Warning "hello"
     $vcpkg = "$VcpkgDir/vcpkg.exe"
     if (!(Get-Command $vcpkg -ErrorAction SilentlyContinue)) {
         $vcpkg = "vcpkg"
@@ -55,5 +56,6 @@ function InstallPackages() {
     }
 }
 
-InstallPackages 2> $null
-GenerateProjectFiles 2> $null
+# I don't care about errors or warnings cringe
+InstallPackages 2> $null 3> $null
+GenerateProjectFiles 2> $null 3> $null
