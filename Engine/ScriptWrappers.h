@@ -13,6 +13,7 @@
 #include "ObjectLayer.h"
 #include "TextureManager.h"
 #include "WarspiteObject.h"
+#include <memory>
 
 // To make it easier to change how these are referenced throughout the codebase
 // You can reference these objects in Python by engine module followed by any of the below.
@@ -81,7 +82,7 @@ struct SLevelObject : SBaseWrapper<CLevel>
 	{
 		if (!IsValid()) return nullptr;
 
-		std::vector<std::vector<IGameObject*>*> m_objects;
+		std::vector<std::vector<IGameObject*>*> m_objects = m_inst->GetGameObjects();
 
 		// Go through each ObjectLayer we got earlier
 		for (size_t i = 0; i < m_objects.size(); i++)
@@ -95,9 +96,7 @@ struct SLevelObject : SBaseWrapper<CLevel>
 			{
 				if (ir[j]->GetName() == id)
 				{
-					auto pCWO = std::unique_ptr<T>(dynamic_cast<T*>(ir[j]));
-
-					return pCWO;
+					return std::shared_ptr<T>(dynamic_cast<T*>(ir[j]));
 				}
 			}
 		}
