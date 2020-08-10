@@ -16,4 +16,14 @@ except Exception as e:
 print(ws)
 print(ws.get_position())
 
-print(engine.level.find_wobject("Player").get_ptr()) 
+na = engine.level.find_wobject("Player")
+na.set_position(engine.Vector2D(64,64))
+
+da = engine.level.find_wobject("PythonObject")
+da.set_position(engine.Vector2D(0,0))
+
+print("Comparing ws with da: ", end="")
+if da == ws:
+    print("They are the same")
+else:
+    print("They are different")

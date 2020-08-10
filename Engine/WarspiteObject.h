@@ -7,9 +7,10 @@
 #include "GameObjectDictionary.h" // Include used for classes that derive it! Do not remove!!!
 #include "ObjectParams.h"
 #include "Vector2D.h"
+#include <memory>
 
 class CWarspiteObject :
-	public IGameObject
+	public IGameObject, std::enable_shared_from_this<CWarspiteObject>
 {
 public:
 	CWarspiteObject();

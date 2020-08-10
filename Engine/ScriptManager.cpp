@@ -4,6 +4,7 @@
 #include "ScriptWrappers.h"
 #include "WarspiteUtil.h"
 #include <pybind11/embed.h>
+#include <pybind11/operators.h>
 #include "WarspiteObject.h"
 
 // Exposing some classes to Python
@@ -13,9 +14,6 @@ PYBIND11_MODULE(engine, m) {
 	m.attr(CAMERAOBJECT_NAME)	= py::none();
 	m.attr(INPUTOBJECT_NAME)		= py::none();
 	m.attr(GAMEOBJECT_NAME)		= py::none();
-
-	py::class_<CPtrWrapper<CWarspiteObject>>(m, "pWO")
-		.def("get_ptr", &CPtrWrapper<CWarspiteObject>::get);
 	
 	py::class_<CVector2D>(m, "Vector2D", "A two dimensional vector object")
 		.def(py::init<>())
@@ -35,30 +33,30 @@ PYBIND11_MODULE(engine, m) {
 			}
 	);
 
-	py::class_<CWarspiteObject>(m, "WarspiteObject", "An object that exists as the base for the majority of GameObjects in levels")
-		.def(py::init<>())
-		.def("get_position", &CWarspiteObject::GetPosition, "Returns the position of the specified object")
-		.def("set_position", &CWarspiteObject::SetPosition, "Sets the position of the specified object")
-		.def("get_type", &CWarspiteObject::GetFactoryID, "Returns the factory ID of the object")
-		.def("get_name", &CWarspiteObject::GetName, "Returns the name of the object")
-		.def("get_texid", &CWarspiteObject::GetTextureID, "Returns the texture ID associated with the object")
-		.def("get_velocity", &CWarspiteObject::GetVelocity, "Returns the current velocity")
-		.def("set_velocity", &CWarspiteObject::SetVelocity, "Sets the current velocity")
-		.def("add_velocity", &CWarspiteObject::AddVelocity, "Adds the specified velocity to the current")
-		.def("get_acceleration", &CWarspiteObject::GetAcceleration, "Returns the current acceleration")
-		.def("set_acceleration", &CWarspiteObject::SetAcceleration, "Sets the current acceleration")
-		.def("add_acceleration", &CWarspiteObject::AddAcceleration, "Adds to the current acceleration")
-		.def("get_size", &CWarspiteObject::GetSize, "Returns a Vector2D with the dimensions of the object")
-		.def("get_current_anim_row", &CWarspiteObject::GetCurrentAnimRow, "Returns the current row of animation on the sprite sheet the object is on")
-		.def("set_anim_row", &CWarspiteObject::SetAnimRow, "Sets the current row of animation on the sprite sheet the object is on")
-		.def("get_current_anim_frame", &CWarspiteObject::GetCurrentAnimFrame, "Returns the current frame of animation the object is on")
-		.def("set_anim_frame", &CWarspiteObject::SetAnimFrame, "Sets the current animation frame")
-		.def("get_total_anim_frames", &CWarspiteObject::GetTotalAnimFrames, "Returns the total amount of animation frames the object has")
-		.def("should_collide", &CWarspiteObject::ShouldCollide, "Returns whether the object should collide with other objects")
-		.def("set_collision", &CWarspiteObject::SetCollision, "Sets whether this object should collide with other objects")
-		.def("__repr__", [](CWarspiteObject& o)
+	py::class_<SWarObject>(m, "WarObject", "An object that exists as the base for the majority of GameObjects in levels")
+		.def(py::init<CWarspiteObject*>())
+		.def("get_position", &SWarObject::GetPosition, "Returns the position of the specified object")
+		.def("set_position", &SWarObject::SetPosition, "Sets the position of the specified object")
+		.def("get_type", &SWarObject::GetFactoryID, "Returns the factory ID of the object")
+		.def("get_name", &SWarObject::GetName, "Returns the name of the object")
+		.def("get_texid", &SWarObject::GetTextureID, "Returns the texture ID associated with the object")
+		.def("get_velocity", &SWarObject::GetVelocity, "Returns the current velocity")
+		.def("set_velocity", &SWarObject::SetVelocity, "Sets the current velocity")
+		.def("add_velocity", &SWarObject::AddVelocity, "Adds the specified velocity to the current")
+		.def("get_acceleration", &SWarObject::GetAcceleration, "Returns the current acceleration")
+		.def("set_acceleration", &SWarObject::SetAcceleration, "Sets the current acceleration")
+		.def("add_acceleration", &SWarObject::AddAcceleration, "Adds to the current acceleration")
+		.def("get_size", &SWarObject::GetSize, "Returns a Vector2D with the dimensions of the object")
+		.def("get_current_anim_row", &SWarObject::GetCurrentAnimRow, "Returns the current row of animation on the sprite sheet the object is on")
+		.def("set_anim_row", &SWarObject::SetAnimRow, "Sets the current row of animation on the sprite sheet the object is on")
+		.def("get_current_anim_frame", &SWarObject::GetCurrentAnimFrame, "Returns the current frame of animation the object is on")
+		.def("set_anim_frame", &SWarObject::SetAnimFrame, "Sets the current animation frame")
+		.def("get_total_anim_frames", &SWarObject::GetTotalAnimFrames, "Returns the total amount of animation frames the object has")
+		.def("should_collide", &SWarObject::ShouldCollide, "Returns whether the object should collide with other objects")
+		.def("set_collision", &SWarObject::SetCollision, "Sets whether this object should collide with other objects")
+		.def("__repr__", [](SWarObject& o)
 			{
-				return "<CWarspiteObject \"" + (std::string(o.GetName()).empty() ? "UNDEFINED" : std::string(o.GetName())) +
+				return "<SWarObject \"" + (std::string(o.GetName()).empty() ? "UNDEFINED" : std::string(o.GetName())) +
 					"\" of type \"" + (o.GetFactoryID().empty() ? "UNDEFINED" : o.GetFactoryID()) + "\">";
 			}
 	);

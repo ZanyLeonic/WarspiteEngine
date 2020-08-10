@@ -41,20 +41,46 @@ protected:
 	T* m_inst = nullptr; // Each of these will be containing a pointer of something.
 };
 
-template<class T>
-class CPtrWrapper
+struct SWarObject : SBaseWrapper<CWarspiteObject>
 {
-public:
-	CPtrWrapper() : ptr(nullptr) {}
-	CPtrWrapper(T* ptr) : ptr(ptr) {}
-	CPtrWrapper(const CPtrWrapper& other) : ptr(other.ptr) {}
-	T& operator* () const { return *ptr; }
-	T* operator->() const { return  ptr; }
-	T* get() const { return ptr; }
-	void Destroy() { delete ptr; }
-	T& operator[](std::size_t idx) const { return ptr[idx]; }
-private:
-	T* ptr;
+	SWarObject(CWarspiteObject* pClass) : SBaseWrapper<CWarspiteObject>(pClass) {}
+
+	CVector2D GetPosition() const { if (!IsValid()) return CVector2D(); return m_inst->GetPosition(); }
+	void SetPosition(CVector2D& nPos) const { if (!IsValid()) return; m_inst->SetPosition(nPos); }
+
+	CVector2D GetVelocity() const { if (!IsValid()) return CVector2D(); return m_inst->GetVelocity();}
+	void SetVelocity(CVector2D nV) const { if (!IsValid()) return; m_inst->SetVelocity(nV); }
+	void AddVelocity(CVector2D aV) const { if (!IsValid()) return; m_inst->AddVelocity(aV); }
+
+	CVector2D GetAcceleration() const
+	{
+		if (!IsValid()) return CVector2D();
+		return m_inst->GetAcceleration();
+	}
+	void SetAcceleration(CVector2D nV) const { if (!IsValid()) return; m_inst->SetAcceleration(nV); }
+	void AddAcceleration(CVector2D aV) const { if (!IsValid()) return; m_inst->AddAcceleration(aV); }
+
+	CVector2D GetSize() const { if (!IsValid()) return CVector2D(); return m_inst->GetSize(); }
+
+	int GetCurrentAnimRow() const { if (!IsValid()) return 0; return m_inst->GetCurrentAnimRow(); }
+	void SetAnimRow(int nR) const { if (!IsValid()) return; m_inst->SetAnimRow(nR); }
+
+	int GetCurrentAnimFrame() const { if (!IsValid()) return 0; return m_inst->GetCurrentAnimFrame(); }
+	void SetAnimFrame(int nR) const { if (!IsValid()) return; m_inst->SetAnimFrame(nR); }
+
+	int GetTotalAnimFrames() const { if (!IsValid()) return 0; return m_inst->GetTotalAnimFrames(); }
+
+	const char* GetName() const { if (!IsValid()) return ""; return m_inst->GetName(); }
+	std::string GetTextureID() const { if (!IsValid()) return ""; return m_inst->GetTextureID(); }
+	std::string GetFactoryID() const { if (!IsValid()) return ""; return m_inst->GetFactoryID(); }
+
+	bool ShouldCollide() const { if (!IsValid()) return false; return m_inst->ShouldCollide(); }
+	void SetCollision(bool nC) const { if (!IsValid()) return; m_inst->SetCollision(nC); }
+
+	bool operator==(const SWarObject &w) const
+	{
+		return m_inst == w.m_inst;
+	}
 };
 
 struct SLevelObject : SBaseWrapper<CLevel>
@@ -75,7 +101,7 @@ struct SLevelObject : SBaseWrapper<CLevel>
 		return m_inst->m_LevelSize;
 	}
 
-	std::unique_ptr<CWarspiteObject> CreateObject(std::string factID, CObjectParams params) const
+	std::unique_ptr<SWarObject> CreateObject(std::string factID, CObjectParams params) const
 	{
 		if (!IsValid()) nullptr;
 		// Create the object and load the params provided.
@@ -88,17 +114,23 @@ struct SLevelObject : SBaseWrapper<CLevel>
 
 		pSL->push_back(pObj);
 		pObj->OnPlay();
+
+		auto* pNew = new SWarObject(dynamic_cast<CWarspiteObject*>(pObj));
+		if (pNew == nullptr) return nullptr;
 		
 		// lul will this work? nope.
-		return std::unique_ptr<CWarspiteObject>(dynamic_cast<CWarspiteObject*>(pObj));
+		return std::unique_ptr<SWarObject>(pNew);
 	}
 
-	CPtrWrapper<CWarspiteObject> FindGameObject(std::string id)
+	std::unique_ptr<SWarObject> FindGameObject(std::string id)
 	{
 		if (!IsValid()) return nullptr;
 
 		std::vector<std::vector<IGameObject*>*> m_objects = m_inst->GetGameObjects();
 
+		// Add the ScriptLayer
+		m_objects.push_back(m_inst->GetScriptLayer()->GetGameObjects());
+		
 		// Go through each ObjectLayer we got earlier
 		for (size_t i = 0; i < m_objects.size(); i++)
 		{
@@ -111,10 +143,10 @@ struct SLevelObject : SBaseWrapper<CLevel>
 			{
 				if (ir[j]->GetName() == id)
 				{
-					auto* pNew = dynamic_cast<CWarspiteObject*>(ir[j]);
+					auto* pNew = new SWarObject(dynamic_cast<CWarspiteObject*>(ir[j]));
 					if (pNew == nullptr) return nullptr;
 					
-					return CPtrWrapper<CWarspiteObject>(pNew);
+					return std::unique_ptr<SWarObject>(pNew);
 				}
 			}
 		}
