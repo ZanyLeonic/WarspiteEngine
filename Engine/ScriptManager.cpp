@@ -13,6 +13,9 @@ PYBIND11_MODULE(engine, m) {
 	m.attr(CAMERAOBJECT_NAME)	= py::none();
 	m.attr(INPUTOBJECT_NAME)		= py::none();
 	m.attr(GAMEOBJECT_NAME)		= py::none();
+
+	py::class_<CPtrWrapper<CWarspiteObject>>(m, "pWO")
+		.def("get_ptr", &CPtrWrapper<CWarspiteObject>::get);
 	
 	py::class_<CVector2D>(m, "Vector2D", "A two dimensional vector object")
 		.def(py::init<>())
@@ -71,7 +74,7 @@ PYBIND11_MODULE(engine, m) {
 		.def("get_name", &SLevelObject::GetName, "Returns the name of the map currently loaded. (Extension removed.)")
 		.def("get_level_size", &SLevelObject::GetLevelSize, "Returns a Vector2D of the map's dimensions")
 		.def("create_object", &SLevelObject::CreateObject, "Creates the object specified - returns the object in success and nullptr when failed")
-		.def("find_wobject", &SLevelObject::FindGameObject<CWarspiteObject>, "Returns a WarspiteObject that matches the specified ID")
+		.def("find_wobject", &SLevelObject::FindGameObject, "Returns a WarspiteObject that matches the specified ID")
 		.def("__repr__", [](SLevelObject& o)
 			{
 				return "<SLevelObject for map \"" + (o.GetName().empty() ? "UNDEFINED" : o.GetName()) + "\">";

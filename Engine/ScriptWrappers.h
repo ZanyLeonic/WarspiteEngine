@@ -41,6 +41,22 @@ protected:
 	T* m_inst = nullptr; // Each of these will be containing a pointer of something.
 };
 
+template<class T>
+class CPtrWrapper
+{
+public:
+	CPtrWrapper() : ptr(nullptr) {}
+	CPtrWrapper(T* ptr) : ptr(ptr) {}
+	CPtrWrapper(const CPtrWrapper& other) : ptr(other.ptr) {}
+	T& operator* () const { return *ptr; }
+	T* operator->() const { return  ptr; }
+	T* get() const { return ptr; }
+	void Destroy() { delete ptr; }
+	T& operator[](std::size_t idx) const { return ptr[idx]; }
+private:
+	T* ptr;
+};
+
 struct SLevelObject : SBaseWrapper<CLevel>
 {
 	SLevelObject(CLevel* pClass) : SBaseWrapper<CLevel>(pClass) {}
@@ -77,8 +93,7 @@ struct SLevelObject : SBaseWrapper<CLevel>
 		return std::unique_ptr<CWarspiteObject>(dynamic_cast<CWarspiteObject*>(pObj));
 	}
 
-	template<class T>
-	std::shared_ptr<T> FindGameObject(std::string id)
+	CPtrWrapper<CWarspiteObject> FindGameObject(std::string id)
 	{
 		if (!IsValid()) return nullptr;
 
@@ -96,7 +111,10 @@ struct SLevelObject : SBaseWrapper<CLevel>
 			{
 				if (ir[j]->GetName() == id)
 				{
-					return std::shared_ptr<T>(dynamic_cast<T*>(ir[j]));
+					auto* pNew = dynamic_cast<CWarspiteObject*>(ir[j]);
+					if (pNew == nullptr) return nullptr;
+					
+					return CPtrWrapper<CWarspiteObject>(pNew);
 				}
 			}
 		}

@@ -16,4 +16,4 @@ except Exception as e:
 print(ws)
 print(ws.get_position())
 
-print(engine.level.find_wobject("Player")) 
+print(engine.level.find_wobject("Player").get_ptr()) 
