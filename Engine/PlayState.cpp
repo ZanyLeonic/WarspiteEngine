@@ -44,7 +44,8 @@ bool CPlayState::OnPlay()
 	CInputHandler::Instance()->AddActionKeyDown(SDL_SCANCODE_8, [this] {
 		if (CGame::Instance()->GetStateManager()->GetCurrentState()->GetStateID() != SID_PAUSE)
 		{
-			CScriptManager::Instance()->RunFromRef("TestScript");
+			CScriptManager::Instance()->Load(SGameScript::file("Script2", CEngineFileSystem::ResolvePath("test2.py", CEngineFileSystem::EPathType::SCRIPT)));
+			CScriptManager::Instance()->RunFromRef("Script2");
 		}
 		});
 

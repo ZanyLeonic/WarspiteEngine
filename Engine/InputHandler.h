@@ -7,6 +7,7 @@
 #include <map>
 #include <memory>
 #include <functional>
+#include "EngineTypes.h"
 #include "Vector2D.h"
 
 enum EMouseButtons
@@ -17,9 +18,6 @@ enum EMouseButtons
 };
 
 struct SInputObject;
-
-typedef std::function<void()> KeyCallback;
-typedef std::shared_ptr<SInputObject> PInputPtr;
 
 class CInputHandler
 {

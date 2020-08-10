@@ -17,9 +17,6 @@ enum class EGameScriptType
 	SCRIPT_FILE = 2
 };
 
-struct SKeyScancodes
-{};
-
 struct SGameScript
 {
 	static SGameScript* file(std::string sName, std::string sPath)

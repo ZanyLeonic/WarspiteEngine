@@ -4,9 +4,7 @@
 
 #include "GameStateBase.h"
 #include "Level.h"
-
-struct SLevelObject;
-typedef std::shared_ptr<SLevelObject>  PLevelPtr;
+#include "EngineTypes.h"
 
 class CPlayState :
 	public CGameStateBase

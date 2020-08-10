@@ -2,18 +2,31 @@
 #ifndef __SCRIPTWRAPPERS_H__
 #define __SCRIPTWRAPPERS_H__
 
-// The current APIs we are exposing
-#include "Camera.h"
-#include "InputHandler.h"
-#include "Level.h"
-#include "GameStateBase.h"
-#include "GameObjectDictionary.h"
-#include "GameStateDictionary.h"
-#include "GameStateManager.h"
-#include "ObjectLayer.h"
-#include "TextureManager.h"
-#include "WarspiteObject.h"
+#include <string>
+#include <vector>
 #include <memory>
+#include <SDL_scancode.h>
+#include <pybind11/pybind11.h>
+#include "EngineTypes.h"
+
+// The current APIs we are exposing
+class CWarspiteObject;
+class CGameStateBase;
+class CVector2D;
+class CGame;
+class CLevel;
+class IGameObject;
+class CObjectParams;
+class CInputHandler;
+class CCamera;
+
+namespace py = pybind11;
+
+class CScriptWrappers
+{
+public:
+	static bool Init_Interpreter(py::module* pMM, py::module* pEM, py::object* pMN);
+};
 
 // To make it easier to change how these are referenced throughout the codebase
 // You can reference these objects in Python by engine module followed by any of the below.
@@ -45,37 +58,33 @@ struct SWarObject : SBaseWrapper<CWarspiteObject>
 {
 	SWarObject(CWarspiteObject* pClass) : SBaseWrapper<CWarspiteObject>(pClass) {}
 
-	CVector2D GetPosition() const { if (!IsValid()) return CVector2D(); return m_inst->GetPosition(); }
-	void SetPosition(CVector2D& nPos) const { if (!IsValid()) return; m_inst->SetPosition(nPos); }
+	CVector2D GetPosition() const;
+	void SetPosition(CVector2D& nPos) const;
 
-	CVector2D GetVelocity() const { if (!IsValid()) return CVector2D(); return m_inst->GetVelocity();}
-	void SetVelocity(CVector2D nV) const { if (!IsValid()) return; m_inst->SetVelocity(nV); }
-	void AddVelocity(CVector2D aV) const { if (!IsValid()) return; m_inst->AddVelocity(aV); }
+	CVector2D GetVelocity() const;
+	void SetVelocity(CVector2D nV) const;
+	void AddVelocity(CVector2D aV) const;
 
-	CVector2D GetAcceleration() const
-	{
-		if (!IsValid()) return CVector2D();
-		return m_inst->GetAcceleration();
-	}
-	void SetAcceleration(CVector2D nV) const { if (!IsValid()) return; m_inst->SetAcceleration(nV); }
-	void AddAcceleration(CVector2D aV) const { if (!IsValid()) return; m_inst->AddAcceleration(aV); }
+	CVector2D GetAcceleration() const;
+	void SetAcceleration(CVector2D nV) const;
+	void AddAcceleration(CVector2D aV) const;
 
-	CVector2D GetSize() const { if (!IsValid()) return CVector2D(); return m_inst->GetSize(); }
+	CVector2D GetSize() const;
 
-	int GetCurrentAnimRow() const { if (!IsValid()) return 0; return m_inst->GetCurrentAnimRow(); }
-	void SetAnimRow(int nR) const { if (!IsValid()) return; m_inst->SetAnimRow(nR); }
+	int GetCurrentAnimRow() const;
+	void SetAnimRow(int nR) const;
 
-	int GetCurrentAnimFrame() const { if (!IsValid()) return 0; return m_inst->GetCurrentAnimFrame(); }
-	void SetAnimFrame(int nR) const { if (!IsValid()) return; m_inst->SetAnimFrame(nR); }
+	int GetCurrentAnimFrame() const;
+	void SetAnimFrame(int nR) const;
 
-	int GetTotalAnimFrames() const { if (!IsValid()) return 0; return m_inst->GetTotalAnimFrames(); }
+	int GetTotalAnimFrames() const;
 
-	const char* GetName() const { if (!IsValid()) return ""; return m_inst->GetName(); }
-	std::string GetTextureID() const { if (!IsValid()) return ""; return m_inst->GetTextureID(); }
-	std::string GetFactoryID() const { if (!IsValid()) return ""; return m_inst->GetFactoryID(); }
+	const char* GetName() const;
+	std::string GetTextureID() const;
+	std::string GetFactoryID() const;
 
-	bool ShouldCollide() const { if (!IsValid()) return false; return m_inst->ShouldCollide(); }
-	void SetCollision(bool nC) const { if (!IsValid()) return; m_inst->SetCollision(nC); }
+	bool ShouldCollide() const;
+	void SetCollision(bool nC) const;
 
 	bool operator==(const SWarObject &w) const
 	{
@@ -83,222 +92,70 @@ struct SWarObject : SBaseWrapper<CWarspiteObject>
 	}
 };
 
+struct SWarState : SBaseWrapper<CGameStateBase>
+{
+	SWarState(CGameStateBase* pClass) : SBaseWrapper<CGameStateBase>(pClass) {}
+
+	std::vector<std::string> GetLoadedTextures() const;
+	std::vector<std::string> GetLoadedScripts() const;
+
+	bool ShouldBeTicking() const;
+	bool ShouldBeDrawing() const;
+};
+
 struct SLevelObject : SBaseWrapper<CLevel>
 {
-	SLevelObject(CLevel* pClass) : SBaseWrapper<CLevel>(pClass) {}
-	
-	std::string GetName() const
-	{
-		if (!IsValid()) return "";
+	SLevelObject(CLevel* pClass) : SBaseWrapper<CLevel>(pClass) {  }
 
-		return m_inst->GetName();
-	}
-
-	CVector2D GetLevelSize() const
-	{
-		if (!IsValid()) return CVector2D(0,0);
-		
-		return m_inst->m_LevelSize;
-	}
-
-	std::unique_ptr<SWarObject> CreateObject(std::string factID, CObjectParams params) const
-	{
-		if (!IsValid()) nullptr;
-		// Create the object and load the params provided.
-		IGameObject* pObj = CGameObjectDictionary::Instance()->Create(factID);
-		if (pObj == nullptr) return nullptr; // a bit redundant but it prevents a reference of a nullptr
-
-		pObj->Load(&params);
-		
-		std::vector<IGameObject*>* pSL = m_inst->GetScriptLayer()->GetGameObjects();
-
-		pSL->push_back(pObj);
-		pObj->OnPlay();
-
-		auto* pNew = new SWarObject(dynamic_cast<CWarspiteObject*>(pObj));
-		if (pNew == nullptr) return nullptr;
-		
-		// lul will this work? nope.
-		return std::unique_ptr<SWarObject>(pNew);
-	}
-
-	std::unique_ptr<SWarObject> FindGameObject(std::string id)
-	{
-		if (!IsValid()) return nullptr;
-
-		std::vector<std::vector<IGameObject*>*> m_objects = m_inst->GetGameObjects();
-
-		// Add the ScriptLayer
-		m_objects.push_back(m_inst->GetScriptLayer()->GetGameObjects());
-		
-		// Go through each ObjectLayer we got earlier
-		for (size_t i = 0; i < m_objects.size(); i++)
-		{
-			if (!m_objects[i]) continue;
-
-			// Get an rvalue of the list of GameObject's for the iterated layer
-			std::vector<IGameObject*>& ir = *m_objects[i];
-
-			for (size_t j = 0; j < ir.size(); j++)
-			{
-				if (ir[j]->GetName() == id)
-				{
-					auto* pNew = new SWarObject(dynamic_cast<CWarspiteObject*>(ir[j]));
-					if (pNew == nullptr) return nullptr;
-					
-					return std::unique_ptr<SWarObject>(pNew);
-				}
-			}
-		}
-
-		return nullptr;
-	}
-	
-	std::vector<std::vector<IGameObject*>*> GetGameObjects() const
-	{
-		if (!IsValid()) return std::vector<std::vector<IGameObject*>*>();
-		
-		return m_inst->GetGameObjects();
-	}
+	std::string GetName() const;
+	CVector2D GetLevelSize() const;
+	std::unique_ptr<SWarObject> CreateObject(std::string factID, CObjectParams params) const;
+	std::unique_ptr<SWarObject> FindGameObject(std::string id);
+	std::vector<std::vector<IGameObject*>*> GetGameObjects() const;
 };
 
 struct SCameraObject : SBaseWrapper<CCamera>
 {
 	SCameraObject(CCamera* pClass) : SBaseWrapper<CCamera>(pClass) {}
 
-	CVector2D GetPosition() const
-	{
-		if (!IsValid()) return CVector2D(0, 0);
-		
-		return m_inst->GetPosition();
-	}
-
-	CVector2D GetOffsetedPosition() const
-	{
-		if (!IsValid()) return CVector2D(0, 0);
-		
-		return m_inst->GetPositionT();
-	}
-
-	CVector2D* GetTarget() const
-	{
-		if (!IsValid()) return nullptr;
-
-		return m_inst->GetTarget();
-	}
-
-	bool SetPosition(CVector2D pPos) const
-	{
-		if (!IsValid()) return false;
-
-		m_inst->SetPosition(pPos);
-		return true;
-	}
-
-	bool SetTarget(CVector2D* pTar) const
-	{
-		if (!IsValid()) return false;
-
-		m_inst->SetTarget(pTar);
-		return true;
-	}
-
-	CVector2D GetLevelSize() const
-	{
-		if (!IsValid()) return CVector2D();
-
-		return m_inst->GetLevelSize();
-	}
+	CVector2D GetPosition() const;
+	CVector2D GetOffsetedPosition() const;
+	CVector2D* GetTarget() const;
+	
+	bool SetPosition(CVector2D pPos) const;
+	bool SetTarget(CVector2D* pTar) const;
+	
+	CVector2D GetLevelSize() const;
 };
 
 struct SInputObject : SBaseWrapper<CInputHandler>
 {
 	SInputObject(CInputHandler* pClass) : SBaseWrapper<CInputHandler>(pClass) {}
 
-	bool GetButtonState(int joy, int buttonNumber) const
-	{
-		if (!IsValid()) return false;
-		return m_inst->GetButtonState(joy, buttonNumber);
-	}
-
-	bool GetMouseButtonState(int buttonNumber) const
-	{
-		if (!IsValid()) return false;
-		return m_inst->GetMouseButtonState(buttonNumber);
-	}
-
-	bool IsKeyDown(SDL_Scancode key) const
-	{
-		if (!IsValid()) return false;
-		return m_inst->IsKeyDown(key);
-	}
-
-	float GetXAxis(int joy, int stick) const
-	{
-		if (!IsValid()) return 0.f;
-		return m_inst->GetXAxis(joy, stick);
-	}
-
-	float GetYAxis(int joy, int stick) const
-	{
-		if (!IsValid()) return 0.f;
-		return m_inst->GetYAxis(joy, stick);
-	}
-
-	bool SetReleaseState(SDL_Scancode key, bool state) const
-	{
-		if (!IsValid()) return false;
-		m_inst->SetReleaseState(key, state);
-		return true;
-	}
-
-	bool AddActionKeyDown(SDL_Scancode key, const KeyCallback callBack) const
-	{
-		if (!IsValid()) return false;
-		m_inst->AddActionKeyDown(key, callBack);
-		return true;
-	}
-
-	bool AddActionKeyUp(SDL_Scancode key, const KeyCallback callBack) const
-	{
-		if (!IsValid()) return false;
-		m_inst->AddActionKeyUp(key, callBack);
-		return true;
-	}
+	bool GetButtonState(int joy, int buttonNumber) const;
+	bool GetMouseButtonState(int buttonNumber) const;
+	bool IsKeyDown(SDL_Scancode key) const;
+	
+	float GetXAxis(int joy, int stick) const;
+	float GetYAxis(int joy, int stick) const;
+	
+	bool SetReleaseState(SDL_Scancode key, bool state) const;
+	bool AddActionKeyDown(SDL_Scancode key, const KeyCallback callBack) const;
+	bool AddActionKeyUp(SDL_Scancode key, const KeyCallback callBack) const;
 };
 
-// This maybe moved from this codebase to the game codebase soon.
-// Internal APIs in the codebase need to be updated for further work!
 struct SGameObject : SBaseWrapper<CGame>
 {
 	SGameObject(CGame* pClass) : SBaseWrapper<CGame>(pClass) {}
 
-	std::shared_ptr<CGameStateBase> GetCurrentState() const
-	{
-		if (!IsValid()) return nullptr;
-		return std::shared_ptr<CGameStateBase>(m_inst->GetStateManager()->GetCurrentState());
-	}
-
-	bool ChangeState(std::string stateID)
-	{
-		if (m_inst->GetStateManager()->GetCurrentState()->GetStateID() != stateID)
-		{
-			m_inst->GetStateManager()->ModifyState(CGameStateDictionary::Instance()->Create(stateID));
-		}
-		return false;
-	}
-
-	template<class T>
-	std::shared_ptr<T> GetPlayer() const
-	{
-		if (m_inst->GetPlayer() == nullptr) return nullptr;
-		return dynamic_cast<T*>(m_inst->GetPlayer());
-	}
-
-	bool LoadTexture(std::string texPath, std::string texID) const
-	{
-		if (!IsValid()) return false;
-		return CTextureManager::Instance()->Load(texPath, texID, m_inst->GetRenderer());
-	}
+	std::unique_ptr<SWarState> GetCurrentState() const;
+	bool ChangeState(std::string stateID) const;
+	std::unique_ptr<SWarObject> GetPlayer() const;
+	bool LoadTexture(std::string texPath, std::string texID) const;
 };
+
+// Small container for class def in pybind
+struct SKeyScancodes
+{};
+
 #endif

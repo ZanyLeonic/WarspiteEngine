@@ -26,6 +26,7 @@ set(WarspiteEngine_Src
         Player.cpp
         PlayState.cpp
         ScriptManager.cpp
+        ScriptWrappers.cpp
         SoundManager.cpp
         StateParser.cpp
         TestObject.cpp
@@ -41,6 +42,7 @@ set(WarspiteEngine_Header
         Camera.h
         Enemy.h
         EngineFileSystem.h
+        EngineTypes.h
         Game.h
         GameObject.h
         GameObjectDictionary.h

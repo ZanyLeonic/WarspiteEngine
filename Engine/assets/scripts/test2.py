@@ -1,4 +1,5 @@
-print("This is a test script!")
+import engine
 
-for i in range(0,10):
-    print(i + j)
+print(engine.game.get_current_state())
+
+print(engine.game.get_player())

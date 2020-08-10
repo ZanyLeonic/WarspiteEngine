@@ -6,12 +6,10 @@
 #include <SDL2/SDL_thread.h>
 #include <memory>
 #include <vector>
+#include "EngineTypes.h"
 #include "GameStateManager.h"
 #include "MainMenuState.h"
 #include "Vector2D.h"
-
-struct SGameObject;
-typedef std::shared_ptr<SGameObject>  PGamePtr;
 
 class CGame
 {

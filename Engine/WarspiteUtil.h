@@ -5,12 +5,17 @@
 #include <string>
 #include <stdexcept>
 
+class CLevel;
+class IGameObject;
+
 class CWarspiteUtil
 {
 public:
 	static std::string GetFileExtenstion(std::string path);
 	static std::string GetFileName(std::string path, bool ext = true, char sep = 'n');
 	static std::string ReadAllText(std::string path);
+
+	static IGameObject* FindGameObject(CLevel* pLevel, std::string id);
 };
 
 class NotImplemented : public std::logic_error

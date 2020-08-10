@@ -1,6 +1,10 @@
 #include "WarspiteUtil.h"
 #include <fstream>
 #include <sstream>
+#include <vector>
+
+#include "Level.h"
+#include "ObjectLayer.h"
 
 std::string CWarspiteUtil::GetFileExtenstion(std::string path)
 {
@@ -57,4 +61,27 @@ std::string CWarspiteUtil::ReadAllText(std::string path)
 	}
 
 	return fStr;
+}
+
+IGameObject* CWarspiteUtil::FindGameObject(CLevel* pLevel, std::string id)
+{
+	std::vector<std::vector<IGameObject*>*> m_objects = pLevel->GetGameObjects();
+
+	// Add the ScriptLayer
+	m_objects.push_back(pLevel->GetScriptLayer()->GetGameObjects());
+
+	// Go through each ObjectLayer we got earlier
+	for (size_t i = 0; i < m_objects.size(); i++)
+	{
+		if (!m_objects[i]) continue;
+
+		// Get an rvalue of the list of GameObject's for the iterated layer
+		std::vector<IGameObject*>& ir = *m_objects[i];
+
+		for (size_t j = 0; j < ir.size(); j++)
+		{
+			if (ir[j]->GetName() == id) return ir[j];
+		}
+	}
+	return nullptr;
 }
