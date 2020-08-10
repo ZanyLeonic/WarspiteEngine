@@ -1,3 +1,4 @@
+#define _CRT_SECURE_NO_WARNINGS
 #include "Game.h"
 #include "EngineMetadata.h"
 #include <iostream>
@@ -25,11 +26,10 @@ int main(int argc, char* argv[])
 	std::chrono::seconds dur((long)GAME_BUILD_TIME);
 	std::chrono::time_point<std::chrono::system_clock> dt(dur);
 	auto ptr = std::chrono::system_clock::to_time_t(dt);
-	char time[255];
-	auto frm = ctime_s(time, 255, &ptr);
+	auto* frm = ctime(&ptr);
 	
 	std::cout << "Build: "<< GAME_BUILD_NUMBER << "\nUsing source: " << GAME_GIT_HASH << "\n";
-	std::cout << "Build Date: " << time << std::endl;
+	std::cout << "Build Date: " << frm << std::endl;
 	std::cout << "Attempting Game initialization...\n";
 	std::cout << "Target FPS is " << FPS << " FPS\n";
 
