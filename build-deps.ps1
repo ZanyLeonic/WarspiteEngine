@@ -24,7 +24,7 @@ function GenerateProjectFiles() {
     '-DCMAKE_BUILD_TYPE="Debug"', 
     "-DVCPKG_TARGET_TRIPLET=$Arch-windows",
     ".")
-    & cmake $bargs 2> $null
+    & cmake $bargs
 }
 
 function InstallPackages() {
@@ -48,12 +48,12 @@ function InstallPackages() {
 
     & $vcpkg install sdl2 sdl2-image[libjpeg-turbo,libwebp,tiff] sdl2-ttf libvorbis rapidjson zlib openal-soft python3 pybind11 --triplet $Arch-windows
     if ($local_vcpkg) {
-        & $vcpkg integrate install 2> $null
+        & $vcpkg integrate install
         Write-Output "Cleaning up..."
         Remove-Item build/vcpkg/downloads -Recurse
         Remove-Item build/vcpkg/buildtrees -Recurse
     }
 }
 
-InstallPackages
-GenerateProjectFiles
+InstallPackages 2> $null
+GenerateProjectFiles 2> $null
