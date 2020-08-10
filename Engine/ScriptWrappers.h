@@ -10,6 +10,7 @@
 #include "GameObjectDictionary.h"
 #include "GameStateDictionary.h"
 #include "GameStateManager.h"
+#include "ObjectLayer.h"
 #include "TextureManager.h"
 #include "WarspiteObject.h"
 
@@ -55,6 +56,24 @@ struct SLevelObject : SBaseWrapper<CLevel>
 		if (!IsValid()) return CVector2D(0,0);
 		
 		return m_inst->m_LevelSize;
+	}
+
+	std::unique_ptr<CWarspiteObject> CreateObject(std::string factID, CObjectParams params) const
+	{
+		if (!IsValid()) nullptr;
+		// Create the object and load the params provided.
+		IGameObject* pObj = CGameObjectDictionary::Instance()->Create(factID);
+		if (pObj == nullptr) return nullptr; // a bit redundant but it prevents a reference of a nullptr
+
+		pObj->Load(&params);
+		
+		std::vector<IGameObject*>* pSL = m_inst->GetScriptLayer()->GetGameObjects();
+
+		pSL->push_back(pObj);
+		pObj->OnPlay();
+		
+		// lul will this work? nope.
+		return std::unique_ptr<CWarspiteObject>(dynamic_cast<CWarspiteObject*>(pObj));
 	}
 
 	template<class T>
@@ -225,20 +244,6 @@ struct SGameObject : SBaseWrapper<CGame>
 	{
 		if (m_inst->GetPlayer() == nullptr) return nullptr;
 		return dynamic_cast<T*>(m_inst->GetPlayer());
-	}
-
-	// These next one doesn't really use CGame, but it was the only place I thought it would fit
-	// May split it off later.
-	std::shared_ptr<CWarspiteObject> CreateObject(std::string factID, CObjectParams params) const
-	{
-		// Create the object and load the params provided.
-		IGameObject* pObj = CGameObjectDictionary::Instance()->Create(factID);
-		if (pObj == nullptr) return nullptr; // a bit redundant but it prevents a reference of a nullptr
-		
-		pObj->Load(&params);
-
-		// lul will this work? nope.
-		return std::shared_ptr<CWarspiteObject>(dynamic_cast<CWarspiteObject*>(pObj));
 	}
 
 	bool LoadTexture(std::string texPath, std::string texID) const

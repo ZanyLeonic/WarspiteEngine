@@ -3,6 +3,7 @@
 #define __LEVEL_H__
 
 class IGameObject;
+class CObjectLayer;
 
 #include <string>
 #include <vector>
@@ -56,15 +57,18 @@ public:
 	}
 
 	std::vector<std::vector<IGameObject*>*> GetGameObjects();
+	CObjectLayer* GetScriptLayer() const { return m_scriptLayer; }
 	
 	CVector2D m_LevelSize;
 
 private:
 	friend class CLevelParser;
-	CLevel(std::string& path) : m_path(path) {}
+	CLevel(std::string& path);
 
 	std::vector<STileset> m_tilesets;
 	std::vector<ILayer*> m_layers;
+
+	CObjectLayer* m_scriptLayer = nullptr;
 
 	std::string m_path;
 };

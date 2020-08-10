@@ -1,6 +1,11 @@
 #include "Level.h"
-
 #include "ObjectLayer.h"
+
+CLevel::CLevel(std::string& path)
+	: m_path(path)
+{
+	if(m_scriptLayer == nullptr) m_scriptLayer = new CObjectLayer();
+}
 
 void CLevel::OnPlay()
 {
@@ -18,6 +23,7 @@ void CLevel::Destroy()
 		m_layers[i]->Destroy();
 	}
 	m_layers.clear();
+	m_scriptLayer->Destroy();
 }
 
 void CLevel::OnThink()
@@ -26,6 +32,9 @@ void CLevel::OnThink()
 	{
 		m_layers[i]->OnThink();
 	}
+
+	// Run the script layer last
+	m_scriptLayer->OnThink();
 }
 
 void CLevel::Draw()
@@ -34,6 +43,9 @@ void CLevel::Draw()
 	{
 		m_layers[i]->Draw();
 	}
+
+	// Run the script layer last
+	m_scriptLayer->Draw();
 }
 
 std::vector<std::vector<IGameObject*>*> CLevel::GetGameObjects()

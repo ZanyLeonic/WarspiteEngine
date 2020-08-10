@@ -49,8 +49,6 @@ int main(int argc, char* argv[])
 			{
 				SDL_Delay((int)(DELAY_TIME - frameTime));
 			}
-
-			// SDL_Delay(10);
 		}
 	}
 	else

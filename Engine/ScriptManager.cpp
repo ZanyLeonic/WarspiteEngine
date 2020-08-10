@@ -55,8 +55,8 @@ PYBIND11_MODULE(engine, m) {
 		.def("set_collision", &CWarspiteObject::SetCollision, "Sets whether this object should collide with other objects")
 		.def("__repr__", [](CWarspiteObject& o)
 			{
-				return "<CWarspiteObject \"" + (std::string(o.GetName()).empty() ? std::string(o.GetName()) : "UNDEFINED") +
-					"\" of type \"" + (o.GetFactoryID().empty() ? o.GetFactoryID() : "UNDEFINED") + "\">";
+				return "<CWarspiteObject \"" + (std::string(o.GetName()).empty() ? "UNDEFINED" : std::string(o.GetName())) +
+					"\" of type \"" + (o.GetFactoryID().empty() ? "UNDEFINED" : o.GetFactoryID()) + "\">";
 			}
 	);
 
@@ -70,6 +70,7 @@ PYBIND11_MODULE(engine, m) {
 		.def(py::init<CLevel*>())
 		.def("get_name", &SLevelObject::GetName, "Returns the name of the map currently loaded. (Extension removed.)")
 		.def("get_level_size", &SLevelObject::GetLevelSize, "Returns a Vector2D of the map's dimensions")
+		.def("create_object", &SLevelObject::CreateObject, "Creates the object specified - returns the object in success and nullptr when failed")
 		.def("find_wobject", &SLevelObject::FindGameObject<CWarspiteObject>, "Returns a WarspiteObject that matches the specified ID")
 		.def("__repr__", [](SLevelObject& o)
 			{
@@ -110,7 +111,6 @@ PYBIND11_MODULE(engine, m) {
 		.def("get_current_state", &SGameObject::GetCurrentState, "Returns the state that is currently loaded")
 		.def("change_state", &SGameObject::ChangeState, "Changes the current state to the specified state")
 		// .def("get_player", &SGameObject::GetPlayer<CPlayer>, "Returns the currently registered player object")
-		.def("create_object", &SGameObject::CreateObject, "Creates the object specified - returns the object in success and nullptr when failed")
 		.def("load_texture", &SGameObject::LoadTexture, "Loads the specified texture into the manager with the specified ID");
 
 	py::class_<CObjectParams>(m, "ObjectParams", "A container used to initialise objects")
