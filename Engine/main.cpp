@@ -1,5 +1,5 @@
 #include "Game.h"
-#include "GitVersion.h"
+#include "EngineMetadata.h"
 #include <iostream>
 #include <chrono>
 

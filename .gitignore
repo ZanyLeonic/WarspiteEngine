@@ -4,7 +4,7 @@
 ### C++ ###
 # Prerequisites
 *.d
-GitVersion.h
+EngineMetadata.h
 
 # Compiled Object files
 *.slo

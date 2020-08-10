@@ -8,7 +8,7 @@ set(WarspiteEngine_Src
         Button.cpp
         Camera.cpp
         Enemy.cpp
-        EngineFilesystem.cpp
+        EngineFileSystem.cpp
         Game.cpp
         GameObjectDictionary.cpp
         GameStateBase.cpp
@@ -40,7 +40,7 @@ set(WarspiteEngine_Header
         Button.h
         Camera.h
         Enemy.h
-        EngineFilesystem.h
+        EngineFileSystem.h
         Game.h
         GameObject.h
         GameObjectDictionary.h
@@ -107,8 +107,8 @@ message(STATUS "Python3_LIBRARIES = ${Python3_LIBRARIES}")
 message(STATUS "Python3_EXECUTABLE = ${Python3_EXECUTABLE}")
 message(STATUS "Python3_INCLUDE_DIRS = ${Python3_INCLUDE_DIRS}")
 
-add_custom_target(ProjectMetadata
-        COMMAND "${Python3_EXECUTABLE}" "${CMAKE_CURRENT_SOURCE_DIR}/GitVersion.py"
+add_custom_target(EngineMetadata
+        COMMAND "${Python3_EXECUTABLE}" "${CMAKE_CURRENT_SOURCE_DIR}/EngineMetadata.py"
         COMMENT "Generating build metadata..."
 )
 
@@ -157,7 +157,7 @@ link_directories(${Python3_LIBRARY_DIRS})
 
 # Add source to this project's executable.
 add_executable (${PROJECT_NAME} ${WarspiteEngine_Src} ${WarspiteEngine_Header})
-add_dependencies(${PROJECT_NAME} ProjectMetadata)
+add_dependencies(${PROJECT_NAME} EngineMetadata)
 
 # As a last ditch effort...
 if ("${Python_EXECUTABLE}" STREQUAL "")
