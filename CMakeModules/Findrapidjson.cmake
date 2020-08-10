@@ -1,50 +1,71 @@
-#FindRapidJSON.cmake
+#.rst:
+# FindRapidjson
+# --------
 #
-# Finds the rapidjson library
+# Find the native rapidjson includes and library.
 #
-# from http://rapidjson.org/
+# IMPORTED Targets
+# ^^^^^^^^^^^^^^^^
 #
-# This will define the following variables
 #
-#    RapidJSON_FOUND
-#    RapidJSON_VERSION
-#    RapidJSON_INCLUDE_DIRS
+# Result Variables
+# ^^^^^^^^^^^^^^^^
 #
-# and the following imported targets
+# This module defines the following variables:
 #
-#     RapidJSON::RapidJSON
+# ::
 #
-# Author: Pablo Arias - pabloariasal@gmail.com
+#   Rapidjson_INCLUDE_DIRS   - where to find rapidjson/document.h, etc.
+#   Rapidjson_LIBRARIES      - List of libraries when using rapidjson.
+#   Rapidjson_FOUND          - True if rapidjson found.
 #
+# ::
+#
+#
+# Hints
+# ^^^^^
+#
+# A user may set ``RAPIDJSON_ROOT`` to a rapidjson installation root to tell this
+# module where to look.
 
-find_package(PkgConfig)
-pkg_check_modules(PC_RapidJSON QUIET RapidJSON)
+#=============================================================================
+# Copyright 2018 OWenT.
+#
+# Distributed under the OSI-approved BSD License (the "License");
+# see accompanying file Copyright.txt for details.
+#
+# This software is distributed WITHOUT ANY WARRANTY; without even the
+# implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+# See the License for more information.
+#=============================================================================
+# (To distribute this file outside of CMake, substitute the full
+#  License text for the above reference.)
 
-find_path(RapidJSON_INCLUDE_DIR
-    NAMES rapidjson.h
-    PATHS ${PC_RapidJSON_INCLUDE_DIRS}
-    PATH_SUFFIXES rapidjson
-)
+unset(_RAPIDJSON_SEARCH_ROOT_INC)
+unset(_RAPIDJSON_SEARCH_ROOT_LIB)
 
-set(RapidJSON_VERSION ${PC_RapidJSON_VERSION})
-
-mark_as_advanced(RapidJSON_FOUND RapidJSON_INCLUDE_DIR RapidJSON_VERSION)
-
-include(FindPackageHandleStandardArgs)
-find_package_handle_standard_args(RapidJSON
-    REQUIRED_VARS RapidJSON_INCLUDE_DIR
-    VERSION_VAR RapidJSON_VERSION
-)
-
-if(RapidJSON_FOUND)
-    #Set include dirs to parent, to enable includes like #include <rapidjson/document.h>
-    get_filename_component(RapidJSON_INCLUDE_DIRS ${RapidJSON_INCLUDE_DIR} DIRECTORY)
+# Search RAPIDJSON_ROOT first if it is set.
+if (Rapidjson_ROOT)
+  set(RAPIDJSON_ROOT ${Rapidjson_ROOT})
 endif()
 
-if(RapidJSON_FOUND AND NOT TARGET RapidJSON::RapidJSON)
-    add_library(RapidJSON::RapidJSON INTERFACE IMPORTED)
-    set_target_properties(RapidJSON::RapidJSON PROPERTIES
-        INTERFACE_INCLUDE_DIRECTORIES "${RapidJSON_INCLUDE_DIRS}"
-    )
+if(RAPIDJSON_ROOT)
+  set(_RAPIDJSON_SEARCH_ROOT_INC PATHS ${RAPIDJSON_ROOT} ${RAPIDJSON_ROOT}/include NO_DEFAULT_PATH)
 endif()
 
+# Try each search configuration.
+find_path(Rapidjson_INCLUDE_DIRS    NAMES rapidjson/document.h  ${_RAPIDJSON_SEARCH_ROOT_INC})
+
+mark_as_advanced(Rapidjson_INCLUDE_DIRS)
+
+# handle the QUIETLY and REQUIRED arguments and set RAPIDJSON_FOUND to TRUE if
+# all listed variables are TRUE
+include("FindPackageHandleStandardArgs")
+FIND_PACKAGE_HANDLE_STANDARD_ARGS(Rapidjson
+  REQUIRED_VARS Rapidjson_INCLUDE_DIRS
+  FOUND_VAR Rapidjson_FOUND
+)
+
+if(Rapidjson_FOUND)
+    set(RAPIDJSON_FOUND ${Rapidjson_FOUND})
+endif()

@@ -25,6 +25,7 @@ jobs:
     displayName: Cache vcpkg
 
   - task: PowerShell@2
+    displayName: "Installing dependencies + making build files"
     inputs:
      filePath: 'build-deps.ps1'
      workingDirectory: '$(System.DefaultWorkingDirectory)'
