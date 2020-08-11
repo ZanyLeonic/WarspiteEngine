@@ -476,7 +476,7 @@ void CSoundManager::Destroy()
         alCall(alDeleteBuffers, NUM_BUFFERS, &streams[i]->Buffers[0]);
 	}
 
-	std::cout << "Destroying device handles..." << std::endl;
+	spdlog::info("Destroying device handles...");
 	// Try to destroy our device
 	ALCboolean closed;
 	if (!alcCall(alcCloseDevice, closed, openALDevice, openALDevice))

@@ -20,9 +20,6 @@ CScriptManager::CScriptManager()
 			main_module = py::module::import("__main__");
 			engine_module = py::module::import("engine");
 			main_namespace = main_module.attr("__dict__");
-
-			// Grab all the stdout
-			m_stdRedirect = new PyStdErrOutStreamRedirect();
 			
 			// Show that the ScriptManager is ready
 			SGameScript* test = SGameScript::source("test", "import sys\nprint(\"Using Python Runtime %s.%s.%s\" % (sys.version_info.major, sys.version_info.minor, sys.version_info.micro))\nprint(\"Script Manager is ready!\")\nj=1");
@@ -77,6 +74,9 @@ bool CScriptManager::Run(SGameScript* script, py::object* ns)
 {
 	try
 	{
+		// Grab all the stdout
+		m_stdRedirect = new PyStdErrOutStreamRedirect();
+		
 		// Use the namespace provided (if there is one)
 		switch (script->GetScriptType())
 		{
@@ -91,6 +91,8 @@ bool CScriptManager::Run(SGameScript* script, py::object* ns)
 		default:
 			return false; // No type defined? what?
 		}
+		
+		delete m_stdRedirect;
 		
 		return true;
 	}
@@ -115,6 +117,8 @@ bool CScriptManager::Run(SGameScript* script, py::object* ns)
 			spdlog::error(m_stdRedirect->stderrString());
 			spdlog::error("***Error End***");
 	}
+
+	delete m_stdRedirect;
 	return false;
 }
 
