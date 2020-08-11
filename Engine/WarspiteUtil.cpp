@@ -44,6 +44,25 @@ std::string CWarspiteUtil::GetFileName(std::string path, bool ext, char sep)
 	return fN;
 }
 
+std::string CWarspiteUtil::RemoveFileNameFromPath(std::string path)
+{
+#ifdef _WIN32
+	std::string pathDis = "\\";
+#else
+	std::string pathDis = "/";
+#endif
+
+	auto pos = path.rfind(pathDis);
+	if (pos == std::string::npos) return path; // no file name
+
+	std::string fN = path.substr(pos + 1);
+
+	auto dif = pos - path.length();
+	auto nLen = path.length() - dif;
+
+	return path.substr(nLen);
+}
+
 std::string CWarspiteUtil::ReadAllText(std::string path)
 {
 	std::fstream nFile;

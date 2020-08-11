@@ -4,6 +4,7 @@
 #include <map>
 #include <string>
 #include <SDL_ttf.h>
+#include <rapidjson/document.h>
 
 class CFontManager
 {
@@ -30,6 +31,9 @@ public:
 	std::map<std::string, TTF_Font*> GetLoadedFonts() const { return m_loadedFonts; }
 
 private:
+
+	bool lookForType(const rapidjson::Value& pNode, std::string type) const;
+	
 	std::map<std::string, TTF_Font*> m_loadedFonts;
 };
 #endif // #ifndef __FONTMANAGER_H__

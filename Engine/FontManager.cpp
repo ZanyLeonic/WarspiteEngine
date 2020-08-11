@@ -22,16 +22,11 @@ bool CFontManager::LoadFont(std::string path, std::string type, std::string id, 
 	if(CEngineFileSystem::ReadJSON(path, &fFile))
 	{
 		std::string baseName = fFile["name"].GetString();
-		auto types = fFile["types"].GetArray();
+		const rapidjson::Value& types = fFile["types"].GetArray();
 
-
+		if (!lookForType(types, type)) return false;
 
 		
-		spdlog::info("Font \"{}\" has types:", baseName);
-		for (size_t i=0; i < types.Size(); i++)
-		{
-			spdlog::info(types[i].GetString());
-		}
 	}
 	return false;
 }
@@ -43,5 +38,15 @@ bool CFontManager::RemoveFont(std::string id)
 
 bool CFontManager::RenderText(std::string text, std::string fontID, std::string textureID)
 {
+	return false;
+}
+
+bool CFontManager::lookForType(const rapidjson::Value& pNode, std::string type) const
+{
+	
+	for (rapidjson::SizeType i = 0; i < pNode.Size(); i++)
+	{
+		if (pNode[i].GetString() == type) return true;
+	}
 	return false;
 }

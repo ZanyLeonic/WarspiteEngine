@@ -14,6 +14,8 @@ class CWarspiteUtil
 public:
 	static std::string GetFileExtenstion(std::string path);
 	static std::string GetFileName(std::string path, bool ext = true, char sep = 'n');
+	static std::string RemoveFileNameFromPath(std::string path);
+	
 	static std::string ReadAllText(std::string path);
 
 	static std::vector<std::string> SplitString(const std::string& inStr, const char& inD);
