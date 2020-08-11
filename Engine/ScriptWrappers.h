@@ -86,6 +86,9 @@ struct SWarObject : SBaseWrapper<CWarspiteObject>
 	bool ShouldCollide() const;
 	void SetCollision(bool nC) const;
 
+	bool ShouldOverlap() const;
+	void SetOverlap(bool nO) const;
+
 	bool operator==(const SWarObject &w) const
 	{
 		return m_inst == w.m_inst;

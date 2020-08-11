@@ -64,6 +64,8 @@ PYBIND11_MODULE(engine, m) {
 		.def("get_total_anim_frames", &SWarObject::GetTotalAnimFrames, "Returns the total amount of animation frames the object has")
 		.def("should_collide", &SWarObject::ShouldCollide, "Returns whether the object should collide with other objects")
 		.def("set_collision", &SWarObject::SetCollision, "Sets whether this object should collide with other objects")
+		.def("should_overlap", &SWarObject::ShouldOverlap, "Returns whether the object should overlap with other objects")
+		.def("set_overlap", &SWarObject::SetOverlap, "Sets whether this object should overlap with other objects")
 		.def("__repr__", [](SWarObject& o)
 			{
 				return "<SWarObject \"" + (std::string(o.GetName()).empty() ? "UNDEFINED" : std::string(o.GetName())) +
@@ -403,6 +405,18 @@ void SWarObject::SetCollision(bool nC) const
 {
 	if (!IsValid()) return;
 	m_inst->SetCollision(nC);
+}
+
+bool SWarObject::ShouldOverlap() const
+{
+	if (!IsValid()) return false;
+	return m_inst->ShouldOverlap();
+}
+
+void SWarObject::SetOverlap(bool nO) const
+{
+	if (!IsValid()) return;
+	m_inst->SetOverlap(nO);
 }
 
 std::vector<std::string> SWarState::GetLoadedTextures() const

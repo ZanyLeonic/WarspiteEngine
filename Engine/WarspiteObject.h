@@ -49,6 +49,9 @@ public:
 
 	bool ShouldCollide() override { return m_collidable; }
 	void SetCollision(bool nC) { m_collidable = nC; }
+
+	bool ShouldOverlap() override { return m_overlap; }
+	void SetOverlap(bool nO) { m_overlap = nO; }
 	
 protected:
 	CVector2D m_position;
@@ -67,5 +70,6 @@ protected:
 	std::string m_textureID = "";
 
 	bool m_collidable = false;
+	bool m_overlap = false;
 };
 #endif /* defined(__CWarspiteObject__) */

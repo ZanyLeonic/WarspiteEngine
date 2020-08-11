@@ -18,7 +18,9 @@ public:
 	virtual void SetPosition(CVector2D& nPos) = 0;
 
 	virtual const char* GetName() = 0;
+	
 	virtual bool ShouldCollide() = 0;
+	virtual bool ShouldOverlap() = 0;
 protected:
 	friend class IGameObjectDeleter;
 	IGameObject() {} 

@@ -33,7 +33,7 @@ jobs:
   - task: MSBuild@1
     displayName: "Compiling project"
     inputs:
-      solution: 'build/INSTALL.vcxproj'
+      solution: 'INSTALL.vcxproj'
       msbuildArchitecture: 'x64'
       platform: 'x64'
       configuration: 'Debug'
