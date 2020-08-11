@@ -82,11 +82,15 @@ bool CScriptManager::Run(SGameScript* script, py::object* ns)
 		{
 		case EGameScriptType::SCRIPT_INLINE:
 			py::exec(script->GetSource().c_str(), ns != nullptr ? *ns : main_namespace);
-			spdlog::info("Script \"{}\" output:\n{}", script->GetScriptName(), m_stdRedirect->stdoutString());
+			spdlog::info("====== Inline script \"{}\" output:    ======", script->GetScriptName());
+			printScriptOutput(m_stdRedirect->stdoutString());
+			spdlog::info("====== Inline script \"{}\" output end ======", script->GetScriptName());
 			break;
 		case EGameScriptType::SCRIPT_FILE:
 			py::eval_file(script->GetFilename().c_str(), ns != nullptr ? *ns : main_namespace);
-			spdlog::info("Script \"{}\" output:\n{}", script->GetScriptName(), m_stdRedirect->stdoutString());
+			spdlog::info("====== External script \"{}\" output:     ======", script->GetScriptName());
+			printScriptOutput(m_stdRedirect->stdoutString());
+			spdlog::info("====== External script \"{}\" output end  ======", script->GetScriptName());
 			break;
 		default:
 			return false; // No type defined? what?
@@ -125,4 +129,14 @@ bool CScriptManager::Run(SGameScript* script, py::object* ns)
 bool CScriptManager::RunFromRef(std::string scriptRef, py::object* ns)
 {
 	return Run(loadedScripts[scriptRef], ns);
+}
+
+void CScriptManager::printScriptOutput(std::string output)
+{
+	std::vector<std::string> lines = CWarspiteUtil::SplitString(output, '\n');
+
+	for (size_t i=0; i < lines.size(); i++)
+	{
+		spdlog::info(lines[i]);
+	}
 }

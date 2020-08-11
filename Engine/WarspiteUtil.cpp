@@ -63,6 +63,20 @@ std::string CWarspiteUtil::ReadAllText(std::string path)
 	return fStr;
 }
 
+std::vector<std::string> CWarspiteUtil::SplitString(const std::string& inStr, const char& inD)
+{
+	std::stringstream ss(inStr);
+	std::vector<std::string> out;
+	
+	std::string curLine;
+	while (std::getline(ss, curLine, inD))
+	{
+		out.push_back(curLine);
+	}
+
+	return out;
+}
+
 IGameObject* CWarspiteUtil::FindGameObject(CLevel* pLevel, std::string id)
 {
 	std::vector<std::vector<IGameObject*>*> m_objects = pLevel->GetGameObjects();

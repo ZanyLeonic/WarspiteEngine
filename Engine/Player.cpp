@@ -7,6 +7,7 @@
 #include "TextureManager.h"
 #include "ScriptManager.h"
 #include <iostream>
+#include <spdlog/spdlog.h>
 
 #define PLAYER_WIDTH 32
 #define PLAYER_HEIGHT 32
@@ -91,12 +92,12 @@ void CPlayer::Draw()
 
 void CPlayer::KeyDown()
 {
-	std::cout << "Key has been pressed down!\n";
+	spdlog::info("Key has been pressed down!");
 }
 
 void CPlayer::KeyUp()
 {
-	std::cout << "Key has been released!\n";
+	spdlog::info("Key has been released!");
 }
 
 void CPlayer::HandleInput()
@@ -149,7 +150,7 @@ void CPlayer::MoveForward(float axis)
 	}
 	else
 	{
-		std::cout << "Cannot move " << ((axis > 0) ? "down" : "up") << " - collided!\n";
+		spdlog::info("Cannot move {} - collided!", ((axis > 0) ? "down" : "up"));
 	}
 }
 
@@ -170,7 +171,7 @@ void CPlayer::MoveRight(float axis)
 	}
 	else
 	{
-		std::cout << "Cannot move "<< ((axis > 0) ? "right" : "left") <<" - collided!\n";
+		spdlog::info("Cannot move {} - collided!", ((axis > 0) ? "right" : "left"));
 	}
 }
 

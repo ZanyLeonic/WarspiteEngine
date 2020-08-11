@@ -2,7 +2,7 @@
 #include "Game.h"
 #include "EngineMetadata.h"
 #include <iostream>
-#include <fstream>
+#include <string>
 #include <chrono>
 
 #include "spdlog/spdlog.h"
@@ -59,13 +59,16 @@ int main(int argc, char* argv[])
 	auto ptr = std::chrono::system_clock::to_time_t(dt);
 	auto stptr = std::chrono::system_clock::to_time_t(start);
 	
-	auto* frm = ctime(&ptr);
-	auto* runt = ctime(&stptr);
+	std::string st = std::string(ctime(&ptr));
+	std::string rt = std::string(ctime(&stptr));
+
+	st.erase(std::remove(st.begin(), st.end(), '\n'), st.end());
+	rt.erase(std::remove(rt.begin(), rt.end(), '\n'), rt.end());
 	
 	spdlog::info("Build: {}", GAME_BUILD_NUMBER);
 	spdlog::info("Using source: {}", GAME_GIT_HASH);
-	spdlog::info("Build Date: {}", frm);
-	spdlog::info("Running at: {}", runt);
+	spdlog::info("Build Date: {}", st);
+	spdlog::info("Running at: {}", rt);
 	
 	spdlog::info("Attempting Game initialization...");
 	spdlog::info("Target FPS is {} FPS", FPS);

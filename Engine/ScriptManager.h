@@ -97,6 +97,8 @@ private:
 	py::module engine_module;
 	py::object main_namespace;
 
+	void printScriptOutput(std::string output);
+	
 	std::shared_ptr<spdlog::logger> m_scriptLogger;
 
 	std::map<std::string, SGameScript*> loadedScripts;

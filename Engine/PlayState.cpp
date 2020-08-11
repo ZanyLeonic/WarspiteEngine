@@ -52,10 +52,6 @@ bool CPlayState::OnPlay()
 	CInputHandler::Instance()->AddActionKeyUp(SDL_SCANCODE_8, [this] {
 		return;
 		});
-
-	
-	std::cout << CWarspiteUtil::GetFileName(CEngineFileSystem::ResolvePath("map02.json", CEngineFileSystem::EPathType::MAP)) << std::endl;
-	std::cout << CWarspiteUtil::GetFileName(CEngineFileSystem::ResolvePath("map02.json", CEngineFileSystem::EPathType::MAP), false) << std::endl;
 	
 	// This callback code is disgusting - but it works so I don't care.
 	testStream.PlayCallback = [this](SStreamingAudioData* as)
