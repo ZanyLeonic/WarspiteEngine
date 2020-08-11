@@ -32,6 +32,10 @@ std::string CEngineFileSystem::ResolvePath(std::string ePath, EPathType pathType
 	case EPathType::SOUND:
 		rPath /= "sound";
 		break;
+	case EPathType::FONTS:
+		rPath /= "resource";
+		rPath /= "fonts";
+		break;
 	default:
 		break;
 	};

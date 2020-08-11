@@ -8,6 +8,7 @@ set(WarspiteEngine_Src
         Camera.cpp
         Enemy.cpp
         EngineFileSystem.cpp
+        FontManager.cpp
         Game.cpp
         GameObjectDictionary.cpp
         GameStateBase.cpp
@@ -42,6 +43,7 @@ set(WarspiteEngine_Header
         Enemy.h
         EngineFileSystem.h
         EngineTypes.h
+        FontManager.h
         Game.h
         GameObject.h
         GameObjectDictionary.h

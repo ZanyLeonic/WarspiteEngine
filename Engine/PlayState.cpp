@@ -12,6 +12,7 @@
 #include "WarspiteUtil.h"
 #include "ScriptWrappers.h"
 #include "ScriptManager.h"
+#include "FontManager.h"
 
 SStreamingAudioData testStream;
 SStreamingAudioData testStream2;
@@ -174,6 +175,8 @@ bool CPlayState::OnPlay()
 		SDL_SetRenderDrawColor(CGame::Instance()->GetRenderer(), 255, 255, 255, 255);
 	}
 
+	CFontManager::Instance()->LoadFont(CEngineFileSystem::ResolvePath("Roboto.json", CEngineFileSystem::EPathType::FONTS), "", 0);
+	
 	spdlog::info("Entering PlayState");
 	
 	return true;
