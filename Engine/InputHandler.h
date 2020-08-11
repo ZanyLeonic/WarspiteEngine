@@ -5,7 +5,9 @@
 #include <SDL2/SDL.h>
 #include <vector>
 #include <map>
+#include <memory>
 #include <functional>
+#include "EngineTypes.h"
 #include "Vector2D.h"
 
 enum EMouseButtons
@@ -15,7 +17,7 @@ enum EMouseButtons
 	RIGHT = 2
 };
 
-typedef std::function<void()> KeyCallback;
+struct SInputObject;
 
 class CInputHandler
 {
@@ -92,6 +94,8 @@ private:
 	CVector2D* m_mousePosition = new CVector2D(0,0);
 
 	Uint8* m_keystates = 0;
+
+	PInputPtr m_inputPtr;
 
 	static CInputHandler* s_pInstance;
 };

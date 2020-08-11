@@ -2,29 +2,15 @@
 #include "TextureManager.h"
 #include "SoundManager.h"
 #include "ScriptManager.h"
+#include "GameStateDictionary.h"
 #include "Camera.h"
 #include "InputHandler.h"
 #include "LevelParser.h"
 #include <iostream>
+#include "ScriptWrappers.h"
+#include "spdlog/spdlog.h"
 
 CGame* CGame::s_pInstance = 0;
-
-int audioLoop(void* data)
-{
-	// Just create an instance to initialise it.
-	CSoundManager::Instance();
-	
-	CGame* pG = reinterpret_cast<CGame*>(data);
-
-	while (pG->IsRunning())
-	{
-		CSoundManager::Instance()->OnThink();
-
-		// SDL_WaitThread(pG->GetAudioThread(), NULL);
-	}
-
-	return 0;
-}
 
 // Initialises the major parts of the engine
 bool CGame::Init(const char* title, int xpos, int ypos, int width, int height, bool fullscreen)
@@ -41,44 +27,48 @@ bool CGame::Init(const char* title, int xpos, int ypos, int width, int height, b
 			flags = SDL_WINDOW_FULLSCREEN;
 		}
 
-		std::cout << "SDL init success\n";
+		spdlog::info("SDL init success");
 		// init the window
 		m_pWindow = SDL_CreateWindow(title, xpos, ypos, width, height, flags);
 		m_viewportSize = CVector2D((float)width, (float)height);
 
 		if (m_pWindow != 0)
 		{
-			std::cout << "Window creation success\n";
+			spdlog::info("Window creation success");
 			m_pRenderer = SDL_CreateRenderer(m_pWindow, -1, SDL_RENDERER_TARGETTEXTURE | SDL_RENDERER_SOFTWARE);
 
 			if (m_pRenderer != 0) // render init success
 			{
-				std::cout << "renderer creation success\n";
+				spdlog::info("Renderer creation success");
 				SDL_SetRenderDrawColor(m_pRenderer,
 					255, 255, 255, 255);
 
-				SDL_Thread* aT = SDL_CreateThread(audioLoop, "AudioThread", (void*)Instance());
-				SDL_DetachThread(aT);
+				// Initialise the SoundManager
+				CSoundManager::Instance();
+
+				// Assign the Game attribute with a game object
+				if (CScriptManager::Instance()->GetEngineModule().attr(GAMEOBJECT_NAME).is_none())
+				{
+					m_gamePtr = std::make_shared<SGameObject>(SGameObject(this));
+					CScriptManager::Instance()->GetEngineModule().attr(GAMEOBJECT_NAME) = m_gamePtr;
+				}
 
 				m_pGameStateManager = new CGameStateManager();
-				m_pGameStateManager->ModifyState(new CMainMenuState());
-
-				// Start the script manager
-				CScriptManager::Instance();
+				m_pGameStateManager->ModifyState(CGameStateDictionary::Instance()->Create(SID_MM));
 			}
 			else
 			{
-				std::cout << "Render init fail\n";
+				spdlog::error("Render init fail");
 				return false; // renderer init fail
 			}
 		}
 		else
 		{
-			std::cout << "SDL init fail\n";
+			spdlog::error("SDL init fail");
 			return false; // SDL init fail
 		}
 
-		std::cout << "Init success\n";
+		spdlog::info("Init success");
 		m_bRunning = true; // everything inited successfully, start the main loop
 
 		return true;
@@ -111,7 +101,7 @@ void CGame::HandleEvents()
 
 void CGame::Destroy()
 {
-	std::cout << "Cleaning Game instance...\n";
+	spdlog::info("Cleaning Game instance...");
 
 	CInputHandler::Instance()->Destroy();
 	CSoundManager::Instance()->Destroy();
@@ -127,9 +117,4 @@ void CGame::Destroy()
 void CGame::Quit()
 {
 	m_bRunning = false;
-}
-
-void CGame::TestMethod()
-{
-	std::cout << "Hello world!" << std::endl;
 }

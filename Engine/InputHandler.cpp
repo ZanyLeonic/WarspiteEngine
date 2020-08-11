@@ -1,6 +1,8 @@
 #include "InputHandler.h"
-#include <iostream>
 #include "Game.h"
+#include "ScriptManager.h"
+#include "ScriptWrappers.h"
+#include <iostream>
 
 CInputHandler* CInputHandler::s_pInstance = 0;
 
@@ -11,6 +13,13 @@ CInputHandler::CInputHandler()
 	for (int i = 0; i < 3; i++)
 	{
 		m_mouseButtonStates.push_back(false);
+	}
+
+	// Expose the current camera to the Python API
+	if (CScriptManager::Instance()->GetEngineModule().attr(INPUTOBJECT_NAME).is_none())
+	{
+		m_inputPtr = std::make_shared<SInputObject>(SInputObject(s_pInstance));
+		CScriptManager::Instance()->GetEngineModule().attr(INPUTOBJECT_NAME) = m_inputPtr;
 	}
 }
 

@@ -1,52 +1,23 @@
 #include "StateParser.h"
-#include <cstdio>
-#include <rapidjson/filereadstream.h>
-#include <rapidjson/writer.h>
 #include <iostream>
 #include <string>
 #include "TextureManager.h"
+#include "ScriptManager.h"
 #include "GameObjectDictionary.h"
 #include "ObjectParams.h"
 #include "Game.h"
 
 using namespace rapidjson;
 
-// Debug: Serializes JSON
-std::string getJSON(const Value* pStateRoot)
-{
-	StringBuffer sb;
-	Writer<StringBuffer> writer(sb);
-
-	pStateRoot->Accept(writer);
-
-	return sb.GetString();;
-}
-
-bool CStateParser::ParseState(const char* stateFile, std::string stateID, std::vector<IGameObject*>* pObjects, std::vector<std::string>* pTextureIDs)
+bool CStateParser::ParseState(const char* stateFile, std::string stateID, std::vector<IGameObject*>* pObjects, 
+	std::vector<std::string>* pTextureIDs, std::vector<std::string>* pScriptRefs)
 {
 	// Read our JSON document.
-	rapidjson::Document jDoc;
-	FILE* fp = fopen(stateFile, "rb");
+	Document jDoc;
 
 	// load state file
-	if (fp != NULL)
+	if (CEngineFileSystem::ReadJSON(stateFile, &jDoc))
 	{
-		char readBuffer[4096];
-		FileReadStream is(fp, readBuffer, sizeof(readBuffer));
-
-		jDoc.ParseStream(is);
-
-		fclose(fp);
-
-		// Have we parsed the JSON correctly?
-		if (jDoc.HasParseError())
-		{
-			std::cout << "An error has occurred when loading \"" << stateFile << "\"\n";
-			std::cout << jDoc.GetParseError() << "\n";
-
-			return false;
-		}
-		
 		// Create a new Value to store our state (if we find it.)
 		Value iState = Value(false);
 		Value& state = iState;
@@ -88,6 +59,12 @@ bool CStateParser::ParseState(const char* stateFile, std::string stateID, std::v
 		// Add the Objects to the passed m_GameObjects
 		ParseObjects(&objects, pObjects);
 
+		const Value& scripts = state["scripts"].GetArray();
+		assert(scripts.IsArray());
+
+		// Load the scripts into the ScriptManager
+		ParseScripts(&scripts, pScriptRefs);
+		
 		return true;
 	}
 
@@ -106,8 +83,13 @@ void CStateParser::ParseObjects(const rapidjson::Value* pStateRoot, std::vector<
 	{
 		// Get the current object we are working with.
 		const Value& b = t[i];
+
+		// Attempt to create the object type.
+		IGameObject* pGameObject =
+			CGameObjectDictionary::Instance()->Create(b["type"].GetString());
+
 		int x, y, width, height, numFrames, animSpeed, onClickCallback, onEnterCallback, onLeaveCallback;
-		std::string textureID;
+		std::string textureID, name, factID, script;
 
 		// Retrieve the relevant information from the object declaration...
 		// Required
@@ -116,6 +98,8 @@ void CStateParser::ParseObjects(const rapidjson::Value* pStateRoot, std::vector<
 		width = b["width"].GetInt();
 		height = b["height"].GetInt();
 		textureID = b["textureID"].GetString();
+		name = b["name"].GetString();
+		factID = b["type"].GetString();
 
 		// Optional
 		numFrames = b.HasMember("numFrames") ? b["numFrames"].GetInt() : 1;
@@ -125,13 +109,11 @@ void CStateParser::ParseObjects(const rapidjson::Value* pStateRoot, std::vector<
 		onEnterCallback = b.HasMember("onEnterID") ? b["onEnterID"].GetInt() : 0;
 		onLeaveCallback = b.HasMember("onLeaveID") ? b["onLeaveID"].GetInt() : 0;
 
-		// Attempt to create the object type.
-		IGameObject* pGameObject =
-			CGameObjectDictionary::Instance()->Create(b["type"].GetString());
+		script = b.HasMember("script") ? b["script"].GetString() : "";
 
 		// Provide the extracting info to the object.
 		pGameObject->Load(new CObjectParams((float)x, (float)y, width, height, textureID,
-			animSpeed, numFrames, onClickCallback, onEnterCallback, onLeaveCallback));
+			animSpeed, numFrames, onClickCallback, onEnterCallback, onLeaveCallback, script, name, factID));
 
 		// Add it to the m_GameObjects
 		pObjects->push_back(pGameObject);
@@ -156,4 +138,20 @@ void CStateParser::ParseTextures(const rapidjson::Value* pStateRoot, std::vector
 	}
 }
 
+void CStateParser::ParseScripts(const rapidjson::Value* pStateRoot, std::vector<std::string>* pScriptsID)
+{
+	// Get the script array. (For some reason the array is in an array?)
+	const Value::ConstArray& t = pStateRoot->GetArray();
 
+	for (SizeType i = 0; i < t.Size(); i++)
+	{
+		// Gets the current script we are working with.
+		const Value& b = t[i];
+
+		// Add it to a list so it can be destroyed later.
+		pScriptsID->push_back(b["id"].GetString());
+
+		// Load our script path and name into memory so it can be loaded later
+		CScriptManager::Instance()->Load(SGameScript::file(b["id"].GetString(), b["path"].GetString()));
+	}
+}

@@ -3,11 +3,14 @@
 
 CLogicAuto::CLogicAuto()
 {
-	
+	m_collidable = false;
 }
 
 void CLogicAuto::OnPlay()
 {
+	if (m_scriptName.empty())
+		return;
+	
 	CScriptManager::Instance()->RunFromRef(m_scriptName);
 }
 

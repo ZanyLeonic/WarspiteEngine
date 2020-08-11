@@ -1,6 +1,5 @@
 ﻿# CMakeList.txt : CMake project for Engine, include source and define
 # project specific logic here.
-#
 cmake_minimum_required (VERSION 3.8)
 
 set(WarspiteEngine_Src
@@ -8,9 +7,12 @@ set(WarspiteEngine_Src
         Button.cpp
         Camera.cpp
         Enemy.cpp
+        EngineFileSystem.cpp
+        FontManager.cpp
         Game.cpp
         GameObjectDictionary.cpp
         GameStateBase.cpp
+        GameStateDictionary.cpp
         GameStateManager.cpp
         InputHandler.cpp
         Level.cpp
@@ -24,6 +26,7 @@ set(WarspiteEngine_Src
         Player.cpp
         PlayState.cpp
         ScriptManager.cpp
+        ScriptWrappers.cpp
         SoundManager.cpp
         StateParser.cpp
         TestObject.cpp
@@ -38,11 +41,15 @@ set(WarspiteEngine_Header
         Button.h
         Camera.h
         Enemy.h
+        EngineFileSystem.h
+        EngineTypes.h
+        FontManager.h
         Game.h
         GameObject.h
         GameObjectDictionary.h
         GameState.h
         GameStateBase.h
+        GameStateDictionary.h
         GameStateManager.h
         InputHandler.h
         Layer.h
@@ -53,11 +60,13 @@ set(WarspiteEngine_Header
         MapObject.h
         MenuState.h
         ObjectLayer.h
+        ObjectFactory.h
         ObjectParams.h
         PauseState.h
         Player.h
         PlayState.h
         ScriptManager.h
+        ScriptWrappers.h
         SoundManager.h
         StateParser.h
         TestObject.h
@@ -91,11 +100,23 @@ endif()
 
 # Apply some debug options
 if (CMAKE_BUILD_TYPE STREQUAL "Debug")
+    message(STATUS "Debug build")
     add_compile_definitions(WARDEBUG)
 endif()
 
 find_package(Python3 COMPONENTS Interpreter Development REQUIRED)
-find_package(Boost COMPONENTS system REQUIRED)
+
+message(STATUS "Python3_LIBRARIES = ${Python3_LIBRARIES}")
+message(STATUS "Python3_EXECUTABLE = ${Python3_EXECUTABLE}")
+message(STATUS "Python3_INCLUDE_DIRS = ${Python3_INCLUDE_DIRS}")
+
+add_custom_target(EngineMetadata
+        COMMAND "${Python3_EXECUTABLE}" "${CMAKE_CURRENT_SOURCE_DIR}/EngineMetadata.py"
+        COMMENT "Generating build metadata..."
+)
+
+find_package(pybind11 CONFIG REQUIRED)
+find_package(spdlog CONFIG REQUIRED)
 find_package(SDL2 CONFIG REQUIRED)
 find_package(SDL2_image REQUIRED)
 find_package(SDL2_ttf REQUIRED)
@@ -103,23 +124,6 @@ find_package(rapidjson REQUIRED)
 find_package(OpenAL REQUIRED)
 find_package(Vorbis REQUIRED)
 find_package(ZLIB REQUIRED)
-
-# Boost-Python stuff
-if (Python3_Interpreter_FOUND)
-    FIND_PACKAGE(Boost COMPONENTS python${Python3_VERSION_MAJOR}${Python3_VERSION_MINOR})
-else()
-    message("Python not found")
-endif()
-
-message(STATUS "Python3_LIBRARIES = ${Python3_LIBRARIES}")
-message(STATUS "Python3_EXECUTABLE = ${Python3_EXECUTABLE}")
-message(STATUS "Python3_INCLUDE_DIRS = ${Python3_INCLUDE_DIRS}")
-message(STATUS "Boost_LIBRARIES = ${Boost_LIBRARIES}")
-
-add_custom_target(ProjectMetadata
-        COMMAND "${Python_EXECUTABLE}" "${CMAKE_CURRENT_SOURCE_DIR}/GitVersion.py"
-        COMMENT "Generating build metadata..."
-        )
 
 # Add this because apparently find_package(SDL2 REQUIRED) doesn't work right on Arch?
 if("${SDL2_LIBRARIES}" STREQUAL "")
@@ -131,19 +135,21 @@ if("${SDL2_IMAGE_LIBRARIES}" STREQUAL "")
 endif()
 
 set (Warspite_Libs
-        ${Boost_LIBRARIES}
-        ${Boost_SYSTEM_LIBRARY}
-        ${Python3_LIBRARIES}
-        ${SDL2_LIBRARIES}
-        ${SDL2_IMAGE_LIBRARIES}
-        ${SDL2_TTF_LIBRARIES}
-        ${OPENAL_LIBRARY}
-        ${VORBIS_LIBRARIES}
-        ${ZLIB_LIBRARIES}
-        )
+    ${Python3_LIBRARIES}
+    ${PYBIND11_LIBRARIES}
+    ${SDL2_LIBRARIES}
+    ${SDL2_IMAGE_LIBRARIES}
+    ${SDL2_TTF_LIBRARIES}
+    ${OPENAL_LIBRARY}
+    ${VORBIS_LIBRARIES}
+    ${ZLIB_LIBRARIES}
+    spdlog::spdlog
+    spdlog::spdlog_header_only
+)
 
-include_directories(${Boost_INCLUDE_DIRS})
 include_directories(${Python3_INCLUDE_DIRS})
+include_directories(${SPDLOG_INCLUDE_DIR})
+include_directories(${PYBIND11_INCLUDE_DIRS})
 include_directories(${SDL2_INCLUDE_DIRS})
 include_directories(${SDL2_IMAGE_INCLUDE_DIRS})
 include_directories(${SDL2_TTF_INCLUDE_DIRS})
@@ -153,9 +159,12 @@ include_directories(${OPENAL_INCLUDE_DIRS})
 include_directories(${VORBIS_INCLUDE_DIR})
 include_directories(${ZLIB_INCLUDE_DIRS})
 
+# Linking errors if we don't do this.
+link_directories(${Python3_LIBRARY_DIRS})
+
 # Add source to this project's executable.
 add_executable (${PROJECT_NAME} ${WarspiteEngine_Src} ${WarspiteEngine_Header})
-add_dependencies(${PROJECT_NAME} ProjectMetadata)
+add_dependencies(${PROJECT_NAME} EngineMetadata)
 
 # As a last ditch effort...
 if ("${Python_EXECUTABLE}" STREQUAL "")

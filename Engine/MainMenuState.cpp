@@ -1,28 +1,31 @@
 #include "MainMenuState.h"
-#include "TextureManager.h"
 #include "Game.h"
 #include "Button.h"
 #include "StateParser.h"
-#include "PlayState.h"
-#include <iostream>
-
-const std::string CMainMenuState::s_UIID = "MainMenu";
+#include <spdlog/spdlog.h>
 
 bool CMainMenuState::OnPlay()
 {
 	CMenuState::OnPlay();
-
+	
+	s_UIID = SID_MM;
+	
 	// Parse the state
 	CStateParser sp;
-	sp.ParseState("assets/resource/states/SystemMenus.json", s_UIID, &m_GameObjects, &m_TextureIDList);
+	sp.ParseState(CEngineFileSystem::ResolvePath("SystemMenus.json", CEngineFileSystem::EPathType::STATE).c_str(), s_UIID, &m_GameObjects, &m_TextureIDList, &m_ScriptIDList);
 
+	for(size_t i = 0; i < m_GameObjects.size(); i++)
+	{
+		m_GameObjects[i]->OnPlay();
+	}
+	
 	m_callbacks.push_back(0);
 	m_callbacks.push_back(s_menuToPlay);
 	m_callbacks.push_back(s_exitFromMenu);
 
 	SetCallbacks(m_callbacks);
 
-	std::cout << "Entered MainMenuState\n";
+	spdlog::info("Entered MainMenuState");
 	return true;
 }
 
@@ -30,15 +33,13 @@ bool CMainMenuState::OnEnd()
 {
 	CMenuState::OnEnd();
 
-	std::cout << "Exiting MainMenuState\n";
+	spdlog::info("Exiting MainMenuState");
 	return true;
 }
 
 void CMainMenuState::SetCallbacks(const std::vector<HButtonCallback>& callbacks)
 {
-	// MenuState::SetCallbacks(callbacks);
-
-	for (int i = 0; i < m_GameObjects.size(); i++)
+	for (size_t i = 0; i < m_GameObjects.size(); i++)
 	{
 		if (dynamic_cast<CButton*>(m_GameObjects[i]))
 		{
@@ -54,14 +55,14 @@ void CMainMenuState::SetCallbacks(const std::vector<HButtonCallback>& callbacks)
 
 bool CMainMenuState::s_menuToPlay()
 {
-	std::cout << "Play button clicked\n";
-	CGame::Instance()->GetStateManager()->ModifyState(new CPlayState());
+	spdlog::info("Play button clicked");
+	CGame::Instance()->GetStateManager()->ModifyState(CGameStateDictionary::Instance()->Create(SID_PLAY));
 	return false;
 }
 
 bool CMainMenuState::s_exitFromMenu()
 {
-	std::cout << "Exit button clicked\n";
+	spdlog::info("Exit button clicked");
 	CGame::Instance()->Quit();
 	return false;
 }

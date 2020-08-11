@@ -2,23 +2,16 @@
 #ifndef __GameObjectDictionary_H__
 #define __GameObjectDictionary_H__
 
+#include "ObjectFactory.h"
 #include <string>
 #include <map>
 
 class IGameObject;
 
-// Overridable base stuff
-class IObjectFactory
-{
-public:
-	virtual IGameObject* Create() = 0;
-	virtual size_t GetObjectSize() = 0;
-};
-
 // Singleton class
 class CGameObjectDictionary
 {
-	CGameObjectDictionary() {};
+	CGameObjectDictionary() {}
 	static CGameObjectDictionary* s_pInstance;
 
 public:
@@ -32,16 +25,16 @@ public:
 		return s_pInstance;
 	}
 
-	bool RegisterType(std::string typeID, IObjectFactory* pCreator);
+	bool RegisterType(std::string typeID, IObjectFactory<IGameObject>* pCreator);
 	IGameObject* Create(std::string typeID);
 private:
-	std::map<std::string, IObjectFactory*> m_creators;
+	std::map<std::string, IObjectFactory<IGameObject>*> m_creators;
 };
 
 // For real - what will create our GameObject.
 // A template class to know what we are creating.
 template <class T>
-class CGameObjectFactory : public IObjectFactory
+class CGameObjectFactory : public IObjectFactory<IGameObject>
 {
 public:
 	// When the class is created - take the respective map reference string

@@ -3,12 +3,15 @@
 #define __SCRIPTMANAGER_H__
 
 #include <iostream>
-#include <boost/shared_ptr.hpp>
-#include <boost/make_shared.hpp>
-#include <boost/python.hpp>
 #include <map>
-
+#include <memory>
+#include "Level.h"
 #include "Game.h"
+#include <pybind11/pybind11.h>
+#include <spdlog/spdlog.h>
+
+class PyStdErrOutStreamRedirect;
+namespace py = pybind11;
 
 enum class EGameScriptType
 {
@@ -16,17 +19,6 @@ enum class EGameScriptType
 	SCRIPT_INLINE = 1,
 	SCRIPT_FILE = 2
 };
-
-struct Foo {
-	Foo() {}
-	Foo(std::string const& s) : m_string(s) {}
-	void doSomething() {
-		std::cout << "Foo:" << m_string << std::endl;
-	}
-	std::string m_string;
-};
-
-typedef boost::shared_ptr<Foo> foo_ptr;
 
 struct SGameScript
 {
@@ -74,6 +66,7 @@ class CScriptManager
 {
 	static CScriptManager* s_pInstance;
 	CScriptManager();
+
 public:
 	// more singleton stuff
 	static CScriptManager* Instance()
@@ -86,16 +79,30 @@ public:
 		return s_pInstance;
 	}
 
+	void Destroy();
+
 	void Load(SGameScript* script);
 	bool Remove(const char* scriptRef);
 	void RemoveAll();
+
+	bool Run(SGameScript* script, py::object* ns = nullptr);
+	bool RunFromRef(std::string scriptRef, py::object* ns = nullptr);
+
+	py::module GetMainModule() const { return main_module; }
+	py::module GetEngineModule() const { return engine_module; }
+	py::object GetMainNamespace() const { return main_namespace; }
 	
-	bool Run(SGameScript* script, boost::python::object* ns = 0);
-	bool RunFromRef(std::string scriptRef, boost::python::object* ns = 0);
 private:
-	boost::python::object main_module;
-	boost::python::object main_namespace;
+	py::module main_module;
+	py::module engine_module;
+	py::object main_namespace;
+
+	void printScriptOutput(std::string output);
+	
+	std::shared_ptr<spdlog::logger> m_scriptLogger;
 
 	std::map<std::string, SGameScript*> loadedScripts;
+
+	PyStdErrOutStreamRedirect* m_stdRedirect;
 };
 #endif // ifndef __SCRIPTMANAGER_H__

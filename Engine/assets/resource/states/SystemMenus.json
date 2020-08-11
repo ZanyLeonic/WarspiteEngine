@@ -2,6 +2,8 @@
 	"states": [
 		{
 		  "id": "MainMenu",
+		  "scripts": [
+		  ],
 		  "textures": [
 			{
 			  "path": "assets\\textures\\UI\\PlayButton.png",
@@ -14,6 +16,7 @@
 		  ],
 		  "objects": [
 			{
+			  "name": "PlayBtn",
 			  "type": "Button",
 			  "x": 100,
 			  "y": 100,
@@ -24,6 +27,7 @@
 			  "numFrames" : 3
 			},
 			{
+			  "name": "ExitBtn",
 			  "type": "Button",
 			  "x": 100,
 			  "y": 300,
@@ -36,7 +40,9 @@
 		  ]
 		},
 		{
-		  "id": "PauseMenu",
+		  "id": "PauseState",
+		  "scripts": [
+		  ],
 		  "textures": [
 			{
 			  "path": "assets\\textures\\UI\\ResumeButton.png",
@@ -49,6 +55,7 @@
 		  ],
 		  "objects": [
 			{
+			  "name": "ResumeBtn",
 			  "type": "Button",
 			  "x": 100,
 			  "y": 100,
@@ -59,6 +66,7 @@
 			  "numFrames" : 3
 			},
 			{
+			  "name": "ExitpBtn",
 			  "type": "Button",
 			  "x": 100,
 			  "y": 200,

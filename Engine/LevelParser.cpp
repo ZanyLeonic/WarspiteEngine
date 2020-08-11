@@ -1,6 +1,7 @@
 #include "LevelParser.h"
 #include "Level.h"
 #include "ObjectLayer.h"
+#include "EngineFileSystem.h"
 #include "TextureManager.h"
 #include "ScriptManager.h"
 #include "GameObjectDictionary.h"
@@ -9,50 +10,20 @@
 #include "TileLayer.h"
 #include "WarspiteUtil.h"
 
-#include <boost/filesystem.hpp>
-#include <iostream>
-#include <rapidjson/filereadstream.h>
-#include <rapidjson/writer.h>
+#include <spdlog/spdlog.h>
 #include "etc/Base64.h"
 #include <zlib.h>
 
 using namespace rapidjson;
 
-// Debug: Serializes JSON
-std::string getJSONs(const Value* pStateRoot)
-{
-	StringBuffer sb;
-	Writer<StringBuffer> writer(sb);
-
-	pStateRoot->Accept(writer);
-
-	return sb.GetString();
-}
-
 CLevel* CLevelParser::ParseLevel(const char* levelFile)
 {
 	Document tLevel;
-	FILE* fp = fopen(levelFile, "rb");
 
-	if (fp != NULL)
+	if (CEngineFileSystem::ReadJSON(levelFile, &tLevel))
 	{
-		char readBuffer[4096];
-		FileReadStream is(fp, readBuffer, sizeof(readBuffer));
-
-		tLevel.ParseStream(is);
-
-		// Have we parsed the JSON correctly?
-		if (tLevel.HasParseError())
-		{
-			std::cout << "An error has occurred when loading \"" << levelFile << "\"\n";
-			std::cout << tLevel.GetParseError() << "\n";
-
-			return 0;
-		}
-
-		fclose(fp);
-
-		CLevel* pLevel = new CLevel();
+		std::string sL = levelFile;
+		CLevel* pLevel = new CLevel(sL);
 
 		assert(tLevel["height"].IsInt() && tLevel["width"].IsInt() && tLevel["tilewidth"].IsInt());
 
@@ -115,6 +86,30 @@ CLevel* CLevelParser::ParseLevel(const char* levelFile)
 	return 0;
 }
 
+MapProperties CLevelParser::GetMapProp(const std::string prop)
+{
+	static const std::map<std::string, MapProperties> propStrings
+	{
+		{"runScript",		MapProperties::PROP_SCRIPT},
+		{"textureID",		MapProperties::PROP_TEXTUREID},
+		{"textureWidth",	MapProperties::PROP_TEXWIDTH},
+		{"textureHeight",	MapProperties::PROP_TEXHEIGHT},
+		{"numFrames",		MapProperties::PROP_NUMFRAMES},
+		{"animSpeed",		MapProperties::PROP_ANIMSPEED},
+		{"onClickCallback", MapProperties::PROP_ONCLICKCALL},
+		{"onEnterCallback", MapProperties::PROP_ONENTERCALL},
+		{"onLeaveCallback", MapProperties::PROP_ONLEAVECALL}
+	};
+
+	auto itr = propStrings.find(prop);
+	if (itr != propStrings.end())
+	{
+		return itr->second;
+	}
+
+	return MapProperties::PROP_INVALID;
+}
+
 void CLevelParser::parseTilesets(const rapidjson::Value* pTilesetRoot, std::vector<STileset>* pTilesets)
 {
 	const Value::ConstObject& obj = pTilesetRoot->GetObject();
@@ -126,34 +121,15 @@ void CLevelParser::parseTilesets(const rapidjson::Value* pTilesetRoot, std::vect
 		Document tileset;
 
 		const char* fileName = obj["source"].GetString();
-		FILE* tHandle = fopen(fileName, "rb");
 
-		if (tHandle != NULL)
+		if (CEngineFileSystem::ReadJSON(fileName, &tileset))
 		{
-			char readBuffer[4096];
-			FileReadStream is(tHandle, readBuffer, sizeof(readBuffer));
-
-			tileset.ParseStream(is);
-
-			// Have we parsed the JSON correctly?
-			if (tileset.HasParseError())
-			{
-				std::cout << "An error has occurred when loading \"" << fileName << "\"\n";
-				std::cout << tileset.GetParseError() << "\n";
-
-				return;
-			}
-
-			fclose(tHandle);
-
 			const Value& t = tileset.GetObject();
 
 			CTextureManager::Instance()->Load(t["image"].GetString(),
 				t["name"].GetString(), CGame::Instance()->GetRenderer());
 
 			STileset ts;
-
-			std::cout << getJSONs(&t) << std::endl;
 
 			ts.Width = t["imagewidth"].GetInt();
 			ts.Height = t["imageheight"].GetInt();
@@ -238,7 +214,7 @@ void CLevelParser::parseFiles(const rapidjson::Value* pFileRoot)
 	// Get the correct type of the value. (should be an object)
 	const Value::ConstObject& o = pFileRoot->GetObject();
 
-	if (WarspiteUtil::GetFileExtenstion(o["value"].GetString()) == ".py")
+	if (CWarspiteUtil::GetFileExtenstion(o["value"].GetString()) == ".py")
 	{
 		CScriptManager::Instance()->Load(SGameScript::file(o["name"].GetString(), o["value"].GetString()));
 		return;
@@ -266,7 +242,6 @@ void CLevelParser::parseBackgroundColour(const std::string* colourVal)
 		g = std::stoi(colourVal->substr(3, 2), 0, 16);
 		// Blue
 		b = std::stoi(colourVal->substr(5, 2), 0, 16);
-
 		break;
 	
 	// Alpha channel
@@ -275,11 +250,11 @@ void CLevelParser::parseBackgroundColour(const std::string* colourVal)
 		r = std::stoi(colourVal->substr(3, 2), 0, 16);
 		g = std::stoi(colourVal->substr(5, 2), 0, 16);
 		b = std::stoi(colourVal->substr(7, 2), 0, 16);
-
 		break;
 
 	default:
-		std::cout << "Warning: Unrecongised or unsupported colour value!" << std::endl << "Value: " << colourVal << std::endl;
+		spdlog::warn("Warning: Unrecongised or unsupported colour value!");
+		spdlog::warn("Value: {}", *colourVal);
 		break;
 	};
 
@@ -298,93 +273,76 @@ void CLevelParser::parseObjectLayer(const rapidjson::Value* pObjectVal, std::vec
 	// iterate through each object we have.
 	for (SizeType i = 0; i < a.Size(); i++)
 	{
-		// debug
-		std::cout << "i: " << i << " a size: " << a.Size() << std::endl;
-
 		// get our current object as a JSON object to get data from.
 		const Value::ConstObject& b = a[i].GetObject();
-		// intialise variables for the data we are getting from the JSON.
-		int x = 0, y = 0, width = 0, height = 0, 
+		
+		int x = 0, y = 0, width = 0, height = 0,
 			onClickCallback = 0, onEnterCallback = 0, onLeaveCallback = 0;
 		int numFrames = 1, animSpeed = 1;
-		std::string textureID;
-		const char* scriptName = "";
-		
+		std::string textureID, objN, scriptName, type;
+
 		// Get the desired coordinates
 		x = b["x"].GetInt();
 		y = b["y"].GetInt();
 		
+		type = b["type"].GetString();
+		objN = b["name"].GetString();
+
 		// Create the object that is defined
 		IGameObject* pGameObject = CGameObjectDictionary::Instance()
-			->Create(b["type"].GetString());
-
+			->Create(type);
+		
 		// fill in any additional information (if provided.)
 		if (b.HasMember("properties"))
 		{
 			// iterate
 			const Value::ConstArray& d = b["properties"].GetArray();
+			
 			for (SizeType j = 0; j < d.Size(); j++)
 			{
-				// Maybe use a switch
 				std::string propName = d[j]["name"].GetString();
 
-				if (propName == "RunScript")
+				switch (GetMapProp(propName))
 				{
+				case MapProperties::PROP_SCRIPT:
 					scriptName = d[j]["value"].GetString();
-					continue;
-				}
-				if (propName == "textureWidth")
-				{
-					width = d[j]["value"].GetInt();
-					continue;
-				}
-				else if (propName == "textureHeight")
-				{
-					height = d[j]["value"].GetInt();
-					continue;
-				}
-				else if (propName == "numFrames")
-				{
-					numFrames = d[j]["value"].GetInt();
-					continue;
-				}
-				else if (propName == "animSpeed")
-				{
-					animSpeed = d[j]["value"].GetInt();
-					continue;
-				}
-				else if (propName == "onClickCallback")
-				{
-					onClickCallback = d[j]["value"].GetInt();
-					continue;
-				}
-				else if (propName == "onEnterCallback")
-				{
-					onClickCallback = d[j]["value"].GetInt();
-					continue;
-				}
-				else if (propName == "onLeaveCallback")
-				{
-					onClickCallback = d[j]["value"].GetInt();
-					continue;
-				}
-				else if (propName == "textureID")
-				{
+					break;
+				case MapProperties::PROP_TEXTUREID:
 					textureID = d[j]["value"].GetString();
-					continue;
-				}
-				else
-				{
+					break;
+				case MapProperties::PROP_TEXWIDTH:
+					width = d[j]["value"].GetInt();
+					break;
+				case MapProperties::PROP_TEXHEIGHT:
+					height = d[j]["value"].GetInt();
+					break;
+				case MapProperties::PROP_NUMFRAMES:
+					numFrames = d[j]["value"].GetInt();
+					break;
+				case MapProperties::PROP_ANIMSPEED:
+					animSpeed = d[j]["value"].GetInt();
+					break;
+				case MapProperties::PROP_ONCLICKCALL:
+					onClickCallback = d[j]["value"].GetInt();
+					break;
+				case MapProperties::PROP_ONENTERCALL:
+					onEnterCallback = d[j]["value"].GetInt();
+					break;
+				case MapProperties::PROP_ONLEAVECALL:
+					onLeaveCallback = d[j]["value"].GetInt();
+					break;	
+				default:
 					// Future proofing incase new properties get added for newer engine version.
-					std::cout << "Warning: Unrecongised property \"" << propName << "\"!" << std::endl;
+					spdlog::warn("Warning: Unrecongised property \"{}\"!", propName);
+					break;
 				}
 			}
 		}
-
+		
 		// intialise the object with the data obtained.
-		pGameObject->Load(new CObjectParams((float)x, (float)y, width, height, 
-			textureID, animSpeed, numFrames, onClickCallback, 
-			onEnterCallback, onLeaveCallback, scriptName));
+		pGameObject->Load(new CObjectParams((float)x, (float)y, width, height,
+			textureID, animSpeed, numFrames, onClickCallback,
+			onEnterCallback, onLeaveCallback, scriptName, objN, type));
 		pObjectLayer->GetGameObjects()->push_back(pGameObject);
 	}
 

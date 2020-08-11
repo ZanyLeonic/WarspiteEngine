@@ -1,0 +1,16 @@
+{
+    "name": "Roboto",
+    "types":
+    [
+        "Regular",
+        "Black",
+        "BlackItalic",
+        "Italic",
+        "Light",
+        "LightItalic",
+        "Medium",
+        "MediumItalic",
+        "Thin",
+        "ThinItalitc"
+    ]
+}

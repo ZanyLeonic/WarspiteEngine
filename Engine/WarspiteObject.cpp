@@ -10,6 +10,9 @@ CWarspiteObject::CWarspiteObject()
 
 void CWarspiteObject::Load(const CObjectParams* pParams)
 {
+	m_objectName = pParams->GetName();
+	m_factoryID = pParams->GetFactoryID();
+	
 	m_position = CVector2D(pParams->GetX(), pParams->GetY());
 	m_velocity = CVector2D(0, 0);
 	m_acceleration = CVector2D(0, 0);

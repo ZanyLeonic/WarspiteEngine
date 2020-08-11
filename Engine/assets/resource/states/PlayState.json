@@ -1,7 +1,9 @@
 {
   "states": [
 	{
-      "id": "Game",
+      "id": "PlayState",
+	  "scripts": [
+	  ],
       "textures": [
       ],
       "objects": [

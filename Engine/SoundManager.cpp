@@ -1,4 +1,5 @@
 #include "SoundManager.h"
+#include <spdlog/spdlog.h>
 
 // TODO: Clean up and refine this class - it is a mess.
 CSoundManager* CSoundManager::s_pInstance = 0;
@@ -40,17 +41,17 @@ int UpdateStream(SStreamingAudioData& audioData)
 
 			if (result == OV_HOLE)
 			{
-				std::cerr << "ERROR: OV_HOLE found in update of buffer " << std::endl;
+				spdlog::error("ERROR: OV_HOLE found in update of buffer ");
 				break;
 			}
 			else if (result == OV_EBADLINK)
 			{
-				std::cerr << "ERROR: OV_EBADLINK found in update of buffer " << std::endl;
+				spdlog::error("ERROR: OV_EBADLINK found in update of buffer");
 				break;
 			}
 			else if (result == OV_EINVAL)
 			{
-				std::cerr << "ERROR: OV_EINVAL found in update of buffer " << std::endl;
+				spdlog::error("ERROR: OV_EINVAL found in update of buffer ");
 				break;
 			}
 			else if (result == 0)
@@ -139,7 +140,7 @@ std::size_t readOggCallback(void* destination, std::size_t size1, std::size_t si
 		audioData->File.open(audioData->Filename, std::ios::binary);
 		if (!audioData->File.is_open())
 		{
-			std::cerr << "ERROR: Could not re-open streaming file \"" << audioData->Filename << "\"" << std::endl;
+			spdlog::error("ERROR: Could not re-open streaming file \"{}\"", audioData->Filename);
 			return 0;
 		}
 	}
@@ -156,13 +157,13 @@ std::size_t readOggCallback(void* destination, std::size_t size1, std::size_t si
 		}
 		else if (audioData->File.fail())
 		{
-			std::cerr << "ERROR: OGG stream has fail bit set " << audioData->Filename << std::endl;
+			spdlog::error("ERROR: OGG stream has fail bit set \"{}\"", audioData->Filename);
 			audioData->File.clear();
 			return 0;
 		}
 		else if (audioData->File.bad())
 		{
-			perror(("ERROR: OGG stream has bad bit set " + audioData->Filename).c_str());
+			spdlog::error("ERROR: OGG stream has bad bit set \"{}\"", audioData->Filename);
 			audioData->File.clear();
 			return 0;
 		}
@@ -225,7 +226,7 @@ int createStreamOnThread(void* pdata)
 	audioData->File.open(audioData->Filename, std::ios::binary);
 	if (!audioData->File.is_open())
 	{
-		std::cerr << "ERROR: couldn't open file" << std::endl;
+		spdlog::error("ERROR: Couldn't open file \"{}\"", audioData->Filename);
 		return 0;
 	}
 
@@ -247,7 +248,7 @@ int createStreamOnThread(void* pdata)
 	// Open the OGG file with vorbis
 	if (ov_open_callbacks(pdata, &audioData->OggVorbisFile, nullptr, -1, oggCallbacks) < 0)
 	{
-		std::cerr << "ERROR: Could not ov_open_callbacks" << std::endl;
+		spdlog::error("ERROR: Could not call ov_open_callbacks");
 		return -1;
 	}
 
@@ -271,17 +272,17 @@ int createStreamOnThread(void* pdata)
 
 	if (audioData->File.eof())
 	{
-		std::cerr << "ERROR: Already reached EOF without loading data" << std::endl;
+		spdlog::error("ERROR: Already reached EOF without loading audio data");
 		return false;
 	}
 	else if (audioData->File.fail())
 	{
-		std::cerr << "ERROR: Fail bit set" << std::endl;
+		spdlog::error("ERROR: Audio Fail bit set");
 		return false;
 	}
 	else if (!audioData->File)
 	{
-		std::cerr << "ERROR: file is false" << std::endl;
+		spdlog::error("ERROR: Audio File stream is closed");
 		return false;
 	}
 
@@ -300,22 +301,22 @@ int createStreamOnThread(void* pdata)
 										  reinterpret_cast<int *>(&audioData->OggCurrentSection));
 			if (result == OV_HOLE)
 			{
-				std::cerr << "ERROR: OV_HOLE found in initial read of buffer " << i << std::endl;
+				spdlog::error("ERROR: OV_HOLE found in initial read of buffer {}", i);
 				break;
 			}
 			else if (result == OV_EBADLINK)
 			{
-				std::cerr << "ERROR: OV_EBADLINK found in initial read of buffer " << i << std::endl;
+				spdlog::error("ERROR: OV_EBADLINK found in initial read of buffer {}", i);
 				break;
 			}
 			else if (result == OV_EINVAL)
 			{
-				std::cerr << "ERROR: OV_EINVAL found in initial read of buffer " << i << std::endl;
+				spdlog::error("ERROR: OV_EINVAL found in initial read of buffer {}", i);
 				break;
 			}
 			else if (result == 0)
 			{
-				std::cerr << "ERROR: EOF found in initial read of buffer " << i << std::endl;
+				spdlog::error("ERROR: EOF found in initial read of buffer {}", i);
 				break;
 			}
 
@@ -334,7 +335,7 @@ int createStreamOnThread(void* pdata)
 			audioData->Format = AL_FORMAT_STEREO16;
 		else
 		{
-			std::cerr << "ERROR: unrecognised OGG Format: " << audioData->Channels << " Channels, " << audioData->BitRate << " bps" << std::endl;
+			spdlog::error("ERROR: Unrecognised OGG Format: {} Channels, {} bps", audioData->Channels, audioData->BitRate);
 			delete[] data;
 			return -1;
 		}
@@ -358,26 +359,26 @@ bool checkALErrors(const std::string& filename, const std::uint_fast32_t line)
 	ALenum error = alGetError();
 	if (error != AL_NO_ERROR)
 	{
-		std::cerr << "***ERROR*** (" << filename << ": " << line << ")\n";
+		spdlog::error("***ERROR*** ({}:{})", filename, line);
 		switch (error)
 		{
 		case AL_INVALID_NAME:
-			std::cerr << "AL_INVALID_NAME: a bad name (ID) was passed to an OpenAL function";
+			spdlog::error("AL_INVALID_NAME: a bad name (ID) was passed to an OpenAL function");
 			break;
 		case AL_INVALID_ENUM:
-			std::cerr << "AL_INVALID_ENUM: an invalid enum value was passed to an OpenAL function";
+			spdlog::error("AL_INVALID_ENUM: an invalid enum value was passed to an OpenAL function");
 			break;
 		case AL_INVALID_VALUE:
-			std::cerr << "AL_INVALID_VALUE: an invalid value was passed to an OpenAL function";
+			spdlog::error("AL_INVALID_VALUE: an invalid value was passed to an OpenAL function");
 			break;
 		case AL_INVALID_OPERATION:
-			std::cerr << "AL_INVALID_OPERATION: the requested operation is not valid";
+			spdlog::error("AL_INVALID_OPERATION: the requested operation is not valid");
 			break;
 		case AL_OUT_OF_MEMORY:
-			std::cerr << "AL_OUT_OF_MEMORY: the requested operation resulted in OpenAL running out of memory";
+			spdlog::error("AL_OUT_OF_MEMORY: the requested operation resulted in OpenAL running out of memory");
 			break;
 		default:
-			std::cerr << "UNKNOWN AL ERROR: " << error;
+			spdlog::error("UNKNOWN AL ERROR: {}", error);
 		}
 		std::cerr << std::endl;
 		return false;
@@ -391,26 +392,26 @@ bool checkALCErrors(const std::string& filename, const std::uint_fast32_t line, 
 	ALCenum error = alcGetError(device);
 	if (error != ALC_NO_ERROR)
 	{
-		std::cerr << "***ERROR*** (" << filename << ": " << line << ")\n";
+		spdlog::error("***ERROR*** ({}:{})", filename, line);
 		switch (error)
 		{
 		case ALC_INVALID_VALUE:
-			std::cerr << "ALC_INVALID_VALUE: an invalid value was passed to an OpenAL function";
+			spdlog::error("ALC_INVALID_VALUE: an invalid value was passed to an OpenAL function");
 			break;
 		case ALC_INVALID_DEVICE:
-			std::cerr << "ALC_INVALID_DEVICE: a bad device was passed to an OpenAL function";
+			spdlog::error("ALC_INVALID_DEVICE: a bad device was passed to an OpenAL function");
 			break;
 		case ALC_INVALID_CONTEXT:
-			std::cerr << "ALC_INVALID_CONTEXT: a bad context was passed to an OpenAL function";
+			spdlog::error("ALC_INVALID_CONTEXT: a bad context was passed to an OpenAL function");
 			break;
 		case ALC_INVALID_ENUM:
-			std::cerr << "ALC_INVALID_ENUM: an unknown enum value was passed to an OpenAL function";
+			spdlog::error("ALC_INVALID_ENUM: an unknown enum value was passed to an OpenAL function");
 			break;
 		case ALC_OUT_OF_MEMORY:
-			std::cerr << "ALC_OUT_OF_MEMORY: an unknown enum value was passed to an OpenAL function";
+			spdlog::error("ALC_OUT_OF_MEMORY: an unknown enum value was passed to an OpenAL function");
 			break;
 		default:
-			std::cerr << "UNKNOWN ALC ERROR: " << error;
+			spdlog::error("UNKNOWN ALC ERROR: {}", error);
 		}
 		std::cerr << std::endl;
 		return false;
@@ -420,25 +421,25 @@ bool checkALCErrors(const std::string& filename, const std::uint_fast32_t line, 
 
 CSoundManager::CSoundManager()
 {
-	std::cout << "Initialising SoundManager..." << std::endl;
+	spdlog::info("Initialising SoundManager...");
 
 	// Enumerate all our devices
 	getAvailableDevices(devices, NULL);
 
-	std::cout << "Using device \"" << devices[0].c_str() << "\"..." << std::endl;
+	spdlog::info("Using device \"{}\"...", devices[0].c_str());
 
 	// Open the first device we get
 	// Sidenote - does OpenAL soft even allow us to choose which device to initialise?
 	openALDevice = alcOpenDevice(devices[0].c_str());
 	if (!openALDevice)
 	{
-		std::cerr << "Cannot open device \"" << devices[0].c_str() << "\"!" << std::endl;
+		spdlog::error("ERROR: Cannot open device \"{}\"!", devices[0].c_str());
 	}
 
 	// Whoops - we cannot create a context.
 	if (!alcCall(alcCreateContext, openALContext, openALDevice, openALDevice, nullptr) || !openALContext)
 	{
-		std::cerr << "ERROR: Could not create audio context" << std::endl;
+		spdlog::error("ERROR: Could not create audio context");
 		/* probably exit program */
 	}
 
@@ -447,12 +448,12 @@ CSoundManager::CSoundManager()
 	if (!alcCall(alcMakeContextCurrent, contextMadeCurrent, openALDevice, openALContext)
 		|| contextMadeCurrent != ALC_TRUE)
 	{
-		std::cerr << "ERROR: Could not make audio context current" << std::endl;
+		spdlog::error("ERROR: Could not make audio context current");
 		/* probably exit or give up on having sound */
 	}
 
 	// We somehow survived! fhew.
-	std::cout << "SoundManager initialised." << std::endl;
+	spdlog::info("SoundManager initialised.");
 }
 
 CSoundManager::~CSoundManager()
@@ -467,7 +468,7 @@ void CSoundManager::OnThink()
 
 void CSoundManager::Destroy()
 {
-	std::cout << "Destroying active AudioStreams..." << std::endl;
+	spdlog::info("Destroying active AudioStreams...");
 	for (int i=0;i < streams.size();i++)
 	{
 		alCall(alSourcei, streams[i]->Source, AL_BUFFER, 0);
@@ -475,16 +476,16 @@ void CSoundManager::Destroy()
         alCall(alDeleteBuffers, NUM_BUFFERS, &streams[i]->Buffers[0]);
 	}
 
-	std::cout << "Destroying device handles..." << std::endl;
+	spdlog::info("Destroying device handles...");
 	// Try to destroy our device
 	ALCboolean closed;
 	if (!alcCall(alcCloseDevice, closed, openALDevice, openALDevice))
 	{
-		std::cerr << "Error while destroying device" << std::endl;
+		spdlog::error("ERROR: Error while destroying active audio device");
 	}
 	else
 	{
-		std::cout << "Successfully destroyed device handle" << std::endl;
+		spdlog::info("Successfully destroyed device handle");
 	}
 }
 
@@ -497,7 +498,7 @@ bool CSoundManager::Load(const std::string& fileName, SWaveFile& file)
 
 	if (file.RawData == nullptr || file.DataSize == 0)
 	{
-		std::cerr << "ERROR: Could not load wav" << std::endl;
+		spdlog::error("ERROR: Could not load wav");
 		return false;
 	}
 
@@ -604,59 +605,59 @@ bool CSoundManager::loadWavFileHeader(std::ifstream& file, std::uint8_t& channel
 	// the RIFF
 	if (!file.read(buffer, 4))
 	{
-		std::cerr << "ERROR: could not read RIFF" << std::endl;
+		spdlog::error("ERROR: could not read RIFF");
 		return false;
 	}
 	if (strncmp(buffer, "RIFF", 4) != 0)
 	{
-		std::cerr << "ERROR: file is not a valid WAVE file (header doesn't begin with RIFF)" << std::endl;
+		spdlog::error("ERROR: file is not a valid WAVE file (header doesn't begin with RIFF)");
 		return false;
 	}
 
 	// the size of the file
 	if (!file.read(buffer, 4))
 	{
-		std::cerr << "ERROR: could not read size of file" << std::endl;
+		spdlog::error("ERROR: could not read size of file");
 		return false;
 	}
 
 	// the WAVE
 	if (!file.read(buffer, 4))
 	{
-		std::cerr << "ERROR: could not read WAVE" << std::endl;
+		spdlog::error("ERROR: could not read WAVE");
 		return false;
 	}
 	if (strncmp(buffer, "WAVE", 4) != 0)
 	{
-		std::cerr << "ERROR: file is not a valid WAVE file (header doesn't contain WAVE)" << std::endl;
+		spdlog::error("ERROR: file is not a valid WAVE file (header doesn't contain WAVE)");
 		return false;
 	}
 
 	// "fmt/0"
 	if (!file.read(buffer, 4))
 	{
-		std::cerr << "ERROR: could not read fmt/0" << std::endl;
+		spdlog::error("ERROR: could not read fmt/0");
 		return false;
 	}
 
 	// this is always 16, the size of the fmt data chunk
 	if (!file.read(buffer, 4))
 	{
-		std::cerr << "ERROR: could not read the 16" << std::endl;
+		spdlog::error("ERROR: could not read the 16");
 		return false;
 	}
 
 	// PCM should be 1?
 	if (!file.read(buffer, 2))
 	{
-		std::cerr << "ERROR: could not read PCM" << std::endl;
+		spdlog::error("ERROR: could not read PCM");
 		return false;
 	}
 
 	// the number of channels
 	if (!file.read(buffer, 2))
 	{
-		std::cerr << "ERROR: could not read number of channels" << std::endl;
+		spdlog::error("ERROR: could not read number of channels");
 		return false;
 	}
 	channels = convertToInt(buffer, 2);
@@ -664,7 +665,7 @@ bool CSoundManager::loadWavFileHeader(std::ifstream& file, std::uint8_t& channel
 	// sample rate
 	if (!file.read(buffer, 4))
 	{
-		std::cerr << "ERROR: could not read sample rate" << std::endl;
+		spdlog::error("ERROR: could not read sample rate");
 		return false;
 	}
 	sampleRate = convertToInt(buffer, 4);
@@ -672,21 +673,21 @@ bool CSoundManager::loadWavFileHeader(std::ifstream& file, std::uint8_t& channel
 	// (sampleRate * bitsPerSample * channels) / 8
 	if (!file.read(buffer, 4))
 	{
-		std::cerr << "ERROR: could not read (sampleRate * bitsPerSample * channels) / 8" << std::endl;
+		spdlog::error("ERROR: could not read (sampleRate * bitsPerSample * channels) / 8");
 		return false;
 	}
 
 	// ?? dafaq
 	if (!file.read(buffer, 2))
 	{
-		std::cerr << "ERROR: could not read dafaq" << std::endl;
+		spdlog::error("ERROR: could not read file");
 		return false;
 	}
 
 	// bitsPerSample
 	if (!file.read(buffer, 2))
 	{
-		std::cerr << "ERROR: could not read bits per sample" << std::endl;
+		spdlog::error("ERROR: could not read bits per sample");
 		return false;
 	}
 	bitsPerSample = convertToInt(buffer, 2);
@@ -694,19 +695,19 @@ bool CSoundManager::loadWavFileHeader(std::ifstream& file, std::uint8_t& channel
 	// data chunk header "data"
 	if (!file.read(buffer, 4))
 	{
-		std::cerr << "ERROR: could not read data chunk header" << std::endl;
+		spdlog::error("ERROR: could not read data chunk header");
 		return false;
 	}
 	if (strncmp(buffer, "data", 4) != 0)
 	{
-		std::cerr << "ERROR: file is not a valid WAVE file (doesn't have 'data' tag)" << std::endl;
+		spdlog::error("ERROR: file is not a valid WAVE file (doesn't have 'data' tag)");
 		return false;
 	}
 
 	// size of data
 	if (!file.read(buffer, 4))
 	{
-		std::cerr << "ERROR: could not read data size" << std::endl;
+		spdlog::error("ERROR: could not read data size");
 		return false;
 	}
 	size = convertToInt(buffer, 4);
@@ -714,12 +715,12 @@ bool CSoundManager::loadWavFileHeader(std::ifstream& file, std::uint8_t& channel
 	/* cannot be at the end of file */
 	if (file.eof())
 	{
-		std::cerr << "ERROR: reached EOF on the file" << std::endl;
+		spdlog::error("ERROR: reached EOF on the file");
 		return false;
 	}
 	if (file.fail())
 	{
-		std::cerr << "ERROR: fail state set on the file" << std::endl;
+		spdlog::error("ERROR: fail state set on the file");
 		return false;
 	}
 
@@ -732,12 +733,12 @@ bool CSoundManager::loadWav(const std::string& filename, SWaveFile* wf)
 	std::ifstream in(filename, std::ios::binary);
 	if (!in.is_open())
 	{
-		std::cerr << "ERROR: Could not open \"" << filename << "\"" << std::endl;
+		spdlog::error("ERROR: Could not open \"{}\"", filename);
 		return false;
 	}
 	if (!loadWavFileHeader(in, wf->Channels, wf->SampleRate, wf->BitRate, wf->DataSize))
 	{
-		std::cerr << "ERROR: Could not load wav header of \"" << filename << "\"" << std::endl;
+		spdlog::error("ERROR: Could not load wav header of \"{}\"", filename);
 		return false;
 	}
 

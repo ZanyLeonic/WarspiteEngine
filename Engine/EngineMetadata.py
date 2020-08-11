@@ -3,14 +3,16 @@ import os
 import time
 import pathlib
 import sys
+import subprocess
 
 headerTemplate =  """#pragma once
 
 // PURPOSE: Provides the Engine with metadata of the build.
 // GENERATED CODE --- CHANGED ON BUILD --- ANY MANUAL CHANGES WILL BE OVERWRITTEN.
-#define GAME_BUILD_NUMBER {0}
-#define GAME_GIT_HASH "{1}"
-#define GAME_BUILD_TIME {2}
+#define GAME_BUILD_NUMBER   {0}
+#define GAME_GIT_HASH      "{1}"
+#define GAME_BUILD_TIME     {2}
+#define GAME_GIT_DESC      "{3}"
 """
 
 # Searches for .git directory recursively until it is found.
@@ -82,7 +84,14 @@ def IncrementBuildNumber():
 def GetTime():
     return float(time.time())
 
+def GetGitDesc():
+    try:
+        return str(subprocess.check_output(["git", "describe", "--always"]).strip().decode("utf-8"))
+    except FileNotFoundError:
+        return "undefined"
+
 if __name__ == "__main__":
+    print("Modifying metadata, please wait...")
 
     scriptDir = pathlib.Path(os.path.dirname(os.path.realpath(__file__)))
     searchDir = scriptDir.parent
@@ -92,6 +101,6 @@ if __name__ == "__main__":
     header = "{0}.h".format(os.path.splitext(__file__)[0])
 
     with open(header, "w") as f:
-        f.write(headerTemplate.format(IncrementBuildNumber(), headSha, GetTime()))
+        f.write(headerTemplate.format(IncrementBuildNumber(), headSha, GetTime(), GetGitDesc()))
     
     print("Wrote metadata to {0}!".format(header))

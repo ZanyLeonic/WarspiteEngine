@@ -28,6 +28,7 @@ function GenerateProjectFiles() {
 }
 
 function InstallPackages() {
+    Write-Warning "hello"
     $vcpkg = "$VcpkgDir/vcpkg.exe"
     if (!(Get-Command $vcpkg -ErrorAction SilentlyContinue)) {
         $vcpkg = "vcpkg"
@@ -46,7 +47,7 @@ function InstallPackages() {
         $local_vcpkg = $true
     }
 
-    & $vcpkg install sdl2 sdl2-image[libjpeg-turbo,libwebp,tiff] sdl2-ttf libvorbis rapidjson zlib python3 boost-python --triplet $Arch-windows
+    & $vcpkg install sdl2 sdl2-image[libjpeg-turbo,libwebp,tiff] sdl2-ttf libvorbis rapidjson zlib openal-soft python3 pybind11 spdlog --triplet $Arch-windows
     if ($local_vcpkg) {
         & $vcpkg integrate install
         Write-Output "Cleaning up..."
@@ -55,5 +56,6 @@ function InstallPackages() {
     }
 }
 
+# I don't care about errors or warnings cringe
 InstallPackages
 GenerateProjectFiles

@@ -5,7 +5,9 @@
 #include "Game.h"
 #include "PlayState.h"
 #include "TextureManager.h"
+#include "ScriptManager.h"
 #include <iostream>
+#include <spdlog/spdlog.h>
 
 #define PLAYER_WIDTH 32
 #define PLAYER_HEIGHT 32
@@ -18,14 +20,14 @@ CPlayer::CPlayer()
 void CPlayer::OnPlay()
 {
 	// Are we in the PlayState?
-	CPlayState* ps = static_cast<CPlayState*>(CGame::Instance()->GetStateManager()->GetCurrentState());
+	CPlayState* ps = dynamic_cast<CPlayState*>(CGame::Instance()->GetStateManager()->GetCurrentState());
 
 	if (ps)
 	{
 		// If so - we can grab the current level and its Layers
 		std::vector<ILayer*> objs = *ps->GetLoadedLevel()->GetLayers();
 
-		for (int i = 0; i < objs.size(); i++)
+		for (size_t i = 0; i < objs.size(); i++)
 		{
 			// Only care about the ObjectLayers - since that's what we are going to collide with.
 			CObjectLayer* obl = dynamic_cast<CObjectLayer*>(objs[i]);
@@ -90,12 +92,12 @@ void CPlayer::Draw()
 
 void CPlayer::KeyDown()
 {
-	std::cout << "Key has been pressed down!\n";
+	spdlog::info("Key has been pressed down!");
 }
 
 void CPlayer::KeyUp()
 {
-	std::cout << "Key has been released!\n";
+	spdlog::info("Key has been released!");
 }
 
 void CPlayer::HandleInput()
@@ -148,7 +150,7 @@ void CPlayer::MoveForward(float axis)
 	}
 	else
 	{
-		std::cout << "Cannot move " << ((axis > 0) ? "down" : "up") << " - collided!\n";
+		spdlog::info("Cannot move {} - collided!", ((axis > 0) ? "down" : "up"));
 	}
 }
 
@@ -169,7 +171,7 @@ void CPlayer::MoveRight(float axis)
 	}
 	else
 	{
-		std::cout << "Cannot move "<< ((axis > 0) ? "right" : "left") <<" - collided!\n";
+		spdlog::info("Cannot move {} - collided!", ((axis > 0) ? "right" : "left"));
 	}
 }
 
@@ -179,17 +181,17 @@ bool CPlayer::IsPositionFree(CVector2D* pNext)
 	CVector2D nPos = CVector2D(*pNext);
 
 	// Go through each ObjectLayer we got earlier
-	for (int i = 0; i < m_objects.size(); i++)
+	for (size_t i = 0; i < m_objects.size(); i++)
 	{
 		if (!m_objects[i]) continue;
 
 		// Get an rvalue of the list of GameObject's for the iterated layer
 		std::vector<IGameObject*>& ir = *m_objects[i];
 
-		for (int j = 0; j < ir.size(); j++)
+		for (size_t j = 0; j < ir.size(); j++)
 		{
-			// Check if the GameObject is in the way and isn't us
-			if (ir[j] != this && ir[j]->GetPosition() == nPos)
+			// Check if the GameObject is in the way and isn't us + collision flag
+			if (ir[j] != this && ir[j]->GetPosition() == nPos && ir[j]->ShouldCollide())
 			{
 				return false;
 			}
@@ -198,7 +200,7 @@ bool CPlayer::IsPositionFree(CVector2D* pNext)
 
 	// Also do a check if we are going off the level
 	CPlayState* pPS = static_cast<CPlayState*>(CGame::Instance()->GetStateManager()->GetCurrentState());
-	if (pPS != 0)
+	if (pPS != nullptr)
 	{
 		CLevel* pLevel = pPS->GetLoadedLevel();
 

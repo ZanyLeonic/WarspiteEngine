@@ -17,12 +17,12 @@ bool CGameStateBase::OnEnd()
 	m_shouldDraw = false;
 
 	// Destroying everything!
-	for (int i = 0; i < m_GameObjects.size(); i++)
+	for (size_t i = 0; i < m_GameObjects.size(); i++)
 	{
 		m_GameObjects[i]->Destroy();
 	}
 
-	for (int i = 0; i < m_TextureIDList.size(); i++)
+	for (size_t i = 0; i < m_TextureIDList.size(); i++)
 	{
 		CTextureManager::Instance()->Remove(m_TextureIDList[i]);
 	}
@@ -36,7 +36,7 @@ bool CGameStateBase::OnEnd()
 void CGameStateBase::OnThink()
 {
 	if (!m_shouldTick) return;
-	for (int i = 0; i < m_GameObjects.size(); i++)
+	for (size_t i = 0; i < m_GameObjects.size(); i++)
 	{	
 		if (!m_GameObjects[i]->OnThink()) return;
 	}
@@ -46,7 +46,7 @@ void CGameStateBase::Draw()
 {
 	if (!m_shouldDraw) return;
 
-	for (int i = 0; i < m_GameObjects.size(); i++)
+	for (size_t i = 0; i < m_GameObjects.size(); i++)
 	{
 		m_GameObjects[i]->Draw();
 	}

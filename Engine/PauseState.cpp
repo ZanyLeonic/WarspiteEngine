@@ -3,14 +3,14 @@
 #include "PauseState.h"
 #include "StateParser.h"
 
-const std::string CPauseState::s_UIID = "PauseMenu";
-
 bool CPauseState::OnPlay()
 {
 	CGameStateBase::OnPlay();
 
+	s_UIID = SID_PAUSE;
+	
 	CStateParser sp;
-	sp.ParseState("assets/states/SystemMenus.json", s_UIID, &m_GameObjects, &m_TextureIDList);
+	sp.ParseState(CEngineFileSystem::ResolvePath("SystemMenus.json", CEngineFileSystem::EPathType::STATE).c_str(), s_UIID, &m_GameObjects, &m_TextureIDList, &m_ScriptIDList);
 
 	m_callbacks.push_back(0);
 	m_callbacks.push_back(s_continueGame);
@@ -30,7 +30,7 @@ void CPauseState::SetCallbacks(const std::vector<HButtonCallback>& callbacks)
 {
 	// MenuState::SetCallbacks(callbacks);
 
-	for (int i = 0; i < m_GameObjects.size(); i++)
+	for (size_t i = 0; i < m_GameObjects.size(); i++)
 	{
 		if (dynamic_cast<CButton*>(m_GameObjects[i]))
 		{
@@ -54,7 +54,7 @@ bool CPauseState::s_continueGame()
 
 bool CPauseState::s_exitToMenu()
 {
-	CGame::Instance()->GetStateManager()->ModifyState(new CMainMenuState());
+	CGame::Instance()->GetStateManager()->ModifyState(CGameStateDictionary::Instance()->Create(SID_MM));
 
 	return false;
 }

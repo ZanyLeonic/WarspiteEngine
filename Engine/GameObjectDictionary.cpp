@@ -1,11 +1,10 @@
 #include "GameObjectDictionary.h"
-
 #include <iostream>
 
 CGameObjectDictionary* CGameObjectDictionary::s_pInstance = 0;
 
 // Registers our GameObjectFactory
-bool CGameObjectDictionary::RegisterType(std::string typeID, IObjectFactory* pCreator)
+bool CGameObjectDictionary::RegisterType(std::string typeID, IObjectFactory<IGameObject>* pCreator)
 {
 	auto it = m_creators.find(typeID);
 

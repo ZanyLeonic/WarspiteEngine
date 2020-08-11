@@ -4,7 +4,11 @@
 
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_thread.h>
+#include <memory>
 #include <vector>
+#include <spdlog/spdlog.h>
+
+#include "EngineTypes.h"
 #include "GameStateManager.h"
 #include "MainMenuState.h"
 #include "Vector2D.h"
@@ -37,8 +41,6 @@ public:
 	void Destroy();
 	void Quit();
 
-	void TestMethod();
-
 	// a function to access the private running variable
 	bool IsRunning() { return m_bRunning; }
 
@@ -48,8 +50,9 @@ public:
 
 	CVector2D GetViewportSize() const { return m_viewportSize; }
 
-	SDL_Thread* GetAudioThread() const { return audioThread; }
-
+	void SetPlayer(IGameObject* pNO) { m_player = pNO; }
+	IGameObject* GetPlayer() const { return m_player; }
+	
 private:
 	CGameStateManager* m_pGameStateManager;
 
@@ -60,10 +63,12 @@ private:
 	SDL_Rect m_sourceRectangle = {}; // the first rectangle
 	SDL_Rect m_destinationRectangle = {}; // another rectangle
 
-	SDL_Thread* audioThread = 0;
-
+	IGameObject* m_player = nullptr;
+	
 	CVector2D m_viewportSize;
+	PGamePtr m_gamePtr;
 
 	bool m_bRunning = false;
 };
+
 #endif /* defined(__Game__) */

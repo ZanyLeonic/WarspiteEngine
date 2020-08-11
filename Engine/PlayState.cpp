@@ -3,14 +3,17 @@
 #include "Game.h"
 #include "Camera.h"
 #include "Player.h"
-#include "PauseState.h"
 #include "StateParser.h"
 #include "LevelParser.h"
-#include <iostream>
+#include <spdlog/spdlog.h>
 
 #include "PlayState.h"
 
-const std::string CPlayState::s_playID = "Game";
+#include "WarspiteUtil.h"
+#include "ScriptWrappers.h"
+#include "ScriptManager.h"
+#include "FontManager.h"
+
 SStreamingAudioData testStream;
 SStreamingAudioData testStream2;
 SWaveFile testFile;
@@ -19,18 +22,19 @@ bool CPlayState::OnPlay()
 {
 	CGameStateBase::OnPlay();
 
+	s_UIID = SID_PLAY;
 	m_screenSize = CGame::Instance()->GetViewportSize();
 
 	CStateParser sp;
-	sp.ParseState("assets/resource/states/PlayState.json", s_playID, &m_GameObjects, &m_TextureIDList);
-	
+	sp.ParseState(CEngineFileSystem::ResolvePath("PlayState.json", CEngineFileSystem::EPathType::STATE).c_str(), GetStateID(), &m_GameObjects, &m_TextureIDList, &m_ScriptIDList);
+
 	CLevelParser lp;
-	pLevel = lp.ParseLevel("assets/maps/map02.json");
+	pLevel = lp.ParseLevel(CEngineFileSystem::ResolvePath("map02.json", CEngineFileSystem::EPathType::MAP).c_str());
 
 	CInputHandler::Instance()->AddActionKeyDown(SDL_SCANCODE_ESCAPE, [this] {
-			if (!dynamic_cast<CPauseState*>(CGame::Instance()->GetStateManager()->GetCurrentState()))
+			if (CGame::Instance()->GetStateManager()->GetCurrentState()->GetStateID() != SID_PAUSE)
 			{
-				CGame::Instance()->GetStateManager()->PushState(new CPauseState());
+				CGame::Instance()->GetStateManager()->PushState(CGameStateDictionary::Instance()->Create(SID_PAUSE));
 			}
 		});
 
@@ -38,40 +42,52 @@ bool CPlayState::OnPlay()
 			return;
 		});
 
-	// This callback code is fucking disgusting - but it works so I don't care.
+	CInputHandler::Instance()->AddActionKeyDown(SDL_SCANCODE_8, [this] {
+		if (CGame::Instance()->GetStateManager()->GetCurrentState()->GetStateID() != SID_PAUSE)
+		{
+			CScriptManager::Instance()->Load(SGameScript::file("Script2", CEngineFileSystem::ResolvePath("test2.py", CEngineFileSystem::EPathType::SCRIPT)));
+			CScriptManager::Instance()->RunFromRef("Script2");
+		}
+		});
+
+	CInputHandler::Instance()->AddActionKeyUp(SDL_SCANCODE_8, [this] {
+		return;
+		});
+	
+	// This callback code is disgusting - but it works so I don't care.
 	testStream.PlayCallback = [this](SStreamingAudioData* as)
 	{
-		std::cout << "Playing: \"" << as->Filename.c_str() << "\"." << std::endl;
+		spdlog::info("Playing: \"{}\".", as->Filename.c_str());
 	};
-
+	
 	testStream.PauseCallback = [this](SStreamingAudioData* as)
 	{
-		std::cout << "Pause: \"" << as->Filename.c_str() << "\"." << std::endl;
+		spdlog::info("Paused: \"{}\".", as->Filename.c_str());
 	};
 
 	testStream.StopCallback = [this](SStreamingAudioData* as)
 	{
-		std::cout << "Stopped: \"" << as->Filename.c_str() << "\"." << std::endl;
+		spdlog::info("Stopped: \"{}\".", as->Filename.c_str());
 	};
 
 	testStream2.PlayCallback = [this](SStreamingAudioData* as)
 	{
-		std::cout << "Playing: \"" << as->Filename.c_str() << "\"." << std::endl;
+		spdlog::info("Playing: \"{}\".", as->Filename.c_str());
 	};
 
 	testStream2.PauseCallback = [this](SStreamingAudioData* as)
 	{
-		std::cout << "Pause: \"" << as->Filename.c_str() << "\"." << std::endl;
+		spdlog::info("Paused: \"{}\".", as->Filename.c_str());
 	};
 
 	testStream2.StopCallback = [this](SStreamingAudioData* as)
 	{
-		std::cout << "Stopped: \"" << as->Filename.c_str() << "\"." << std::endl;
+		spdlog::info("Stopped: \"{}\".", as->Filename.c_str());
 	};
 
 	// Load Wave
 	CInputHandler::Instance()->AddActionKeyDown(SDL_SCANCODE_0, [this] {
-			CSoundManager::Instance()->Load("assets/sound/mycode.wav", testFile);
+			CSoundManager::Instance()->Load(CEngineFileSystem::ResolvePath("mycode.wav", CEngineFileSystem::EPathType::SOUND), testFile);
 		});
 	CInputHandler::Instance()->AddActionKeyUp(SDL_SCANCODE_0, [this] {
 			return;
@@ -87,8 +103,8 @@ bool CPlayState::OnPlay()
 
 	// Load
 	CInputHandler::Instance()->AddActionKeyDown(SDL_SCANCODE_1, [this] {
-		CSoundManager::Instance()->CreateStreamFromFile("assets/sound/teststream.ogg", testStream);
-		CSoundManager::Instance()->CreateStreamFromFile("assets/sound/teststream2.ogg", testStream2);
+		CSoundManager::Instance()->CreateStreamFromFile(CEngineFileSystem::ResolvePath("teststream.ogg", CEngineFileSystem::EPathType::SOUND), testStream);
+		CSoundManager::Instance()->CreateStreamFromFile(CEngineFileSystem::ResolvePath("teststream2.ogg", CEngineFileSystem::EPathType::SOUND), testStream2);
 		});
 	CInputHandler::Instance()->AddActionKeyUp(SDL_SCANCODE_1, [this] {
 		return;
@@ -114,7 +130,6 @@ bool CPlayState::OnPlay()
 	CInputHandler::Instance()->AddActionKeyUp(SDL_SCANCODE_6, [this] {
 		return;
 		});
-
 
 	// Stream 2
 	CInputHandler::Instance()->AddActionKeyDown(SDL_SCANCODE_4, [this] {
@@ -143,6 +158,13 @@ bool CPlayState::OnPlay()
 		// Give the camera the Level size
 		CCamera::Instance()->SetLevelSize(pLevel->m_LevelSize);
 
+		// Assign the Level attribute to the current loaded level
+		if (CScriptManager::Instance()->GetEngineModule().attr(LEVELOBJECT_NAME).is_none())
+		{
+			m_levelPtr = std::make_shared<SLevelObject>(SLevelObject(pLevel));
+			CScriptManager::Instance()->GetEngineModule().attr(LEVELOBJECT_NAME) = m_levelPtr;
+		}
+		
 		// Execute the OnPlay method on all the GameObjects in all Object Layers
 		pLevel->OnPlay();
 	}
@@ -153,7 +175,9 @@ bool CPlayState::OnPlay()
 		SDL_SetRenderDrawColor(CGame::Instance()->GetRenderer(), 255, 255, 255, 255);
 	}
 
-	std::cout << "Entering PlayState\n";
+	CFontManager::Instance()->LoadFont(CEngineFileSystem::ResolvePath("Roboto.json", CEngineFileSystem::EPathType::FONTS), "Regular", 8);
+	
+	spdlog::info("Entering PlayState");
 	
 	return true;
 }
@@ -182,8 +206,8 @@ void CPlayState::OnThink()
 
 bool CPlayState::OnEnd()
 {
-	std::cout << "Exiting PlayState\n";
-
+	spdlog::info("Exiting PlayState");
+	
 	// Execute the OnPlay method on all the GameObjects in all Object Layers
 	if (pLevel != 0)
 		pLevel->Destroy();

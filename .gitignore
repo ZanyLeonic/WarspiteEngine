@@ -4,7 +4,7 @@
 ### C++ ###
 # Prerequisites
 *.d
-GitVersion.h
+EngineMetadata.h
 
 # Compiled Object files
 *.slo
@@ -406,5 +406,6 @@ MigrationBackup/
 # End of https://www.gitignore.io/api/c++,cmake,visualstudio
 
 out/
+Engine/logs/**
 *.vcxproj*
 *.sln

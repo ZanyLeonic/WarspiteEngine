@@ -2,11 +2,15 @@
 #ifndef __LEVEL_H__
 #define __LEVEL_H__
 
+class IGameObject;
+class CObjectLayer;
+
 #include <string>
 #include <vector>
 
 #include "Vector2D.h"
 #include "Layer.h"
+#include "WarspiteUtil.h"
 
 struct STileset
 {
@@ -40,15 +44,32 @@ public:
 	std::vector<ILayer*>* GetLayers()
 	{
 		return &m_layers;
-	};
+	}
 
+	std::string GetName() const
+	{
+		return CWarspiteUtil::GetFileName(m_path, false);
+	}
+
+	std::string GetPath() const
+	{
+		return m_path;
+	}
+
+	std::vector<std::vector<IGameObject*>*> GetGameObjects();
+	CObjectLayer* GetScriptLayer() const { return m_scriptLayer; }
+	
 	CVector2D m_LevelSize;
 
 private:
 	friend class CLevelParser;
-	CLevel();
+	CLevel(std::string& path);
 
 	std::vector<STileset> m_tilesets;
 	std::vector<ILayer*> m_layers;
+
+	CObjectLayer* m_scriptLayer = nullptr;
+
+	std::string m_path;
 };
 #endif
