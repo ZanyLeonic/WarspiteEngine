@@ -10,7 +10,7 @@
 #include "TileLayer.h"
 #include "WarspiteUtil.h"
 
-#include <iostream>
+#include <spdlog/spdlog.h>
 #include "etc/Base64.h"
 #include <zlib.h>
 
@@ -253,7 +253,8 @@ void CLevelParser::parseBackgroundColour(const std::string* colourVal)
 		break;
 
 	default:
-		std::cout << "Warning: Unrecongised or unsupported colour value!" << std::endl << "Value: " << colourVal << std::endl;
+		spdlog::warn("Warning: Unrecongised or unsupported colour value!");
+		spdlog::warn("Value: {}", *colourVal);
 		break;
 	};
 
@@ -332,7 +333,7 @@ void CLevelParser::parseObjectLayer(const rapidjson::Value* pObjectVal, std::vec
 					break;	
 				default:
 					// Future proofing incase new properties get added for newer engine version.
-					std::cout << "Warning: Unrecongised property \"" << propName << "\"!" << std::endl;
+					spdlog::warn("Warning: Unrecongised property \"{}\"!", propName);
 					break;
 				}
 			}

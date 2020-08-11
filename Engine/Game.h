@@ -6,6 +6,8 @@
 #include <SDL2/SDL_thread.h>
 #include <memory>
 #include <vector>
+#include <spdlog/spdlog.h>
+
 #include "EngineTypes.h"
 #include "GameStateManager.h"
 #include "MainMenuState.h"
@@ -50,7 +52,7 @@ public:
 
 	void SetPlayer(IGameObject* pNO) { m_player = pNO; }
 	IGameObject* GetPlayer() const { return m_player; }
-
+	
 private:
 	CGameStateManager* m_pGameStateManager;
 

@@ -114,6 +114,7 @@ add_custom_target(EngineMetadata
 )
 
 find_package(pybind11 CONFIG REQUIRED)
+find_package(spdlog CONFIG REQUIRED)
 find_package(SDL2 CONFIG REQUIRED)
 find_package(SDL2_image REQUIRED)
 find_package(SDL2_ttf REQUIRED)
@@ -140,9 +141,12 @@ set (Warspite_Libs
     ${OPENAL_LIBRARY}
     ${VORBIS_LIBRARIES}
     ${ZLIB_LIBRARIES}
+    spdlog::spdlog
+    spdlog::spdlog_header_only
 )
 
 include_directories(${Python3_INCLUDE_DIRS})
+include_directories(${SPDLOG_INCLUDE_DIR})
 include_directories(${PYBIND11_INCLUDE_DIRS})
 include_directories(${SDL2_INCLUDE_DIRS})
 include_directories(${SDL2_IMAGE_INCLUDE_DIRS})

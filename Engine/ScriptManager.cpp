@@ -2,12 +2,14 @@
 #include <iostream>
 #include "ScriptWrappers.h"
 #include <pybind11/embed.h>
+#include "spdlog/spdlog.h"
+#include <spdlog/sinks/stdout_color_sinks.h>
 
 CScriptManager* CScriptManager::s_pInstance = 0;
 
 CScriptManager::CScriptManager()
 {
-	std::cout << "Initialising ScriptManager..." << std::endl;
+	spdlog::info("Initialising ScriptManager...");
 
 	if (CScriptWrappers::Init_Engine())
 	{
@@ -19,24 +21,27 @@ CScriptManager::CScriptManager()
 			engine_module = py::module::import("engine");
 			main_namespace = main_module.attr("__dict__");
 
+			// Grab all the stdout
+			m_stdRedirect = new PyStdErrOutStreamRedirect();
+			
 			// Show that the ScriptManager is ready
-			SGameScript* test = SGameScript::source("test", "import sys\nprint(\"Using Python Runtime %s.%s.%s\" % (sys.version_info.major, sys.version_info.minor, sys.version_info.micro))\nprint(\"Script Manager is ready!\")");
+			SGameScript* test = SGameScript::source("test", "import sys\nprint(\"Using Python Runtime %s.%s.%s\" % (sys.version_info.major, sys.version_info.minor, sys.version_info.micro))\nprint(\"Script Manager is ready!\")\nj=1");
 
 			Run(test);
 		}
 		catch (pybind11::error_already_set const& e)
 		{
-			std::cerr << "***AN ERROR OCCURRED DURING INITIALISATION OF PYTHON!***" << std::endl;
-			std::cerr << e.what() << std::endl;
-			std::cerr << "***************************END**************************" << std::endl;
+			spdlog::error("***AN ERROR OCCURRED DURING INITIALISATION OF PYTHON!***");
+			spdlog::error(e.what());
+			spdlog::error("***************************END**************************");
 
-			std::cerr << "Initialisation of ScriptManager failed!" << std::endl;
+			spdlog::error("Initialisation of ScriptManager failed!");
 			Destroy();
 		}
 	}
 	else
 	{
-		std::cerr << "Initialisation of ScriptManager failed!" << std::endl;
+		spdlog::error("Initialisation of ScriptManager failed!");
 		Destroy();
 	}
 }
@@ -77,9 +82,11 @@ bool CScriptManager::Run(SGameScript* script, py::object* ns)
 		{
 		case EGameScriptType::SCRIPT_INLINE:
 			py::exec(script->GetSource().c_str(), ns != nullptr ? *ns : main_namespace);
+			spdlog::info("Script \"{}\" output:\n{}", script->GetScriptName(), m_stdRedirect->stdoutString());
 			break;
 		case EGameScriptType::SCRIPT_FILE:
 			py::eval_file(script->GetFilename().c_str(), ns != nullptr ? *ns : main_namespace);
+			spdlog::info("Script \"{}\" output:\n{}", script->GetScriptName(), m_stdRedirect->stdoutString());
 			break;
 		default:
 			return false; // No type defined? what?
@@ -89,21 +96,24 @@ bool CScriptManager::Run(SGameScript* script, py::object* ns)
 	}
 	catch(py::error_already_set const & e)
 	{
-		switch(script->GetScriptType())
+		switch (script->GetScriptType())
 		{
 		case EGameScriptType::SCRIPT_INLINE:
-			std::cerr << "An internal error occurred when executing an inline script named: \"" + script->GetScriptName() + "\"" << std::endl;
+			spdlog::error("An internal error occurred when executing an inline script named: \"{}\"", script->GetScriptName());
 			break;
 		case EGameScriptType::SCRIPT_FILE:
-			std::cerr << "An internal error occurred when executing an external script named: \"" + script->GetScriptName() + "\"" << std::endl;
+			spdlog::error("An internal error occurred when executing an external script named: \"{}\"", script->GetScriptName());
 			break;
 		default:
-			std::cerr << "An internal error occurred when executing script named: \"" + script->GetScriptName() + "\"" << std::endl;
+			spdlog::error("An internal error occurred when executing script named: \"{}\"", script->GetScriptName());
+			break;
 		}
-
 		// Print what happened to not make debugging hell.
-		std::cerr << "Error:\n " << e.what() << std::endl;
-		std::cerr << "***Error End***" << std::endl;
+			spdlog::error("Error:");
+			spdlog::error(e.what());
+			spdlog::error("Python stderr:");
+			spdlog::error(m_stdRedirect->stderrString());
+			spdlog::error("***Error End***");
 	}
 	return false;
 }

@@ -4,10 +4,13 @@
 
 #include <iostream>
 #include <map>
+#include <memory>
 #include "Level.h"
 #include "Game.h"
 #include <pybind11/pybind11.h>
+#include <spdlog/spdlog.h>
 
+class PyStdErrOutStreamRedirect;
 namespace py = pybind11;
 
 enum class EGameScriptType
@@ -94,6 +97,10 @@ private:
 	py::module engine_module;
 	py::object main_namespace;
 
+	std::shared_ptr<spdlog::logger> m_scriptLogger;
+
 	std::map<std::string, SGameScript*> loadedScripts;
+
+	PyStdErrOutStreamRedirect* m_stdRedirect;
 };
 #endif // ifndef __SCRIPTMANAGER_H__

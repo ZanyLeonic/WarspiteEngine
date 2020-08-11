@@ -15,9 +15,9 @@ jobs:
   steps:
   - task: Cache@2
     inputs:
-      key: 'v7 | vcpkg | "$(Agent.OS)" | "C:\vcpkg\.git\HEAD"'
+      key: 'v8 | vcpkg | "$(Agent.OS)" | "C:\vcpkg\.git\HEAD"'
       restoreKeys: |
-        v7 | vcpkg | "$(Agent.OS)"
+        v8 | vcpkg | "$(Agent.OS)"
         vcpkg | "$(Agent.OS)"
         vcpkg
       path: 'C:\vcpkg'
@@ -25,7 +25,7 @@ jobs:
     displayName: Cache vcpkg
 
   - task: PowerShell@2
-    displayName: "Installing dependencies + making build files"
+    displayName: "Installing dependencies + Making build files"
     inputs:
      filePath: 'build-deps.ps1'
      workingDirectory: '$(System.DefaultWorkingDirectory)'
@@ -42,6 +42,6 @@ jobs:
   - task: PublishBuildArtifacts@1
     displayName: "Publishing build artifacts"
     inputs:
-      PathtoPublish: '$(Build.ArtifactStagingDirectory)'
+      PathtoPublish: 'C:/Program Files (x86)/Warspite/'
       ArtifactName: 'drop'
       publishLocation: 'Container'

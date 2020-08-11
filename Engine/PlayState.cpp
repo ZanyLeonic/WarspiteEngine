@@ -5,7 +5,7 @@
 #include "Player.h"
 #include "StateParser.h"
 #include "LevelParser.h"
-#include <iostream>
+#include <spdlog/spdlog.h>
 
 #include "PlayState.h"
 
@@ -60,32 +60,32 @@ bool CPlayState::OnPlay()
 	// This callback code is disgusting - but it works so I don't care.
 	testStream.PlayCallback = [this](SStreamingAudioData* as)
 	{
-		std::cout << "Playing: \"" << as->Filename.c_str() << "\"." << std::endl;
+		spdlog::info("Playing: \"{}\".", as->Filename.c_str());
 	};
 	
 	testStream.PauseCallback = [this](SStreamingAudioData* as)
 	{
-		std::cout << "Pause: \"" << as->Filename.c_str() << "\"." << std::endl;
+		spdlog::info("Paused: \"{}\".", as->Filename.c_str());
 	};
 
 	testStream.StopCallback = [this](SStreamingAudioData* as)
 	{
-		std::cout << "Stopped: \"" << as->Filename.c_str() << "\"." << std::endl;
+		spdlog::info("Stopped: \"{}\".", as->Filename.c_str());
 	};
 
 	testStream2.PlayCallback = [this](SStreamingAudioData* as)
 	{
-		std::cout << "Playing: \"" << as->Filename.c_str() << "\"." << std::endl;
+		spdlog::info("Playing: \"{}\".", as->Filename.c_str());
 	};
 
 	testStream2.PauseCallback = [this](SStreamingAudioData* as)
 	{
-		std::cout << "Pause: \"" << as->Filename.c_str() << "\"." << std::endl;
+		spdlog::info("Paused: \"{}\".", as->Filename.c_str());
 	};
 
 	testStream2.StopCallback = [this](SStreamingAudioData* as)
 	{
-		std::cout << "Stopped: \"" << as->Filename.c_str() << "\"." << std::endl;
+		spdlog::info("Stopped: \"{}\".", as->Filename.c_str());
 	};
 
 	// Load Wave
@@ -178,7 +178,7 @@ bool CPlayState::OnPlay()
 		SDL_SetRenderDrawColor(CGame::Instance()->GetRenderer(), 255, 255, 255, 255);
 	}
 
-	std::cout << "Entering PlayState\n";
+	spdlog::info("Entering PlayState");
 	
 	return true;
 }
@@ -207,7 +207,7 @@ void CPlayState::OnThink()
 
 bool CPlayState::OnEnd()
 {
-	std::cout << "Exiting PlayState\n";
+	spdlog::info("Exiting PlayState");
 	
 	// Execute the OnPlay method on all the GameObjects in all Object Layers
 	if (pLevel != 0)

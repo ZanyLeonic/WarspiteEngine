@@ -1,9 +1,8 @@
 #include "MainMenuState.h"
-#include "TextureManager.h"
 #include "Game.h"
 #include "Button.h"
 #include "StateParser.h"
-#include <iostream>
+#include <spdlog/spdlog.h>
 
 bool CMainMenuState::OnPlay()
 {
@@ -26,7 +25,7 @@ bool CMainMenuState::OnPlay()
 
 	SetCallbacks(m_callbacks);
 
-	std::cout << "Entered MainMenuState\n";
+	spdlog::info("Entered MainMenuState");
 	return true;
 }
 
@@ -34,7 +33,7 @@ bool CMainMenuState::OnEnd()
 {
 	CMenuState::OnEnd();
 
-	std::cout << "Exiting MainMenuState\n";
+	spdlog::info("Exiting MainMenuState");
 	return true;
 }
 
@@ -56,14 +55,14 @@ void CMainMenuState::SetCallbacks(const std::vector<HButtonCallback>& callbacks)
 
 bool CMainMenuState::s_menuToPlay()
 {
-	std::cout << "Play button clicked\n";
+	spdlog::info("Play button clicked");
 	CGame::Instance()->GetStateManager()->ModifyState(CGameStateDictionary::Instance()->Create(SID_PLAY));
 	return false;
 }
 
 bool CMainMenuState::s_exitFromMenu()
 {
-	std::cout << "Exit button clicked\n";
+	spdlog::info("Exit button clicked");
 	CGame::Instance()->Quit();
 	return false;
 }
