@@ -36,7 +36,7 @@ int main(int argc, char* argv[])
 		spdlog::register_logger(combined_logger);
 		spdlog::set_default_logger(combined_logger);
 
-		spdlog::set_pattern("[%Y-%m-%d %H:%M:%S.%e (%z)] [%n] [Thread %t] [%^%l%$] %v ");
+		spdlog::set_pattern("[%Y-%m-%d %H:%M:%S.%e (%z)] [Thread/%t] [%n/%^%l%$] %v ");
 	}
 	catch (const spdlog::spdlog_ex& ex)
 	{
@@ -46,9 +46,9 @@ int main(int argc, char* argv[])
 	spdlog::info("Warspite Engine");
 	
 #ifndef WARDEBUG
-	snprintf(title, sizeof(title), "Engine (Build: %d git: %s)", GAME_BUILD_NUMBER, GAME_GIT_HASH);
+	snprintf(title, sizeof(title), "Engine (%d/%s)", GAME_BUILD_NUMBER, GAME_GIT_DESC);
 #else
-	snprintf(title, sizeof(title), "Engine (DEBUG) (Build: %d git: %s)", GAME_BUILD_NUMBER, GAME_GIT_HASH);
+	snprintf(title, sizeof(title), "Engine (DEBUG) (%d/%s)", GAME_BUILD_NUMBER, GAME_GIT_DESC);
 	spdlog::debug("This is a debug build.\n");
 #endif
 
@@ -67,6 +67,7 @@ int main(int argc, char* argv[])
 	
 	spdlog::info("Build: {}", GAME_BUILD_NUMBER);
 	spdlog::info("Using source: {}", GAME_GIT_HASH);
+	spdlog::info("Extra Git info: {}", GAME_GIT_DESC);
 	spdlog::info("Build Date: {}", st);
 	spdlog::info("Running at: {}", rt);
 	

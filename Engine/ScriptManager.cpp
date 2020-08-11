@@ -22,7 +22,7 @@ CScriptManager::CScriptManager()
 			main_namespace = main_module.attr("__dict__");
 			
 			// Show that the ScriptManager is ready
-			SGameScript* test = SGameScript::source("test", "import sys\nprint(\"Using Python Runtime %s.%s.%s\" % (sys.version_info.major, sys.version_info.minor, sys.version_info.micro))\nprint(\"Script Manager is ready!\")\nj=1");
+			SGameScript* test = SGameScript::source("internal_autoexec", "import sys\nprint(\"Using Python Runtime %s.%s.%s\" % (sys.version_info.major, sys.version_info.minor, sys.version_info.micro))\nprint(\"Script Manager is ready!\")\nj=1");
 
 			Run(test);
 		}

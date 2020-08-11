@@ -23,8 +23,8 @@ public:
 		return s_pInstance;
 	}
 
-	bool LoadFont(std::string path, std::string type, std::string id, int size);
-	bool RemoveFont(std::string id);
+	bool LoadFont(std::string path, std::string type, int size);
+	bool RemoveFont(std::string name, std::string type, int size);
 
 	bool RenderText(std::string text, std::string fontID, std::string textureID);
 

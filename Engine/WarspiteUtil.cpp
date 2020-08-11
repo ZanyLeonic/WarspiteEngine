@@ -51,16 +51,15 @@ std::string CWarspiteUtil::RemoveFileNameFromPath(std::string path)
 #else
 	std::string pathDis = "/";
 #endif
-
 	auto pos = path.rfind(pathDis);
 	if (pos == std::string::npos) return path; // no file name
 
 	std::string fN = path.substr(pos + 1);
 
-	auto dif = pos - path.length();
+	auto dif = path.length() - pos;
 	auto nLen = path.length() - dif;
 
-	return path.substr(nLen);
+	return path.substr(0, nLen + 1);
 }
 
 std::string CWarspiteUtil::ReadAllText(std::string path)

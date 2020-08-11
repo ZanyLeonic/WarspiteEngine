@@ -5,11 +5,23 @@
     "version": "0.2.0",
     "configurations": [
         {
+            "name": "Python: Current File",
+            "type": "python",
+            "request": "launch",
+            "program": "${file}",
+            "console": "integratedTerminal"
+        },
+        {
             "name": "Python: Test Export Map",
             "type": "python",
             "request": "launch",
             "program": "${workspaceFolder}/sdk/ExportMap.py",
-            "args": ["-map", "${workspaceFolder}/sdk/test.json", "-workDir", "${workspaceFolder}/Engine"],
+            "args": [
+                "-map",
+                "${workspaceFolder}/sdk/test.json",
+                "-workDir",
+                "${workspaceFolder}/Engine"
+            ],
             "console": "integratedTerminal"
         }
     ]
