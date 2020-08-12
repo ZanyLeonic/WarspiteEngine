@@ -1,0 +1,42 @@
+Index: .idea/workspace.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<project version=\"4\">\n  <component name=\"CMakeRunConfigurationManager\" shouldGenerate=\"true\" shouldDeleteObsolete=\"true\">\n    <generated />\n  </component>\n  <component name=\"CMakeSettings\">\n    <configurations>\n      <configuration PROFILE_NAME=\"Debug\" CONFIG_NAME=\"Debug\" GENERATION_DIR=\".\" />\n    </configurations>\n  </component>\n  <component name=\"ChangeListManager\">\n    <list default=\"true\" id=\"543719c6-8c94-4a69-8f9a-51660507439a\" name=\"Default Changelist\" comment=\"\">\n      <change beforePath=\"$PROJECT_DIR$/Engine/Player.cpp\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/Engine/Player.cpp\" afterDir=\"false\" />\n      <change beforePath=\"$PROJECT_DIR$/Engine/SoundManager.cpp\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/Engine/SoundManager.cpp\" afterDir=\"false\" />\n      <change beforePath=\"$PROJECT_DIR$/Engine/WarspiteGame.Build.txt\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/Engine/WarspiteGame.Build.txt\" afterDir=\"false\" />\n    </list>\n    <option name=\"SHOW_DIALOG\" value=\"false\" />\n    <option name=\"HIGHLIGHT_CONFLICTS\" value=\"true\" />\n    <option name=\"HIGHLIGHT_NON_ACTIVE_CHANGELIST\" value=\"false\" />\n    <option name=\"LAST_RESOLUTION\" value=\"IGNORE\" />\n  </component>\n  <component name=\"ClangdSettings\">\n    <option name=\"formatViaClangd\" value=\"false\" />\n  </component>\n  <component name=\"Git.Settings\">\n    <option name=\"RECENT_GIT_ROOT_PATH\" value=\"$PROJECT_DIR$\" />\n  </component>\n  <component name=\"ProjectId\" id=\"1bm9ejGdKPxB7961uTCYE9uCOLT\" />\n  <component name=\"ProjectViewState\">\n    <option name=\"hideEmptyMiddlePackages\" value=\"true\" />\n    <option name=\"showLibraryContents\" value=\"true\" />\n  </component>\n  <component name=\"PropertiesComponent\">\n    <property name=\"RunOnceActivity.OpenProjectViewOnStart\" value=\"true\" />\n    <property name=\"RunOnceActivity.ShowReadmeOnStart\" value=\"true\" />\n    <property name=\"WebServerToolWindowFactoryState\" value=\"false\" />\n    <property name=\"cf.first.check.clang-format\" value=\"false\" />\n    <property name=\"last_opened_file_path\" value=\"$PROJECT_DIR$\" />\n  </component>\n  <component name=\"SvnConfiguration\">\n    <configuration />\n  </component>\n  <component name=\"TaskManager\">\n    <task active=\"true\" id=\"Default\" summary=\"Default task\">\n      <changelist id=\"543719c6-8c94-4a69-8f9a-51660507439a\" name=\"Default Changelist\" comment=\"\" />\n      <created>1589226498810</created>\n      <option name=\"number\" value=\"Default\" />\n      <option name=\"presentableId\" value=\"Default\" />\n      <updated>1589226498810</updated>\n    </task>\n    <servers />\n  </component>\n  <component name=\"TypeScriptGeneratedFilesManager\">\n    <option name=\"version\" value=\"2\" />\n  </component>\n</project>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- .idea/workspace.xml	(revision 05f446c2234dd7496c3e8313c7cafb88f79dc11e)
++++ .idea/workspace.xml	(date 1597224461547)
+@@ -37,6 +37,32 @@
+     <property name="cf.first.check.clang-format" value="false" />
+     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+   </component>
++  <component name="RunManager" selected="CMake Application.Warspite">
++    <configuration name="ProjectMetadata" type="CMakeRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" PASS_PARENT_ENVS_2="true" PROJECT_NAME="Warspite" TARGET_NAME="ProjectMetadata" CONFIG_NAME="Debug">
++      <method v="2">
++        <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
++      </method>
++    </configuration>
++    <configuration name="Warspite" type="CMakeRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" PASS_PARENT_ENVS_2="true" PROJECT_NAME="Warspite" TARGET_NAME="Warspite" CONFIG_NAME="Debug" RUN_TARGET_PROJECT_NAME="Warspite" RUN_TARGET_NAME="Warspite">
++      <method v="2">
++        <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
++      </method>
++    </configuration>
++    <configuration default="true" type="CMakeRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" PASS_PARENT_ENVS_2="true">
++      <method v="2">
++        <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
++      </method>
++    </configuration>
++    <configuration default="true" type="GradleAppRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" PASS_PARENT_ENVS_2="true">
++      <method v="2">
++        <option name="com.jetbrains.cidr.cpp.gradle.execution.GradleNativeBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
++      </method>
++    </configuration>
++    <list>
++      <item itemvalue="CMake Application.ProjectMetadata" />
++      <item itemvalue="CMake Application.Warspite" />
++    </list>
++  </component>
+   <component name="SvnConfiguration">
+     <configuration />
+   </component>

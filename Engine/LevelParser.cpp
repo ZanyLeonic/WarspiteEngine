@@ -122,11 +122,11 @@ void CLevelParser::parseTilesets(const rapidjson::Value* pTilesetRoot, std::vect
 
 		const char* fileName = obj["source"].GetString();
 
-		if (CEngineFileSystem::ReadJSON(fileName, &tileset))
+		if (CEngineFileSystem::ReadJSON(CEngineFileSystem::ResolvePath(fileName, CEngineFileSystem::EPathType::TILESET), &tileset))
 		{
 			const Value& t = tileset.GetObject();
 
-			CTextureManager::Instance()->Load(t["image"].GetString(),
+			CTextureManager::Instance()->Load(CEngineFileSystem::ResolvePath(t["image"].GetString(),CEngineFileSystem::EPathType::TEXTURE),
 				t["name"].GetString(), CGame::Instance()->GetRenderer());
 
 			STileset ts;
@@ -216,13 +216,15 @@ void CLevelParser::parseFiles(const rapidjson::Value* pFileRoot)
 
 	if (CWarspiteUtil::GetFileExtenstion(o["value"].GetString()) == ".py")
 	{
-		CScriptManager::Instance()->Load(SGameScript::file(o["name"].GetString(), o["value"].GetString()));
+		CScriptManager::Instance()->Load(SGameScript::file(o["name"].GetString(),
+                                                     CEngineFileSystem::ResolvePath(o["value"].GetString(),
+                                                                                    CEngineFileSystem::EPathType::SCRIPT)));
 		return;
 	}
 	
 	// Load the texture via the TextureManager with the info inside the object.
-	CTextureManager::Instance()->Load(o["value"].GetString(), o["name"].GetString(),
-		CGame::Instance()->GetRenderer());
+	CTextureManager::Instance()->Load(CEngineFileSystem::ResolvePath(o["value"].GetString(), CEngineFileSystem::EPathType::TEXTURE),
+                                   o["name"].GetString(),CGame::Instance()->GetRenderer());
 }
 
 void CLevelParser::parseBackgroundColour(const std::string* colourVal)

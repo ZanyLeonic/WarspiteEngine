@@ -6,11 +6,11 @@
 		  ],
 		  "textures": [
 			{
-			  "path": "assets\\textures\\UI\\PlayButton.png",
+			  "path": "UI/PlayButton.png",
 			  "id": "PlayButton"
 			},
 			{
-			  "path": "assets\\textures\\UI\\ExitButton.png",
+			  "path": "UI/ExitButton.png",
 			  "id": "ExitButton"
 			}
 		  ],
@@ -45,11 +45,11 @@
 		  ],
 		  "textures": [
 			{
-			  "path": "assets\\textures\\UI\\ResumeButton.png",
+			  "path": "UI/ResumeButton.png",
 			  "id": "ResumeButton"
 			},
 			{
-			  "path": "assets\\textures\\UI\\ExitButton.png",
+			  "path": "UI/ExitButton.png",
 			  "id": "ExitButton"
 			}
 		  ],

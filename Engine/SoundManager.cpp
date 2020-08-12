@@ -434,13 +434,16 @@ CSoundManager::CSoundManager()
 	if (!openALDevice)
 	{
 		spdlog::error("ERROR: Cannot open device \"{}\"!", devices[0].c_str());
+        spdlog::warn("SoundManager failed to initialise.");
+		return;
 	}
 
 	// Whoops - we cannot create a context.
 	if (!alcCall(alcCreateContext, openALContext, openALDevice, openALDevice, nullptr) || !openALContext)
 	{
 		spdlog::error("ERROR: Could not create audio context");
-		/* probably exit program */
+        spdlog::warn("SoundManager failed to initialise.");
+		return;
 	}
 
 	// Uh oh, cannot switch audio context, no audio for the app session?
@@ -449,9 +452,11 @@ CSoundManager::CSoundManager()
 		|| contextMadeCurrent != ALC_TRUE)
 	{
 		spdlog::error("ERROR: Could not make audio context current");
-		/* probably exit or give up on having sound */
+        spdlog::warn("SoundManager failed to initialise.");
+		return;
 	}
 
+    m_initalised = true;
 	// We somehow survived! fhew.
 	spdlog::info("SoundManager initialised.");
 }
@@ -491,6 +496,7 @@ void CSoundManager::Destroy()
 
 bool CSoundManager::Load(const std::string& fileName, SWaveFile& file)
 {
+    if(!m_initalised) return false;
 	// The input already has been loaded! No need to load again.
 	if (file.RawData != nullptr && file.DataSize > 0) return true;
 
@@ -753,6 +759,8 @@ bool CSoundManager::loadWav(const std::string& filename, SWaveFile* wf)
 
 bool CSoundManager::CreateStreamFromFile(const std::string& filename, SStreamingAudioData& audioData)
 {
+    if(!m_initalised) return false;
+
 	// Don't try to create a new stream in an already created stream
 	if (audioData.File.is_open()) return false;
 
@@ -773,6 +781,8 @@ bool CSoundManager::CreateStreamFromFile(const std::string& filename, SStreaming
 // Stream playback control
 void CSoundManager::PlayStream(SStreamingAudioData* audioData)
 {
+    if(!m_initalised) return;
+
 	if (!audioData->File.is_open()) return;
 	
     // Fully stop the source than play.
@@ -786,6 +796,8 @@ void CSoundManager::PlayStream(SStreamingAudioData* audioData)
 
 void CSoundManager::PauseStream(SStreamingAudioData* audioData)
 {
+    if(!m_initalised) return;
+
 	ALint st;
 	alCall(alGetSourcei, audioData->Source, AL_SOURCE_STATE, &st);
 
@@ -800,6 +812,8 @@ void CSoundManager::PauseStream(SStreamingAudioData* audioData)
 
 void CSoundManager::StopStream(SStreamingAudioData* audioData)
 {
+    if(!m_initalised) return;
+
 	ALint st;
 	alCall(alGetSourcei, audioData->Source, AL_SOURCE_STATE, &st);
 

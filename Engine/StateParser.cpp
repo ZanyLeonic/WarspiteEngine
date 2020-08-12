@@ -134,7 +134,9 @@ void CStateParser::ParseTextures(const rapidjson::Value* pStateRoot, std::vector
 		pTextureIDs->push_back(b["id"].GetString());
 
 		// Load our texture into memory.
-		CTextureManager::Instance()->Load(b["path"].GetString(), b["id"].GetString(), CGame::Instance()->GetRenderer());
+		CTextureManager::Instance()->Load(CEngineFileSystem::ResolvePath(b["path"].GetString(),
+                                                                   CEngineFileSystem::EPathType::TEXTURE),
+                                    b["id"].GetString(), CGame::Instance()->GetRenderer());
 	}
 }
 
@@ -152,6 +154,6 @@ void CStateParser::ParseScripts(const rapidjson::Value* pStateRoot, std::vector<
 		pScriptsID->push_back(b["id"].GetString());
 
 		// Load our script path and name into memory so it can be loaded later
-		CScriptManager::Instance()->Load(SGameScript::file(b["id"].GetString(), b["path"].GetString()));
+		CScriptManager::Instance()->Load(SGameScript::file(b["id"].GetString(), CEngineFileSystem::ResolvePath(b["path"].GetString(), CEngineFileSystem::EPathType::SCRIPT)));
 	}
 }

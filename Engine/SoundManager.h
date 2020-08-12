@@ -227,6 +227,8 @@ private:
 
 	std::vector<std::string> devices;
 
+	bool m_initalised = false;
+
 public:
 	std::vector<SStreamingAudioData*> GetStreams() const { return streams; };
 };

@@ -1,6 +1,7 @@
 #pragma once
 #ifndef __OBJECTFACTORY_H__
 #define __OBJECTFACTORY_H__
+#include <cstddef>
 
 // Overridable base stuff
 template<class T>
