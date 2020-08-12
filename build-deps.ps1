@@ -16,6 +16,7 @@ function SetEnv() {
 }
 
 function GenerateProjectFiles() {
+	Write-Output "Generating project files..."
     if (!(Get-Command cmake -ErrorAction SilentlyContinue)) {
         SetEnv
     }
@@ -25,10 +26,12 @@ function GenerateProjectFiles() {
     "-DVCPKG_TARGET_TRIPLET=$Arch-windows",
     ".")
     & cmake $bargs
+	
+	Write-Output "Finished generating project files."
 }
 
 function InstallPackages() {
-    Write-Warning "hello"
+	Write-Output "Installing dependencies..."
     $vcpkg = "$VcpkgDir/vcpkg.exe"
     if (!(Get-Command $vcpkg -ErrorAction SilentlyContinue)) {
         $vcpkg = "vcpkg"
@@ -54,6 +57,7 @@ function InstallPackages() {
         Remove-Item build/vcpkg/downloads -Recurse
         Remove-Item build/vcpkg/buildtrees -Recurse
     }
+	Write-Output "Dependencies installed."
 }
 
 # I don't care about errors or warnings cringe
