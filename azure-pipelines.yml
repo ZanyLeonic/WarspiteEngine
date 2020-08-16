@@ -39,6 +39,14 @@ jobs:
       configuration: 'Debug'
       maximumCpuCount: true
       createLogFile: true
+
+  - task: CopyFiles@2
+    displayName: "Copying DLL to root drop"
+    inputs:
+      SourceFolder: 'C:/Program Files (x86)/Warspite/Warspite/Debug'
+      Contents: '**'
+      TargetFolder: 'C:/Program Files (x86)/Warspite/Warspite'
+
   - task: PublishBuildArtifacts@1
     displayName: "Publishing build artifacts"
     inputs:
