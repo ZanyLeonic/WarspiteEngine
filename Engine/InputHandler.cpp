@@ -18,7 +18,7 @@ CInputHandler::CInputHandler()
 	// Expose the current camera to the Python API
 	if (CScriptManager::Instance()->GetEngineModule().attr(INPUTOBJECT_NAME).is_none())
 	{
-		m_inputPtr = std::make_shared<SInputObject>(SInputObject(s_pInstance));
+		m_inputPtr = std::make_shared<SInputObject>(SInputObject(this));
 		CScriptManager::Instance()->GetEngineModule().attr(INPUTOBJECT_NAME) = m_inputPtr;
 	}
 }
@@ -215,7 +215,16 @@ void CInputHandler::onKeyDown()
 				&& m_keyReleased[it->first] == true)
 			{
 				m_keyReleased[it->first] = false;
-				it->second();
+
+				try 
+				{
+					it->second();
+				}
+				catch(std::exception e)
+				{
+					spdlog::error("Exception occurred when trying to call callback for keycode \"{}\":", it->first);
+					spdlog::error("Exception: {}", e.what());
+				}
 			}
 		}
 	}
@@ -231,11 +240,20 @@ void CInputHandler::onKeyUp()
 
 		for (it = m_keyUpCallbacks.begin(); it != m_keyUpCallbacks.end(); it++)
 		{
-			if (m_keystates[it->first] == 0 
+			if (m_keystates[it->first] == 0
 				&& m_keyReleased[it->first] == false)
 			{
 				m_keyReleased[it->first] = true;
-				it->second();
+
+				try
+				{
+					it->second();
+				}
+				catch (std::exception e)
+				{
+					spdlog::error("Exception occurred when trying to call callback for keycode \"{}\":", it->first);
+					spdlog::error("Exception: {}", e.what());
+				}
 			}
 		}
 	}

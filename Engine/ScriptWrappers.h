@@ -5,7 +5,6 @@
 #include <string>
 #include <vector>
 #include <memory>
-#include <SDL_scancode.h>
 #include <pybind11/pybind11.h>
 #include "EngineTypes.h"
 
@@ -168,14 +167,14 @@ struct SInputObject : SBaseWrapper<CInputHandler>
 
 	bool GetButtonState(int joy, int buttonNumber) const;
 	bool GetMouseButtonState(int buttonNumber) const;
-	bool IsKeyDown(SDL_Scancode key) const;
+	bool IsKeyDown(int key) const;
 	
 	float GetXAxis(int joy, int stick) const;
 	float GetYAxis(int joy, int stick) const;
 	
-	bool SetReleaseState(SDL_Scancode key, bool state) const;
-	bool AddActionKeyDown(SDL_Scancode key, const KeyCallback callBack) const;
-	bool AddActionKeyUp(SDL_Scancode key, const KeyCallback callBack) const;
+	bool SetReleaseState(int key, bool state) const;
+	bool AddActionKeyDown(int key, const KeyCallback callBack) const;
+	bool AddActionKeyUp(int key, const KeyCallback callBack) const;
 };
 
 struct SGameObject : SBaseWrapper<CGame>
