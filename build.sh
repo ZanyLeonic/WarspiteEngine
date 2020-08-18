@@ -1,2 +1,2 @@
 #!/bin/bash
-make -j4 install
+sudo make -j4 install
