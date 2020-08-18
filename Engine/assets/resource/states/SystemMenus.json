@@ -16,6 +16,15 @@
 		  ],
 		  "objects": [
 			{
+				"name": "TestText",
+				"type": "TextObject",
+				"x": 10,
+				"y": 10,
+				"width": 10,
+				"height": 10,
+				"textureID": "TitleText"
+			},
+			{
 			  "name": "PlayBtn",
 			  "type": "Button",
 			  "x": 100,

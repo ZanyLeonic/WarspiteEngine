@@ -7,6 +7,7 @@
 #include <filesystem>
 #include <fmt/core.h>
 #include "TextureManager.h"
+#include "Game.h"
 
 CFontManager* CFontManager::s_pInstance = 0;
 
@@ -75,25 +76,28 @@ bool CFontManager::RemoveFont(std::string name, std::string type, int size)
 bool CFontManager::RenderText(std::string text, std::string fontID, std::string textureID, 
 	EFontRenderType rType, SDL_Colour tColour, SDL_Colour bColour)
 {
-	SDL_Surface* tSurface;
+	SDL_Surface* pSurface = nullptr;
 
 	switch (rType)
 	{
 	case EFontRenderType::SOLID:
-		tSurface = TTF_RenderUTF8_Solid(m_loadedFonts[fontID], text.c_str(), tColour);
+		pSurface = TTF_RenderUTF8_Solid(m_loadedFonts[fontID], text.c_str(), tColour);
 		break;
 	case EFontRenderType::BLENDED:
-		tSurface = TTF_RenderUTF8_Blended(m_loadedFonts[fontID], text.c_str(), tColour);
+		pSurface = TTF_RenderUTF8_Blended(m_loadedFonts[fontID], text.c_str(), tColour);
 		break;
 	case EFontRenderType::SHADED:
-		tSurface = TTF_RenderUTF8_Shaded(m_loadedFonts[fontID], text.c_str(), tColour, bColour);
+		pSurface = TTF_RenderUTF8_Shaded(m_loadedFonts[fontID], text.c_str(), tColour, bColour);
 		break;
 	default:
 		spdlog::warn("Unsupported or undefined type of text rendering!");
 		break;
 	}
 
-	if (!tSurface)
+	SDL_Texture* pTexture =
+		SDL_CreateTextureFromSurface(CGame::Instance()->GetRenderer(), pSurface);
+
+	if (!pSurface)
 	{
 		spdlog::error("Failed to render text with fontID \"{}\" with text \"{}\".", fontID, text);
 		spdlog::error("SDL2_ttf error:");
@@ -102,9 +106,9 @@ bool CFontManager::RenderText(std::string text, std::string fontID, std::string 
 		return false;
 	}
 
+	CTextureManager::Instance()->Add(new CTexture(pTexture), textureID);
 
-
-	return false;
+	return true;
 }
 
 bool CFontManager::lookForType(const rapidjson::Value& pNode, std::string type) const

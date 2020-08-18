@@ -34,7 +34,9 @@ public:
 	bool LoadFont(std::string path, std::string type, int size);
 	bool RemoveFont(std::string name, std::string type, int size);
 
-	bool RenderText(std::string text, std::string fontID, std::string textureID, EFontRenderType rType = EFontRenderType::BLENDED, SDL_Colour tColour = { 0,0,0 }, SDL_Colour bColour = { 255,255,255 });
+	bool RenderText(std::string text, std::string fontID, std::string textureID, 
+		EFontRenderType rType = EFontRenderType::BLENDED, 
+		SDL_Colour tColour = { 0,0,0 }, SDL_Colour bColour = { 255,255,255 });
 
 	std::map<std::string, TTF_Font*> GetLoadedFonts() const { return m_loadedFonts; }
 

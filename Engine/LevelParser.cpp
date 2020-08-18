@@ -14,6 +14,8 @@
 #include "etc/Base64.h"
 #include <zlib.h>
 
+#undef GetObject
+
 using namespace rapidjson;
 
 CLevel* CLevelParser::ParseLevel(const char* levelFile)

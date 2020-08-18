@@ -30,6 +30,11 @@ bool CTextureManager::Load(std::string fileName, std::string id,
 	return false;
 }
 
+void CTextureManager::Add(CTexture* nText, std::string id)
+{
+	m_textureMap[id] = nText;
+}
+
 void CTextureManager::CreateCheckboardPattern(CVector2D size, std::string texName, SDL_Renderer* pRenderer)
 {
 	const int cSize = 32;
@@ -93,6 +98,7 @@ void CTextureManager::Draw(std::string id, int x, int y, int width, int height,
 {
 	// Don't try to draw if there is no id specified.
 	if (id == "") return;
+	if (m_textureMap[id] == nullptr) return;
 
 	SDL_Rect srcRect;
 	SDL_Rect destRect;
@@ -134,6 +140,7 @@ void CTextureManager::DrawFrame(std::string id, int x, int y, int width, int hei
 	double angle, SDL_Point* center, SDL_RendererFlip flip)
 {
 	if (id == "") return;
+	if (m_textureMap[id] == nullptr) return;
 
 	SDL_Rect srcRect;
 	SDL_Rect destRect;

@@ -52,11 +52,35 @@ jobs:
     inputs:
       SourceFolder: 'C:/Program Files (x86)/Warspite/Warspite/Debug'
       Contents: '**'
-      RemoveSourceFolder: true'
+      RemoveSourceFolder: true
 
   - task: PublishBuildArtifacts@1
     displayName: "Publishing build artifacts"
     inputs:
       PathtoPublish: 'C:/Program Files (x86)/Warspite/'
-      ArtifactName: 'drop'
+      ArtifactName: 'windows'
       publishLocation: 'Container'
+
+- job: Ubuntu
+  pool:
+    vmImage: ubuntu-18.04
+  steps:
+    - task: Bash@3
+      displayName: "Installing dependencies + Making build files"
+      inputs:
+        filePath: 'build-deps.sh'
+        workingDirectory: '$(System.DefaultWorkingDirectory)'
+
+    - task: Bash@3
+      displayName: "Building project"
+      inputs:
+        filePath: 'build.sh'
+        workingDirectory: '$(System.DefaultWorkingDirectory)'
+
+    - task: PublishBuildArtifacts@1
+      displayName: "Publishing build artifacts"
+      inputs:
+        PathtoPublish: '/usr/local/Warspite/'
+        ArtifactName: 'linux'
+        publishLocation: 'Container'
+        

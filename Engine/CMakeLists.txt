@@ -10,6 +10,7 @@ set(WarspiteEngine_Src
         Enemy.cpp
         EngineFileSystem.cpp
         FontManager.cpp
+        TextObject.cpp
         Game.cpp
         GameObjectDictionary.cpp
         GameStateBase.cpp
@@ -46,6 +47,7 @@ set(WarspiteEngine_Header
         EngineFileSystem.h
         EngineTypes.h
         FontManager.h
+        TextObject.h
         Game.h
         GameObject.h
         GameObjectDictionary.h
@@ -117,6 +119,7 @@ add_custom_target(EngineMetadata
         COMMENT "Generating build metadata..."
 )
 
+find_package(fmt CONFIG REQUIRED)
 find_package(pybind11 CONFIG REQUIRED)
 find_package(spdlog CONFIG REQUIRED)
 find_package(SDL2 CONFIG REQUIRED)
@@ -139,15 +142,22 @@ endif()
 set (Warspite_Libs
     ${Python3_LIBRARIES}
     ${PYBIND11_LIBRARIES}
+    fmt::fmt
     ${SDL2_LIBRARIES}
     ${SDL2_IMAGE_LIBRARIES}
     ${SDL2_TTF_LIBRARIES}
+    ${SPDLOG_LIBRARY}
     ${OPENAL_LIBRARY}
     ${VORBIS_LIBRARIES}
     ${ZLIB_LIBRARIES}
-    spdlog::spdlog
-    spdlog::spdlog_header_only
 )
+
+if(UNIX)
+set (Warspite_Libs
+    ${Warspite_Libs}
+    stdc++fs
+)
+endif()
 
 include_directories(${Python3_INCLUDE_DIRS})
 include_directories(${SPDLOG_INCLUDE_DIR})
