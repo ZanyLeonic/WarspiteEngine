@@ -63,7 +63,7 @@ jobs:
 
 - job: Ubuntu
   pool:
-    vmImage: ubuntu-18.04
+    vmImage: ubuntu-20.04
   steps:
     - task: Bash@3
       displayName: "Installing dependencies + Making build files"
@@ -83,4 +83,3 @@ jobs:
         PathtoPublish: '/usr/local/Warspite/'
         ArtifactName: 'linux'
         publishLocation: 'Container'
-        
