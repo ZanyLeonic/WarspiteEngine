@@ -6,6 +6,7 @@ set(WarspiteEngine_Src
         AnimatedGraphic.cpp
         Button.cpp
         Camera.cpp
+        CTexture.cpp
         Enemy.cpp
         EngineFileSystem.cpp
         FontManager.cpp
@@ -40,6 +41,7 @@ set(WarspiteEngine_Header
         AnimatedGraphic.h
         Button.h
         Camera.h
+        CTexture.h
         Enemy.h
         EngineFileSystem.h
         EngineTypes.h

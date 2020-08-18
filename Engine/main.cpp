@@ -19,11 +19,6 @@ const int DELAY_TIME = 1000 / FPS;
 
 int main(int argc, char* argv[])
 {
-    std::ofstream myfile;
-    myfile.open (CEngineFileSystem::ResolvePath("test.txt", CEngineFileSystem::EPathType::SCRIPT));
-    myfile << "Writing this to a file.\n";
-    myfile.close();
-
 	Uint32 frameStart, frameTime;
 	char title[420];
 	

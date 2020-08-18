@@ -72,8 +72,38 @@ bool CFontManager::RemoveFont(std::string name, std::string type, int size)
 	return false;
 }
 
-bool CFontManager::RenderText(std::string text, std::string fontID, std::string textureID)
+bool CFontManager::RenderText(std::string text, std::string fontID, std::string textureID, 
+	EFontRenderType rType, SDL_Colour tColour, SDL_Colour bColour)
 {
+	SDL_Surface* tSurface;
+
+	switch (rType)
+	{
+	case EFontRenderType::SOLID:
+		tSurface = TTF_RenderUTF8_Solid(m_loadedFonts[fontID], text.c_str(), tColour);
+		break;
+	case EFontRenderType::BLENDED:
+		tSurface = TTF_RenderUTF8_Blended(m_loadedFonts[fontID], text.c_str(), tColour);
+		break;
+	case EFontRenderType::SHADED:
+		tSurface = TTF_RenderUTF8_Shaded(m_loadedFonts[fontID], text.c_str(), tColour, bColour);
+		break;
+	default:
+		spdlog::warn("Unsupported or undefined type of text rendering!");
+		break;
+	}
+
+	if (!tSurface)
+	{
+		spdlog::error("Failed to render text with fontID \"{}\" with text \"{}\".", fontID, text);
+		spdlog::error("SDL2_ttf error:");
+		spdlog::error(TTF_GetError());
+
+		return false;
+	}
+
+
+
 	return false;
 }
 
