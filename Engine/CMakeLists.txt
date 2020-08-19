@@ -3,6 +3,7 @@
 cmake_minimum_required (VERSION 3.8)
 
 set(WarspiteEngine_Src
+        AudioSource.cpp
         AnimatedGraphic.cpp
         Button.cpp
         Camera.cpp
@@ -40,6 +41,7 @@ set(WarspiteEngine_Src
         )
 
 set(WarspiteEngine_Header
+        AudioSource.h
         AnimatedGraphic.h
         Button.h
         Camera.h

@@ -6,8 +6,10 @@
 #include "PlayState.h"
 #include "TextureManager.h"
 #include "ScriptManager.h"
+#include "SoundManager.h"
 #include <iostream>
 #include <spdlog/spdlog.h>
+
 
 #define PLAYER_WIDTH 32
 #define PLAYER_HEIGHT 32
@@ -49,18 +51,18 @@ void CPlayer::Load(const CObjectParams* pParams)
 
 bool CPlayer::OnThink()
 {
-	// std::cout << "\r";
-	// std::cout << "PLAYER -> X: " << m_position.GetX() << " Y: " << m_position.GetY() << " CAM -> X: " << Camera::Instance()->GetPosition().GetX() << " Y: " << Camera::Instance()->GetPosition().GetY() << " TimeLeft: " << float(m_timeLeft / 100) <<  " Frame: " << m_frameOffset << "   ";
-	
 	HandleInput();
-	
 	m_currentFrame = 0;
 
 	if (moving)
 	{
 		m_position = VectorMath::Lerp(lastPosition, nextPosition, (m_timeLeft / 100));
+		if (CSoundManager::Instance()->IsInitialised())
+		{
+			alCall(alListener3f, AL_POSITION, m_position.GetX(), m_position.GetY(), 0.f);
+		}
+
 		CCamera::Instance()->SetTarget(&m_position);
-		
 		DecideFrame();
 	}
 

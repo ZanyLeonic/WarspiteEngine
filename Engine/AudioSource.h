@@ -4,7 +4,7 @@
 
 #include "MapObject.h"
 class AudioSource :
-	public MapObject
+	public CMapObject
 {
 public:
 	AudioSource();

@@ -218,6 +218,8 @@ public:
 
 	void StopStream(SStreamingAudioData* audioData);
 
+	bool IsInitialised() const { return m_initalised; }
+
 private:
 	// Variables
 	ALCdevice* openALDevice = 0;

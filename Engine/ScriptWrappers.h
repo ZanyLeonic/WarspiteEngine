@@ -36,6 +36,7 @@ class PyStdErrOutStreamRedirect {
 	py::object _stderr;
 	py::object _stdout_buffer;
 	py::object _stderr_buffer;
+
 public:
 	PyStdErrOutStreamRedirect() {
 		auto sysm = py::module::import("sys");

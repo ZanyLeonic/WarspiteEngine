@@ -43,7 +43,6 @@ public:
 	std::map<std::string, TTF_Font*> GetLoadedFonts() const { return m_loadedFonts; }
 
 private:
-
 	bool lookForType(const rapidjson::Value& pNode, std::string type) const;
 	
 	std::map<std::string, TTF_Font*> m_loadedFonts;

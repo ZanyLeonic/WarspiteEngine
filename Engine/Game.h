@@ -60,7 +60,6 @@ public:
 	IGameObject* GetPlayer() const { return m_player; }
 	
 private:
-
 	CGameStateManager* m_pGameStateManager;
 
 	SDL_Window* m_pWindow = nullptr;
