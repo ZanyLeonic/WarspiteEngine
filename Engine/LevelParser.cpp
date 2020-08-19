@@ -100,7 +100,8 @@ MapProperties CLevelParser::GetMapProp(const std::string prop)
 		{"animSpeed",		MapProperties::PROP_ANIMSPEED},
 		{"onClickCallback", MapProperties::PROP_ONCLICKCALL},
 		{"onEnterCallback", MapProperties::PROP_ONENTERCALL},
-		{"onLeaveCallback", MapProperties::PROP_ONLEAVECALL}
+		{"onLeaveCallback", MapProperties::PROP_ONLEAVECALL},
+		{"soundPath",		MapProperties::PROP_SOUNDPATH}
 	};
 
 	auto itr = propStrings.find(prop);
@@ -124,6 +125,7 @@ void CLevelParser::parseTilesets(const rapidjson::Value* pTilesetRoot, std::vect
 
 		const char* fileName = obj["source"].GetString();
 
+		// External Tilesets
 		if (CEngineFileSystem::ReadJSON(CEngineFileSystem::ResolvePath(fileName, CEngineFileSystem::EPathType::TILESET), &tileset))
 		{
 			const Value& t = tileset.GetObject();
@@ -148,9 +150,27 @@ void CLevelParser::parseTilesets(const rapidjson::Value* pTilesetRoot, std::vect
 			pTilesets->push_back(ts);
 		}
 	}
+	// Embedded Tilesets
 	else
 	{
-		// throw "Unimplemented!";
+		CTextureManager::Instance()->Load(CEngineFileSystem::ResolvePath(obj["image"].GetString(), CEngineFileSystem::EPathType::TEXTURE),
+			obj["name"].GetString(), CGame::Instance()->GetRenderer());
+
+		STileset ts;
+
+		ts.Width = obj["imagewidth"].GetInt();
+		ts.Height = obj["imageheight"].GetInt();
+		ts.FirstGID = fg;
+		ts.TileWidth = obj["tilewidth"].GetInt();
+		ts.TileHeight = obj["tileheight"].GetInt();
+		ts.Spacing = obj["spacing"].GetInt();
+		ts.Margin = obj["margin"].GetInt();
+
+		ts.Name = obj["name"].GetString();
+
+		ts.NumColumns = ts.Width / (ts.TileWidth + ts.Spacing);
+
+		pTilesets->push_back(ts);
 	}
 }
 
@@ -218,15 +238,14 @@ void CLevelParser::parseFiles(const rapidjson::Value* pFileRoot)
 
 	if (CWarspiteUtil::GetFileExtenstion(o["value"].GetString()) == ".py")
 	{
-		CScriptManager::Instance()->Load(SGameScript::file(o["name"].GetString(),
-                                                     CEngineFileSystem::ResolvePath(o["value"].GetString(),
-                                                                                    CEngineFileSystem::EPathType::SCRIPT)));
+		CScriptManager::Instance()->Load(SGameScript::file(o["name"].GetString(), CEngineFileSystem::ResolvePath(o["value"].GetString(), 
+										 CEngineFileSystem::EPathType::SCRIPT)));
 		return;
 	}
 	
 	// Load the texture via the TextureManager with the info inside the object.
 	CTextureManager::Instance()->Load(CEngineFileSystem::ResolvePath(o["value"].GetString(), CEngineFileSystem::EPathType::TEXTURE),
-                                   o["name"].GetString(),CGame::Instance()->GetRenderer());
+                                      o["name"].GetString(),CGame::Instance()->GetRenderer());
 }
 
 void CLevelParser::parseBackgroundColour(const std::string* colourVal)
@@ -329,6 +348,9 @@ void CLevelParser::parseObjectLayer(const rapidjson::Value* pObjectVal, std::vec
 				case MapProperties::PROP_ONLEAVECALL:
 					pOP->SetOnLeave(d[j]["value"].GetInt());
 					break;	
+				case MapProperties::PROP_SOUNDPATH:
+					pOP->SetSoundPath(d[j]["value"].GetString());
+					break;
 				default:
 					// Future proofing incase new properties get added for newer engine version.
 					spdlog::warn("Warning: Unrecongised property \"{}\"!", propName);
@@ -336,7 +358,6 @@ void CLevelParser::parseObjectLayer(const rapidjson::Value* pObjectVal, std::vec
 				}
 			}
 		}
-		
 		// intialise the object with the data obtained.
 		pGameObject->Load(pOP);
 		pObjectLayer->GetGameObjects()->push_back(pGameObject);

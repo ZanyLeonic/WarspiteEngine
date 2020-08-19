@@ -86,6 +86,12 @@ void CStateParser::ParseObjects(const rapidjson::Value* pStateRoot, std::vector<
 
 		if (!b.HasMember("type"))
 		{
+			spdlog::error("Missing object type attribute for {} item - ignoring...", i);
+			continue;
+		}
+
+		if (b["type"].GetString() == "")
+		{
 			spdlog::error("Missing object type for {} item - ignoring...", i);
 			continue;
 		}
@@ -125,8 +131,8 @@ void CStateParser::ParseObjects(const rapidjson::Value* pStateRoot, std::vector<
 			pOP->SetHeight(0);
 		}
 
-		if (b.HasMember("textureID"))
-			pOP->SetTextureID(b["textureID"].GetString());
+		if (b.HasMember("textureid"))
+			pOP->SetTextureID(b["textureid"].GetString());
 		else
 		{
 			spdlog::warn("No textureID declared for object type \"{}\"", b["type"].GetString());
@@ -140,11 +146,12 @@ void CStateParser::ParseObjects(const rapidjson::Value* pStateRoot, std::vector<
 		pOP->SetNumFrames(b.HasMember("numFrames") ? b["numFrames"].GetInt() : 1);
 		pOP->SetAnimSpeed(b.HasMember("animSpeed") ? b["animSpeed"].GetInt() : 1);
 
-		pOP->SetOnClick(b.HasMember("onClickID") ? b["onClickID"].GetInt() : 0);
-		pOP->SetOnEnter(b.HasMember("onEnterID") ? b["onEnterID"].GetInt() : 0);
-		pOP->SetOnLeave(b.HasMember("onLeaveID") ? b["onLeaveID"].GetInt() : 0);
+		pOP->SetOnClick(b.HasMember("onClickId") ? b["onClickId"].GetInt() : 0);
+		pOP->SetOnEnter(b.HasMember("onEnterId") ? b["onEnterId"].GetInt() : 0);
+		pOP->SetOnLeave(b.HasMember("onLeaveId") ? b["onLeaveId"].GetInt() : 0);
 
 		pOP->SetScript(b.HasMember("script") ? b["script"].GetString() : "");
+		pOP->SetSoundPath(b.HasMember("soundPath") ? b["soundPath"].GetString() : "");
 
 		// Provide the extracting info to the object.
 		pGameObject->Load(pOP);
@@ -188,6 +195,7 @@ void CStateParser::ParseScripts(const rapidjson::Value* pStateRoot, std::vector<
 		pScriptsID->push_back(b["id"].GetString());
 
 		// Load our script path and name into memory so it can be loaded later
-		CScriptManager::Instance()->Load(SGameScript::file(b["id"].GetString(), CEngineFileSystem::ResolvePath(b["path"].GetString(), CEngineFileSystem::EPathType::SCRIPT)));
+		CScriptManager::Instance()->Load(SGameScript::file(b["id"].GetString(), 
+			CEngineFileSystem::ResolvePath(b["path"].GetString(), CEngineFileSystem::EPathType::SCRIPT)));
 	}
 }

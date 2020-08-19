@@ -36,6 +36,8 @@ public:
 	void SetOnEnter(int c) { m_OnEnter = c; }
 	void SetOnLeave(int c) { m_OnLeave = c; }
 
+	void SetSoundPath(std::string path) { m_soundPath = path; }
+
 	void SetTextureID(std::string id) { m_textureID = id; }
 	void SetScript(std::string s) { m_script = s; }
 	
@@ -56,6 +58,8 @@ public:
 	int GetOnEnterID() const { return m_OnEnter; }
 	int GetOnLeaveID() const { return m_OnLeave; }
 
+	std::string GetSoundPath() const { return m_soundPath; }
+
 	std::string GetTextureID() const { return m_textureID; }
 	std::string GetScript() const { return m_script; }
 
@@ -65,6 +69,7 @@ private:
 	std::string m_textureID = "";
 	std::string m_objName = "";
 	std::string m_factoryID = "";
+	std::string m_soundPath = "";
 	
 	float m_x = 0;
 	float m_y = 0;

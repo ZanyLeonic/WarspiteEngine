@@ -19,6 +19,7 @@ enum class MapProperties
 	PROP_ONCLICKCALL,
 	PROP_ONENTERCALL,
 	PROP_ONLEAVECALL,
+	PROP_SOUNDPATH
 };
 
 class CLevel;

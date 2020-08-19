@@ -829,3 +829,10 @@ void CSoundManager::StopStream(SStreamingAudioData* audioData)
 	
 	streams.erase(std::remove(streams.begin(),streams.end(), audioData),	streams.end());
 }
+
+void CSoundManager::DeleteStream(SStreamingAudioData* audioData)
+{
+	// then free the memory that contained the StreamAudio file.
+	alCall(alDeleteSources, 1, &audioData->Source);
+	alCall(alDeleteBuffers, NUM_BUFFERS, &audioData->Buffers[0]);
+}

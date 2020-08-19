@@ -16,9 +16,9 @@
 #define alCall(function, ...) alCallImpl(__FILE__, __LINE__, function, __VA_ARGS__)
 #define alcCall(function, device, ...) alcCallImpl(__FILE__, __LINE__, function, device, __VA_ARGS__)
 
-
 enum class ESoundType
 {
+	SOUND_NONE = -1,
 	SOUND_MUSIC = 0,
 	SOUND_SFX = 1
 };
@@ -217,6 +217,7 @@ public:
 	void PauseStream(SStreamingAudioData* audioData);
 
 	void StopStream(SStreamingAudioData* audioData);
+	void DeleteStream(SStreamingAudioData* audioData);
 
 	bool IsInitialised() const { return m_initalised; }
 
