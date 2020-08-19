@@ -84,36 +84,70 @@ void CStateParser::ParseObjects(const rapidjson::Value* pStateRoot, std::vector<
 		// Get the current object we are working with.
 		const Value& b = t[i];
 
+		if (!b.HasMember("type"))
+		{
+			spdlog::error("Missing object type for {} item - ignoring...", i);
+			continue;
+		}
+
+		if (!b.HasMember("x"))
+		{
+			spdlog::error("Missing X position for object of type \"{}\" - ignoring...", b["type"].GetString());
+			continue;
+		}
+
+		if (!b.HasMember("y"))
+		{
+			spdlog::error("Missing Y position for object of type \"{}\" - ignoring...", b["type"].GetString());
+			continue;
+		}
+
 		// Attempt to create the object type.
 		IGameObject* pGameObject =
 			CGameObjectDictionary::Instance()->Create(b["type"].GetString());
 
-		int x, y, width, height, numFrames, animSpeed, onClickCallback, onEnterCallback, onLeaveCallback;
-		std::string textureID, name, factID, script;
-
+		CObjectParams* pOP = new CObjectParams(b["x"].GetInt(), b["y"].GetInt());
 		// Retrieve the relevant information from the object declaration...
 		// Required
-		x = b["x"].GetInt();
-		y = b["y"].GetInt();
-		width = b["width"].GetInt();
-		height = b["height"].GetInt();
-		textureID = b["textureID"].GetString();
-		name = b["name"].GetString();
-		factID = b["type"].GetString();
+		if (b.HasMember("width"))
+			pOP->SetWidth(b["width"].GetInt());
+		else
+		{
+			spdlog::warn("No width declared for object type \"{}\"", b["type"].GetString());
+			pOP->SetWidth(0);
+		}
+		
+		if (b.HasMember("height"))
+			pOP->SetHeight(b["height"].GetInt());
+		else
+		{
+			spdlog::warn("No height declared for object type \"{}\"", b["type"].GetString());
+			pOP->SetHeight(0);
+		}
+
+		if (b.HasMember("textureID"))
+			pOP->SetTextureID(b["textureID"].GetString());
+		else
+		{
+			spdlog::warn("No textureID declared for object type \"{}\"", b["type"].GetString());
+			pOP->SetTextureID("");
+		}
+
+		pOP->SetName(b.HasMember("name") ? b["name"].GetString() : "");
+		pOP->SetFactoryID(b["type"].GetString());
 
 		// Optional
-		numFrames = b.HasMember("numFrames") ? b["numFrames"].GetInt() : 1;
-		animSpeed = b.HasMember("animSpeed") ? b["animSpeed"].GetInt() : 1;
+		pOP->SetNumFrames(b.HasMember("numFrames") ? b["numFrames"].GetInt() : 1);
+		pOP->SetAnimSpeed(b.HasMember("animSpeed") ? b["animSpeed"].GetInt() : 1);
 
-		onClickCallback = b.HasMember("onClickID") ? b["onClickID"].GetInt() : 0;
-		onEnterCallback = b.HasMember("onEnterID") ? b["onEnterID"].GetInt() : 0;
-		onLeaveCallback = b.HasMember("onLeaveID") ? b["onLeaveID"].GetInt() : 0;
+		pOP->SetOnClick(b.HasMember("onClickID") ? b["onClickID"].GetInt() : 0);
+		pOP->SetOnEnter(b.HasMember("onEnterID") ? b["onEnterID"].GetInt() : 0);
+		pOP->SetOnLeave(b.HasMember("onLeaveID") ? b["onLeaveID"].GetInt() : 0);
 
-		script = b.HasMember("script") ? b["script"].GetString() : "";
+		pOP->SetScript(b.HasMember("script") ? b["script"].GetString() : "");
 
 		// Provide the extracting info to the object.
-		pGameObject->Load(new CObjectParams((float)x, (float)y, width, height, textureID,
-			animSpeed, numFrames, onClickCallback, onEnterCallback, onLeaveCallback, script, name, factID));
+		pGameObject->Load(pOP);
 
 		// Add it to the m_GameObjects
 		pObjects->push_back(pGameObject);

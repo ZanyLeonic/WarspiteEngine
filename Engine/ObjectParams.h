@@ -27,7 +27,7 @@ public:
 	void SetFactoryID(std::string n) { m_factoryID = n; }
 	
 	void SetWidth(int w) { m_width = w; }
-	void SetHeight(int h) { m_width = h; }
+	void SetHeight(int h) { m_height = h; }
 
 	void SetAnimSpeed(int s) { m_animSpeed = s; }
 	void SetNumFrames(int n) { m_numFrames = n; }
