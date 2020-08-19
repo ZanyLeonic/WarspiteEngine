@@ -9,7 +9,7 @@ class CVector2D;
 class CTexture
 {
 public:
-	CTexture(SDL_Texture* nTex, double angle = 0.f, SDL_Point* center = nullptr);
+	CTexture(SDL_Texture* nTex = nullptr, double angle = 0.f, SDL_Point* center = nullptr);
 
 	~CTexture();
 
@@ -17,7 +17,7 @@ public:
 	void Free();
 
 	//Set color modulation
-	void SetColor(Uint8 red, Uint8 green, Uint8 blue);
+	void SetColour(Uint8 red, Uint8 green, Uint8 blue);
 
 	//Set blending
 	void SetBlendMode(SDL_BlendMode blending);
@@ -35,6 +35,9 @@ public:
 
 	double GetAngle() const { return m_angle; }
 	SDL_Point* GetCenter() const { return m_center; }
+
+	void SetAngle(double pAngle);
+	void SetCenter(SDL_Point* pNewPoint);
 private:
 	SDL_Texture* m_texture;
 	SDL_Point* m_center;

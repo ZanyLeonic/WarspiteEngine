@@ -17,6 +17,7 @@
 #include "GameStateDictionary.h"
 #include "GameStateManager.h"
 #include "Game.h"
+#include "FontManager.h"
 
 // Exposing some classes to Python
 PYBIND11_MODULE(engine, m) {
@@ -127,6 +128,13 @@ PYBIND11_MODULE(engine, m) {
 		.def("get_player", &SGameObject::GetPlayer, "Returns the currently registered player object")
 		.def("load_texture", &SGameObject::LoadTexture, "Loads the specified texture into the manager with the specified ID");
 
+	py::class_<SFontObject> fo(m, "FontObject", "A container that allows interaction with the Font Manger of the Engine.");
+		fo.def(py::init<CFontManager*>())
+		.def("load_font", &SFontObject::LoadFont, "Loads the specifed font into memory")
+		.def("remove_font", &SFontObject::RemoveFont, "Unloads the specifed font from memory")
+		.def("render_text", &SFontObject::RenderText, "Renders the specifed font to the specified textureID")
+		.def("is_loaded", &SFontObject::IsLoaded, "Returns true if the specifed font is loaded and false if not");
+
 	py::class_<CObjectParams>(m, "ObjectParams", "A container used to initialise objects")
 		.def(py::init<float, float>(), "Used for certain objects that just need to be spawned")
 		.def(py::init<float, float, const char*>(), "Used for objects that use scripts")
@@ -149,6 +157,15 @@ PYBIND11_MODULE(engine, m) {
 		.value("TILESET", CEngineFileSystem::EPathType::TILESET)
 		.value("STATE", CEngineFileSystem::EPathType::STATE)
 		.value("SOUND", CEngineFileSystem::EPathType::SOUND)
+		.value("FONTS", CEngineFileSystem::EPathType::FONTS)
+
+		.export_values();
+
+	py::enum_<CFontManager::EFontRenderType>(fo, "RenderType")
+		.value("NONE", CFontManager::EFontRenderType::NONE)
+		.value("SOLID", CFontManager::EFontRenderType::SOLID)
+		.value("SHADED", CFontManager::EFontRenderType::SHADED)
+		.value("BLENDED", CFontManager::EFontRenderType::BLENDED)
 
 		.export_values();
 }
@@ -515,4 +532,100 @@ bool SGameObject::LoadTexture(std::string texPath, std::string texID) const
 {
 	if (!IsValid()) return false;
 	return CTextureManager::Instance()->Load(texPath, texID, m_inst->GetRenderer());
+}
+
+bool SFontObject::LoadFont(std::string path, std::string type, int size)
+{
+	if (!IsValid()) return false;
+	return m_inst->LoadFont(path, type, size);
+}
+
+bool SFontObject::RemoveFont(std::string name, std::string type, int size)
+{
+	if (!IsValid()) return false;
+	return m_inst->RemoveFont(name, type, size);
+}
+
+bool SFontObject::RenderText(std::string text, std::string fontID, std::string textureID, CFontManager::EFontRenderType rType, SDL_Colour tColour, SDL_Colour bColour)
+{
+	if (!IsValid()) return false;
+	return m_inst->RenderText(text, fontID, textureID, rType, tColour, bColour);
+}
+
+bool SFontObject::IsLoaded(std::string name, std::string type, int size)
+{
+	if (!IsValid()) return false;
+	return m_inst->IsLoaded(name, type, size);
+}
+
+bool SWarTexture::Load(std::string path)
+{
+	if (!IsValid()) return false;
+	return m_inst->Load(path);
+}
+
+void SWarTexture::Free()
+{
+	if (!IsValid()) return;
+	m_inst->Free();
+}
+
+void SWarTexture::SetColour(Uint8 red, Uint8 green, Uint8 blue)
+{
+	if (!IsValid()) return;
+	m_inst->SetColour(red, green, blue);
+}
+
+void SWarTexture::SetBlendMode(SDL_BlendMode blending)
+{
+	if (!IsValid()) return;
+	m_inst->SetBlendMode(blending);
+}
+
+void SWarTexture::SetAlpha(Uint8 alpha)
+{
+	if (!IsValid()) return;
+	m_inst->SetAlpha(alpha);
+}
+
+void SWarTexture::Draw(CVector2D pos)
+{
+	if (!IsValid()) return;
+	m_inst->Draw(pos);
+}
+
+int SWarTexture::GetWidth() const
+{
+	if (!IsValid()) return 0;
+	return m_inst->GetWidth();
+}
+
+int SWarTexture::GetHeight() const
+{
+	if (!IsValid()) return 0;
+	return m_inst->GetHeight();
+}
+
+double SWarTexture::GetAngle() const
+{
+	if (!IsValid()) return 0.0;
+	return m_inst->GetAngle();
+}
+
+SDL_Point* SWarTexture::GetCenter() const
+{
+	if (!IsValid()) return nullptr;
+	return m_inst->GetCenter();
+}
+
+void SWarTexture::SetAngle(double pAngle)
+{
+	if (!IsValid()) return;
+	return m_inst->SetAngle(pAngle);
+}
+
+void SWarTexture::SetCenter(SDL_Point* pNewPoint)
+{
+	if (!IsValid()) return;
+	return m_inst->SetCenter(pNewPoint);
 }

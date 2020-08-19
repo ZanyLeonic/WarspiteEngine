@@ -13,6 +13,10 @@
 #include "MainMenuState.h"
 #include "Vector2D.h"
 
+#define FRAME_SAMPLES 10
+
+class CFPSCounter;
+
 class CGame
 {
 public:
@@ -30,11 +34,13 @@ private:
 	~CGame() {}
 	
 	static CGame* s_pInstance;
-
 public:
 	// simply set the running variable to true
 	bool Init(const char* title, int xpos, int ypos, int width, int height, bool fullscreen);
-
+private:
+	// Calculate current FPS
+	void FPS_Calc();
+public:
 	void Draw();
 	void OnThink();
 	void HandleEvents();
@@ -54,6 +60,7 @@ public:
 	IGameObject* GetPlayer() const { return m_player; }
 	
 private:
+
 	CGameStateManager* m_pGameStateManager;
 
 	SDL_Window* m_pWindow = nullptr;
@@ -67,6 +74,14 @@ private:
 	
 	CVector2D m_viewportSize;
 	PGamePtr m_gamePtr;
+
+	CFPSCounter* m_fpsCounter;
+
+	// FPS calculations
+	Uint32 m_frametimes[FRAME_SAMPLES];
+	Uint32 m_lastFrametime;
+	Uint32 m_frameCount;
+	float m_FPS;
 
 	bool m_bRunning = false;
 };

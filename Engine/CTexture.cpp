@@ -9,7 +9,8 @@ CTexture::CTexture(SDL_Texture* nTex, double angle, SDL_Point* center)
 	m_texture = nTex;
 	m_angle = angle;
 	m_center = center;
-	SDL_QueryTexture(m_texture, NULL, NULL, &m_width, &m_height);
+	if (m_texture != nullptr)
+		SDL_QueryTexture(m_texture, NULL, NULL, &m_width, &m_height);
 }
 
 CTexture::~CTexture()
@@ -56,7 +57,7 @@ void CTexture::Free()
 	}
 }
 
-void CTexture::SetColor(Uint8 red, Uint8 green, Uint8 blue)
+void CTexture::SetColour(Uint8 red, Uint8 green, Uint8 blue)
 {
 	if (m_texture == nullptr) return;
 	SDL_SetTextureColorMod(m_texture, red, green, blue);
@@ -78,4 +79,14 @@ void CTexture::Draw(CVector2D pos)
 {
 	if (!m_texture) return;
 	CTextureManager::Instance()->Draw(this, pos.GetX(), pos.GetY(), CGame::Instance()->GetRenderer(), m_angle);
+}
+
+void CTexture::SetAngle(double pAngle)
+{
+	m_angle = pAngle;
+}
+
+void CTexture::SetCenter(SDL_Point* pNewPoint)
+{
+	m_center = pNewPoint;
 }

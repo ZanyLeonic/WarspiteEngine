@@ -7,6 +7,8 @@
 #include <memory>
 #include <pybind11/pybind11.h>
 #include "EngineTypes.h"
+#include <SDL_pixels.h>
+#include "FontManager.h"
 
 // The current APIs we are exposing
 class CWarspiteObject;
@@ -17,7 +19,9 @@ class CLevel;
 class IGameObject;
 class CObjectParams;
 class CInputHandler;
+class CTextureManager;
 class CCamera;
+class CTexture;
 
 namespace py = pybind11;
 
@@ -65,6 +69,7 @@ public:
 #define CAMERAOBJECT_NAME	"camera"
 #define INPUTOBJECT_NAME	"inputh"
 #define GAMEOBJECT_NAME		"game"
+#define FONTOBJECT_NAME		"font"
 
 // Create a base set of methods to prevent the repeat of code
 template<class T>
@@ -123,6 +128,35 @@ struct SWarObject : SBaseWrapper<CWarspiteObject>
 	{
 		return m_inst == w.m_inst;
 	}
+};
+
+struct SWarTexture : SBaseWrapper<CTexture>
+{
+	SWarTexture(CTexture* pClass) : SBaseWrapper<CTexture>(pClass) {}
+
+	bool Load(std::string path);
+	void Free();
+
+	//Set color modulation
+	void SetColour(Uint8 red, Uint8 green, Uint8 blue);
+
+	//Set blending
+	void SetBlendMode(SDL_BlendMode blending);
+
+	//Set alpha modulation
+	void SetAlpha(Uint8 alpha);
+
+	void Draw(CVector2D pos);
+
+	//Gets image dimensions
+	int GetWidth() const;
+	int GetHeight() const;
+
+	double GetAngle() const;
+	SDL_Point* GetCenter() const;
+
+	void SetAngle(double pAngle);
+	void SetCenter(SDL_Point* pNewPoint);
 };
 
 struct SWarState : SBaseWrapper<CGameStateBase>
@@ -187,8 +221,18 @@ struct SGameObject : SBaseWrapper<CGame>
 	bool LoadTexture(std::string texPath, std::string texID) const;
 };
 
-// Small container for class def in pybind
-struct SKeyScancodes
-{};
+struct SFontObject : SBaseWrapper<CFontManager>
+{
+	SFontObject(CFontManager* pClass) : SBaseWrapper<CFontManager>(pClass) {}
+	
+	bool LoadFont(std::string path, std::string type, int size);
+	bool RemoveFont(std::string name, std::string type, int size);
+
+	bool RenderText(std::string text, std::string fontID, std::string textureID,
+		CFontManager::EFontRenderType rType = (CFontManager::EFontRenderType)3,
+		SDL_Colour tColour = { 0,0,0 }, SDL_Colour bColour = { 255,255,255 });
+
+	bool IsLoaded(std::string name, std::string type, int size);
+};
 
 #endif

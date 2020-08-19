@@ -7,6 +7,7 @@ set(WarspiteEngine_Src
         Button.cpp
         Camera.cpp
         CTexture.cpp
+        FPSCounter.cpp
         Enemy.cpp
         EngineFileSystem.cpp
         FontManager.cpp
@@ -43,6 +44,7 @@ set(WarspiteEngine_Header
         Button.h
         Camera.h
         CTexture.h
+        FPSCounter.h
         Enemy.h
         EngineFileSystem.h
         EngineTypes.h

@@ -9,12 +9,22 @@
 #include <iostream>
 #include "ScriptWrappers.h"
 #include "spdlog/spdlog.h"
+#include "FPSCounter.h"
 
 CGame* CGame::s_pInstance = 0;
 
 // Initialises the major parts of the engine
 bool CGame::Init(const char* title, int xpos, int ypos, int width, int height, bool fullscreen)
 {
+	// Init our FPS stuff
+	// Set all frame times to 0ms.
+	memset(m_frametimes, 0, sizeof(m_frametimes));
+	m_frameCount = 0;
+	m_FPS = 0;
+	m_lastFrametime = SDL_GetTicks();
+
+	m_fpsCounter = new CFPSCounter();
+
 	CInputHandler::Instance()->InitialiseJoysticks();
 
 	// attempt to initalize SDL
@@ -76,18 +86,71 @@ bool CGame::Init(const char* title, int xpos, int ypos, int width, int height, b
 	return false;
 }
 
+void CGame::FPS_Calc()
+{
+	Uint32 frametimesindex;
+	Uint32 getticks;
+	Uint32 count;
+	Uint32 i;
+
+	// frametimesindex is the position in the array. It ranges from 0 to FRAME_VALUES.
+	// This value rotates back to 0 after it hits FRAME_VALUES.
+	frametimesindex = m_frameCount % FRAME_SAMPLES;
+
+	// store the current time
+	getticks = SDL_GetTicks();
+
+	// save the frame time value
+	m_frametimes[frametimesindex] = getticks - m_lastFrametime;
+
+	// save the last frame time for the next fpsthink
+	m_lastFrametime = getticks;
+
+	// increment the frame count
+	m_frameCount++;
+
+	// Work out the current framerate
+
+	// The code below could be moved into another function if you don't need the value every frame.
+
+	// I've included a test to see if the whole array has been written to or not. This will stop
+	// strange values on the first few (FRAME_VALUES) frames.
+	if (m_frameCount < FRAME_SAMPLES) {
+		count = m_frameCount;
+	}
+	else {
+		count = FRAME_SAMPLES;
+	}
+
+	// add up all the values and divide to get the average frame time.
+	m_FPS = 0;
+	for (i = 0; i < count; i++) {
+		m_FPS += m_frametimes[i];
+	}
+
+	m_FPS /= count;
+
+	// now to make it an actual frames per second value...
+	m_FPS = 1000.f / m_FPS;
+}
+
 void CGame::Draw()
 {
 	SDL_RenderClear(m_pRenderer); // clear the renderer to draw color
 	
 	// Call the current GameState functionality via the GameStateManager.
 	m_pGameStateManager->Draw();
+	m_fpsCounter->Draw();
 
 	SDL_RenderPresent(m_pRenderer); // draw to the screen
 }
 
 void CGame::OnThink()
 {
+	// FPS counter stuff
+	FPS_Calc();
+	m_fpsCounter->SetFPSValue(m_FPS);
+
 	// Call the current GameState functionality via the GameStateManager.
 	m_pGameStateManager->OnThink();
 	

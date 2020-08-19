@@ -12,7 +12,7 @@ void CTextObject::Load(const CObjectParams* pParams)
 {
 	CWarspiteObject::Load(pParams);
 
-	CFontManager::Instance()->RenderText("Warspite Engine", "Roboto-Regular-32", m_textureID, EFontRenderType::SHADED, { 0, 0, 0}, { 255, 255, 255});
+	CFontManager::Instance()->RenderText("Warspite Engine", "Roboto-Regular-32", m_textureID, CFontManager::EFontRenderType::SHADED, { 0, 0, 0}, { 255, 255, 255});
 
 	m_width = CTextureManager::Instance()->m_textureMap[m_textureID]->GetWidth();
 	m_height = CTextureManager::Instance()->m_textureMap[m_textureID]->GetHeight();

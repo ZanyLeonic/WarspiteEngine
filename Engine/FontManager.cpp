@@ -56,11 +56,8 @@ bool CFontManager::RemoveFont(std::string name, std::string type, int size)
 {
 	// Look for the specified value
 	std::string fName = fmt::format(FMT_STRING("{}-{}-{}"), name, type, size);
-	
-	auto it
-		= m_loadedFonts.find(fName);
 
-	if(it != m_loadedFonts.end())
+	if(IsLoaded(name, type, size))
 	{
 		TTF_Font* wFont = m_loadedFonts[fName];
 
@@ -94,9 +91,6 @@ bool CFontManager::RenderText(std::string text, std::string fontID, std::string 
 		break;
 	}
 
-	SDL_Texture* pTexture =
-		SDL_CreateTextureFromSurface(CGame::Instance()->GetRenderer(), pSurface);
-
 	if (!pSurface)
 	{
 		spdlog::error("Failed to render text with fontID \"{}\" with text \"{}\".", fontID, text);
@@ -106,9 +100,30 @@ bool CFontManager::RenderText(std::string text, std::string fontID, std::string 
 		return false;
 	}
 
+	SDL_Texture* pTexture =
+		SDL_CreateTextureFromSurface(CGame::Instance()->GetRenderer(), pSurface);
+
+	// Free up memory, why didn't I add this earlier aaaaaaaa
+	SDL_FreeSurface(pSurface);
+
 	CTextureManager::Instance()->Add(new CTexture(pTexture), textureID);
 
 	return true;
+}
+
+bool CFontManager::IsLoaded(std::string name, std::string type, int size)
+{
+	// Look for the specified value
+	std::string fName = fmt::format(FMT_STRING("{}-{}-{}"), name, type, size);
+
+	auto it
+		= m_loadedFonts.find(fName);
+
+	if (it != m_loadedFonts.end())
+	{
+		return m_loadedFonts[fName] != nullptr;
+	}
+	return false;
 }
 
 bool CFontManager::lookForType(const rapidjson::Value& pNode, std::string type) const
