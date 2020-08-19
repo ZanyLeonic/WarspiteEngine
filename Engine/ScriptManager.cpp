@@ -2,7 +2,7 @@
 #include <iostream>
 #include "ScriptWrappers.h"
 #include <pybind11/embed.h>
-#include "spdlog/spdlog.h"
+#include <spdlog/spdlog.h>
 #include <spdlog/sinks/stdout_color_sinks.h>
 
 CScriptManager* CScriptManager::s_pInstance = 0;

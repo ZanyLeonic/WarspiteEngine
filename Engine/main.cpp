@@ -7,9 +7,9 @@
 #include <chrono>
 #include "EngineFileSystem.h"
 
-#include "spdlog/spdlog.h"
-#include "spdlog/sinks/stdout_color_sinks.h"
-#include "spdlog/sinks/daily_file_sink.h"
+#include <spdlog/spdlog.h>
+#include <spdlog/sinks/stdout_color_sinks.h>
+#include <spdlog/sinks/daily_file_sink.h>
 
 // our Game object
 CGame* g_game = 0;

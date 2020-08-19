@@ -1,7 +1,7 @@
 #include "AudioSource.h"
 #include "EngineFileSystem.h"
 #include "WarspiteUtil.h"
-#include <spdlog\spdlog.h>
+#include <spdlog/spdlog.h>
 
 CAudioSource::CAudioSource()
 {
