@@ -6,7 +6,7 @@
 trigger:
 - master
 - develop
-- pybind
+- launchv2
 
 jobs:
 - job: Windows

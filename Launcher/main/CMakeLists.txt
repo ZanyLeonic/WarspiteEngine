@@ -12,4 +12,18 @@ set (LauncherMain_Header
     resource.h
 )
 
-add_executable (LauncherMain ${LauncherMain_Src} ${LauncherMain_Header})
+add_executable (LauncherMain WIN32 ${LauncherMain_Src} ${LauncherMain_Header})
+set_target_properties(LauncherMain PROPERTIES OUTPUT_NAME "ws")
+
+install(TARGETS LauncherMain RUNTIME DESTINATION ./)
+
+if (WIN32)
+    install(DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/
+            DESTINATION ./${PROJECT_NAME}
+            FILES_MATCHING PATTERN "*.dll"
+            PATTERN ".cmake" EXCLUDE
+            PATTERN "CMakeFiles" EXCLUDE
+            PATTERN "include" EXCLUDE
+            PATTERN "Testing" EXCLUDE
+            )
+endif()

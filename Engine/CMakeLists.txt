@@ -106,12 +106,6 @@ if (WIN32)
     set(SDL2_TTF_LIBRARIES SDL2::SDL2_ttf)
 endif()
 
-# Apply some debug options
-if (CMAKE_BUILD_TYPE STREQUAL "Debug")
-    message(STATUS "Debug build")
-    add_compile_definitions(WARDEBUG)
-endif()
-
 find_package(Python3 COMPONENTS Interpreter Development REQUIRED)
 
 message(STATUS "Python3_LIBRARIES = ${Python3_LIBRARIES}")
@@ -178,9 +172,10 @@ include_directories(${ZLIB_INCLUDE_DIRS})
 # Linking errors if we don't do this.
 link_directories(${Python3_LIBRARY_DIRS})
 
+include (GenerateExportHeader)
 # Add source to this project's executable.
-add_executable (${PROJECT_NAME} ${WarspiteEngine_Src} ${WarspiteEngine_Header})
-add_dependencies(${PROJECT_NAME} EngineMetadata)
+add_library(${MOD_NAME} SHARED ${WarspiteEngine_Src} ${WarspiteEngine_Header})
+add_dependencies(${MOD_NAME} EngineMetadata)
 
 # As a last ditch effort...
 if ("${Python_EXECUTABLE}" STREQUAL "")
@@ -191,7 +186,7 @@ if ("${Python_EXECUTABLE}" STREQUAL "")
     endif()
 endif()
 
-target_link_libraries(${PROJECT_NAME} PUBLIC ${Warspite_Libs})
+target_link_libraries(${MOD_NAME} PUBLIC ${Warspite_Libs})
 
 if(CMAKE_SIZEOF_VOID_P EQUAL 8)
     add_definitions(-DENV64BIT)
@@ -199,11 +194,11 @@ else()
     add_definitions(-DENV32BIT)
 endif()
 
-install(TARGETS ${PROJECT_NAME} RUNTIME DESTINATION ./Warspite)
+install(TARGETS ${MOD_NAME} RUNTIME DESTINATION ./bin)
 
 if (WIN32)
     install(DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/
-            DESTINATION ./Warspite
+            DESTINATION ./${PROJECT_NAME}/bin
             FILES_MATCHING PATTERN "*.dll"
             PATTERN ".cmake" EXCLUDE
             PATTERN "CMakeFiles" EXCLUDE
@@ -212,4 +207,4 @@ if (WIN32)
             )
 endif()
 
-install (DIRECTORY assets DESTINATION ./Warspite)
+install (DIRECTORY assets DESTINATION ./)

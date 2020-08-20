@@ -16,6 +16,10 @@ if (CMAKE_BUILD_TYPE STREQUAL "Debug")
     add_compile_definitions(WARDEBUG)
 endif()
 
+# Mod name (for the Engine)
+set (MOD_NAME "WarspiteEngine")
+add_compile_definitions(MOD_NAME="${MOD_NAME}")
+
 # Include sub-projects.
 add_subdirectory ("Engine")
 add_subdirectory ("Launcher")

@@ -8,7 +8,7 @@ extern "C" __declspec(dllexport) int __cdecl LauncherMain(HINSTANCE hInstance,
 {
 	char buf[4096];
 
-	snprintf(buf, sizeof(buf), "%s\\bin\\WarspiteGame.dll", basePath);
+	snprintf(buf, sizeof(buf), "%s\\bin\\%s.dll", basePath, MOD_NAME);
 
 	HINSTANCE engine = LoadLibraryEx(buf, NULL, LOAD_WITH_ALTERED_SEARCH_PATH);
 
