@@ -43,14 +43,14 @@ jobs:
   - task: CopyFiles@2
     displayName: "Copying DLLs to root drop"
     inputs:
-      SourceFolder: 'C:/Program Files (x86)/Warspite/Warspite/bin/Debug'
+      SourceFolder: 'C:/Program Files (x86)/Warspite/bin/Debug'
       Contents: '**'
-      TargetFolder: 'C:/Program Files (x86)/Warspite/Warspite/bin'
+      TargetFolder: 'C:/Program Files (x86)/Warspite/bin'
 
   - task: DeleteFiles@1
     displayName: "Deleting duplicate DLLs"
     inputs:
-      SourceFolder: 'C:/Program Files (x86)/Warspite/Warspite/bin/Debug'
+      SourceFolder: 'C:/Program Files (x86)/Warspite/bin/Debug'
       Contents: '**'
       RemoveSourceFolder: true
 
