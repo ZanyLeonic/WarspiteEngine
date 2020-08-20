@@ -16,6 +16,7 @@ if (CMAKE_BUILD_TYPE STREQUAL "Debug")
     add_compile_definitions(WARDEBUG)
 endif()
 
+# For Linux and Windows specific code
 if (WIN32)
     add_compile_definitions(_WIN32)
 elseif(UNIX)

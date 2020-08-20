@@ -66,7 +66,7 @@ struct SWaveFile
 				<< "ERROR: unrecognised wave format: "
 				<< Channels << " channels, "
 				<< BitRate << " bps" << std::endl;
-			return NULL;
+			return 0x0;
 		}
 	}
 };

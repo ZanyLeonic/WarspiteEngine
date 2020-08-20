@@ -73,7 +73,6 @@ int WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int n
 
 			snprintf(szBuf, sizeof(szBuf), "PATH=%s\\bin;%s", basePath, pPath);
 			_putenv(szBuf);
-
 			snprintf(szBuf, sizeof(szBuf), "%s\\bin\\launcher.dll", basePath);
 
 			HINSTANCE launcher = LoadLibraryEx(szBuf, NULL, LOAD_WITH_ALTERED_SEARCH_PATH);
@@ -91,16 +90,12 @@ int WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int n
 				LocalFree(pszError);
 				return 0;
 			}
-
 			LauncherMain_t main = (LauncherMain_t)GetProcAddress(launcher, "LauncherMain");
 			return main(hInstance, hPrevInstance, lpCmdLine, nShowCmd, basePath);
 		}
-		
 	}
-
 	return -1;
 }
-
 #elif _UNIX
 #define stringize(a) #a
 #define engine_binary(a,b,c) a stringize(b) c 

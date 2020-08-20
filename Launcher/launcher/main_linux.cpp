@@ -32,4 +32,6 @@ extern "C" int LauncherMain(int argc, char** argv)
 
 	ret = main(argc, argv);
 	dlclose(engine);
+
+	return ret;
 }

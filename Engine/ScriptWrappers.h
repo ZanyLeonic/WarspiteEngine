@@ -30,8 +30,12 @@ class CScriptWrappers
 public:
 	static bool Init_Engine();
 };
-
-class PyStdErrOutStreamRedirect {
+#ifdef _WIN32
+class PyStdErrOutStreamRedirect
+#elif _UNIX
+class __attribute__ ((visibility("hidden"))) PyStdErrOutStreamRedirect
+#endif
+{
 	py::object _stdout;
 	py::object _stderr;
 	py::object _stdout_buffer;

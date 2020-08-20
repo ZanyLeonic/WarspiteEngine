@@ -33,18 +33,17 @@
     </configurations>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="543719c6-8c94-4a69-8f9a-51660507439a" name="Default Changelist" comment="">
+    <list default="true" id="543719c6-8c94-4a69-8f9a-51660507439a" name="Default Changelist" comment="Made some changes to CMakeLists.txt and code for Linux builds">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/CMakeLists.txt" beforeDir="false" afterPath="$PROJECT_DIR$/CMakeLists.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Engine/CMakeLists.txt" beforeDir="false" afterPath="$PROJECT_DIR$/Engine/CMakeLists.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Engine/PlayState.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Engine/PlayState.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Engine/ScriptManager.h" beforeDir="false" afterPath="$PROJECT_DIR$/Engine/ScriptManager.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Engine/ScriptWrappers.h" beforeDir="false" afterPath="$PROJECT_DIR$/Engine/ScriptWrappers.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Engine/SoundManager.h" beforeDir="false" afterPath="$PROJECT_DIR$/Engine/SoundManager.h" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Engine/WarspiteGame.Build.txt" beforeDir="false" afterPath="$PROJECT_DIR$/Engine/WarspiteGame.Build.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Engine/main.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Engine/main.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Launcher/launcher/CMakeLists.txt" beforeDir="false" afterPath="$PROJECT_DIR$/Launcher/launcher/CMakeLists.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Launcher/launcher/main_linux.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Launcher/launcher/main_linux.cpp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Launcher/main/CMakeLists.txt" beforeDir="false" afterPath="$PROJECT_DIR$/Launcher/main/CMakeLists.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Launcher/main/launcher_main.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Launcher/main/launcher_main.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Warspite.cbp" beforeDir="false" afterPath="$PROJECT_DIR$/Warspite.cbp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/azure-pipelines.yml" beforeDir="false" afterPath="$PROJECT_DIR$/azure-pipelines.yml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -171,7 +170,14 @@
       <option name="project" value="LOCAL" />
       <updated>1594569277042</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="Made some changes to CMakeLists.txt and code for Linux builds">
+      <created>1597928483595</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1597928483596</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -191,7 +197,8 @@
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Made changes for compilation under Linux" />
-    <option name="LAST_COMMIT_MESSAGE" value="Made changes for compilation under Linux" />
+    <MESSAGE value="Made some changes to CMakeLists.txt and code for Linux builds" />
+    <option name="LAST_COMMIT_MESSAGE" value="Made some changes to CMakeLists.txt and code for Linux builds" />
   </component>
   <component name="WindowStateProjectService">
     <state x="384" y="128" width="1264" height="810" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1597224948018">

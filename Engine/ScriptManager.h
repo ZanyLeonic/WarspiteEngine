@@ -62,7 +62,11 @@ private:
 	std::string m_FileName = "";
 };
 
+#ifdef _WIN32
 class CScriptManager
+#elif _UNIX
+class __attribute__ ((visibility("hidden"))) CScriptManager
+#endif
 {
 	static CScriptManager* s_pInstance;
 	CScriptManager();

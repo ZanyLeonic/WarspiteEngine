@@ -4,6 +4,7 @@
 cmake_minimum_required (VERSION 3.8)
 
 if (WIN32)
+    set(LauncherMain_Libs)
     set (LauncherMain_Src
         launcher_main.cpp
         launcher_main.rc
@@ -15,6 +16,7 @@ if (WIN32)
 
     add_executable (LauncherMain WIN32 ${LauncherMain_Src} ${LauncherMain_Header})
 elseif(UNIX)
+    set(LauncherMain_Libs dl)
     set (LauncherMain_Src
         launcher_main.cpp
     )
@@ -23,8 +25,6 @@ elseif(UNIX)
     )
     add_executable (LauncherMain ${LauncherMain_Src} ${LauncherMain_Header})
 endif()
-
-set(LauncherMain_Libs dl)
 
 target_link_libraries(LauncherMain PUBLIC ${LauncherMain_Libs})
 set_target_properties(LauncherMain PROPERTIES OUTPUT_NAME "ws")
