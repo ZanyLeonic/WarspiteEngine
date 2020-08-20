@@ -29,11 +29,12 @@ endif()
 target_link_libraries(LauncherMain PUBLIC ${LauncherMain_Libs})
 set_target_properties(LauncherMain PROPERTIES OUTPUT_NAME "ws")
 
-install(TARGETS LauncherMain RUNTIME DESTINATION ./bin/${PROJECT_NAME})
-
-if (WIN32)
+if (UNIX)
+    install(TARGETS LauncherMain RUNTIME DESTINATION ./bin/${PROJECT_NAME})
+elseif (WIN32)
+    install(TARGETS LauncherMain RUNTIME DESTINATION ./)
     install(DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/
-            DESTINATION ./${PROJECT_NAME}
+            DESTINATION ./
             FILES_MATCHING PATTERN "*.dll"
             PATTERN ".cmake" EXCLUDE
             PATTERN "CMakeFiles" EXCLUDE

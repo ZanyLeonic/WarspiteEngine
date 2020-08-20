@@ -196,17 +196,18 @@ endif()
 
 if (UNIX)
     install(FILES lib${MOD_NAME}.so DESTINATION ./bin/${PROJECT_NAME}/bin)
+    install (DIRECTORY assets DESTINATION ./bin/${PROJECT_NAME})
 elseif (WIN32)
-    install(TARGETS ${MOD_NAME} RUNTIME DESTINATION ./${PROJECT_NAME}/bin)
+    install(TARGETS ${MOD_NAME} RUNTIME DESTINATION ./bin)
 
     install(DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/
-            DESTINATION ./${PROJECT_NAME}/bin
+            DESTINATION ./bin
             FILES_MATCHING PATTERN "*.dll"
             PATTERN ".cmake" EXCLUDE
             PATTERN "CMakeFiles" EXCLUDE
             PATTERN "include" EXCLUDE
             PATTERN "Testing" EXCLUDE
             )
+    install (DIRECTORY assets DESTINATION ./)
 endif()
 
-install (DIRECTORY assets DESTINATION ./bin/${PROJECT_NAME})

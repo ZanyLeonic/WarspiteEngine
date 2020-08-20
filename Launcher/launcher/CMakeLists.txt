@@ -22,9 +22,9 @@ set_target_properties(Launcher PROPERTIES OUTPUT_NAME "launcher")
 if (UNIX)
     install(FILES liblauncher.so DESTINATION ./bin/${PROJECT_NAME}/bin)
 elseif (WIN32)
-    install(TARGETS Launcher RUNTIME DESTINATION ./${PROJECT_NAME}/bin)
+    install(TARGETS Launcher RUNTIME DESTINATION ./bin)
     install(DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/
-            DESTINATION ./${PROJECT_NAME}/bin
+            DESTINATION ./bin
             FILES_MATCHING PATTERN "*.dll"
             PATTERN ".cmake" EXCLUDE
             PATTERN "CMakeFiles" EXCLUDE
