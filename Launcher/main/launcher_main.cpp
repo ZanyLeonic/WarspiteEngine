@@ -56,9 +56,12 @@ static char* GetBaseDir(const char* pFileName)
 #ifdef _WIN32
 int WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nShowCmd)
 {
-#ifdef USE_CONSOLE == 1
+#ifdef USE_CONSOLE
 	// Create a console and output all stdout and sterr to it.
 	AllocConsole();
+
+	// Redirect the std stuff
+	freopen("CONIN$", "r", stdin);
 	freopen("CONOUT$", "w", stdout);
 	freopen("CONOUT$", "w", stderr);
 #endif

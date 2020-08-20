@@ -112,7 +112,7 @@ void CStateParser::ParseObjects(const rapidjson::Value* pStateRoot, std::vector<
 		IGameObject* pGameObject =
 			CGameObjectDictionary::Instance()->Create(b["type"].GetString());
 
-		CObjectParams* pOP = new CObjectParams(b["x"].GetInt(), b["y"].GetInt());
+		CObjectParams* pOP = new CObjectParams(b["x"].GetFloat(), b["y"].GetFloat());
 		// Retrieve the relevant information from the object declaration...
 		// Required
 		if (b.HasMember("width"))

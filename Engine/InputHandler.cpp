@@ -2,7 +2,6 @@
 #include "Game.h"
 #include "ScriptManager.h"
 #include "ScriptWrappers.h"
-#include <iostream>
 
 CInputHandler* CInputHandler::s_pInstance = 0;
 
@@ -115,14 +114,15 @@ void CInputHandler::InitialiseJoysticks()
 			}
 			else
 			{
-				std::cout << SDL_GetError();
+				spdlog::error("Error while initialising joystick ({})", i);
+				spdlog::error(SDL_GetError());
 			}
 		}
 		SDL_JoystickEventState(SDL_ENABLE);
 		m_bJoysticksInitialised = true;
 
-		std::cout << "Initialised " << m_joysticks.size() <<
-			" joystick(s)\n";
+		spdlog::info("Initialised {} joystick(s)", 
+			m_joysticks.size());
 	}
 	else
 	{
@@ -385,9 +385,4 @@ void CInputHandler::onJoystickButtonUp(SDL_Event& event)
 	int whichOne = event.jaxis.which;
 
 	m_buttonStates[whichOne][event.jbutton.button] = false;
-}
-
-void CInputHandler::keyDownTest()
-{
-	std::cout << "Key has been pressed down!";
 }

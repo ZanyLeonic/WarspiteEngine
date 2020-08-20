@@ -38,8 +38,8 @@ CLevel* CLevelParser::ParseLevel(const char* levelFile)
 		parseBackgroundColour(&bgColour);
 
 		// multiply by tilesize since we are using pixels
-		pLevel->m_LevelSize.SetX((int)(m_width * m_tileSize));
-		pLevel->m_LevelSize.SetY((int)(m_height * m_tileSize));
+		pLevel->m_LevelSize.SetX(m_width * m_tileSize);
+		pLevel->m_LevelSize.SetY(m_height * m_tileSize);
 
 		assert(tLevel["tilesets"].IsArray());
 		const Value& tilesets = tLevel["tilesets"].GetArray();
@@ -300,7 +300,7 @@ void CLevelParser::parseObjectLayer(const rapidjson::Value* pObjectVal, std::vec
 		const Value::ConstObject& b = a[i].GetObject();
 
 		// Get the desired coordinates
-		CObjectParams* pOP = new CObjectParams(b["x"].GetInt(), b["y"].GetInt());
+		CObjectParams* pOP = new CObjectParams(b["x"].GetFloat(), b["y"].GetFloat());
 
 		pOP->SetFactoryID(b["type"].GetString());
 		pOP->SetName(b["name"].GetString());

@@ -2,11 +2,6 @@
 #ifndef __ENGINEFILESYSTEM_H__
 #define __ENGINEFILESYSTEM_H__
 
-// Get rid of those "deprecated" messages
-#ifdef _WIN32
-#define _CRT_SECURE_NO_DEPRECATE
-#endif
-
 #include <string>
 #include <rapidjson/document.h>
 

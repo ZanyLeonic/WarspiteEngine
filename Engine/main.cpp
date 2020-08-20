@@ -1,4 +1,3 @@
-#define _CRT_SECURE_NO_WARNINGS
 #include "Game.h"
 #include "EngineMetadata.h"
 #include <iostream>
@@ -31,9 +30,7 @@ extern "C" int Engine(int argc, char** argv)
 	// Setup logging
 	try
 	{
-#ifdef WARDEBUG
 		sinks.push_back(std::make_shared<spdlog::sinks::stdout_color_sink_st>());
-#endif
 		sinks.push_back(std::make_shared<spdlog::sinks::daily_file_sink_st>("logs/engine.log", 23, 59));
 
 		std::shared_ptr<spdlog::logger> combined_logger

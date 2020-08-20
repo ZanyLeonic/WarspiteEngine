@@ -78,7 +78,7 @@ void CTexture::SetAlpha(Uint8 alpha)
 void CTexture::Draw(CVector2D pos)
 {
 	if (!m_texture) return;
-	CTextureManager::Instance()->Draw(this, pos.GetX(), pos.GetY(), CGame::Instance()->GetRenderer(), m_angle);
+	CTextureManager::Instance()->Draw(this, (int)pos.GetX(), (int)pos.GetY(), CGame::Instance()->GetRenderer(), m_angle);
 }
 
 void CTexture::SetAngle(double pAngle)

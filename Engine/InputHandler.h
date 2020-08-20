@@ -74,8 +74,6 @@ private:
 	void onJoystickButtonDown(SDL_Event& event);
 	void onJoystickButtonUp(SDL_Event& event);
 
-	static void keyDownTest();
-
 	std::vector<SDL_Joystick*> m_joysticks;
 	bool m_bJoysticksInitialised;
 

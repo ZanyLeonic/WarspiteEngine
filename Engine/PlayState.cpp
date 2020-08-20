@@ -114,7 +114,7 @@ bool CPlayState::OnPlay()
 
 	// Stream 1
 	CInputHandler::Instance()->AddActionKeyDown(SDL_SCANCODE_2, [this] {
-		alCall(alSourcef, testStream.Source, AL_PITCH, 1);
+		alCall(alSourcef, testStream.Source, AL_PITCH, 1.0f);
 		alCall(alSourcef, testStream.Source, AL_GAIN, 1.0f);
 		alCall(alSource3f, testStream.Source, AL_POSITION, 50.f, 50.f, 0.f);
 		alCall(alSource3f, testStream.Source, AL_VELOCITY, 0.f, 0.f, 0.f);
@@ -139,7 +139,7 @@ bool CPlayState::OnPlay()
 
 	// Stream 2
 	CInputHandler::Instance()->AddActionKeyDown(SDL_SCANCODE_4, [this] {
-		alCall(alSourcef, testStream2.Source, AL_PITCH, 1);
+		alCall(alSourcef, testStream2.Source, AL_PITCH, 1.0f);
 		alCall(alSourcef, testStream2.Source, AL_GAIN, 1.0f);
 		alCall(alSource3f, testStream2.Source, AL_POSITION, 180.f, 180.f, 0.f);
 		alCall(alSource3f, testStream2.Source, AL_VELOCITY, 0.f, 0.f, 0.f);

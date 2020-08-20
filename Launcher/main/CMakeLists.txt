@@ -26,6 +26,8 @@ elseif(UNIX)
     add_executable (LauncherMain ${LauncherMain_Src} ${LauncherMain_Header})
 endif()
 
+add_dependencies(LauncherMain ${MOD_NAME})
+
 target_link_libraries(LauncherMain PUBLIC ${LauncherMain_Libs})
 set_target_properties(LauncherMain PROPERTIES 
                         OUTPUT_NAME "ws"

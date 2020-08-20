@@ -17,7 +17,7 @@ set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/CMakeModules/")
 # Apply some debug options
 if (CMAKE_BUILD_TYPE STREQUAL "Debug")
     add_compile_definitions(WARDEBUG)
-    add_compile_definitions(USE_CONSOLE 1)
+    add_compile_definitions(USE_CONSOLE)
 endif()
 
 # For Linux and Windows specific code
@@ -33,6 +33,9 @@ set (MOD_NAME "WarspiteEngine")
 # So things like the launcher know what the library is going to be called
 add_compile_definitions(MOD_NAME="${MOD_NAME}")
 add_compile_definitions(MOD_NAME_L=${MOD_NAME})
+
+# Go away M$
+add_compile_definitions(_CRT_SECURE_NO_WARNINGS)
 
 # Build path for debug
 set(BIN_PATH_DEBUG ${CMAKE_BINARY_DIR}/Debug)
