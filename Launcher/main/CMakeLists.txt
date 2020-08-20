@@ -3,7 +3,6 @@
 #
 cmake_minimum_required (VERSION 3.8)
 
-
 if (WIN32)
     set (LauncherMain_Src
         launcher_main.cpp
@@ -25,9 +24,12 @@ elseif(UNIX)
     add_executable (LauncherMain ${LauncherMain_Src} ${LauncherMain_Header})
 endif()
 
+set(LauncherMain_Libs dl)
+
+target_link_libraries(LauncherMain PUBLIC ${LauncherMain_Libs})
 set_target_properties(LauncherMain PROPERTIES OUTPUT_NAME "ws")
 
-install(TARGETS LauncherMain RUNTIME DESTINATION ./)
+install(TARGETS LauncherMain RUNTIME DESTINATION ./bin/${PROJECT_NAME})
 
 if (WIN32)
     install(DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/

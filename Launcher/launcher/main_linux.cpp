@@ -14,7 +14,7 @@ typedef int (*Engine_t)(int argc, char** argv);
 
 extern "C" int LauncherMain(int argc, char** argv)
 {
-	const char* pBinaryName = engine_binary("bin/", MOD_NAME, ".so");
+	const char* pBinaryName = engine_binary("bin/lib", MOD_NAME_L, ".so");
 	void* engine = dlopen(pBinaryName, RTLD_NOW);
 	int ret = 0;
 	

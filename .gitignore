@@ -409,3 +409,4 @@ out/
 Engine/logs/**
 *.vcxproj*
 *.sln
+/Launcher/main/ws

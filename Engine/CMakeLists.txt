@@ -194,9 +194,11 @@ else()
     add_definitions(-DENV32BIT)
 endif()
 
-install(TARGETS ${MOD_NAME} RUNTIME DESTINATION ./bin)
+if (UNIX)
+    install(FILES lib${MOD_NAME}.so DESTINATION ./bin/${PROJECT_NAME}/bin)
+elseif (WIN32)
+    install(TARGETS ${MOD_NAME} RUNTIME DESTINATION ./${PROJECT_NAME}/bin)
 
-if (WIN32)
     install(DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/
             DESTINATION ./${PROJECT_NAME}/bin
             FILES_MATCHING PATTERN "*.dll"
@@ -207,4 +209,4 @@ if (WIN32)
             )
 endif()
 
-install (DIRECTORY assets DESTINATION ./)
+install (DIRECTORY assets DESTINATION ./bin/${PROJECT_NAME})

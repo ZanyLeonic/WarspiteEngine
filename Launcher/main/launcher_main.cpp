@@ -5,6 +5,7 @@
 #include <cassert>
 #elif _UNIX
 #include <string>
+#include <cstring>
 #include <iostream>
 #include <cassert>
 #include <dlfcn.h>
@@ -28,7 +29,7 @@ static char* GetBaseDir(const char* pFileName)
 	size_t j;
 	char* pBuffer = NULL;
 
-	strcpy_s(szBuffer, pFileName);
+	strcpy(szBuffer, pFileName);
 
 	// Get a pointer to the last / in the path
 	pBuffer = strrchr(szBuffer, '\\');
@@ -37,7 +38,7 @@ static char* GetBaseDir(const char* pFileName)
 		*(pBuffer + 1) = '\0';
 	}
 
-	strcpy_s(basedir, szBuffer);
+	strcpy(basedir, szBuffer);
 
 	j = strlen(basedir);
 	if (j > 0)
@@ -121,7 +122,7 @@ int main(int argc, char** argv)
 		printf("%s\n", strerror(errno));
 	}
 
-	const char* pBinaryName = "bin/launcher.so";
+	const char* pBinaryName = "bin/liblauncher.so";
 	void* launcher = dlopen(pBinaryName, RTLD_NOW);
 	if (!launcher)
 	{

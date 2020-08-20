@@ -24,7 +24,9 @@ endif()
 
 # Mod name (for the Engine)
 set (MOD_NAME "WarspiteEngine")
+
 add_compile_definitions(MOD_NAME="${MOD_NAME}")
+add_compile_definitions(MOD_NAME_L=${MOD_NAME})
 
 # Include sub-projects.
 add_subdirectory ("Engine")

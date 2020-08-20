@@ -5,7 +5,7 @@
 		<Option title="Warspite"/>
 		<Option makefile_is_custom="1"/>
 		<Option compiler="gcc"/>
-		<Option virtualFolders="CMake Files\;CMake Files\Engine\;CMake Files\..\;CMake Files\..\..\;CMake Files\..\..\..\;CMake Files\..\..\..\..\;CMake Files\..\..\..\..\usr\;CMake Files\..\..\..\..\usr\lib\;CMake Files\..\..\..\..\usr\lib\cmake\;CMake Files\..\..\..\..\usr\lib\cmake\pybind11\;CMake Files\..\..\..\..\usr\lib\x86_64-linux-gnu\;CMake Files\..\..\..\..\usr\lib\x86_64-linux-gnu\cmake\;CMake Files\..\..\..\..\usr\lib\x86_64-linux-gnu\cmake\spdlog\;CMake Files\..\..\..\..\usr\lib\x86_64-linux-gnu\cmake\SDL2\;CMake Files\CMakeModules\;"/>
+		<Option virtualFolders="CMake Files\;CMake Files\Engine\;CMake Files\..\;CMake Files\..\..\;CMake Files\..\..\..\;CMake Files\..\..\..\..\;CMake Files\..\..\..\..\usr\;CMake Files\..\..\..\..\usr\lib\;CMake Files\..\..\..\..\usr\lib\x86_64-linux-gnu\;CMake Files\..\..\..\..\usr\lib\x86_64-linux-gnu\cmake\;CMake Files\..\..\..\..\usr\lib\x86_64-linux-gnu\cmake\fmt\;CMake Files\..\..\..\..\usr\lib\x86_64-linux-gnu\cmake\spdlog\;CMake Files\..\..\..\..\usr\lib\x86_64-linux-gnu\cmake\SDL2\;CMake Files\..\..\..\..\usr\lib\cmake\;CMake Files\..\..\..\..\usr\lib\cmake\pybind11\;CMake Files\..\..\..\..\usr\lib\cmake\RapidJSON\;CMake Files\CMakeModules\;CMake Files\Launcher\;CMake Files\Launcher\launcher\;CMake Files\Launcher\main\;"/>
 		<Build>
 			<Target title="all">
 				<Option working_dir="/home/kurisu/CLionProjects/WarspiteGame"/>
@@ -87,279 +87,447 @@
 					<DistClean command="/usr/bin/make -j4 -f &quot;/home/kurisu/CLionProjects/WarspiteGame/Engine/Makefile&quot;  VERBOSE=1 clean"/>
 				</MakeCommands>
 			</Target>
-			<Target title="Warspite">
-				<Option output="/home/kurisu/CLionProjects/WarspiteGame/Engine/Warspite" prefix_auto="0" extension_auto="0"/>
+			<Target title="WarspiteEngine">
+				<Option output="/home/kurisu/CLionProjects/WarspiteGame/Engine/libWarspiteEngine.so" prefix_auto="0" extension_auto="0"/>
 				<Option working_dir="/home/kurisu/CLionProjects/WarspiteGame/Engine"/>
 				<Option object_output="./"/>
-				<Option type="1"/>
+				<Option type="3"/>
 				<Option compiler="gcc"/>
 				<Compiler>
 					<Add option="-DWARDEBUG"/>
+					<Add option="-D_UNIX"/>
+					<Add option="-DMOD_NAME=&quot;WarspiteEngine&quot;"/>
+					<Add option="-DMOD_NAME_L=WarspiteEngine"/>
 					<Add option="-DENV64BIT"/>
-					<Add option="-DSPDLOG_COMPILED_LIB"/>
-					<Add directory="/usr/include/python3.8"/>
+					<Add directory="/usr/include/python3.7m"/>
 					<Add directory="/usr/include/SDL2"/>
-					<Add directory="/usr/include/c++/9"/>
-					<Add directory="/usr/include/x86_64-linux-gnu/c++/9"/>
-					<Add directory="/usr/include/c++/9/backward"/>
-					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/9/include"/>
+					<Add directory="/usr/include/c++/8"/>
+					<Add directory="/usr/include/x86_64-linux-gnu/c++/8"/>
+					<Add directory="/usr/include/c++/8/backward"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/8/include"/>
 					<Add directory="/usr/local/include"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/8/include-fixed"/>
 					<Add directory="/usr/include/x86_64-linux-gnu"/>
 					<Add directory="/usr/include"/>
 				</Compiler>
 				<MakeCommands>
-					<Build command="/usr/bin/make -j4 -f &quot;/home/kurisu/CLionProjects/WarspiteGame/Engine/Makefile&quot;  VERBOSE=1 Warspite"/>
+					<Build command="/usr/bin/make -j4 -f &quot;/home/kurisu/CLionProjects/WarspiteGame/Engine/Makefile&quot;  VERBOSE=1 WarspiteEngine"/>
 					<CompileFile command="/usr/bin/make -j4 -f &quot;/home/kurisu/CLionProjects/WarspiteGame/Engine/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
 					<Clean command="/usr/bin/make -j4 -f &quot;/home/kurisu/CLionProjects/WarspiteGame/Engine/Makefile&quot;  VERBOSE=1 clean"/>
 					<DistClean command="/usr/bin/make -j4 -f &quot;/home/kurisu/CLionProjects/WarspiteGame/Engine/Makefile&quot;  VERBOSE=1 clean"/>
 				</MakeCommands>
 			</Target>
-			<Target title="Warspite/fast">
-				<Option output="/home/kurisu/CLionProjects/WarspiteGame/Engine/Warspite" prefix_auto="0" extension_auto="0"/>
+			<Target title="WarspiteEngine/fast">
+				<Option output="/home/kurisu/CLionProjects/WarspiteGame/Engine/libWarspiteEngine.so" prefix_auto="0" extension_auto="0"/>
 				<Option working_dir="/home/kurisu/CLionProjects/WarspiteGame/Engine"/>
+				<Option object_output="./"/>
+				<Option type="3"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add option="-DWARDEBUG"/>
+					<Add option="-D_UNIX"/>
+					<Add option="-DMOD_NAME=&quot;WarspiteEngine&quot;"/>
+					<Add option="-DMOD_NAME_L=WarspiteEngine"/>
+					<Add option="-DENV64BIT"/>
+					<Add directory="/usr/include/python3.7m"/>
+					<Add directory="/usr/include/SDL2"/>
+					<Add directory="/usr/include/c++/8"/>
+					<Add directory="/usr/include/x86_64-linux-gnu/c++/8"/>
+					<Add directory="/usr/include/c++/8/backward"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/8/include"/>
+					<Add directory="/usr/local/include"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/8/include-fixed"/>
+					<Add directory="/usr/include/x86_64-linux-gnu"/>
+					<Add directory="/usr/include"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j4 -f &quot;/home/kurisu/CLionProjects/WarspiteGame/Engine/Makefile&quot;  VERBOSE=1 WarspiteEngine/fast"/>
+					<CompileFile command="/usr/bin/make -j4 -f &quot;/home/kurisu/CLionProjects/WarspiteGame/Engine/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j4 -f &quot;/home/kurisu/CLionProjects/WarspiteGame/Engine/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j4 -f &quot;/home/kurisu/CLionProjects/WarspiteGame/Engine/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="Launcher">
+				<Option output="/home/kurisu/CLionProjects/WarspiteGame/Launcher/launcher/liblauncher.so" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/home/kurisu/CLionProjects/WarspiteGame/Launcher/launcher"/>
+				<Option object_output="./"/>
+				<Option type="3"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add option="-DWARDEBUG"/>
+					<Add option="-D_UNIX"/>
+					<Add option="-DMOD_NAME=&quot;WarspiteEngine&quot;"/>
+					<Add option="-DMOD_NAME_L=WarspiteEngine"/>
+					<Add directory="/usr/include/c++/8"/>
+					<Add directory="/usr/include/x86_64-linux-gnu/c++/8"/>
+					<Add directory="/usr/include/c++/8/backward"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/8/include"/>
+					<Add directory="/usr/local/include"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/8/include-fixed"/>
+					<Add directory="/usr/include/x86_64-linux-gnu"/>
+					<Add directory="/usr/include"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j4 -f &quot;/home/kurisu/CLionProjects/WarspiteGame/Launcher/launcher/Makefile&quot;  VERBOSE=1 Launcher"/>
+					<CompileFile command="/usr/bin/make -j4 -f &quot;/home/kurisu/CLionProjects/WarspiteGame/Launcher/launcher/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j4 -f &quot;/home/kurisu/CLionProjects/WarspiteGame/Launcher/launcher/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j4 -f &quot;/home/kurisu/CLionProjects/WarspiteGame/Launcher/launcher/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="Launcher/fast">
+				<Option output="/home/kurisu/CLionProjects/WarspiteGame/Launcher/launcher/liblauncher.so" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/home/kurisu/CLionProjects/WarspiteGame/Launcher/launcher"/>
+				<Option object_output="./"/>
+				<Option type="3"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add option="-DWARDEBUG"/>
+					<Add option="-D_UNIX"/>
+					<Add option="-DMOD_NAME=&quot;WarspiteEngine&quot;"/>
+					<Add option="-DMOD_NAME_L=WarspiteEngine"/>
+					<Add directory="/usr/include/c++/8"/>
+					<Add directory="/usr/include/x86_64-linux-gnu/c++/8"/>
+					<Add directory="/usr/include/c++/8/backward"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/8/include"/>
+					<Add directory="/usr/local/include"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/8/include-fixed"/>
+					<Add directory="/usr/include/x86_64-linux-gnu"/>
+					<Add directory="/usr/include"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j4 -f &quot;/home/kurisu/CLionProjects/WarspiteGame/Launcher/launcher/Makefile&quot;  VERBOSE=1 Launcher/fast"/>
+					<CompileFile command="/usr/bin/make -j4 -f &quot;/home/kurisu/CLionProjects/WarspiteGame/Launcher/launcher/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j4 -f &quot;/home/kurisu/CLionProjects/WarspiteGame/Launcher/launcher/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j4 -f &quot;/home/kurisu/CLionProjects/WarspiteGame/Launcher/launcher/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="LauncherMain">
+				<Option output="/home/kurisu/CLionProjects/WarspiteGame/Launcher/main/ws" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/home/kurisu/CLionProjects/WarspiteGame/Launcher/main"/>
 				<Option object_output="./"/>
 				<Option type="1"/>
 				<Option compiler="gcc"/>
 				<Compiler>
 					<Add option="-DWARDEBUG"/>
-					<Add option="-DENV64BIT"/>
-					<Add option="-DSPDLOG_COMPILED_LIB"/>
-					<Add directory="/usr/include/python3.8"/>
-					<Add directory="/usr/include/SDL2"/>
-					<Add directory="/usr/include/c++/9"/>
-					<Add directory="/usr/include/x86_64-linux-gnu/c++/9"/>
-					<Add directory="/usr/include/c++/9/backward"/>
-					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/9/include"/>
+					<Add option="-D_UNIX"/>
+					<Add option="-DMOD_NAME=&quot;WarspiteEngine&quot;"/>
+					<Add option="-DMOD_NAME_L=WarspiteEngine"/>
+					<Add directory="/usr/include/c++/8"/>
+					<Add directory="/usr/include/x86_64-linux-gnu/c++/8"/>
+					<Add directory="/usr/include/c++/8/backward"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/8/include"/>
 					<Add directory="/usr/local/include"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/8/include-fixed"/>
 					<Add directory="/usr/include/x86_64-linux-gnu"/>
 					<Add directory="/usr/include"/>
 				</Compiler>
 				<MakeCommands>
-					<Build command="/usr/bin/make -j4 -f &quot;/home/kurisu/CLionProjects/WarspiteGame/Engine/Makefile&quot;  VERBOSE=1 Warspite/fast"/>
-					<CompileFile command="/usr/bin/make -j4 -f &quot;/home/kurisu/CLionProjects/WarspiteGame/Engine/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
-					<Clean command="/usr/bin/make -j4 -f &quot;/home/kurisu/CLionProjects/WarspiteGame/Engine/Makefile&quot;  VERBOSE=1 clean"/>
-					<DistClean command="/usr/bin/make -j4 -f &quot;/home/kurisu/CLionProjects/WarspiteGame/Engine/Makefile&quot;  VERBOSE=1 clean"/>
+					<Build command="/usr/bin/make -j4 -f &quot;/home/kurisu/CLionProjects/WarspiteGame/Launcher/main/Makefile&quot;  VERBOSE=1 LauncherMain"/>
+					<CompileFile command="/usr/bin/make -j4 -f &quot;/home/kurisu/CLionProjects/WarspiteGame/Launcher/main/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j4 -f &quot;/home/kurisu/CLionProjects/WarspiteGame/Launcher/main/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j4 -f &quot;/home/kurisu/CLionProjects/WarspiteGame/Launcher/main/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="LauncherMain/fast">
+				<Option output="/home/kurisu/CLionProjects/WarspiteGame/Launcher/main/ws" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/home/kurisu/CLionProjects/WarspiteGame/Launcher/main"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add option="-DWARDEBUG"/>
+					<Add option="-D_UNIX"/>
+					<Add option="-DMOD_NAME=&quot;WarspiteEngine&quot;"/>
+					<Add option="-DMOD_NAME_L=WarspiteEngine"/>
+					<Add directory="/usr/include/c++/8"/>
+					<Add directory="/usr/include/x86_64-linux-gnu/c++/8"/>
+					<Add directory="/usr/include/c++/8/backward"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/8/include"/>
+					<Add directory="/usr/local/include"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/8/include-fixed"/>
+					<Add directory="/usr/include/x86_64-linux-gnu"/>
+					<Add directory="/usr/include"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j4 -f &quot;/home/kurisu/CLionProjects/WarspiteGame/Launcher/main/Makefile&quot;  VERBOSE=1 LauncherMain/fast"/>
+					<CompileFile command="/usr/bin/make -j4 -f &quot;/home/kurisu/CLionProjects/WarspiteGame/Launcher/main/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j4 -f &quot;/home/kurisu/CLionProjects/WarspiteGame/Launcher/main/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j4 -f &quot;/home/kurisu/CLionProjects/WarspiteGame/Launcher/main/Makefile&quot;  VERBOSE=1 clean"/>
 				</MakeCommands>
 			</Target>
 		</Build>
 		<Unit filename="/home/kurisu/CLionProjects/WarspiteGame/Engine/AnimatedGraphic.cpp">
-			<Option target="Warspite"/>
+			<Option target="WarspiteEngine"/>
 		</Unit>
 		<Unit filename="/home/kurisu/CLionProjects/WarspiteGame/Engine/AnimatedGraphic.h">
-			<Option target="Warspite"/>
+			<Option target="WarspiteEngine"/>
+		</Unit>
+		<Unit filename="/home/kurisu/CLionProjects/WarspiteGame/Engine/AudioSource.cpp">
+			<Option target="WarspiteEngine"/>
+		</Unit>
+		<Unit filename="/home/kurisu/CLionProjects/WarspiteGame/Engine/AudioSource.h">
+			<Option target="WarspiteEngine"/>
 		</Unit>
 		<Unit filename="/home/kurisu/CLionProjects/WarspiteGame/Engine/Button.cpp">
-			<Option target="Warspite"/>
+			<Option target="WarspiteEngine"/>
 		</Unit>
 		<Unit filename="/home/kurisu/CLionProjects/WarspiteGame/Engine/Button.h">
-			<Option target="Warspite"/>
+			<Option target="WarspiteEngine"/>
+		</Unit>
+		<Unit filename="/home/kurisu/CLionProjects/WarspiteGame/Engine/CTexture.cpp">
+			<Option target="WarspiteEngine"/>
+		</Unit>
+		<Unit filename="/home/kurisu/CLionProjects/WarspiteGame/Engine/CTexture.h">
+			<Option target="WarspiteEngine"/>
 		</Unit>
 		<Unit filename="/home/kurisu/CLionProjects/WarspiteGame/Engine/Camera.cpp">
-			<Option target="Warspite"/>
+			<Option target="WarspiteEngine"/>
 		</Unit>
 		<Unit filename="/home/kurisu/CLionProjects/WarspiteGame/Engine/Camera.h">
-			<Option target="Warspite"/>
+			<Option target="WarspiteEngine"/>
 		</Unit>
 		<Unit filename="/home/kurisu/CLionProjects/WarspiteGame/Engine/Enemy.cpp">
-			<Option target="Warspite"/>
+			<Option target="WarspiteEngine"/>
 		</Unit>
 		<Unit filename="/home/kurisu/CLionProjects/WarspiteGame/Engine/Enemy.h">
-			<Option target="Warspite"/>
+			<Option target="WarspiteEngine"/>
 		</Unit>
 		<Unit filename="/home/kurisu/CLionProjects/WarspiteGame/Engine/EngineFileSystem.cpp">
-			<Option target="Warspite"/>
+			<Option target="WarspiteEngine"/>
 		</Unit>
 		<Unit filename="/home/kurisu/CLionProjects/WarspiteGame/Engine/EngineFileSystem.h">
-			<Option target="Warspite"/>
+			<Option target="WarspiteEngine"/>
 		</Unit>
 		<Unit filename="/home/kurisu/CLionProjects/WarspiteGame/Engine/EngineTypes.h">
-			<Option target="Warspite"/>
+			<Option target="WarspiteEngine"/>
+		</Unit>
+		<Unit filename="/home/kurisu/CLionProjects/WarspiteGame/Engine/FPSCounter.cpp">
+			<Option target="WarspiteEngine"/>
+		</Unit>
+		<Unit filename="/home/kurisu/CLionProjects/WarspiteGame/Engine/FPSCounter.h">
+			<Option target="WarspiteEngine"/>
 		</Unit>
 		<Unit filename="/home/kurisu/CLionProjects/WarspiteGame/Engine/FontManager.cpp">
-			<Option target="Warspite"/>
+			<Option target="WarspiteEngine"/>
 		</Unit>
 		<Unit filename="/home/kurisu/CLionProjects/WarspiteGame/Engine/FontManager.h">
-			<Option target="Warspite"/>
+			<Option target="WarspiteEngine"/>
 		</Unit>
 		<Unit filename="/home/kurisu/CLionProjects/WarspiteGame/Engine/Game.cpp">
-			<Option target="Warspite"/>
+			<Option target="WarspiteEngine"/>
 		</Unit>
 		<Unit filename="/home/kurisu/CLionProjects/WarspiteGame/Engine/Game.h">
-			<Option target="Warspite"/>
+			<Option target="WarspiteEngine"/>
 		</Unit>
 		<Unit filename="/home/kurisu/CLionProjects/WarspiteGame/Engine/GameObject.h">
-			<Option target="Warspite"/>
+			<Option target="WarspiteEngine"/>
 		</Unit>
 		<Unit filename="/home/kurisu/CLionProjects/WarspiteGame/Engine/GameObjectDictionary.cpp">
-			<Option target="Warspite"/>
+			<Option target="WarspiteEngine"/>
 		</Unit>
 		<Unit filename="/home/kurisu/CLionProjects/WarspiteGame/Engine/GameObjectDictionary.h">
-			<Option target="Warspite"/>
+			<Option target="WarspiteEngine"/>
 		</Unit>
 		<Unit filename="/home/kurisu/CLionProjects/WarspiteGame/Engine/GameState.h">
-			<Option target="Warspite"/>
+			<Option target="WarspiteEngine"/>
 		</Unit>
 		<Unit filename="/home/kurisu/CLionProjects/WarspiteGame/Engine/GameStateBase.cpp">
-			<Option target="Warspite"/>
+			<Option target="WarspiteEngine"/>
 		</Unit>
 		<Unit filename="/home/kurisu/CLionProjects/WarspiteGame/Engine/GameStateBase.h">
-			<Option target="Warspite"/>
+			<Option target="WarspiteEngine"/>
 		</Unit>
 		<Unit filename="/home/kurisu/CLionProjects/WarspiteGame/Engine/GameStateDictionary.cpp">
-			<Option target="Warspite"/>
+			<Option target="WarspiteEngine"/>
 		</Unit>
 		<Unit filename="/home/kurisu/CLionProjects/WarspiteGame/Engine/GameStateDictionary.h">
-			<Option target="Warspite"/>
+			<Option target="WarspiteEngine"/>
 		</Unit>
 		<Unit filename="/home/kurisu/CLionProjects/WarspiteGame/Engine/GameStateManager.cpp">
-			<Option target="Warspite"/>
+			<Option target="WarspiteEngine"/>
 		</Unit>
 		<Unit filename="/home/kurisu/CLionProjects/WarspiteGame/Engine/GameStateManager.h">
-			<Option target="Warspite"/>
+			<Option target="WarspiteEngine"/>
 		</Unit>
 		<Unit filename="/home/kurisu/CLionProjects/WarspiteGame/Engine/InputHandler.cpp">
-			<Option target="Warspite"/>
+			<Option target="WarspiteEngine"/>
 		</Unit>
 		<Unit filename="/home/kurisu/CLionProjects/WarspiteGame/Engine/InputHandler.h">
-			<Option target="Warspite"/>
+			<Option target="WarspiteEngine"/>
 		</Unit>
 		<Unit filename="/home/kurisu/CLionProjects/WarspiteGame/Engine/Layer.h">
-			<Option target="Warspite"/>
+			<Option target="WarspiteEngine"/>
 		</Unit>
 		<Unit filename="/home/kurisu/CLionProjects/WarspiteGame/Engine/Level.cpp">
-			<Option target="Warspite"/>
+			<Option target="WarspiteEngine"/>
 		</Unit>
 		<Unit filename="/home/kurisu/CLionProjects/WarspiteGame/Engine/Level.h">
-			<Option target="Warspite"/>
+			<Option target="WarspiteEngine"/>
 		</Unit>
 		<Unit filename="/home/kurisu/CLionProjects/WarspiteGame/Engine/LevelParser.cpp">
-			<Option target="Warspite"/>
+			<Option target="WarspiteEngine"/>
 		</Unit>
 		<Unit filename="/home/kurisu/CLionProjects/WarspiteGame/Engine/LevelParser.h">
-			<Option target="Warspite"/>
+			<Option target="WarspiteEngine"/>
 		</Unit>
 		<Unit filename="/home/kurisu/CLionProjects/WarspiteGame/Engine/LogicAuto.cpp">
-			<Option target="Warspite"/>
+			<Option target="WarspiteEngine"/>
 		</Unit>
 		<Unit filename="/home/kurisu/CLionProjects/WarspiteGame/Engine/LogicAuto.h">
-			<Option target="Warspite"/>
+			<Option target="WarspiteEngine"/>
 		</Unit>
 		<Unit filename="/home/kurisu/CLionProjects/WarspiteGame/Engine/MainMenuState.cpp">
-			<Option target="Warspite"/>
+			<Option target="WarspiteEngine"/>
 		</Unit>
 		<Unit filename="/home/kurisu/CLionProjects/WarspiteGame/Engine/MainMenuState.h">
-			<Option target="Warspite"/>
+			<Option target="WarspiteEngine"/>
 		</Unit>
 		<Unit filename="/home/kurisu/CLionProjects/WarspiteGame/Engine/MapObject.cpp">
-			<Option target="Warspite"/>
+			<Option target="WarspiteEngine"/>
 		</Unit>
 		<Unit filename="/home/kurisu/CLionProjects/WarspiteGame/Engine/MapObject.h">
-			<Option target="Warspite"/>
+			<Option target="WarspiteEngine"/>
 		</Unit>
 		<Unit filename="/home/kurisu/CLionProjects/WarspiteGame/Engine/MenuState.h">
-			<Option target="Warspite"/>
+			<Option target="WarspiteEngine"/>
 		</Unit>
 		<Unit filename="/home/kurisu/CLionProjects/WarspiteGame/Engine/ObjectFactory.h">
-			<Option target="Warspite"/>
+			<Option target="WarspiteEngine"/>
 		</Unit>
 		<Unit filename="/home/kurisu/CLionProjects/WarspiteGame/Engine/ObjectLayer.cpp">
-			<Option target="Warspite"/>
+			<Option target="WarspiteEngine"/>
 		</Unit>
 		<Unit filename="/home/kurisu/CLionProjects/WarspiteGame/Engine/ObjectLayer.h">
-			<Option target="Warspite"/>
+			<Option target="WarspiteEngine"/>
 		</Unit>
 		<Unit filename="/home/kurisu/CLionProjects/WarspiteGame/Engine/ObjectParams.h">
-			<Option target="Warspite"/>
+			<Option target="WarspiteEngine"/>
 		</Unit>
 		<Unit filename="/home/kurisu/CLionProjects/WarspiteGame/Engine/PauseState.cpp">
-			<Option target="Warspite"/>
+			<Option target="WarspiteEngine"/>
 		</Unit>
 		<Unit filename="/home/kurisu/CLionProjects/WarspiteGame/Engine/PauseState.h">
-			<Option target="Warspite"/>
+			<Option target="WarspiteEngine"/>
 		</Unit>
 		<Unit filename="/home/kurisu/CLionProjects/WarspiteGame/Engine/PlayState.cpp">
-			<Option target="Warspite"/>
+			<Option target="WarspiteEngine"/>
 		</Unit>
 		<Unit filename="/home/kurisu/CLionProjects/WarspiteGame/Engine/PlayState.h">
-			<Option target="Warspite"/>
+			<Option target="WarspiteEngine"/>
 		</Unit>
 		<Unit filename="/home/kurisu/CLionProjects/WarspiteGame/Engine/Player.cpp">
-			<Option target="Warspite"/>
+			<Option target="WarspiteEngine"/>
 		</Unit>
 		<Unit filename="/home/kurisu/CLionProjects/WarspiteGame/Engine/Player.h">
-			<Option target="Warspite"/>
+			<Option target="WarspiteEngine"/>
 		</Unit>
 		<Unit filename="/home/kurisu/CLionProjects/WarspiteGame/Engine/ScriptManager.cpp">
-			<Option target="Warspite"/>
+			<Option target="WarspiteEngine"/>
 		</Unit>
 		<Unit filename="/home/kurisu/CLionProjects/WarspiteGame/Engine/ScriptManager.h">
-			<Option target="Warspite"/>
+			<Option target="WarspiteEngine"/>
 		</Unit>
 		<Unit filename="/home/kurisu/CLionProjects/WarspiteGame/Engine/ScriptWrappers.cpp">
-			<Option target="Warspite"/>
+			<Option target="WarspiteEngine"/>
 		</Unit>
 		<Unit filename="/home/kurisu/CLionProjects/WarspiteGame/Engine/ScriptWrappers.h">
-			<Option target="Warspite"/>
+			<Option target="WarspiteEngine"/>
 		</Unit>
 		<Unit filename="/home/kurisu/CLionProjects/WarspiteGame/Engine/SoundManager.cpp">
-			<Option target="Warspite"/>
+			<Option target="WarspiteEngine"/>
 		</Unit>
 		<Unit filename="/home/kurisu/CLionProjects/WarspiteGame/Engine/SoundManager.h">
-			<Option target="Warspite"/>
+			<Option target="WarspiteEngine"/>
 		</Unit>
 		<Unit filename="/home/kurisu/CLionProjects/WarspiteGame/Engine/StateParser.cpp">
-			<Option target="Warspite"/>
+			<Option target="WarspiteEngine"/>
 		</Unit>
 		<Unit filename="/home/kurisu/CLionProjects/WarspiteGame/Engine/StateParser.h">
-			<Option target="Warspite"/>
+			<Option target="WarspiteEngine"/>
 		</Unit>
 		<Unit filename="/home/kurisu/CLionProjects/WarspiteGame/Engine/TestObject.cpp">
-			<Option target="Warspite"/>
+			<Option target="WarspiteEngine"/>
 		</Unit>
 		<Unit filename="/home/kurisu/CLionProjects/WarspiteGame/Engine/TestObject.h">
-			<Option target="Warspite"/>
+			<Option target="WarspiteEngine"/>
+		</Unit>
+		<Unit filename="/home/kurisu/CLionProjects/WarspiteGame/Engine/TextObject.cpp">
+			<Option target="WarspiteEngine"/>
+		</Unit>
+		<Unit filename="/home/kurisu/CLionProjects/WarspiteGame/Engine/TextObject.h">
+			<Option target="WarspiteEngine"/>
 		</Unit>
 		<Unit filename="/home/kurisu/CLionProjects/WarspiteGame/Engine/TextureManager.cpp">
-			<Option target="Warspite"/>
+			<Option target="WarspiteEngine"/>
 		</Unit>
 		<Unit filename="/home/kurisu/CLionProjects/WarspiteGame/Engine/TextureManager.h">
-			<Option target="Warspite"/>
+			<Option target="WarspiteEngine"/>
 		</Unit>
 		<Unit filename="/home/kurisu/CLionProjects/WarspiteGame/Engine/TileLayer.cpp">
-			<Option target="Warspite"/>
+			<Option target="WarspiteEngine"/>
 		</Unit>
 		<Unit filename="/home/kurisu/CLionProjects/WarspiteGame/Engine/TileLayer.h">
-			<Option target="Warspite"/>
+			<Option target="WarspiteEngine"/>
 		</Unit>
 		<Unit filename="/home/kurisu/CLionProjects/WarspiteGame/Engine/Vector2D.h">
-			<Option target="Warspite"/>
+			<Option target="WarspiteEngine"/>
 		</Unit>
 		<Unit filename="/home/kurisu/CLionProjects/WarspiteGame/Engine/WarspiteObject.cpp">
-			<Option target="Warspite"/>
+			<Option target="WarspiteEngine"/>
 		</Unit>
 		<Unit filename="/home/kurisu/CLionProjects/WarspiteGame/Engine/WarspiteObject.h">
-			<Option target="Warspite"/>
+			<Option target="WarspiteEngine"/>
 		</Unit>
 		<Unit filename="/home/kurisu/CLionProjects/WarspiteGame/Engine/WarspiteUtil.cpp">
-			<Option target="Warspite"/>
+			<Option target="WarspiteEngine"/>
 		</Unit>
 		<Unit filename="/home/kurisu/CLionProjects/WarspiteGame/Engine/WarspiteUtil.h">
-			<Option target="Warspite"/>
+			<Option target="WarspiteEngine"/>
 		</Unit>
 		<Unit filename="/home/kurisu/CLionProjects/WarspiteGame/Engine/etc/Base64.cpp">
-			<Option target="Warspite"/>
+			<Option target="WarspiteEngine"/>
 		</Unit>
 		<Unit filename="/home/kurisu/CLionProjects/WarspiteGame/Engine/etc/Base64.h">
-			<Option target="Warspite"/>
+			<Option target="WarspiteEngine"/>
 		</Unit>
 		<Unit filename="/home/kurisu/CLionProjects/WarspiteGame/Engine/main.cpp">
-			<Option target="Warspite"/>
+			<Option target="WarspiteEngine"/>
+		</Unit>
+		<Unit filename="/home/kurisu/CLionProjects/WarspiteGame/Launcher/launcher/main_linux.cpp">
+			<Option target="Launcher"/>
+		</Unit>
+		<Unit filename="/home/kurisu/CLionProjects/WarspiteGame/Launcher/main/launcher_main.cpp">
+			<Option target="LauncherMain"/>
 		</Unit>
 		<Unit filename="/home/kurisu/CLionProjects/WarspiteGame/CMakeLists.txt">
 			<Option virtualFolder="CMake Files\"/>
 		</Unit>
 		<Unit filename="/home/kurisu/CLionProjects/WarspiteGame/Engine/CMakeLists.txt">
 			<Option virtualFolder="CMake Files\Engine\"/>
+		</Unit>
+		<Unit filename="/home/kurisu/CLionProjects/WarspiteGame/../../../../usr/lib/x86_64-linux-gnu/cmake/fmt/fmt-config-version.cmake">
+			<Option virtualFolder="CMake Files\..\..\..\..\usr\lib\x86_64-linux-gnu\cmake\fmt\"/>
+		</Unit>
+		<Unit filename="/home/kurisu/CLionProjects/WarspiteGame/../../../../usr/lib/x86_64-linux-gnu/cmake/fmt/fmt-config.cmake">
+			<Option virtualFolder="CMake Files\..\..\..\..\usr\lib\x86_64-linux-gnu\cmake\fmt\"/>
+		</Unit>
+		<Unit filename="/home/kurisu/CLionProjects/WarspiteGame/../../../../usr/lib/x86_64-linux-gnu/cmake/fmt/fmt-targets-none.cmake">
+			<Option virtualFolder="CMake Files\..\..\..\..\usr\lib\x86_64-linux-gnu\cmake\fmt\"/>
+		</Unit>
+		<Unit filename="/home/kurisu/CLionProjects/WarspiteGame/../../../../usr/lib/x86_64-linux-gnu/cmake/fmt/fmt-targets.cmake">
+			<Option virtualFolder="CMake Files\..\..\..\..\usr\lib\x86_64-linux-gnu\cmake\fmt\"/>
+		</Unit>
+		<Unit filename="/home/kurisu/CLionProjects/WarspiteGame/../../../../usr/lib/x86_64-linux-gnu/cmake/spdlog/spdlogConfig.cmake">
+			<Option virtualFolder="CMake Files\..\..\..\..\usr\lib\x86_64-linux-gnu\cmake\spdlog\"/>
+		</Unit>
+		<Unit filename="/home/kurisu/CLionProjects/WarspiteGame/../../../../usr/lib/x86_64-linux-gnu/cmake/spdlog/spdlogConfigVersion.cmake">
+			<Option virtualFolder="CMake Files\..\..\..\..\usr\lib\x86_64-linux-gnu\cmake\spdlog\"/>
+		</Unit>
+		<Unit filename="/home/kurisu/CLionProjects/WarspiteGame/../../../../usr/lib/x86_64-linux-gnu/cmake/spdlog/spdlogTargets.cmake">
+			<Option virtualFolder="CMake Files\..\..\..\..\usr\lib\x86_64-linux-gnu\cmake\spdlog\"/>
+		</Unit>
+		<Unit filename="/home/kurisu/CLionProjects/WarspiteGame/../../../../usr/lib/x86_64-linux-gnu/cmake/SDL2/sdl2-config.cmake">
+			<Option virtualFolder="CMake Files\..\..\..\..\usr\lib\x86_64-linux-gnu\cmake\SDL2\"/>
 		</Unit>
 		<Unit filename="/home/kurisu/CLionProjects/WarspiteGame/../../../../usr/lib/cmake/pybind11/FindPythonLibsNew.cmake">
 			<Option virtualFolder="CMake Files\..\..\..\..\usr\lib\cmake\pybind11\"/>
@@ -376,20 +544,11 @@
 		<Unit filename="/home/kurisu/CLionProjects/WarspiteGame/../../../../usr/lib/cmake/pybind11/pybind11Tools.cmake">
 			<Option virtualFolder="CMake Files\..\..\..\..\usr\lib\cmake\pybind11\"/>
 		</Unit>
-		<Unit filename="/home/kurisu/CLionProjects/WarspiteGame/../../../../usr/lib/x86_64-linux-gnu/cmake/spdlog/spdlogConfig.cmake">
-			<Option virtualFolder="CMake Files\..\..\..\..\usr\lib\x86_64-linux-gnu\cmake\spdlog\"/>
+		<Unit filename="/home/kurisu/CLionProjects/WarspiteGame/../../../../usr/lib/cmake/RapidJSON/RapidJSONConfig.cmake">
+			<Option virtualFolder="CMake Files\..\..\..\..\usr\lib\cmake\RapidJSON\"/>
 		</Unit>
-		<Unit filename="/home/kurisu/CLionProjects/WarspiteGame/../../../../usr/lib/x86_64-linux-gnu/cmake/spdlog/spdlogConfigTargets-none.cmake">
-			<Option virtualFolder="CMake Files\..\..\..\..\usr\lib\x86_64-linux-gnu\cmake\spdlog\"/>
-		</Unit>
-		<Unit filename="/home/kurisu/CLionProjects/WarspiteGame/../../../../usr/lib/x86_64-linux-gnu/cmake/spdlog/spdlogConfigTargets.cmake">
-			<Option virtualFolder="CMake Files\..\..\..\..\usr\lib\x86_64-linux-gnu\cmake\spdlog\"/>
-		</Unit>
-		<Unit filename="/home/kurisu/CLionProjects/WarspiteGame/../../../../usr/lib/x86_64-linux-gnu/cmake/spdlog/spdlogConfigVersion.cmake">
-			<Option virtualFolder="CMake Files\..\..\..\..\usr\lib\x86_64-linux-gnu\cmake\spdlog\"/>
-		</Unit>
-		<Unit filename="/home/kurisu/CLionProjects/WarspiteGame/../../../../usr/lib/x86_64-linux-gnu/cmake/SDL2/sdl2-config.cmake">
-			<Option virtualFolder="CMake Files\..\..\..\..\usr\lib\x86_64-linux-gnu\cmake\SDL2\"/>
+		<Unit filename="/home/kurisu/CLionProjects/WarspiteGame/../../../../usr/lib/cmake/RapidJSON/RapidJSONConfigVersion.cmake">
+			<Option virtualFolder="CMake Files\..\..\..\..\usr\lib\cmake\RapidJSON\"/>
 		</Unit>
 		<Unit filename="/home/kurisu/CLionProjects/WarspiteGame/CMakeModules/FindSDL2_image.cmake">
 			<Option virtualFolder="CMake Files\CMakeModules\"/>
@@ -400,8 +559,14 @@
 		<Unit filename="/home/kurisu/CLionProjects/WarspiteGame/CMakeModules/FindVorbis.cmake">
 			<Option virtualFolder="CMake Files\CMakeModules\"/>
 		</Unit>
-		<Unit filename="/home/kurisu/CLionProjects/WarspiteGame/CMakeModules/Findrapidjson.cmake">
-			<Option virtualFolder="CMake Files\CMakeModules\"/>
+		<Unit filename="/home/kurisu/CLionProjects/WarspiteGame/Launcher/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\Launcher\"/>
+		</Unit>
+		<Unit filename="/home/kurisu/CLionProjects/WarspiteGame/Launcher/launcher/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\Launcher\launcher\"/>
+		</Unit>
+		<Unit filename="/home/kurisu/CLionProjects/WarspiteGame/Launcher/main/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\Launcher\main\"/>
 		</Unit>
 	</Project>
 </CodeBlocks_project_file>

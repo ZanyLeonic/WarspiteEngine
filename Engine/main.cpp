@@ -17,7 +17,11 @@ CGame* g_game = 0;
 const int FPS = 62;
 const int DELAY_TIME = 1000 / FPS;
 
+#ifdef _WIN32
 extern "C" __declspec(dllexport) int __cdecl Engine(int argc, char** argv)
+#elif _UNIX
+extern "C" int Engine(int argc, char** argv)
+#endif
 {
 	Uint32 frameStart, frameTime;
 	char title[420];
