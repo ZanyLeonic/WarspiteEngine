@@ -75,6 +75,12 @@ bool CFontManager::RenderText(std::string text, std::string fontID, std::string 
 {
 	SDL_Surface* pSurface = nullptr;
 
+	if (!m_loadedFonts[fontID])
+	{
+		spdlog::error("Cannot find type \"{}\"!", fontID);
+		return false;
+	}
+
 	switch (rType)
 	{
 	case EFontRenderType::SOLID:

@@ -56,6 +56,12 @@ static char* GetBaseDir(const char* pFileName)
 #ifdef _WIN32
 int WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nShowCmd)
 {
+#ifdef USE_CONSOLE == 1
+	// Create a console and output all stdout and sterr to it.
+	AllocConsole();
+	freopen("CONOUT$", "w", stdout);
+	freopen("CONOUT$", "w", stderr);
+#endif
 	char* pPath = nullptr;
 
 	char moduleBuffer[MAX_PATH];

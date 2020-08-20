@@ -2,6 +2,8 @@
 # project specific logic here.
 cmake_minimum_required (VERSION 3.8)
 
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY_DEBUG "${BIN_PATH_DEBUG}/bin" )
+
 set(WarspiteEngine_Src
         AudioSource.cpp
         AnimatedGraphic.cpp
@@ -108,10 +110,6 @@ endif()
 
 find_package(Python3 COMPONENTS Interpreter Development REQUIRED)
 
-message(STATUS "Python3_LIBRARIES = ${Python3_LIBRARIES}")
-message(STATUS "Python3_EXECUTABLE = ${Python3_EXECUTABLE}")
-message(STATUS "Python3_INCLUDE_DIRS = ${Python3_INCLUDE_DIRS}")
-
 add_custom_target(EngineMetadata
         COMMAND "${Python3_EXECUTABLE}" "${CMAKE_CURRENT_SOURCE_DIR}/EngineMetadata.py"
         COMMENT "Generating build metadata..."
@@ -151,10 +149,10 @@ set (Warspite_Libs
 )
 
 if(UNIX)
-set (Warspite_Libs
-    ${Warspite_Libs}
-    stdc++fs
-)
+    set (Warspite_Libs
+        ${Warspite_Libs}
+        stdc++fs
+    )
 endif()
 
 include_directories(${Python3_INCLUDE_DIRS})
@@ -187,6 +185,13 @@ if ("${Python_EXECUTABLE}" STREQUAL "")
 endif()
 
 target_link_libraries(${MOD_NAME} PUBLIC ${Warspite_Libs})
+
+# Copy assets for debug
+add_custom_command(TARGET ${MOD_NAME} POST_BUILD
+                   COMMAND ${CMAKE_COMMAND} -E copy_directory
+                       "assets" "${BIN_PATH_DEBUG}/assets/")
+
+set_target_properties(${MOD_NAME} PROPERTIES VS_DEBUGGER_WORKING_DIRECTORY "${BIN_PATH_DEBUG}")
 
 if(CMAKE_SIZEOF_VOID_P EQUAL 8)
     add_definitions(-DENV64BIT)

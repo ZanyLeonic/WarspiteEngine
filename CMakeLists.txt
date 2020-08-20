@@ -3,17 +3,21 @@
 #
 cmake_minimum_required (VERSION 3.8)
 
+# Main project name
 project ("Warspite")
 
+# GCC will default to C11 if we don't do this and everything will crash and burn
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
+# Our custom find CMakeFiles for dependencies 
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/CMakeModules/")
 
 # Apply some debug options
 if (CMAKE_BUILD_TYPE STREQUAL "Debug")
     add_compile_definitions(WARDEBUG)
+    add_compile_definitions(USE_CONSOLE 1)
 endif()
 
 # For Linux and Windows specific code
@@ -26,8 +30,17 @@ endif()
 # Mod name (for the Engine)
 set (MOD_NAME "WarspiteEngine")
 
+# So things like the launcher know what the library is going to be called
 add_compile_definitions(MOD_NAME="${MOD_NAME}")
 add_compile_definitions(MOD_NAME_L=${MOD_NAME})
+
+# Build path for debug
+set(BIN_PATH_DEBUG ${CMAKE_BINARY_DIR}/Debug)
+
+# Store stuff when compiled here!
+set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY_DEBUG "${BIN_PATH_DEBUG}/bin")
+set(CMAKE_LIBRARY_OUTPUT_DIRECTORY_DEBUG "${BIN_PATH_DEBUG}/bin") 
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY_DEBUG "${BIN_PATH_DEBUG}")
 
 # Include sub-projects.
 add_subdirectory ("Engine")

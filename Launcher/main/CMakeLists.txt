@@ -27,7 +27,9 @@ elseif(UNIX)
 endif()
 
 target_link_libraries(LauncherMain PUBLIC ${LauncherMain_Libs})
-set_target_properties(LauncherMain PROPERTIES OUTPUT_NAME "ws")
+set_target_properties(LauncherMain PROPERTIES 
+                        OUTPUT_NAME "ws"
+                        VS_DEBUGGER_WORKING_DIRECTORY "${BIN_PATH_DEBUG}")
 
 if (UNIX)
     install(TARGETS LauncherMain RUNTIME DESTINATION ./bin/${PROJECT_NAME})
