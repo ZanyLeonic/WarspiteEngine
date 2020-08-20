@@ -3,9 +3,15 @@
 #
 cmake_minimum_required (VERSION 3.8)
 
+if (WIN32)
 set (Launcher_Src
     main.cpp
 )
+elseif(UNIX)
+set (Launcher_Src
+    main_linux.cpp
+)
+endif()
 
 set (Launcher_Header)
 

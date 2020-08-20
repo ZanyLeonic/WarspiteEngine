@@ -1,7 +1,6 @@
 #include <Windows.h>
 #include <stdio.h>
-
-typedef int (*Engine_t)();
+typedef int (*Engine_t)(int argc, char** argv);
 
 extern "C" __declspec(dllexport) int __cdecl LauncherMain(HINSTANCE hInstance,
 	HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nShowCmd, char* basePath)
@@ -27,5 +26,5 @@ extern "C" __declspec(dllexport) int __cdecl LauncherMain(HINSTANCE hInstance,
 	}
 
 	Engine_t main = (Engine_t)GetProcAddress(engine, "Engine");
-	return main();
+	return main(__argc, __argv);
 }

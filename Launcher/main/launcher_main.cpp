@@ -1,9 +1,25 @@
+#ifdef _WIN32
 #include <windows.h>
 #include <string>
 #include <iostream>
 #include <cassert>
+#elif _UNIX
+#include <string>
+#include <iostream>
+#include <cassert>
+#include <dlfcn.h>
+#include <stdlib.h>
+#include <limits.h>
+#include <errno.h>
+#include <unistd.h>
+#define MAX_PATH PATH_MAX
+#endif
 
+#ifdef _WIN32
 typedef int (*LauncherMain_t)(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nShowCmd, char* basePath);
+#elif _UNIX
+typedef int (*LauncherMain_t)(int argc, char** argv);
+#endif
 
 static char* GetBaseDir(const char* pFileName)
 {
@@ -36,6 +52,7 @@ static char* GetBaseDir(const char* pFileName)
 	return basedir;
 }
 
+#ifdef _WIN32
 int WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nShowCmd)
 {
 	char* pPath = nullptr;
@@ -82,3 +99,43 @@ int WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int n
 
 	return -1;
 }
+
+#elif _UNIX
+#define stringize(a) #a
+#define engine_binary(a,b,c) a stringize(b) c 
+int main(int argc, char** argv)
+{
+	// Must add 'bin' to the path....
+	char* pPath = getenv("LD_LIBRARY_PATH");
+	char szBuffer[4096];
+	char cwd[MAX_PATH];
+	if (!getcwd(cwd, sizeof(cwd)))
+	{
+		printf("getcwd failed (%s)", strerror(errno));
+	}
+
+	snprintf(szBuffer, sizeof(szBuffer) - 1, "LD_LIBRARY_PATH=%s/bin:%s", cwd, pPath);
+	int ret = putenv(szBuffer);
+	if (ret)
+	{
+		printf("%s\n", strerror(errno));
+	}
+
+	const char* pBinaryName = "bin/launcher.so";
+	void* launcher = dlopen(pBinaryName, RTLD_NOW);
+	if (!launcher)
+	{
+		printf("Failed to open %s (%s)\n", pBinaryName, dlerror());
+		return -1;
+	}
+	LauncherMain_t main = (LauncherMain_t)dlsym(launcher, "LauncherMain");
+	if (!main)
+	{
+		printf("Failed to find launcher entry point (%s)\n", dlerror());
+		return -1;
+	}
+
+	ret = main(argc, argv);
+	dlclose(launcher);
+}
+#endif

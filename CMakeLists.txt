@@ -16,6 +16,12 @@ if (CMAKE_BUILD_TYPE STREQUAL "Debug")
     add_compile_definitions(WARDEBUG)
 endif()
 
+if (WIN32)
+    add_compile_definitions(_WIN32)
+elseif(UNIX)
+    add_compile_definitions(_UNIX)
+endif()
+
 # Mod name (for the Engine)
 set (MOD_NAME "WarspiteEngine")
 add_compile_definitions(MOD_NAME="${MOD_NAME}")
