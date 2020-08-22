@@ -107,7 +107,7 @@ bool CFontManager::RenderText(std::string text, std::string fontID, std::string 
 	}
 
 	SDL_Texture* pTexture =
-		SDL_CreateTextureFromSurface(CGame::Instance()->GetRenderer(), pSurface);
+		SDL_CreateTextureFromSurface(CBaseGame::Instance()->GetRenderer(), pSurface);
 
 	// Free up memory, why didn't I add this earlier aaaaaaaa
 	SDL_FreeSurface(pSurface);

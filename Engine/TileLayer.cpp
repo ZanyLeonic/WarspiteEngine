@@ -19,7 +19,7 @@ void CTileLayer::OnThink()
 void CTileLayer::Draw()
 {
 	CVector2D cCamPos = CCamera::Instance()->GetPositionT();
-	CVector2D vPortSz = CGame::Instance()->GetViewportSize();
+	CVector2D vPortSz = CBaseGame::Instance()->GetViewportSize();
 
 	for (int i = 0; i < m_numRows; i++)
 	{
@@ -50,7 +50,7 @@ void CTileLayer::Draw()
 			CTextureManager::Instance()->DrawTile(tileset.Name, tileset.Margin, tileset.Spacing,
 				(int)(((j * m_tileSize)) - cCamPos.GetX()), (int)(((i * m_tileSize)) - cCamPos.GetY()), m_tileSize, m_tileSize, // X, Y, width and height
 				(id - (tileset.FirstGID - 1)) / tileset.NumColumns, (id - (tileset.FirstGID - 1)) % tileset.NumColumns, // Row and frame
-				CGame::Instance()->GetRenderer());
+				CBaseGame::Instance()->GetRenderer());
 		}
 	}
 }

@@ -49,7 +49,7 @@ def GetHeadSha1(gitDir):
 # Gets the build number from the persistent text file.
 def IncrementBuildNumber():
     searchDir = os.path.dirname(os.path.realpath(__file__))
-    bPath = os.path.join(searchDir, "WarspiteGame.Build.txt")
+    bPath = os.path.join(searchDir, "WarspiteEngine.Build.txt")
     buildNum = -1
     
     print("Writing build number to persistent file...")

@@ -29,10 +29,14 @@ endif()
 
 # Mod name (for the Engine)
 set (MOD_NAME "WarspiteEngine")
+set (GAME_NAME "WarspiteGame")
 
 # So things like the launcher know what the library is going to be called
 add_compile_definitions(MOD_NAME="${MOD_NAME}")
 add_compile_definitions(MOD_NAME_L=${MOD_NAME})
+
+add_compile_definitions(GAME_NAME="${GAME_NAME}")
+add_compile_definitions(GAME_NAME_L=${GAME_NAME})
 
 # Go away M$
 add_compile_definitions(_CRT_SECURE_NO_WARNINGS)
@@ -48,3 +52,4 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY_DEBUG "${BIN_PATH_DEBUG}")
 # Include sub-projects.
 add_subdirectory ("Engine")
 add_subdirectory ("Launcher")
+add_subdirectory ("Game")

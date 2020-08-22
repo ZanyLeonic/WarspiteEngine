@@ -1,6 +1,8 @@
 #pragma once
 #ifndef __GameObject__
 #define __GameObject__
+#include "EngineTypes.h"
+
 class CObjectParams;
 class CVector2D;
 

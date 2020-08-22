@@ -6,7 +6,7 @@
 #include "GameObject.h"
 #include <vector>
 
-class CMainMenuState : public CMenuState
+class EXPORT CMainMenuState : public CMenuState
 {
 public:
 	virtual bool OnPlay();

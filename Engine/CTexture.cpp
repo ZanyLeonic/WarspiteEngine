@@ -30,7 +30,7 @@ bool CTexture::Load(std::string path)
 	}
 
 	SDL_Texture* pTexture =
-		SDL_CreateTextureFromSurface(CGame::Instance()->GetRenderer(), pTempSurface);
+		SDL_CreateTextureFromSurface(CBaseGame::Instance()->GetRenderer(), pTempSurface);
 
 	SDL_FreeSurface(pTempSurface);
 	SDL_QueryTexture(pTexture, NULL, NULL, &m_width, &m_height);
@@ -78,7 +78,7 @@ void CTexture::SetAlpha(Uint8 alpha)
 void CTexture::Draw(CVector2D pos)
 {
 	if (!m_texture) return;
-	CTextureManager::Instance()->Draw(this, (int)pos.GetX(), (int)pos.GetY(), CGame::Instance()->GetRenderer(), m_angle);
+	CTextureManager::Instance()->Draw(this, (int)pos.GetX(), (int)pos.GetY(), CBaseGame::Instance()->GetRenderer(), m_angle);
 }
 
 void CTexture::SetAngle(double pAngle)

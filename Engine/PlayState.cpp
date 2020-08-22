@@ -23,7 +23,7 @@ bool CPlayState::OnPlay()
 	CGameStateBase::OnPlay();
 
 	s_UIID = SID_PLAY;
-	m_screenSize = CGame::Instance()->GetViewportSize();
+	m_screenSize = CBaseGame::Instance()->GetViewportSize();
 
 	CStateParser sp;
 	sp.ParseState(CEngineFileSystem::ResolvePath("PlayState.json", CEngineFileSystem::EPathType::STATE).c_str(), GetStateID(), &m_GameObjects, &m_TextureIDList, &m_ScriptIDList);
@@ -32,9 +32,9 @@ bool CPlayState::OnPlay()
 	pLevel = lp.ParseLevel(CEngineFileSystem::ResolvePath("map02.json", CEngineFileSystem::EPathType::MAP).c_str());
 
 	CInputHandler::Instance()->AddActionKeyDown(SDL_SCANCODE_ESCAPE, [this] {
-			if (CGame::Instance()->GetStateManager()->GetCurrentState()->GetStateID() != SID_PAUSE)
+			if (CBaseGame::Instance()->GetStateManager()->GetCurrentState()->GetStateID() != SID_PAUSE)
 			{
-				CGame::Instance()->GetStateManager()->PushState(CGameStateDictionary::Instance()->Create(SID_PAUSE));
+				CBaseGame::Instance()->GetStateManager()->PushState(CGameStateDictionary::Instance()->Create(SID_PAUSE));
 			}
 		});
 
@@ -43,7 +43,7 @@ bool CPlayState::OnPlay()
 		});
 
 	CInputHandler::Instance()->AddActionKeyDown(SDL_SCANCODE_8, [this] {
-		if (CGame::Instance()->GetStateManager()->GetCurrentState()->GetStateID() != SID_PAUSE)
+		if (CBaseGame::Instance()->GetStateManager()->GetCurrentState()->GetStateID() != SID_PAUSE)
 		{
 			CScriptManager::Instance()->Load(SGameScript::file("Script2", CEngineFileSystem::ResolvePath("test2.py", CEngineFileSystem::EPathType::SCRIPT)));
 			CScriptManager::Instance()->RunFromRef("Script2");
@@ -181,8 +181,8 @@ bool CPlayState::OnPlay()
 	else
 	{ 
 		// If a failure happens when attempting to load - this will let us know something is up.
-		CTextureManager::Instance()->CreateCheckboardPattern(m_screenSize, "levelLoadFail", CGame::Instance()->GetRenderer());
-		SDL_SetRenderDrawColor(CGame::Instance()->GetRenderer(), 255, 255, 255, 255);
+		CTextureManager::Instance()->CreateCheckboardPattern(m_screenSize, "levelLoadFail", CBaseGame::Instance()->GetRenderer());
+		SDL_SetRenderDrawColor(CBaseGame::Instance()->GetRenderer(), 255, 255, 255, 255);
 	}
 	
 	spdlog::info("Entering PlayState");
@@ -198,7 +198,7 @@ void CPlayState::Draw()
 	}
 	else
 	{
-		CTextureManager::Instance()->Draw("levelLoadFail", 0, 0, (int)m_screenSize.GetX(), (int)m_screenSize.GetY(), CGame::Instance()->GetRenderer());
+		CTextureManager::Instance()->Draw("levelLoadFail", 0, 0, (int)m_screenSize.GetX(), (int)m_screenSize.GetY(), CBaseGame::Instance()->GetRenderer());
 	}
 	// gameobjects and stuff
 	CGameStateBase::Draw();

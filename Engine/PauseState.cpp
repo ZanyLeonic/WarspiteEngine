@@ -47,14 +47,14 @@ void CPauseState::SetCallbacks(const std::vector<HButtonCallback>& callbacks)
 
 bool CPauseState::s_continueGame()
 {
-	CGame::Instance()->GetStateManager()->PopState();
+	CBaseGame::Instance()->GetStateManager()->PopState();
 
 	return false;
 }
 
 bool CPauseState::s_exitToMenu()
 {
-	CGame::Instance()->GetStateManager()->ModifyState(CGameStateDictionary::Instance()->Create(SID_MM));
+	CBaseGame::Instance()->GetStateManager()->ModifyState(CGameStateDictionary::Instance()->Create(SID_MM));
 
 	return false;
 }

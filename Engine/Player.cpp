@@ -22,7 +22,7 @@ CPlayer::CPlayer()
 void CPlayer::OnPlay()
 {
 	// Are we in the PlayState?
-	CPlayState* ps = dynamic_cast<CPlayState*>(CGame::Instance()->GetStateManager()->GetCurrentState());
+	CPlayState* ps = dynamic_cast<CPlayState*>(CBaseGame::Instance()->GetStateManager()->GetCurrentState());
 
 	if (ps)
 	{
@@ -81,14 +81,14 @@ void CPlayer::Draw()
 		CTextureManager::Instance()->DrawFrame(m_textureID,
 			int(m_position.GetX() - cPos.GetX()), int(m_position.GetY() - cPos.GetY()),
 			m_width, m_height, m_currentRow, m_currentFrame,
-			CGame::Instance()->GetRenderer(), SDL_FLIP_HORIZONTAL);
+			CBaseGame::Instance()->GetRenderer(), SDL_FLIP_HORIZONTAL);
 	}
 	else
 	{
 		CTextureManager::Instance()->DrawFrame(m_textureID,
 			int(m_position.GetX() - cPos.GetX()), int(m_position.GetY() - cPos.GetY()),
 			m_width, m_height, m_currentRow, m_currentFrame,
-			CGame::Instance()->GetRenderer());
+			CBaseGame::Instance()->GetRenderer());
 	}
 }
 
@@ -201,7 +201,7 @@ bool CPlayer::IsPositionFree(CVector2D* pNext)
 	}
 
 	// Also do a check if we are going off the level
-	CPlayState* pPS = static_cast<CPlayState*>(CGame::Instance()->GetStateManager()->GetCurrentState());
+	CPlayState* pPS = static_cast<CPlayState*>(CBaseGame::Instance()->GetStateManager()->GetCurrentState());
 	if (pPS != nullptr)
 	{
 		CLevel* pLevel = pPS->GetLoadedLevel();

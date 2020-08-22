@@ -1,7 +1,16 @@
 #include "GameStateDictionary.h"
 #include <iostream>
 
-CGameStateDictionary* CGameStateDictionary::s_pInstance = 0;
+CGameStateDictionary* CGameStateDictionary::Instance()
+{
+	static CGameStateDictionary* s_pInstance;
+	if (s_pInstance == 0)
+	{
+		s_pInstance = new CGameStateDictionary();
+		return s_pInstance;
+	}
+	return s_pInstance;
+}
 
 // Registers our GameObjectFactory
 bool CGameStateDictionary::RegisterType(std::string stateID, IObjectFactory<CGameStateBase>* pCreator)

@@ -11,15 +11,17 @@
 #include <spdlog/sinks/daily_file_sink.h>
 
 // our Game object
-CGame* g_game = 0;
+CBaseGame* g_game = 0;
+
+typedef bool (*GameDLL_t)(int argc, char** argv);
 
 const int FPS = 62;
 const int DELAY_TIME = 1000 / FPS;
 
 #ifdef _WIN32
-extern "C" __declspec(dllexport) int __cdecl Engine(int argc, char** argv)
+extern "C" __declspec(dllexport) int __cdecl Engine(int argc, char** argv, GameDLL_t pGameDLL)
 #elif _UNIX
-extern "C" int Engine(int argc, char** argv)
+extern "C" int Engine(int argc, char** argv, GameDLL_t pGameDLL)
 #endif
 {
 	Uint32 frameStart, frameTime;
@@ -77,15 +79,15 @@ extern "C" int Engine(int argc, char** argv)
 	spdlog::info("Attempting Game initialization...");
 	spdlog::info("Target FPS is {} FPS", FPS);
 
-	if (CGame::Instance()->Init(title, 100, 100, 640, 480, false))
+	if (CBaseGame::Instance()->Init(title, 100, 100, 640, 480, false, argc, argv, pGameDLL))
 	{
-		while (CGame::Instance()->IsRunning())
+		while (CBaseGame::Instance()->IsRunning())
 		{
 			frameStart = SDL_GetTicks();
 
-			CGame::Instance()->HandleEvents();
-			CGame::Instance()->OnThink();
-			CGame::Instance()->Draw();
+			CBaseGame::Instance()->HandleEvents();
+			CBaseGame::Instance()->OnThink();
+			CBaseGame::Instance()->Draw();
 
 			frameTime = SDL_GetTicks() - frameStart;
 
@@ -101,7 +103,7 @@ extern "C" int Engine(int argc, char** argv)
 		return -1;
 	}
 	spdlog::info("Cleaning up...");
-	CGame::Instance()->Destroy();
+	CBaseGame::Instance()->Destroy();
 
 	return 0;
 }

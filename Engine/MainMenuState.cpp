@@ -56,13 +56,13 @@ void CMainMenuState::SetCallbacks(const std::vector<HButtonCallback>& callbacks)
 bool CMainMenuState::s_menuToPlay()
 {
 	spdlog::info("Play button clicked");
-	CGame::Instance()->GetStateManager()->ModifyState(CGameStateDictionary::Instance()->Create(SID_PLAY));
+	CBaseGame::Instance()->GetStateManager()->ModifyState(CGameStateDictionary::Instance()->Create(SID_PLAY));
 	return false;
 }
 
 bool CMainMenuState::s_exitFromMenu()
 {
 	spdlog::info("Exit button clicked");
-	CGame::Instance()->Quit();
+	CBaseGame::Instance()->Quit();
 	return false;
 }

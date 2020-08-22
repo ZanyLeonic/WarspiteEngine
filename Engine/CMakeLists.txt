@@ -112,7 +112,7 @@ find_package(Python3 COMPONENTS Interpreter Development REQUIRED)
 
 add_custom_target(EngineMetadata
         COMMAND "${Python3_EXECUTABLE}" "${CMAKE_CURRENT_SOURCE_DIR}/EngineMetadata.py"
-        COMMENT "Generating build metadata..."
+        COMMENT "Generating build Engine metadata..."
 )
 
 find_package(fmt CONFIG REQUIRED)
@@ -185,12 +185,6 @@ if ("${Python_EXECUTABLE}" STREQUAL "")
 endif()
 
 target_link_libraries(${MOD_NAME} PUBLIC ${Warspite_Libs})
-
-# Copy assets for debug
-add_custom_command(TARGET ${MOD_NAME} POST_BUILD
-                   COMMAND ${CMAKE_COMMAND} -E copy_directory
-                       "assets" "${BIN_PATH_DEBUG}/assets/")
-
 set_target_properties(${MOD_NAME} PROPERTIES VS_DEBUGGER_WORKING_DIRECTORY "${BIN_PATH_DEBUG}")
 
 if(CMAKE_SIZEOF_VOID_P EQUAL 8)
@@ -201,10 +195,8 @@ endif()
 
 if (UNIX)
     install(FILES lib${MOD_NAME}.so DESTINATION ./bin/${PROJECT_NAME}/bin)
-    install (DIRECTORY assets DESTINATION ./bin/${PROJECT_NAME})
 elseif (WIN32)
     install(TARGETS ${MOD_NAME} RUNTIME DESTINATION ./bin)
-
     install(DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/
             DESTINATION ./bin
             FILES_MATCHING PATTERN "*.dll"
@@ -213,6 +205,4 @@ elseif (WIN32)
             PATTERN "include" EXCLUDE
             PATTERN "Testing" EXCLUDE
             )
-    install (DIRECTORY assets DESTINATION ./)
 endif()
-

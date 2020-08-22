@@ -14,7 +14,7 @@
 class CWarspiteObject;
 class CGameStateBase;
 class CVector2D;
-class CGame;
+class CBaseGame;
 class CLevel;
 class IGameObject;
 class CObjectParams;
@@ -216,9 +216,9 @@ struct SInputObject : SBaseWrapper<CInputHandler>
 	bool AddActionKeyUp(int key, const KeyCallback callBack) const;
 };
 
-struct SGameObject : SBaseWrapper<CGame>
+struct SGameObject : SBaseWrapper<CBaseGame>
 {
-	SGameObject(CGame* pClass) : SBaseWrapper<CGame>(pClass) {}
+	SGameObject(CBaseGame* pClass) : SBaseWrapper<CBaseGame>(pClass) {}
 
 	std::unique_ptr<SWarState> GetCurrentState() const;
 	bool ChangeState(std::string stateID) const;

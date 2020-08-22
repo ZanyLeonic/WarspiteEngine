@@ -36,14 +36,14 @@ void CWarspiteObject::Draw()
 	{
 		CTextureManager::Instance()->DrawFrame(m_textureID, (int)m_position.GetX(),
 			(int)m_position.GetY(), m_width, m_height, 
-			m_currentRow, m_currentFrame, CGame::Instance()->GetRenderer(), 
+			m_currentRow, m_currentFrame, CBaseGame::Instance()->GetRenderer(), 
 			SDL_FLIP_HORIZONTAL);
 	}
 	else
 	{
 		CTextureManager::Instance()->DrawFrame(m_textureID, (int)m_position.GetX(),
 			(int)m_position.GetY(), m_width, m_height,
-			m_currentRow, m_currentFrame, CGame::Instance()->GetRenderer());
+			m_currentRow, m_currentFrame, CBaseGame::Instance()->GetRenderer());
 	}
 }
 

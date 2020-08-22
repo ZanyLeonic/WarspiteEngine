@@ -11,10 +11,10 @@
 #include "spdlog/spdlog.h"
 #include "FPSCounter.h"
 
-CGame* CGame::s_pInstance = 0;
+CBaseGame* CBaseGame::s_pInstance = 0;
 
 // Initialises the major parts of the engine
-bool CGame::Init(const char* title, int xpos, int ypos, int width, int height, bool fullscreen)
+bool CBaseGame::Init(const char* title, int xpos, int ypos, int width, int height, bool fullscreen, int argc, char** argv, GameDLL_t pGameDLL)
 {
 	// Init our FPS stuff
 	// Set all frame times to 0ms.
@@ -64,7 +64,8 @@ bool CGame::Init(const char* title, int xpos, int ypos, int width, int height, b
 				}
 
 				m_pGameStateManager = new CGameStateManager();
-				m_pGameStateManager->ModifyState(CGameStateDictionary::Instance()->Create(SID_MM));
+				
+				return pGameDLL(argc, argv);
 			}
 			else
 			{
@@ -86,7 +87,7 @@ bool CGame::Init(const char* title, int xpos, int ypos, int width, int height, b
 	return false;
 }
 
-void CGame::FPS_Calc()
+void CBaseGame::FPS_Calc()
 {
 	Uint32 frametimesindex;
 	Uint32 getticks;
@@ -134,7 +135,12 @@ void CGame::FPS_Calc()
 	m_FPS = 1000.f / m_FPS;
 }
 
-void CGame::Draw()
+int CBaseGame::LoadGameDLL()
+{
+	return 0;
+}
+
+void CBaseGame::Draw()
 {
 	SDL_RenderClear(m_pRenderer); // clear the renderer to draw color
 	
@@ -145,7 +151,7 @@ void CGame::Draw()
 	SDL_RenderPresent(m_pRenderer); // draw to the screen
 }
 
-void CGame::OnThink()
+void CBaseGame::OnThink()
 {
 	// FPS counter stuff
 	FPS_Calc();
@@ -157,12 +163,12 @@ void CGame::OnThink()
 	CCamera::Instance()->OnThink();
 }
 
-void CGame::HandleEvents()
+void CBaseGame::HandleEvents()
 {
 	CInputHandler::Instance()->OnThink();
 }
 
-void CGame::Destroy()
+void CBaseGame::Destroy()
 {
 	spdlog::info("Cleaning Game instance...");
 
@@ -177,7 +183,7 @@ void CGame::Destroy()
 	SDL_Quit();
 }
 
-void CGame::Quit()
+void CBaseGame::Quit()
 {
 	m_bRunning = false;
 }

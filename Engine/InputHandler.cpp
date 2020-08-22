@@ -32,7 +32,7 @@ void CInputHandler::OnThink()
 		switch (e.type)
 		{
 			case SDL_QUIT:
-				CGame::Instance()->Quit();
+				CBaseGame::Instance()->Quit();
 				break;
 
 			case SDL_JOYAXISMOTION:

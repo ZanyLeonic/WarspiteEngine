@@ -22,14 +22,14 @@ void CMapObject::Draw()
 			CTextureManager::Instance()->DrawFrame(m_textureID,
 				int(m_position.GetX() - cPos.GetX()), int(m_position.GetY() - cPos.GetY()),
 				m_width, m_height, m_currentRow, m_currentFrame,
-				CGame::Instance()->GetRenderer(), SDL_FLIP_HORIZONTAL);
+				CBaseGame::Instance()->GetRenderer(), SDL_FLIP_HORIZONTAL);
 		}
 		else
 		{
 			CTextureManager::Instance()->DrawFrame(m_textureID,
 				int(m_position.GetX() - cPos.GetX()), int(m_position.GetY() - cPos.GetY()),
 				m_width, m_height, m_currentRow, m_currentFrame,
-				CGame::Instance()->GetRenderer());
+				CBaseGame::Instance()->GetRenderer());
 		}
 	}
 }

@@ -177,7 +177,7 @@ void CStateParser::ParseTextures(const rapidjson::Value* pStateRoot, std::vector
 		// Load our texture into memory.
 		CTextureManager::Instance()->Load(CEngineFileSystem::ResolvePath(b["path"].GetString(),
                                                                    CEngineFileSystem::EPathType::TEXTURE),
-                                    b["id"].GetString(), CGame::Instance()->GetRenderer());
+                                    b["id"].GetString(), CBaseGame::Instance()->GetRenderer());
 	}
 }
 

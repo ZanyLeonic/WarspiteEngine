@@ -1,6 +1,6 @@
 #pragma once
-#ifndef __Game__
-#define __Game__
+#ifndef __BaseGame__
+#define __BaseGame__
 
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_thread.h>
@@ -17,29 +17,30 @@
 
 class CFPSCounter;
 
-class CGame
+class CBaseGame
 {
 public:
-	static CGame* Instance()
+	static CBaseGame* Instance()
 	{
 		if (s_pInstance == 0)
 		{
-			s_pInstance = new CGame();
+			s_pInstance = new CBaseGame();
 			return s_pInstance;
 		}
 		return s_pInstance;
 	}
 private:
-	CGame() {}
-	~CGame() {}
+	CBaseGame() {}
+	~CBaseGame() {}
 	
-	static CGame* s_pInstance;
+	static CBaseGame* s_pInstance;
 public:
 	// simply set the running variable to true
-	bool Init(const char* title, int xpos, int ypos, int width, int height, bool fullscreen);
+	bool Init(const char* title, int xpos, int ypos, int width, int height, bool fullscreen, int argc, char** argv, GameDLL_t pGameDLL);
 private:
 	// Calculate current FPS
 	void FPS_Calc();
+	int LoadGameDLL();
 public:
 	void Draw();
 	void OnThink();
@@ -84,5 +85,10 @@ private:
 
 	bool m_bRunning = false;
 };
+
+EXPORT inline CBaseGame* GetGame()
+{
+	return CBaseGame::Instance();
+}
 
 #endif /* defined(__Game__) */

@@ -122,7 +122,7 @@ PYBIND11_MODULE(engine, m) {
 		.def("add_action_keyup", &SInputObject::AddActionKeyUp, "Binds the execution of the specified method when the specified key is released");
 
 	py::class_<SGameObject>(m, "GameObject", "A container that allows interaction with more misc aspects of the Engine's APIs. (Do not call this - use engine.game)")
-		.def(py::init<CGame*>())
+		.def(py::init<CBaseGame*>())
 		.def("get_current_state", &SGameObject::GetCurrentState, "Returns the state that is currently loaded")
 		.def("change_state", &SGameObject::ChangeState, "Changes the current state to the specified state")
 		.def("get_player", &SGameObject::GetPlayer, "Returns the currently registered player object")

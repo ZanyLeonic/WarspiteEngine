@@ -29,7 +29,7 @@ void CFPSCounter::Draw()
 		m_lfps = m_fps;
 	}
 
-	CTextureManager::Instance()->Draw(m_textureID, 0, 0, m_width, m_height, CGame::Instance()->GetRenderer());
+	CTextureManager::Instance()->Draw(m_textureID, 0, 0, m_width, m_height, CBaseGame::Instance()->GetRenderer());
 }
 
 void CFPSCounter::SetFPSValue(float fps)

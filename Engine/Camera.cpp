@@ -23,7 +23,7 @@ CVector2D CCamera::GetPositionT() const
 {
 	if (m_pTarget != 0)
 	{
-		CVector2D vsz = CGame::Instance()->GetViewportSize();
+		CVector2D vsz = CBaseGame::Instance()->GetViewportSize();
 
 		// Offset the target by half of the viewport
 		CVector2D pos(((m_pTarget->GetX()) - (vsz.GetX() / 2)),

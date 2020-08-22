@@ -6,6 +6,8 @@
 #include "GameObject.h"
 #include "EngineFileSystem.h"
 #include "GameStateDictionary.h"
+#include "EngineTypes.h"
+
 #include <vector>
 
 // This part is where the IDs are defined
@@ -13,7 +15,7 @@
 #define SID_PLAY "PlayState"
 #define SID_PAUSE "PauseState"
 
-class CGameStateBase :
+class EXPORT CGameStateBase :
 	public CGameState
 {
 public:

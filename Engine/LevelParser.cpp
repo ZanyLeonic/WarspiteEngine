@@ -131,7 +131,7 @@ void CLevelParser::parseTilesets(const rapidjson::Value* pTilesetRoot, std::vect
 			const Value& t = tileset.GetObject();
 
 			CTextureManager::Instance()->Load(CEngineFileSystem::ResolvePath(t["image"].GetString(),CEngineFileSystem::EPathType::TEXTURE),
-				t["name"].GetString(), CGame::Instance()->GetRenderer());
+				t["name"].GetString(), CBaseGame::Instance()->GetRenderer());
 
 			STileset ts;
 
@@ -154,7 +154,7 @@ void CLevelParser::parseTilesets(const rapidjson::Value* pTilesetRoot, std::vect
 	else
 	{
 		CTextureManager::Instance()->Load(CEngineFileSystem::ResolvePath(obj["image"].GetString(), CEngineFileSystem::EPathType::TEXTURE),
-			obj["name"].GetString(), CGame::Instance()->GetRenderer());
+			obj["name"].GetString(), CBaseGame::Instance()->GetRenderer());
 
 		STileset ts;
 
@@ -245,7 +245,7 @@ void CLevelParser::parseFiles(const rapidjson::Value* pFileRoot)
 	
 	// Load the texture via the TextureManager with the info inside the object.
 	CTextureManager::Instance()->Load(CEngineFileSystem::ResolvePath(o["value"].GetString(), CEngineFileSystem::EPathType::TEXTURE),
-                                      o["name"].GetString(),CGame::Instance()->GetRenderer());
+                                      o["name"].GetString(),CBaseGame::Instance()->GetRenderer());
 }
 
 void CLevelParser::parseBackgroundColour(const std::string* colourVal)
@@ -281,7 +281,7 @@ void CLevelParser::parseBackgroundColour(const std::string* colourVal)
 		break;
 	};
 
-	SDL_SetRenderDrawColor(CGame::Instance()->GetRenderer(), r, g, b, a);
+	SDL_SetRenderDrawColor(CBaseGame::Instance()->GetRenderer(), r, g, b, a);
 }
 
 void CLevelParser::parseObjectLayer(const rapidjson::Value* pObjectVal, std::vector<ILayer*>* pLayer)

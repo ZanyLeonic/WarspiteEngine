@@ -3,9 +3,11 @@
 #define __GAMESTATEMANAGER_H__
 
 #include <vector>
+#include "EngineTypes.h"
+
 class CGameStateBase;
 
-class CGameStateManager
+class EXPORT CGameStateManager
 {
 public:
 	CGameStateBase* GetCurrentState();
