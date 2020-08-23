@@ -5,7 +5,6 @@
 #include "ObjectFactory.h"
 #include <string>
 #include <map>
-#include "EngineTypes.h"
 
 class CGameStateBase;
 
@@ -13,9 +12,18 @@ class CGameStateBase;
 class CGameStateDictionary
 {
 	CGameStateDictionary() {}
-	
+	static CGameStateDictionary* s_pInstance;
+
 public:
-	static CGameStateDictionary* Instance();
+	static CGameStateDictionary* Instance()
+	{
+		if (s_pInstance == 0)
+		{
+			s_pInstance = new CGameStateDictionary();
+			return s_pInstance;
+		}
+		return s_pInstance;
+	}
 
 	bool RegisterType(std::string stateID, IObjectFactory<CGameStateBase>* pCreator);
 	CGameStateBase* Create(std::string stateID);
@@ -49,10 +57,5 @@ public:
 // Macro to make registering classes easier
 #define REG_STATE_TO_REF(stateRefName, compiledClassName) \
 	static CGameStateFactory<compiledClassName> stateRefName( #stateRefName );
-
-EXPORT inline CGameStateDictionary* GetStateDict()
-{
-	return CGameStateDictionary::Instance();
-}
 
 #endif

@@ -15,7 +15,7 @@
 #define SID_PLAY "PlayState"
 #define SID_PAUSE "PauseState"
 
-class EXPORT CGameStateBase :
+class CGameStateBase :
 	public CGameState
 {
 public:

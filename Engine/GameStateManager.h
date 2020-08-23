@@ -7,7 +7,7 @@
 
 class CGameStateBase;
 
-class EXPORT CGameStateManager
+class CGameStateManager
 {
 public:
 	CGameStateBase* GetCurrentState();

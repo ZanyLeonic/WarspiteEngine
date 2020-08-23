@@ -41,6 +41,8 @@ add_compile_definitions(GAME_NAME_L=${GAME_NAME})
 # Go away M$
 add_compile_definitions(_CRT_SECURE_NO_WARNINGS)
 
+set (SHARED_INCLUDE_DIR "${PROJECT_SOURCE_DIR}/shared/src")
+
 # Build path for debug
 set(BIN_PATH_DEBUG ${CMAKE_BINARY_DIR}/Debug)
 

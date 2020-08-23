@@ -51,7 +51,7 @@ set(WarspiteEngine_Header
         FPSCounter.h
         Enemy.h
         EngineFileSystem.h
-        EngineTypes.h
+        ../shared/src/EngineTypes.h
         FontManager.h
         TextObject.h
         Game.h
@@ -155,6 +155,7 @@ if(UNIX)
     )
 endif()
 
+include_directories(${SHARED_INCLUDE_DIR})
 include_directories(${Python3_INCLUDE_DIRS})
 include_directories(${SPDLOG_INCLUDE_DIR})
 include_directories(${PYBIND11_INCLUDE_DIRS})

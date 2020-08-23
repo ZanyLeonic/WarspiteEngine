@@ -1,0 +1,22 @@
+#pragma once
+#ifndef __SINGLETON_H_
+#define __SINGLETON_H_
+
+#if defined(_MSC_VER)
+//  Microsoft 
+#define DLL_EXPORT __declspec(dllexport)
+#define DLL_IMPORT __declspec(dllimport)
+#elif defined(__GNUC__)
+//  GCC
+#define DLL_EXPORT __attribute__((visibility("default")))
+#define DLL_IMPORT
+#else
+//  do nothing and hope for the best?
+#define DLL_EXPORT
+#define DLL_IMPORT
+#pragma warning Unknown dynamic link import/export semantics.
+#endif
+
+class ISingleton
+{};
+#endif

@@ -1,4 +1,9 @@
 #include "Game.h"
+
+#include <SDL2/SDL.h>
+#include <SDL2/SDL_thread.h>
+#include <spdlog/spdlog.h>
+
 #include "TextureManager.h"
 #include "SoundManager.h"
 #include "ScriptManager.h"
@@ -10,8 +15,19 @@
 #include "ScriptWrappers.h"
 #include "spdlog/spdlog.h"
 #include "FPSCounter.h"
+#include "IGame.h"
 
 CBaseGame* CBaseGame::s_pInstance = 0;
+
+IGame* CBaseGame::Instance()
+{
+	if (s_pInstance == 0)
+	{
+		s_pInstance = new CBaseGame();
+		return s_pInstance;
+	}
+	return s_pInstance;
+}
 
 // Initialises the major parts of the engine
 bool CBaseGame::Init(const char* title, int xpos, int ypos, int width, int height, bool fullscreen, int argc, char** argv, GameDLL_t pGameDLL)
@@ -65,7 +81,7 @@ bool CBaseGame::Init(const char* title, int xpos, int ypos, int width, int heigh
 
 				m_pGameStateManager = new CGameStateManager();
 				
-				return pGameDLL(argc, argv);
+				pGameDLL(argc, argv);
 			}
 			else
 			{

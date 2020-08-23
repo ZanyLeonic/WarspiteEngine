@@ -21,10 +21,11 @@ add_custom_target(GameMetadata
 find_package(spdlog CONFIG REQUIRED)
 
 set (WarspiteGame_Libs
-    ${MOD_NAME}
+    #${MOD_NAME}
 )
 
-include_directories(${PROJECT_SOURCE_DIR}/Engine)
+include_directories("${PROJECT_SOURCE_DIR}/engine")
+include_directories(${SHARED_INCLUDE_DIR})
 include_directories(${SPDLOG_INCLUDE_DIR})
 
 include (GenerateExportHeader)

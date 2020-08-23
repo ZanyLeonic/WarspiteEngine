@@ -2,11 +2,9 @@
 #ifndef __BaseGame__
 #define __BaseGame__
 
-#include <SDL2/SDL.h>
-#include <SDL2/SDL_thread.h>
+#include "IGame.h"
 #include <memory>
 #include <vector>
-#include <spdlog/spdlog.h>
 
 #include "EngineTypes.h"
 #include "GameStateManager.h"
@@ -16,49 +14,46 @@
 #define FRAME_SAMPLES 10
 
 class CFPSCounter;
+struct SDL_Rect;
 
-class CBaseGame
+class CBaseGame : public IGame
 {
 public:
-	static CBaseGame* Instance()
-	{
-		if (s_pInstance == 0)
-		{
-			s_pInstance = new CBaseGame();
-			return s_pInstance;
-		}
-		return s_pInstance;
-	}
+	static IGame* Instance();
+
 private:
 	CBaseGame() {}
 	~CBaseGame() {}
-	
+
 	static CBaseGame* s_pInstance;
+
 public:
 	// simply set the running variable to true
-	bool Init(const char* title, int xpos, int ypos, int width, int height, bool fullscreen, int argc, char** argv, GameDLL_t pGameDLL);
+	virtual bool Init(const char* title, int xpos, int ypos, int width, int height, bool fullscreen, int argc, char** argv, GameDLL_t pGameDLL);
+
 private:
 	// Calculate current FPS
 	void FPS_Calc();
 	int LoadGameDLL();
+
 public:
-	void Draw();
-	void OnThink();
-	void HandleEvents();
-	void Destroy();
-	void Quit();
+	void Draw() override;
+	void OnThink() override;
+	void HandleEvents() override;
+	void Destroy() override;
+	void Quit() override;
 
 	// a function to access the private running variable
-	bool IsRunning() { return m_bRunning; }
+	virtual bool IsRunning() override { return m_bRunning; }
 
-	SDL_Renderer* GetRenderer() const { return m_pRenderer; }
-	SDL_Window* GetWindow() const { return m_pWindow; }
-	CGameStateManager* GetStateManager() const { return m_pGameStateManager; }
+	virtual SDL_Renderer* const GetRenderer() override { return m_pRenderer; }
+	virtual SDL_Window* const GetWindow() override { return m_pWindow; }
+	virtual CGameStateManager* const GetStateManager() override { return m_pGameStateManager; }
 
-	CVector2D GetViewportSize() const { return m_viewportSize; }
+	virtual CVector2D const GetViewportSize() override { return m_viewportSize; }
 
-	void SetPlayer(IGameObject* pNO) { m_player = pNO; }
-	IGameObject* GetPlayer() const { return m_player; }
+	virtual void SetPlayer(IGameObject* pNO) { m_player = pNO; }
+	virtual IGameObject* const GetPlayer() override { return m_player; }
 	
 private:
 	CGameStateManager* m_pGameStateManager;
@@ -85,10 +80,4 @@ private:
 
 	bool m_bRunning = false;
 };
-
-EXPORT inline CBaseGame* GetGame()
-{
-	return CBaseGame::Instance();
-}
-
 #endif /* defined(__Game__) */
