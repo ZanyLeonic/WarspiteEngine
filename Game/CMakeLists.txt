@@ -19,6 +19,7 @@ add_custom_target(GameMetadata
 )
 
 find_package(spdlog CONFIG REQUIRED)
+find_package(fmt CONFIG REQUIRED)
 
 set (WarspiteGame_Libs
     ${SPDLOG_LIBRARY}

@@ -75,7 +75,10 @@ bool CBaseGame::Init(const char* title, int xpos, int ypos, int width, int heigh
 				}
 
 				m_pGameStateManager = new CGameStateManager();
-
+				m_pGameStateManager->ModifyState(CGameStateDictionary::Instance()->Create(SID_MM));
+				
+				m_argc = argc;
+				m_argv = argv;
 			}
 			else
 			{
@@ -92,9 +95,8 @@ bool CBaseGame::Init(const char* title, int xpos, int ypos, int width, int heigh
 		spdlog::info("Init success");
 		m_bRunning = true; // everything inited successfully, start the main loop
 
-		pGameDLL(argc, argv, this);
-
-		return true;
+		// Run the GameDLL's init
+		return pGameDLL(m_argc, m_argv, this);
 	}
 	return false;
 }

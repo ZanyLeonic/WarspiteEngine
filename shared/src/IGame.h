@@ -33,7 +33,8 @@ public:
 
     virtual void SetPlayer(IGameObject* pNO) = 0;
     virtual IGameObject* const GetPlayer() = 0;
-};
 
-DLL_EXPORT IGame* Instance();
+    virtual int const GetArgc() = 0;
+    virtual char** const GetArgv() = 0;
+};
 #endif

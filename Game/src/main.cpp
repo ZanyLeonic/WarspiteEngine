@@ -64,8 +64,8 @@ extern "C" bool GameDLL(int argc, char** argv, IGame* pGame)
 
 	if (CGame::Instance()->Init(argc, argv, pGame))
 	{
-
+		return true;
 	}
 
-	return 0;
+	return false;
 }

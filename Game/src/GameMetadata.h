@@ -2,7 +2,7 @@
 
 // PURPOSE: Provides the Engine with metadata of the build.
 // GENERATED CODE --- CHANGED ON BUILD --- ANY MANUAL CHANGES WILL BE OVERWRITTEN.
-#define GAME_BUILD_NUMBER   47
-#define GAME_GIT_HASH      "2829a3b55282a7ce23569d1cd2b9fa7a6d6d3898"
-#define GAME_BUILD_TIME     1598261647.4664314
-#define GAME_GIT_DESC      "iteration-3-83-g2829a3b"
+#define GAME_BUILD_NUMBER   53
+#define GAME_GIT_HASH      "cf100a9162585b30c569f6a355d3989909dffcae"
+#define GAME_BUILD_TIME     1598266475.7711995
+#define GAME_GIT_DESC      "iteration-3-84-gcf100a9"

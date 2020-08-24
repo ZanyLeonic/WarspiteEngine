@@ -5,6 +5,7 @@
 # Prerequisites
 *.d
 EngineMetadata.h
+GameMetadata.h
 
 # Compiled Object files
 *.slo

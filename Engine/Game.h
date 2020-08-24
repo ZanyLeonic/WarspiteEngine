@@ -59,6 +59,9 @@ public:
 	virtual void SetPlayer(IGameObject* pNO) { m_player = pNO; }
 	virtual IGameObject* const GetPlayer() override { return m_player; }
 	
+	virtual int const GetArgc() override { return m_argc; }
+	virtual char** const GetArgv() override { return m_argv; }
+
 private:
 	CGameStateManager* m_pGameStateManager;
 
@@ -81,6 +84,9 @@ private:
 	Uint32 m_lastFrametime;
 	Uint32 m_frameCount;
 	float m_FPS;
+
+	int m_argc; 
+	char** m_argv;
 
 	bool m_bRunning = false;
 };
