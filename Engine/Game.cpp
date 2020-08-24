@@ -1,9 +1,4 @@
 #include "Game.h"
-
-#include <SDL2/SDL.h>
-#include <SDL2/SDL_thread.h>
-#include <spdlog/spdlog.h>
-
 #include "TextureManager.h"
 #include "SoundManager.h"
 #include "ScriptManager.h"
@@ -80,8 +75,7 @@ bool CBaseGame::Init(const char* title, int xpos, int ypos, int width, int heigh
 				}
 
 				m_pGameStateManager = new CGameStateManager();
-				
-				pGameDLL(argc, argv);
+
 			}
 			else
 			{
@@ -97,6 +91,8 @@ bool CBaseGame::Init(const char* title, int xpos, int ypos, int width, int heigh
 
 		spdlog::info("Init success");
 		m_bRunning = true; // everything inited successfully, start the main loop
+
+		pGameDLL(argc, argv, this);
 
 		return true;
 	}

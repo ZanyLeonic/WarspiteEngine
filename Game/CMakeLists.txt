@@ -21,7 +21,8 @@ add_custom_target(GameMetadata
 find_package(spdlog CONFIG REQUIRED)
 
 set (WarspiteGame_Libs
-    #${MOD_NAME}
+    ${SPDLOG_LIBRARY}
+    fmt::fmt
 )
 
 include_directories("${PROJECT_SOURCE_DIR}/engine")

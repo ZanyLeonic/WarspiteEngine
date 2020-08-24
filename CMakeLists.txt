@@ -53,5 +53,5 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY_DEBUG "${BIN_PATH_DEBUG}")
 
 # Include sub-projects.
 add_subdirectory ("Engine")
-add_subdirectory ("Launcher")
 add_subdirectory ("Game")
+add_subdirectory ("Launcher")

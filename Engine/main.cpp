@@ -13,7 +13,7 @@
 // our Game object
 CBaseGame* g_game = 0;
 
-typedef bool (*GameDLL_t)(int argc, char** argv);
+typedef bool (*GameDLL_t)(int argc, char** argv, IGame* pGame);
 
 const int FPS = 62;
 const int DELAY_TIME = 1000 / FPS;

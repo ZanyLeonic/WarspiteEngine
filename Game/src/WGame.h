@@ -1,6 +1,9 @@
 #pragma once
 #ifndef __Game_H__
 #define __Game_H__
+
+class IGame;
+
 class CGame
 {
 public:
@@ -20,7 +23,7 @@ private:
 	static CGame* s_pInstance;
 public:
 	// simply set the running variable to true
-	bool Init(int argc, char** argv);
+	bool Init(int argc, char** argv, IGame* pGame);
 };
 
 #endif

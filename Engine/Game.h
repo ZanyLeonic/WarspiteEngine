@@ -3,6 +3,10 @@
 #define __BaseGame__
 
 #include "IGame.h"
+
+#include <SDL2/SDL.h>
+#include <SDL2/SDL_thread.h>
+#include <spdlog/spdlog.h>
 #include <memory>
 #include <vector>
 

@@ -1,12 +1,12 @@
 #include "WGame.h"
-#include "Game.h"
-#include <iostream>
+#include "IGame.h"
+#include <spdlog/spdlog.h>
 
 CGame* CGame::s_pInstance = 0;
 
 // Initialises the major parts of the engine
-bool CGame::Init(int argc, char** argv)
+bool CGame::Init(int argc, char** argv, IGame* pGame)
 {
-    std::cout << "Is the game running?" << (CBaseGame::Instance()->IsRunning() ? "Yes" : "No") << std::endl;
+    spdlog::info("Is the game running? {}", (pGame->IsRunning() ? "Yes" : "No"));
     return true;
 }
