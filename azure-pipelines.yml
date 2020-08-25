@@ -9,7 +9,7 @@ trigger:
 - launchv2
 
 jobs:
-- job: Windows
+- job: "Windows x64"
   pool:
     vmImage: 'windows-2019'
   steps:
@@ -33,7 +33,7 @@ jobs:
   - task: MSBuild@1
     displayName: "Compiling project"
     inputs:
-      solution: 'ALL_BUILD.vcxproj'
+      solution: 'build/ALL_BUILD.vcxproj'
       msbuildArchitecture: 'x64'
       platform: 'x64'
       configuration: 'Debug'
@@ -44,7 +44,45 @@ jobs:
     displayName: "Publishing build artifacts"
     inputs:
       PathtoPublish: 'build/Debug/'
-      ArtifactName: 'windows'
+      ArtifactName: 'windows-x64'
+      publishLocation: 'Container'
+
+- job: "Windows x86"
+  pool:
+    vmImage: 'windows-2019'
+  steps:
+  - task: Cache@2
+    inputs:
+      key: 'v1-x86 | vcpkg | "$(Agent.OS)" | "C:\vcpkg\.git\HEAD"'
+      restoreKeys: |
+        v1-x86 | vcpkg | "$(Agent.OS)"
+        vcpkg | "$(Agent.OS)"
+        vcpkg
+      path: 'C:\vcpkg'
+      cacheHitVar: VCPKG_CACHE_RESTORED
+    displayName: Cache vcpkg
+
+  - task: PowerShell@2
+    displayName: "Installing dependencies + Making build files"
+    inputs:
+     filePath: 'build-deps-x86.ps1'
+     workingDirectory: '$(System.DefaultWorkingDirectory)'
+
+  - task: MSBuild@1
+    displayName: "Compiling project"
+    inputs:
+      solution: 'build/ALL_BUILD.vcxproj'
+      msbuildArchitecture: 'x86'
+      platform: 'x86'
+      configuration: 'Debug'
+      maximumCpuCount: true
+      createLogFile: true
+
+  - task: PublishBuildArtifacts@1
+    displayName: "Publishing build artifacts"
+    inputs:
+      PathtoPublish: 'build/Debug/'
+      ArtifactName: 'windows-x86'
       publishLocation: 'Container'
 
 - job: Ubuntu

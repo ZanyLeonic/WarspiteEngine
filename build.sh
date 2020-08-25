@@ -1,2 +1,3 @@
 #!/bin/bash
-sudo make -j4 install
+cd build
+sudo make -j12 install
