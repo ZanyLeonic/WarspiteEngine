@@ -112,12 +112,10 @@ void CPlayer::HandleInput()
 	if (m_timeLeft >= 100)
 	{
 		// Can this code be improved? (I hope so.)	
-		if (!(m_timeLeft >= 100))
-		{ 
-			MoveForward(CInputHandler::Instance()->GetAxisValue("MoveForward"));
-			MoveRight(CInputHandler::Instance()->GetAxisValue("MoveRight"));
-		}
-		else
+		MoveForward(CInputHandler::Instance()->GetAxisValue("MoveForward"));
+		MoveRight(CInputHandler::Instance()->GetAxisValue("MoveRight"));
+
+		if (m_timeLeft >= 100)
 		{
 			moving = false;
 		}
@@ -130,7 +128,7 @@ void CPlayer::HandleInput()
 
 void CPlayer::MoveForward(float axis)
 {
-	if (axis == 0) return;
+	if (axis == 0.f) return;
 	CVector2D curPos = m_position;
 	
 	m_currentRow = (axis > 0) ? 1 : 2;
@@ -153,7 +151,7 @@ void CPlayer::MoveForward(float axis)
 
 void CPlayer::MoveRight(float axis)
 {
-	if (axis == 0) return;
+	if (axis == 0.f) return;
 	CVector2D curPos = m_position;
 	
 	m_currentRow = (axis > 0) ? 4 : 3;
