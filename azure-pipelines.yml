@@ -9,7 +9,7 @@ trigger:
 - launchv2
 
 jobs:
-- job: "Windows-x64"
+- job: "Windows_x64"
   pool:
     vmImage: 'windows-2019'
   steps:
@@ -47,7 +47,7 @@ jobs:
       ArtifactName: 'windows-x64'
       publishLocation: 'Container'
 
-- job: "Windows-x86"
+- job: "Windows_x86"
   pool:
     vmImage: 'windows-2019'
   steps:
