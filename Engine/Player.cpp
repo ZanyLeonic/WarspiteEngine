@@ -24,6 +24,11 @@ void CPlayer::OnPlay()
 	// Are we in the PlayState?
 	CPlayState* ps = dynamic_cast<CPlayState*>(CBaseGame::Instance()->GetStateManager()->GetCurrentState());
 
+	CInputHandler::Instance()->SetAxisValue("MoveForward", SDL_SCANCODE_UP, -1.f);
+	CInputHandler::Instance()->SetAxisValue("MoveForward", SDL_SCANCODE_DOWN, 1.f);
+	CInputHandler::Instance()->SetAxisValue("MoveRight", SDL_SCANCODE_LEFT, -1.f);
+	CInputHandler::Instance()->SetAxisValue("MoveRight", SDL_SCANCODE_RIGHT, 1.f);
+
 	if (ps)
 	{
 		// If so - we can grab the current level and its Layers
@@ -107,23 +112,12 @@ void CPlayer::HandleInput()
 	if (m_timeLeft >= 100)
 	{
 		// Can this code be improved? (I hope so.)	
-		if (CInputHandler::Instance()->IsKeyDown(SDL_SCANCODE_DOWN))
-		{
-			MoveForward(1);
+		if (!(m_timeLeft >= 100))
+		{ 
+			MoveForward(CInputHandler::Instance()->GetAxisValue("MoveForward"));
+			MoveRight(CInputHandler::Instance()->GetAxisValue("MoveRight"));
 		}
-		else if (CInputHandler::Instance()->IsKeyDown(SDL_SCANCODE_UP))
-		{
-			MoveForward(-1);
-		}
-		else if (CInputHandler::Instance()->IsKeyDown(SDL_SCANCODE_RIGHT))
-		{
-			MoveRight(1);
-		}
-		else if (CInputHandler::Instance()->IsKeyDown(SDL_SCANCODE_LEFT))
-		{
-			MoveRight(-1);
-		}
-		else if (m_timeLeft >= 100)
+		else
 		{
 			moving = false;
 		}
@@ -136,6 +130,7 @@ void CPlayer::HandleInput()
 
 void CPlayer::MoveForward(float axis)
 {
+	if (axis == 0) return;
 	CVector2D curPos = m_position;
 	
 	m_currentRow = (axis > 0) ? 1 : 2;
@@ -158,6 +153,7 @@ void CPlayer::MoveForward(float axis)
 
 void CPlayer::MoveRight(float axis)
 {
+	if (axis == 0) return;
 	CVector2D curPos = m_position;
 	
 	m_currentRow = (axis > 0) ? 4 : 3;

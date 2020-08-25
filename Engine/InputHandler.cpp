@@ -61,10 +61,12 @@ void CInputHandler::OnThink()
 
 			case SDL_KEYDOWN:
 				onKeyDown();
+				setAxisValues();
 				break;
 
 			case SDL_KEYUP:
 				onKeyUp();
+				setAxisValues();
 				break;
 
 			default:
@@ -201,6 +203,22 @@ void CInputHandler::SetReleaseState(SDL_Scancode key, bool state)
 	m_keyReleased[key] = state;
 }
 
+void CInputHandler::SetAxisValue(std::string name, SDL_Scancode key, float value)
+{
+	m_keyVirtualAxis[key] = name;
+
+	std::map<SDL_Scancode, float> axisVal = m_keyAxisValue[name];
+	axisVal[key] = value;
+	m_currentKeyAxisValue[name] = 0.f;
+
+	m_keyAxisValue[name] = axisVal;
+}
+
+float CInputHandler::GetAxisValue(std::string name)
+{
+	return m_currentKeyAxisValue[name];
+}
+
 void CInputHandler::onKeyDown()
 {
 	m_keystates = (Uint8*)SDL_GetKeyboardState(0);
@@ -256,6 +274,47 @@ void CInputHandler::onKeyUp()
 				}
 			}
 		}
+	}
+}
+
+void CInputHandler::setAxisValues()
+{
+	// Get the latest state of the keys
+	m_keystates = (Uint8*)SDL_GetKeyboardState(0);
+
+	std::map<SDL_Scancode, std::string>::iterator it = m_keyVirtualAxis.begin();
+
+	if (m_keyVirtualAxis.size() <= 0) return;
+
+	// Iterate through the map
+	while (it != m_keyVirtualAxis.end())
+	{
+		if (!m_keyVirtualAxis[it->first].empty())
+		{
+			float m_curKeyVal = m_keyAxisValue[it->second][it->first];
+
+			// Do the method that matches the key
+			switch (m_keystates[it->first])
+			{
+			case 0:
+				// Only change it if it has been pressed.
+				if (m_keyAxisStates[it->first])
+				{
+					m_currentKeyAxisValue[it->second] -= m_curKeyVal;
+					m_keyAxisStates[it->first] = false;
+				}
+				break;
+			case 1:
+				// Only change it if it has been released.
+				if (!m_keyAxisStates[it->first])
+				{
+					m_currentKeyAxisValue[it->second] += m_curKeyVal;
+					m_keyAxisStates[it->first] = true;
+				}
+				break;
+			};
+		}
+		it++;
 	}
 }
 

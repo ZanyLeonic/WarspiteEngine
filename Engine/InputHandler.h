@@ -50,6 +50,9 @@ public:
 	bool IsKeyDown(SDL_Scancode key);
 	void SetReleaseState(SDL_Scancode key, bool state);
 
+	void SetAxisValue(std::string name, SDL_Scancode key, float value);
+	float GetAxisValue(std::string name);
+
 	CVector2D* GetMousePosition()
 	{
 		return m_mousePosition;
@@ -63,6 +66,8 @@ private:
 	// handle keyboard events
 	void onKeyDown();
 	void onKeyUp();
+
+	void setAxisValues();
 
 	// handle mouse events
 	void onMouseMove(SDL_Event& event);
@@ -85,6 +90,13 @@ private:
 
 	std::map<SDL_Scancode, bool> m_keyReleased;
 
+	std::map<SDL_Scancode, std::string> m_keyVirtualAxis;
+	std::map<std::string, std::map<SDL_Scancode, float>> m_keyAxisValue;
+	std::map<std::string, float> m_currentKeyAxisValue;
+
+	// true down, false up
+	std::map<SDL_Scancode, bool> m_keyAxisStates;
+
 	std::vector<bool> m_mouseButtonStates;
 
 	const int m_joystickDeadZone = 10000;
@@ -97,5 +109,4 @@ private:
 
 	static CInputHandler* s_pInstance;
 };
-
 #endif /* defined(__InputHandler__) */

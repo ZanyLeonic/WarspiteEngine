@@ -13,8 +13,8 @@ set(WarspiteGame_Header
 )
 
 find_package(Python3 COMPONENTS Interpreter REQUIRED)
-add_custom_target(GameMetadata
-        COMMAND "${Python3_EXECUTABLE}" "${CMAKE_CURRENT_SOURCE_DIR}/src/GameMetadata.py"
+add_custom_target(GameDLLMetadata
+        COMMAND "${Python3_EXECUTABLE}" "${CMAKE_CURRENT_SOURCE_DIR}/src/GameDLLMetadata.py"
         COMMENT "Generating build metadata..."
 )
 
@@ -33,7 +33,7 @@ include_directories(${SPDLOG_INCLUDE_DIR})
 include (GenerateExportHeader)
 
 add_library(${GAME_NAME} SHARED ${WarspiteGame_Src} ${WarspiteGame_Header})
-add_dependencies(${GAME_NAME} GameMetadata)
+add_dependencies(${GAME_NAME} GameDLLMetadata)
 
 # As a last ditch effort...
 if ("${Python_EXECUTABLE}" STREQUAL "")

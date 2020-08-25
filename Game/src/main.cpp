@@ -6,7 +6,7 @@
 #include <spdlog/sinks/stdout_color_sinks.h>
 #include <spdlog/sinks/daily_file_sink.h>
 
-#include "GameMetadata.h"
+#include "GameDLLMetadata.h"
 
 #ifdef _WIN32
 extern "C" __declspec(dllexport) bool __cdecl GameDLL(int argc, char** argv, IGame* pGame)
@@ -64,6 +64,7 @@ extern "C" bool GameDLL(int argc, char** argv, IGame* pGame)
 
 	if (CGame::Instance()->Init(argc, argv, pGame))
 	{
+		spdlog::info("Initalisation successful!");
 		return true;
 	}
 

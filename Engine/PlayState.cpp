@@ -185,6 +185,15 @@ bool CPlayState::OnPlay()
 		SDL_SetRenderDrawColor(CBaseGame::Instance()->GetRenderer(), 255, 255, 255, 255);
 	}
 	
+
+
+	CInputHandler::Instance()->AddActionKeyDown(SDL_SCANCODE_8, [this] {
+		spdlog::info("test axis value: {}", CInputHandler::Instance()->GetAxisValue("test"));
+		});
+	CInputHandler::Instance()->AddActionKeyUp(SDL_SCANCODE_8, [this] {
+		return;
+		});
+
 	spdlog::info("Entering PlayState");
 	
 	return true;
