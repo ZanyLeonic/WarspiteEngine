@@ -20,11 +20,11 @@ function GenerateProjectFiles() {
         SetEnv
     }
     $bargs = @( 
-    "-A Win32",
+    "-AWin32",
     "-DCMAKE_TOOLCHAIN_FILE=$VcpkgDir\scripts\buildsystems\vcpkg.cmake",
     '-DCMAKE_BUILD_TYPE="Debug"', 
     "-DVCPKG_TARGET_TRIPLET=x86-windows",
-	"-Bbuild"
+	"-Bbuild",
     ".")
     & cmake $bargs
 	
