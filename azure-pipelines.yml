@@ -72,8 +72,8 @@ jobs:
     displayName: "Compiling project"
     inputs:
       solution: 'build/ALL_BUILD.vcxproj'
-      msbuildArchitecture: 'x86'
-      platform: 'x86'
+      msbuildArchitecture: 'Win32'
+      platform: 'Win32'
       configuration: 'Debug'
       maximumCpuCount: true
       createLogFile: true
