@@ -59,7 +59,7 @@ else()
 endif()
 
 if (UNIX)
-    install(FILES lib${GAME_NAME}.so DESTINATION ./bin/${PROJECT_NAME}/assets/bin)
+    install(FILES ${CMAKE_BINARY_DIR}/Game/lib${GAME_NAME}.so DESTINATION ./bin/${PROJECT_NAME}/assets/bin)
     install (DIRECTORY assets DESTINATION ./bin/${PROJECT_NAME})
 elseif (WIN32)
     install(TARGETS ${GAME_NAME} RUNTIME DESTINATION ./assets/bin)

@@ -195,7 +195,7 @@ else()
 endif()
 
 if (UNIX)
-    install(FILES lib${MOD_NAME}.so DESTINATION ./bin/${PROJECT_NAME}/bin)
+    install(FILES ${CMAKE_BINARY_DIR}/Engine/lib${MOD_NAME}.so DESTINATION ./bin/${PROJECT_NAME}/bin)
 elseif (WIN32)
     install(TARGETS ${MOD_NAME} RUNTIME DESTINATION ./bin)
     install(DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/
