@@ -98,7 +98,7 @@ if __name__ == "__main__":
 
     headSha = GetHeadSha1(SearchForGitDirectory(searchDir)).replace("\n", "")
 
-    header = "{0}.h".format(os.path.splitext(__file__)[0])
+    header = "../../shared/src/{0}.h".format(os.path.splitext(os.path.basename(__file__))[0])
 
     with open(header, "w") as f:
         f.write(headerTemplate.format(IncrementBuildNumber(), headSha, GetTime(), GetGitDesc()))

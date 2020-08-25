@@ -47,7 +47,7 @@ endif()
 # Copy assets for debug
 add_custom_command(TARGET ${GAME_NAME} POST_BUILD
                    COMMAND ${CMAKE_COMMAND} -E copy_directory
-                       "assets" "${BIN_PATH_DEBUG}/assets/")
+                       "${CMAKE_CURRENT_SOURCE_DIR}/assets" "${BIN_PATH_DEBUG}/assets/")
 
 target_link_libraries(${GAME_NAME} PUBLIC ${WarspiteGame_Libs})
 set_target_properties(${GAME_NAME} PROPERTIES VS_DEBUGGER_WORKING_DIRECTORY "${BIN_PATH_DEBUG}")

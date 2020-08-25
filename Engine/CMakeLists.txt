@@ -5,97 +5,97 @@ cmake_minimum_required (VERSION 3.8)
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY_DEBUG "${BIN_PATH_DEBUG}/bin" )
 
 set(WarspiteEngine_Src
-        AudioSource.cpp
-        AnimatedGraphic.cpp
-        Button.cpp
-        Camera.cpp
-        CTexture.cpp
-        FPSCounter.cpp
-        Enemy.cpp
-        EngineFileSystem.cpp
-        FontManager.cpp
-        TextObject.cpp
-        Game.cpp
-        GameObjectDictionary.cpp
-        GameStateBase.cpp
-        GameStateDictionary.cpp
-        GameStateManager.cpp
-        InputHandler.cpp
-        Level.cpp
-        LevelParser.cpp
-        LogicAuto.cpp
-        main.cpp
-        MainMenuState.cpp
-        MapObject.cpp
-        ObjectLayer.cpp
-        PauseState.cpp
-        Player.cpp
-        PlayState.cpp
-        ScriptManager.cpp
-        ScriptWrappers.cpp
-        SoundManager.cpp
-        StateParser.cpp
-        TestObject.cpp
-        TextureManager.cpp
-        TileLayer.cpp
-        WarspiteObject.cpp
-        WarspiteUtil.cpp
+        src/AudioSource.cpp
+        src/AnimatedGraphic.cpp
+        src/Button.cpp
+        src/Camera.cpp
+        src/CTexture.cpp
+        src/FPSCounter.cpp
+        src/Enemy.cpp
+        src/EngineFileSystem.cpp
+        src/FontManager.cpp
+        src/TextObject.cpp
+        src/Game.cpp
+        src/GameObjectDictionary.cpp
+        src/GameStateBase.cpp
+        src/GameStateDictionary.cpp
+        src/GameStateManager.cpp
+        src/InputHandler.cpp
+        src/Level.cpp
+        src/LevelParser.cpp
+        src/LogicAuto.cpp
+        src/main.cpp
+        src/MainMenuState.cpp
+        src/MapObject.cpp
+        src/ObjectLayer.cpp
+        src/PauseState.cpp
+        src/Player.cpp
+        src/PlayState.cpp
+        src/ScriptManager.cpp
+        src/ScriptWrappers.cpp
+        src/SoundManager.cpp
+        src/StateParser.cpp
+        src/TestObject.cpp
+        src/TextureManager.cpp
+        src/TileLayer.cpp
+        src/WarspiteObject.cpp
+        src/WarspiteUtil.cpp
         )
 
 set(WarspiteEngine_Header
-        AudioSource.h
-        AnimatedGraphic.h
-        Button.h
-        Camera.h
-        CTexture.h
-        FPSCounter.h
-        Enemy.h
-        EngineFileSystem.h
+        src/AudioSource.h
+        src/AnimatedGraphic.h
+        src/Button.h
+        src/Camera.h
+        src/CTexture.h
+        src/FPSCounter.h
+        src/Enemy.h
+        src/EngineFileSystem.h
         ../shared/src/EngineTypes.h
-        FontManager.h
-        TextObject.h
-        Game.h
-        GameObject.h
-        GameObjectDictionary.h
-        GameState.h
-        GameStateBase.h
-        GameStateDictionary.h
-        GameStateManager.h
-        InputHandler.h
-        Layer.h
-        Level.h
-        LevelParser.h
-        LogicAuto.h
-        MainMenuState.h
-        MapObject.h
-        MenuState.h
-        ObjectLayer.h
-        ObjectFactory.h
-        ObjectParams.h
-        PauseState.h
-        Player.h
-        PlayState.h
-        ScriptManager.h
-        ScriptWrappers.h
-        SoundManager.h
-        StateParser.h
-        TestObject.h
-        TextureManager.h
-        TileLayer.h
-        Vector2D.h
-        WarspiteObject.h
-        WarspiteUtil.h
+        src/FontManager.h
+        src/TextObject.h
+        src/Game.h
+        ../shared/src/GameObject.h
+        src/GameObjectDictionary.h
+        ../shared/src/GameState.h
+        src/GameStateBase.h
+        src/GameStateDictionary.h
+        src/GameStateManager.h
+        src/InputHandler.h
+        src/Layer.h
+        src/Level.h
+        src/LevelParser.h
+        src/LogicAuto.h
+        src/MainMenuState.h
+        src/MapObject.h
+        src/MenuState.h
+        src/ObjectLayer.h
+        ../shared/src/ObjectFactory.h
+        src/ObjectParams.h
+        src/PauseState.h
+        src/Player.h
+        src/PlayState.h
+        src/ScriptManager.h
+        src/ScriptWrappers.h
+        src/SoundManager.h
+        src/StateParser.h
+        src/TestObject.h
+        src/TextureManager.h
+        src/TileLayer.h
+        src/Vector2D.h
+        src/WarspiteObject.h
+        src/WarspiteUtil.h
         )
 
 # Thirdparty code
 set (WarspiteEngine_Src
         ${WarspiteEngine_Src}
-        etc/Base64.cpp
+        src/etc/Base64.cpp
         )
 
 set (WarspiteEngine_Header
         ${WarspiteEngine_Header}
-        etc/Base64.h
+        src/etc/Base64.h
         )
 
 if (WIN32)
@@ -111,7 +111,7 @@ endif()
 find_package(Python3 COMPONENTS Interpreter Development REQUIRED)
 
 add_custom_target(EngineMetadata
-        COMMAND "${Python3_EXECUTABLE}" "${CMAKE_CURRENT_SOURCE_DIR}/EngineMetadata.py"
+        COMMAND "${Python3_EXECUTABLE}" "${CMAKE_CURRENT_SOURCE_DIR}/src/EngineMetadata.py"
         COMMENT "Generating build Engine metadata..."
 )
 

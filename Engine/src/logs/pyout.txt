@@ -1,0 +1,24 @@
+Engine attributes:
+   CameraObject
+   GameObject
+   GameState
+   InputObject
+   LevelObject
+   ObjectParams
+   Vector2D
+   WS_Scancode
+   WarObject
+   __doc__
+   __loader__
+   __name__
+   __package__
+   __spec__
+   camera
+   fs
+   game
+   inputh
+   level
+   util
+<SWarObject "PythonObject" of type "TestObject">
+<CVector2D with point (140.000000, 140.000000)>
+Comparing ws with da: They are different

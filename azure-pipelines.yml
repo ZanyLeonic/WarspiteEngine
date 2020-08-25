@@ -43,7 +43,7 @@ jobs:
   - task: PublishBuildArtifacts@1
     displayName: "Publishing build artifacts"
     inputs:
-      PathtoPublish: 'Debug/'
+      PathtoPublish: 'build/Debug/'
       ArtifactName: 'windows'
       publishLocation: 'Container'
 

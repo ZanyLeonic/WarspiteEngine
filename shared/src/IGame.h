@@ -2,7 +2,6 @@
 #ifndef __IGAME_H_
 #define __IGAME_H_
 
-#include "ISingleton.h"
 #include "EngineTypes.h"
 
 struct SDL_Renderer;
