@@ -66,7 +66,7 @@ jobs:
     displayName: "Installing dependencies + Making build files"
     inputs:
      filePath: 'build-deps-x86.ps1'
-     arguments: '--CI'
+     arguments: 'C:\vcpkg --CI'
      workingDirectory: '$(System.DefaultWorkingDirectory)'
 
   - task: MSBuild@1

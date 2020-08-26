@@ -1,6 +1,7 @@
 # Based on a script from CommitteeOfZero/impacto
 param(
-    [string]$VcpkgDir = $env:VCPKG_INSTALLATION_ROOT
+    [string]$VcpkgDir = $env:VCPKG_INSTALLATION_ROOT,
+    [string]$CI = ""
 )
 
 function SetEnv() {
@@ -22,7 +23,7 @@ function GenerateProjectFiles() {
 	
 	$bargs = @("")
 	
-	if ($args[0] == "--CI")
+	if ($CI -eq "--CI")
 	{
 		$bargs = @( 
 		"-AWin32",
