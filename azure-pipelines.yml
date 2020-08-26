@@ -82,7 +82,7 @@ jobs:
   - task: PublishBuildArtifacts@1
     displayName: "Publishing build artifacts"
     inputs:
-      PathtoPublish: 'build/Debug/'
+      PathtoPublish: 'build-win32/Debug/'
       ArtifactName: 'windows-x86'
       publishLocation: 'Container'
 
