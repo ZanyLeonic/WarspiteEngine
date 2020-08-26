@@ -72,7 +72,7 @@ jobs:
   - task: MSBuild@1
     displayName: "Compiling project"
     inputs:
-      solution: 'build/ALL_BUILD.vcxproj'
+      solution: 'build-win32/ALL_BUILD.vcxproj'
       msbuildArchitecture: 'x86'
       platform: 'Win32'
       configuration: 'Debug'
