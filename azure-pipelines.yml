@@ -66,13 +66,14 @@ jobs:
     displayName: "Installing dependencies + Making build files"
     inputs:
      filePath: 'build-deps-x86.ps1'
+     arguments: '--CI'
      workingDirectory: '$(System.DefaultWorkingDirectory)'
 
   - task: MSBuild@1
     displayName: "Compiling project"
     inputs:
       solution: 'build/ALL_BUILD.vcxproj'
-      msbuildArchitecture: 'Win32'
+      msbuildArchitecture: 'x86'
       platform: 'Win32'
       configuration: 'Debug'
       maximumCpuCount: true

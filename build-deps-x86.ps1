@@ -19,13 +19,31 @@ function GenerateProjectFiles() {
     if (!(Get-Command cmake -ErrorAction SilentlyContinue)) {
         SetEnv
     }
-    $bargs = @( 
-    "-AWin32",
-    "-DCMAKE_TOOLCHAIN_FILE=$VcpkgDir\scripts\buildsystems\vcpkg.cmake",
-    '-DCMAKE_BUILD_TYPE="Debug"', 
-    "-DVCPKG_TARGET_TRIPLET=x86-windows",
-	"-Bbuild",
-    ".")
+	
+	$bargs = @("")
+	
+	if ($args[0] == "--CI")
+	{
+		$bargs = @( 
+		"-AWin32",
+		"-DCMAKE_TOOLCHAIN_FILE=$VcpkgDir\scripts\buildsystems\vcpkg.cmake",
+		'-DCMAKE_BUILD_TYPE="Debug"', 
+		"-DVCPKG_TARGET_TRIPLET=x86-windows",
+		"-DPYTHON_EXECUTABLE:FILEPATH=C:\hostedtoolcache\windows\Python\3.8.5\x86\python.exe",
+		"-Bbuild-win32",
+		".")
+	}
+	else
+	{
+		$bargs = @( 
+		"-AWin32",
+		"-DCMAKE_TOOLCHAIN_FILE=$VcpkgDir\scripts\buildsystems\vcpkg.cmake",
+		'-DCMAKE_BUILD_TYPE="Debug"', 
+		"-DVCPKG_TARGET_TRIPLET=x86-windows",
+		"-DPYTHON_EXECUTABLE:FILEPATH=C:\Program Files (x86)\Python38-32\python.exe",
+		"-Bbuild-win32",
+		".")
+	}
     & cmake $bargs
 	
 	Write-Output "Finished generating project files."
