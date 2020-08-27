@@ -1,6 +1,8 @@
 #include "WGame.h"
+#include "EngineTypes.h"
 
 #include <iostream>
+#include <map>
 
 #include <spdlog/spdlog.h>
 #include <spdlog/sinks/stdout_color_sinks.h>
@@ -9,9 +11,9 @@
 #include "GameDLLMetadata.h"
 
 #ifdef _WIN32
-extern "C" __declspec(dllexport) bool __cdecl GameDLL(int argc, char** argv, IGame* pGame)
+extern "C" __declspec(dllexport) bool __cdecl GameDLL(int argc, char** argv, std::map<ESingletonIDs, void(*)>* pPtrs)
 #elif _UNIX
-extern "C" bool GameDLL(int argc, char** argv, IGame* pGame)
+extern "C" bool GameDLL(int argc, char** argv, std::map<ESingletonIDs, void(*)>* pPtrs)
 #endif
 {
 	std::vector<spdlog::sink_ptr> sinks;
@@ -62,7 +64,7 @@ extern "C" bool GameDLL(int argc, char** argv, IGame* pGame)
 
 	spdlog::info("Attempting Game initialization...");
 
-	if (CGame::Instance()->Init(argc, argv, pGame))
+	if (CGame::Instance()->Init(argc, argv, pPtrs))
 	{
 		spdlog::info("Initalisation successful!");
 		return true;

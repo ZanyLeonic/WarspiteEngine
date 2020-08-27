@@ -6,19 +6,19 @@ cmake_minimum_required (VERSION 3.8)
 if (WIN32)
     set(LauncherMain_Libs)
     set (LauncherMain_Src
-        launcher_main.cpp
-        launcher_main.rc
+        src/launcher_main.cpp
+        src/launcher_main.rc
     )
 
     set (LauncherMain_Header
-        resource.h
+        src/resource.h
     )
 
     add_executable (LauncherMain WIN32 ${LauncherMain_Src} ${LauncherMain_Header})
 elseif(UNIX)
     set(LauncherMain_Libs dl)
     set (LauncherMain_Src
-        launcher_main.cpp
+        src/launcher_main.cpp
     )
 
     set (LauncherMain_Header

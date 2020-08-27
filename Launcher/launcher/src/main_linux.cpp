@@ -6,9 +6,12 @@
 #include <limits.h>
 #include <errno.h>
 #include <unistd.h>
+#include <map>
 #define MAX_PATH PATH_MAX
 
-typedef bool (*GameDLL_t)(int argc, char** argv);
+enum class ESingletonIDs;
+
+typedef bool (*GameDLL_t)(int argc, char** argv, std::map<ESingletonIDs, void(*)> pPtrs);
 typedef int (*Engine_t)(int argc, char** argv, GameDLL_t pGameDLL);
 #define stringize(a) #a
 #define engine_binary(a,b,c) a stringize(b) c 

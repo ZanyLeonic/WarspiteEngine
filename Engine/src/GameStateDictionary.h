@@ -3,13 +3,14 @@
 #define __GAMESTATEDICT_H__
 
 #include "ObjectFactory.h"
+#include "IGameStateDictionary.h"
 #include <string>
 #include <map>
 
 class CGameStateBase;
 
 // I know it is clone of the GameObject version, but I need to get it working first.
-class CGameStateDictionary
+class CGameStateDictionary : public IGameStateDictionary
 {
 	CGameStateDictionary() {}
 	static CGameStateDictionary* s_pInstance;

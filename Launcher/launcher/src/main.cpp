@@ -1,7 +1,10 @@
 #include <Windows.h>
 #include <stdio.h>
+#include <map>
 
-typedef bool (*GameDLL_t)(int argc, char** argv);
+enum class ESingletonIDs;
+
+typedef bool (*GameDLL_t)(int argc, char** argv, std::map<ESingletonIDs, void(*)>* pPtrs);
 typedef int (*Engine_t)(int argc, char** argv, GameDLL_t pGameDLL);
 
 extern "C" __declspec(dllexport) int __cdecl LauncherMain(HINSTANCE hInstance,

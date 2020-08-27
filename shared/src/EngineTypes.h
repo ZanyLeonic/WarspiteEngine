@@ -4,6 +4,7 @@
 
 #include <functional>
 #include <memory>
+#include <map>
 
 struct SInputObject;
 struct SGameObject;
@@ -17,6 +18,16 @@ typedef std::shared_ptr<SGameObject>  PGamePtr;
 typedef std::shared_ptr<SInputObject> PInputPtr;
 typedef std::shared_ptr<SLevelObject>  PLevelPtr;
 
-typedef bool (*GameDLL_t)(int argc, char** argv, IGame* pGame);
+enum class ESingletonIDs
+{
+	NONE = 0,
+	GAME = 1,
+	OBJDICT = 2,
+	STATEDICT = 3,
+	STATEMGR = 4,
+	SCRIPTMGR = 5,
+	SOUNDMGR = 6
+};
 
+typedef bool (*GameDLL_t)(int argc, char** argv, std::map<ESingletonIDs, void(*)>* pPtrs);
 #endif // #ifndef __ENGINETYPES_H__

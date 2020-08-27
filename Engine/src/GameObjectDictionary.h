@@ -3,13 +3,14 @@
 #define __GameObjectDictionary_H__
 
 #include "ObjectFactory.h"
+#include "IGameObjectDictionary.h"
 #include <string>
 #include <map>
 
 class IGameObject;
 
 // Singleton class
-class CGameObjectDictionary
+class CGameObjectDictionary : public IGameObjectDictionary
 {
 	CGameObjectDictionary() {}
 	static CGameObjectDictionary* s_pInstance;
@@ -25,8 +26,8 @@ public:
 		return s_pInstance;
 	}
 
-	bool RegisterType(std::string typeID, IObjectFactory<IGameObject>* pCreator);
-	IGameObject* Create(std::string typeID);
+	virtual bool RegisterType(std::string typeID, IObjectFactory<IGameObject>* pCreator);
+	virtual IGameObject* Create(std::string typeID);
 private:
 	std::map<std::string, IObjectFactory<IGameObject>*> m_creators;
 };

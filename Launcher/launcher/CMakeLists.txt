@@ -7,11 +7,11 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY_DEBUG "${BIN_PATH_DEBUG}/bin" )
 
 if (WIN32)
     set (Launcher_Src
-        main.cpp
+        src/main.cpp
     )
 elseif(UNIX)
     set (Launcher_Src
-        main_linux.cpp
+        src/main_linux.cpp
     )
 endif()
 

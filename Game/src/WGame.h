@@ -2,6 +2,9 @@
 #ifndef __Game_H__
 #define __Game_H__
 
+#include <map>
+#include "EngineTypes.h"
+
 class IGame;
 
 class CGame
@@ -23,7 +26,10 @@ private:
 	static CGame* s_pInstance;
 public:
 	// simply set the running variable to true
-	bool Init(int argc, char** argv, IGame* pGame);
+	bool Init(int argc, char** argv, std::map<ESingletonIDs, void(*)>* pPtrs);
+
+private:
+	std::map<ESingletonIDs, void(*)> m_ptrs;
 };
 
 #endif

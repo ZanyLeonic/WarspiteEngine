@@ -3,6 +3,9 @@
 #define __GAMESTATE_H__
 
 #include <string>
+#include <vector>
+
+class IGameObject;
 
 class CGameState
 {
@@ -14,5 +17,12 @@ public:
 	virtual bool OnEnd() = 0;
 
 	virtual std::string GetStateID() const = 0;
+
+	virtual std::vector<IGameObject*> GetGameObjects() const = 0;
+	virtual std::vector<std::string> GetLoadedTextures() const = 0;
+	virtual std::vector<std::string> GetLoadedScripts() const = 0;
+
+	virtual bool ShouldBeTicking() const = 0;
+	virtual bool ShouldBeDrawing() const = 0;
 };
 #endif

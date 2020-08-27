@@ -95,8 +95,18 @@ bool CBaseGame::Init(const char* title, int xpos, int ypos, int width, int heigh
 		spdlog::info("Init success");
 		m_bRunning = true; // everything inited successfully, start the main loop
 
+		std::map<ESingletonIDs, void(*)> m_singletonPtrs
+		{
+			{ ESingletonIDs::GAME,		 (void(*))this},
+			{ ESingletonIDs::SCRIPTMGR,	 (void(*))CScriptManager::Instance()},
+			{ ESingletonIDs::SOUNDMGR,   (void(*))CSoundManager::Instance()},
+			{ ESingletonIDs::STATEMGR,	 (void(*))GetStateManager()},
+			{ ESingletonIDs::STATEDICT,  (void(*))CGameStateDictionary::Instance()},
+			{ ESingletonIDs::OBJDICT,    (void(*))CGameObjectDictionary::Instance()}
+		};
+
 		// Run the GameDLL's init
-		return pGameDLL(m_argc, m_argv, this);
+		return pGameDLL(m_argc, m_argv, &m_singletonPtrs);
 	}
 	return false;
 }

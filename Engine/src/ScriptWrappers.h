@@ -239,5 +239,4 @@ struct SFontObject : SBaseWrapper<CFontManager>
 
 	bool IsLoaded(std::string name, std::string type, int size);
 };
-
 #endif

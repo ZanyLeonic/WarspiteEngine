@@ -50,6 +50,7 @@ compile_commands.json
 CTestTestfile.cmake
 _deps
 build/
+build-win32/
 
 ### CMake Patch ###
 # External projects

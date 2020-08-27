@@ -103,4 +103,4 @@ if __name__ == "__main__":
     with open(header, "w") as f:
         f.write(headerTemplate.format(IncrementBuildNumber(), headSha, GetTime(), GetGitDesc()))
     
-    print("Wrote metadata to {0}!".format(header))
+    print("Wrote metadata to {0}!".format(os.path.abspath(header)))

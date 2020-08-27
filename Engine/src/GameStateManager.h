@@ -3,22 +3,22 @@
 #define __GAMESTATEMANAGER_H__
 
 #include <vector>
-#include "EngineTypes.h"
+#include "IGameStateManager.h"
 
 class CGameStateBase;
 
-class CGameStateManager
+class CGameStateManager : public IGameStateManager
 {
 public:
 	CGameStateBase* GetCurrentState();
 
-	void PushState(CGameStateBase* pState);
-	void ModifyState(CGameStateBase* pState);
+	virtual void PushState(CGameStateBase* pState);
+	virtual void ModifyState(CGameStateBase* pState);
 
-	void PopState();
+	virtual void PopState();
 
-	void Draw();
-	void OnThink();
+	virtual void Draw();
+	virtual void OnThink();
 
 private:
 	std::vector<CGameStateBase*> m_GameStates;

@@ -484,7 +484,7 @@ void CSoundManager::Destroy()
 	{
 		alCall(alSourcei, streams[i]->Source, AL_BUFFER, 0);
         alCall(alDeleteSources, 1, &streams[i]->Source);
-        alCall(alDeleteBuffers, NUM_BUFFERS, &streams[i]->Buffers[0]);
+        alCall(alDeleteBuffers, (ALsizei)NUM_BUFFERS, &streams[i]->Buffers[0]);
 	}
 
 	spdlog::info("Destroying device handles...");
@@ -834,5 +834,5 @@ void CSoundManager::DeleteStream(SStreamingAudioData* audioData)
 {
 	// then free the memory that contained the StreamAudio file.
 	alCall(alDeleteSources, 1, &audioData->Source);
-	alCall(alDeleteBuffers, NUM_BUFFERS, &audioData->Buffers[0]);
+	alCall(alDeleteBuffers, (ALsizei)NUM_BUFFERS, &audioData->Buffers[0]);
 }
