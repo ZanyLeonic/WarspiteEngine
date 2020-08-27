@@ -10,6 +10,7 @@ struct SInputObject;
 struct SGameObject;
 struct SLevelObject;
 class IGame;
+class IWGame;
 
 typedef std::function<void()> KeyCallback;
 typedef std::function<bool()> HButtonCallback;
@@ -29,5 +30,5 @@ enum class ESingletonIDs
 	SOUNDMGR = 6
 };
 
-typedef bool (*GameDLL_t)(int argc, char** argv, std::map<ESingletonIDs, void(*)>* pPtrs);
+typedef IWGame* (*GameDLL_t)(int argc, char** argv, std::map<ESingletonIDs, void(*)>* pPtrs);
 #endif // #ifndef __ENGINETYPES_H__

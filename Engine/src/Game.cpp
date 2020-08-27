@@ -106,7 +106,9 @@ bool CBaseGame::Init(const char* title, int xpos, int ypos, int width, int heigh
 		};
 
 		// Run the GameDLL's init
-		return pGameDLL(m_argc, m_argv, &m_singletonPtrs);
+		pGame = pGameDLL(m_argc, m_argv, &m_singletonPtrs);
+
+		if (pGame != nullptr) return true;
 	}
 	return false;
 }

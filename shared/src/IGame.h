@@ -35,5 +35,7 @@ public:
 
     virtual int const GetArgc() = 0;
     virtual char** const GetArgv() = 0;
+
+    virtual IWGame* const GetGameDLLClass() = 0;
 };
 #endif

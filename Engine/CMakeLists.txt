@@ -82,7 +82,7 @@ set(WarspiteEngine_Header
         src/TestObject.h
         src/TextureManager.h
         src/TileLayer.h
-        src/Vector2D.h
+        ../shared/src/Vector2D.h
         src/WarspiteObject.h
         src/WarspiteUtil.h
         )

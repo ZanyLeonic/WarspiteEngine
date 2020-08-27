@@ -5,6 +5,7 @@
 #include <string>
 #include <chrono>
 #include "EngineFileSystem.h"
+#include "IWGame.h"
 
 #include <spdlog/spdlog.h>
 #include <spdlog/sinks/stdout_color_sinks.h>
@@ -13,7 +14,7 @@
 // our Game object
 CBaseGame* g_game = 0;
 
-typedef bool (*GameDLL_t)(int argc, char** argv, std::map<ESingletonIDs, void(*)>* pPtrs);
+typedef IWGame* (*GameDLL_t)(int argc, char** argv, std::map<ESingletonIDs, void(*)>* pPtrs);
 
 const int FPS = 62;
 const int DELAY_TIME = 1000 / FPS;
@@ -81,13 +82,15 @@ extern "C" int Engine(int argc, char** argv, GameDLL_t pGameDLL)
 
 	if (CBaseGame::Instance()->Init(title, 100, 100, 640, 480, false, argc, argv, pGameDLL))
 	{
+		IWGame* pGD = CBaseGame::Instance()->GetGameDLLClass();
+
 		while (CBaseGame::Instance()->IsRunning())
 		{
 			frameStart = SDL_GetTicks();
 
-			CBaseGame::Instance()->HandleEvents();
-			CBaseGame::Instance()->OnThink();
-			CBaseGame::Instance()->Draw();
+			pGD->HandleEvents();
+			pGD->OnThink();
+			pGD->Draw();
 
 			frameTime = SDL_GetTicks() - frameStart;
 

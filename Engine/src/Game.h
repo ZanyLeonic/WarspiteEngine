@@ -19,6 +19,7 @@
 
 class CFPSCounter;
 struct SDL_Rect;
+class IWGame;
 
 class CBaseGame : public IGame
 {
@@ -62,6 +63,8 @@ public:
 	virtual int const GetArgc() { return m_argc; }
 	virtual char** const GetArgv() { return m_argv; }
 
+	virtual IWGame* const GetGameDLLClass() { return pGame; }
+
 private:
 	CGameStateManager* m_pGameStateManager;
 
@@ -78,6 +81,7 @@ private:
 	PGamePtr m_gamePtr;
 
 	CFPSCounter* m_fpsCounter;
+	IWGame* pGame = nullptr;
 
 	// FPS calculations
 	Uint32 m_frametimes[FRAME_SAMPLES];
