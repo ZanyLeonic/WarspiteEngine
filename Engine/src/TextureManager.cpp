@@ -45,7 +45,7 @@ void CTextureManager::CreateCheckboardPattern(CVector2D size, std::string texNam
 	int tRows = int(size.GetX() / 32);
 	int tCols = int(size.GetY() / 32);
 
-	SDL_Texture* pTexture = SDL_CreateTexture(pRenderer, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_TARGET, size.GetX(), size.GetY());
+	SDL_Texture* pTexture = SDL_CreateTexture(pRenderer, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_TARGET, (int)size.GetX(), (int)size.GetY());
 	SDL_SetTextureBlendMode(pTexture, SDL_BLENDMODE_NONE);
 
 	SDL_SetRenderTarget(pRenderer, pTexture);

@@ -29,17 +29,17 @@ CLevel* CLevelParser::ParseLevel(const char* levelFile)
 
 		assert(tLevel["height"].IsInt() && tLevel["width"].IsInt() && tLevel["tilewidth"].IsInt());
 
-		m_height = tLevel["height"].GetInt();
-		m_width = tLevel["width"].GetInt();
-		m_tileSize = tLevel["tilewidth"].GetInt();
+		pLevel->m_height = tLevel["height"].GetInt();
+		pLevel->m_width = tLevel["width"].GetInt();
+		pLevel->m_tileSize = tLevel["tilewidth"].GetInt();
 
 		std::string bgColour = tLevel.HasMember("backgroundcolor") ? tLevel["backgroundcolor"].GetString() : "#FFFFFF";
 
 		parseBackgroundColour(&bgColour);
 
 		// multiply by tilesize since we are using pixels
-		pLevel->m_LevelSize.SetX(m_width * m_tileSize);
-		pLevel->m_LevelSize.SetY(m_height * m_tileSize);
+		pLevel->m_LevelSize.SetX((float)pLevel->m_width * (float)pLevel->m_tileSize);
+		pLevel->m_LevelSize.SetY((float)pLevel->m_height * (float)pLevel->m_tileSize);
 
 		assert(tLevel["tilesets"].IsArray());
 		const Value& tilesets = tLevel["tilesets"].GetArray();
@@ -73,8 +73,7 @@ CLevel* CLevelParser::ParseLevel(const char* levelFile)
 
 			if(t == "tilelayer")
 			{
-				parseTileLayer(&layers[i], pLevel->GetLayers(),
-					pLevel->GetTilesets());
+				parseTileLayer(&layers[i], pLevel);
 			}
 			else if (t == "objectgroup")
 			{
@@ -174,13 +173,13 @@ void CLevelParser::parseTilesets(const rapidjson::Value* pTilesetRoot, std::vect
 	}
 }
 
-void CLevelParser::parseTileLayer(const rapidjson::Value* pTileElement, std::vector<ILayer*>* pLayers, const std::vector<STileset>* pTilesets)
+void CLevelParser::parseTileLayer(const rapidjson::Value* pTileElement, CLevel* pLevel)
 {
 	// Make the JSON value an object to manipulate better.
 	const Value::ConstObject& obj = pTileElement->GetObject();
 
 	// Another with a new instance of TileLayer to work with and return.
-	CTileLayer* pTileLayer = new CTileLayer(m_tileSize, m_width, m_height, *pTilesets);
+	CTileLayer* pTileLayer = new CTileLayer(pLevel->m_tileSize, pLevel->m_width, pLevel->m_height, *pLevel->GetTilesets());
 
 	// the final decoded tile data in a 2D integer array
 	std::vector<std::vector<int>> data;
@@ -196,7 +195,7 @@ void CLevelParser::parseTileLayer(const rapidjson::Value* pTileElement, std::vec
 	// The desired size of the buffer ? map dimensions 
 	// multiplied by the size of an integer since the 
 	// destination is a int vector.
-	uLongf numGids = m_width * m_height * sizeof(int);
+	uLongf numGids = pLevel->m_width * pLevel->m_height * sizeof(int);
 
 	// Our buffer to store the uncompressed map data in.
 	std::vector<unsigned> gids(numGids);
@@ -208,27 +207,27 @@ void CLevelParser::parseTileLayer(const rapidjson::Value* pTileElement, std::vec
 		(const Bytef*)decodedIDs.c_str(), (uLong)decodedIDs.size());
 
 	// Populating our 2D array with blank rows
-	std::vector<int> layerRow(m_width);
+	std::vector<int> layerRow(pLevel->m_width);
 
 	// Add a row corrisponding to the height of the map we are trying to load.
-	for (int j = 0; j < m_height; j++)
+	for (int j = 0; j < pLevel->m_height; j++)
 	{
 		data.push_back(layerRow);
 	}
 
 	// Then we fill the 2D array with the uncompressed tile data found in the map.
-	for (int rows = 0; rows < m_height; rows++)
+	for (int rows = 0; rows < pLevel->m_height; rows++)
 	{
-		for (int cols = 0; cols < m_width; cols++)
+		for (int cols = 0; cols < pLevel->m_width; cols++)
 		{
-			data[rows][cols] = gids[rows * m_width + cols];
+			data[rows][cols] = gids[rows * pLevel->m_width + cols];
 		}
 	}
 
 	// Finally, we provide the TileLayer instance with the tile data and then 
 	// push it into the provided layers we were given.
 	pTileLayer->SetTileIDs(data);
-	pLayers->push_back(pTileLayer);
+	pLevel->GetLayers()->push_back(pTileLayer);
 }
 
 void CLevelParser::parseFiles(const rapidjson::Value* pFileRoot)

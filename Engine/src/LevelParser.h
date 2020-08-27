@@ -29,27 +29,22 @@ class ILayer;
 class CLevelParser
 {
 public:
-	CLevel* ParseLevel(const char* levelFile);
+	static CLevel* ParseLevel(const char* levelFile);
 
 private:
 	static MapProperties GetMapProp(const std::string prop);
 	
-	void parseTilesets(const rapidjson::Value* pTilesetRoot,
+	static void parseTilesets(const rapidjson::Value* pTilesetRoot,
 		std::vector<STileset>* pTilesets);
 
-	void parseTileLayer(const rapidjson::Value* pTileElement,
-		std::vector<ILayer*>* pLayers,
-		const std::vector<STileset>* pTilesets);
+	static void parseTileLayer(const rapidjson::Value* pTileElement,
+		CLevel* pLevel);
 
-	void parseFiles(const rapidjson::Value* pFileRoot);
+	static void parseFiles(const rapidjson::Value* pFileRoot);
 
-	void parseBackgroundColour(const std::string* colourVal);
+	static void parseBackgroundColour(const std::string* colourVal);
 
-	void parseObjectLayer(const rapidjson::Value* pObjectVal,
+	static void parseObjectLayer(const rapidjson::Value* pObjectVal,
 		std::vector<ILayer*>* pLayer);
-
-	int m_tileSize;
-	int m_width;
-	int m_height;
 };
 #endif

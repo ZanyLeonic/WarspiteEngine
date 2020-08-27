@@ -25,11 +25,8 @@ bool CPlayState::OnPlay()
 	s_UIID = SID_PLAY;
 	m_screenSize = CBaseGame::Instance()->GetViewportSize();
 
-	CStateParser sp;
-	sp.ParseState(CEngineFileSystem::ResolvePath("PlayState.json", CEngineFileSystem::EPathType::STATE).c_str(), GetStateID(), &m_GameObjects, &m_TextureIDList, &m_ScriptIDList);
-
-	CLevelParser lp;
-	pLevel = lp.ParseLevel(CEngineFileSystem::ResolvePath("map02.json", CEngineFileSystem::EPathType::MAP).c_str());
+	CStateParser::ParseState(CEngineFileSystem::ResolvePath("PlayState.json", CEngineFileSystem::EPathType::STATE).c_str(), GetStateID(), &m_GameObjects, &m_TextureIDList, &m_ScriptIDList);
+	pLevel = CLevelParser::ParseLevel(CEngineFileSystem::ResolvePath("map02.json", CEngineFileSystem::EPathType::MAP).c_str());
 
 	CInputHandler::Instance()->AddActionKeyDown(SDL_SCANCODE_ESCAPE, [this] {
 			if (CBaseGame::Instance()->GetStateManager()->GetCurrentState()->GetStateID() != SID_PAUSE)

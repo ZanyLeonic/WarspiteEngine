@@ -71,5 +71,9 @@ private:
 	CObjectLayer* m_scriptLayer = nullptr;
 
 	std::string m_path;
+
+	int m_tileSize;
+	int m_width;
+	int m_height;
 };
 #endif

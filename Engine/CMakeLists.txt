@@ -62,7 +62,7 @@ set(WarspiteEngine_Header
         src/GameStateDictionary.h
         src/GameStateManager.h
         src/InputHandler.h
-        src/Layer.h
+        ../shared/src/Layer.h
         src/Level.h
         src/LevelParser.h
         src/LogicAuto.h
@@ -71,7 +71,7 @@ set(WarspiteEngine_Header
         src/MenuState.h
         src/ObjectLayer.h
         ../shared/src/ObjectFactory.h
-        src/ObjectParams.h
+        ../shared/src/ObjectParams.h
         src/PauseState.h
         src/Player.h
         src/PlayState.h
