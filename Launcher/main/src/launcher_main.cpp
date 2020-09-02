@@ -125,8 +125,12 @@ int main(int argc, char** argv)
 	{
 		printf("%s\n", strerror(errno));
 	}
-
+#ifndef _DARWIN
 	const char* pBinaryName = "bin/liblauncher.so";
+#else
+    const char* pBinaryName = "bin/liblauncher.dylib";
+#endif
+    
 	void* launcher = dlopen(pBinaryName, RTLD_NOW);
 	if (!launcher)
 	{

@@ -426,6 +426,14 @@ CSoundManager::CSoundManager()
 	// Enumerate all our devices
 	getAvailableDevices(devices, NULL);
 
+    // If no devices can be found
+    if (devices.size() == 0)
+    {
+        spdlog::error("Cannot find any valid audio devices!");
+        spdlog::error("Audio will not be available this app session.");
+        return;
+    }
+    
 	spdlog::info("Using device \"{}\"...", devices[0].c_str());
 
 	// Open the first device we get

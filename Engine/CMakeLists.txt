@@ -1,4 +1,4 @@
-﻿# CMakeList.txt : CMake project for Engine, include source and define
+# CMakeList.txt : CMake project for Engine, include source and define
 # project specific logic here.
 cmake_minimum_required (VERSION 3.8)
 
@@ -151,7 +151,6 @@ set (Warspite_Libs
 if(UNIX)
     set (Warspite_Libs
         ${Warspite_Libs}
-        stdc++fs
     )
 endif()
 

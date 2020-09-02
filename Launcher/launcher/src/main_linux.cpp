@@ -19,8 +19,13 @@ typedef int (*Engine_t)(int argc, char** argv, GameDLL_t pGameDLL);
 
 extern "C" int LauncherMain(int argc, char** argv)
 {
+#ifndef _DARWIN
 	const char* pBinaryName = engine_binary("bin/lib", MOD_NAME_L, ".so");
-	const char* pGameBinaryN = engine_binary("assets/bin/lib", GAME_NAME_L, ".so");
+    const char* pGameBinaryN = engine_binary("assets/bin/lib", GAME_NAME_L, ".so");
+#else
+    const char* pBinaryName = engine_binary("lib", MOD_NAME_L, ".dylib");
+    const char* pGameBinaryN = engine_binary("lib", GAME_NAME_L, ".dylib");
+#endif
 	
 	void* engine = dlopen(pBinaryName, RTLD_NOW);
 	void* game = dlopen(pGameBinaryN , RTLD_NOW);

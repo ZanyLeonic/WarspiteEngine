@@ -1,6 +1,6 @@
 #include "TextureManager.h"
 #include "Vector2D.h"
-#include <SDL2/SDL_image.h>
+#include <SDL_image.h>
 
 CTextureManager* CTextureManager::s_pInstance = 0;
 
@@ -17,7 +17,7 @@ bool CTextureManager::Load(std::string fileName, std::string id,
 	SDL_Texture* pTexture =
 		SDL_CreateTextureFromSurface(pRenderer, pTempSurface);
 
-	SDL_FreeSurface(pTempSurface);
+	// SDL_FreeSurface(pTempSurface);
 
 	// we have loaded the texture ok, add it to the map!
 	if (pTexture != 0)

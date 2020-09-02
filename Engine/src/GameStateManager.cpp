@@ -26,7 +26,7 @@ void CGameStateManager::PopState()
 		if (m_GameStates.back()->OnEnd())
 		{
 			// Delete the actual object in memory
-			delete m_GameStates.back();
+			// delete m_GameStates.back();
 			// ...and remove its Pointer from the queue.
 			m_GameStates.pop_back();
 		}
@@ -61,7 +61,7 @@ void CGameStateManager::ModifyState(CGameStateBase* pState)
 
 		if (m_GameStates.back()->OnEnd())
 		{
-			delete m_GameStates.back();
+			// delete m_GameStates.back();
 			m_GameStates.pop_back();
 		}
 	}
