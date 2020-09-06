@@ -21,8 +21,10 @@
   <component name="CMakeRunConfigurationManager" shouldGenerate="true" shouldDeleteObsolete="true">
     <generated>
       <config projectName="Warspite" targetName="ProjectMetadata" />
-      <config projectName="Warspite" targetName="Warspite" />
+      <config projectName="Warspite" targetName="LauncherMain" />
+      <config projectName="Warspite" targetName="Launcher" />
       <config projectName="Warspite" targetName="EngineMetadata" />
+      <config projectName="Warspite" targetName="WarspiteEngine" />
     </generated>
   </component>
   <component name="CMakeSettings">
@@ -31,20 +33,9 @@
     </configurations>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="543719c6-8c94-4a69-8f9a-51660507439a" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Engine/EngineFileSystem.h" beforeDir="false" afterPath="$PROJECT_DIR$/Engine/EngineFileSystem.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Engine/LevelParser.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Engine/LevelParser.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Engine/ObjectFactory.h" beforeDir="false" afterPath="$PROJECT_DIR$/Engine/ObjectFactory.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Engine/SoundManager.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Engine/SoundManager.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Engine/SoundManager.h" beforeDir="false" afterPath="$PROJECT_DIR$/Engine/SoundManager.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Engine/StateParser.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Engine/StateParser.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Engine/WarspiteGame.Build.txt" beforeDir="false" afterPath="$PROJECT_DIR$/Engine/WarspiteGame.Build.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Engine/assets/maps/map02.json" beforeDir="false" afterPath="$PROJECT_DIR$/Engine/assets/maps/map02.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Engine/assets/resource/states/SystemMenus.json" beforeDir="false" afterPath="$PROJECT_DIR$/Engine/assets/resource/states/SystemMenus.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Engine/assets/tilesets/TestTiles.json" beforeDir="false" afterPath="$PROJECT_DIR$/Engine/assets/tilesets/TestTiles.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Engine/main.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Engine/main.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Warspite.cbp" beforeDir="false" afterPath="$PROJECT_DIR$/Warspite.cbp" afterDir="false" />
+    <list default="true" id="543719c6-8c94-4a69-8f9a-51660507439a" name="Default Changelist" comment="Made some changes to CMakeLists.txt and code for Linux builds">
+      <change beforePath="$PROJECT_DIR$/Game/src/WGame.h" beforeDir="false" afterPath="$PROJECT_DIR$/Game/src/WGame.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/shared/src/IWGame.h" beforeDir="false" afterPath="$PROJECT_DIR$/shared/src/IWGame.h" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -54,7 +45,6 @@
   <component name="ClangdSettings">
     <option name="formatViaClangd" value="false" />
   </component>
-  <component name="ExecutionTargetManager" SELECTED_TARGET="CMakeBuildProfile:Debug" />
   <component name="Git.Settings">
     <option name="RECENT_BRANCH_BY_REPOSITORY">
       <map>
@@ -82,13 +72,8 @@
     <property name="node.js.selected.package.tslint" value="(autodetect)" />
     <property name="settings.editor.selected.configurable" value="CMakeSettings" />
   </component>
-  <component name="RunManager" selected="CMake Application.Engine">
-    <configuration name="Engine" type="CMakeRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" WORKING_DIR="file://$PROJECT_DIR$/Engine" PASS_PARENT_ENVS_2="true" PROJECT_NAME="Warspite" TARGET_NAME="Warspite" CONFIG_NAME="Debug" RUN_TARGET_PROJECT_NAME="Warspite" RUN_TARGET_NAME="Warspite">
-      <method v="2">
-        <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
-      </method>
-    </configuration>
-    <configuration name="EngineMetadata" type="CMakeRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" PASS_PARENT_ENVS_2="true" PROJECT_NAME="Warspite" TARGET_NAME="EngineMetadata" CONFIG_NAME="Debug">
+  <component name="RunManager" selected="Python.Test Map">
+    <configuration default="true" type="CMakeRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" PASS_PARENT_ENVS_2="true">
       <method v="2">
         <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
       </method>
@@ -96,6 +81,31 @@
     <configuration default="true" type="GradleAppRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" PASS_PARENT_ENVS_2="true">
       <method v="2">
         <option name="com.jetbrains.cidr.cpp.gradle.execution.GradleNativeBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="EngineMetadata" type="CMakeRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" PASS_PARENT_ENVS_2="true" PROJECT_NAME="Warspite" TARGET_NAME="EngineMetadata" CONFIG_NAME="Debug">
+      <method v="2">
+        <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="Engine" type="CMakeRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" WORKING_DIR="file://$PROJECT_DIR$/Engine" PASS_PARENT_ENVS_2="true" PROJECT_NAME="Warspite" TARGET_NAME="Warspite" CONFIG_NAME="Debug" RUN_TARGET_PROJECT_NAME="Warspite" RUN_TARGET_NAME="Warspite">
+      <method v="2">
+        <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="LauncherMain" type="CMakeRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" PASS_PARENT_ENVS_2="true" PROJECT_NAME="Warspite" TARGET_NAME="LauncherMain" CONFIG_NAME="Debug" RUN_TARGET_PROJECT_NAME="Warspite" RUN_TARGET_NAME="LauncherMain">
+      <method v="2">
+        <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="Launcher" type="CMakeRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" PASS_PARENT_ENVS_2="true" PROJECT_NAME="Warspite" TARGET_NAME="Launcher" CONFIG_NAME="Debug">
+      <method v="2">
+        <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="WarspiteEngine" type="CMakeRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" PASS_PARENT_ENVS_2="true" PROJECT_NAME="Warspite" TARGET_NAME="WarspiteEngine" CONFIG_NAME="Debug">
+      <method v="2">
+        <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
       </method>
     </configuration>
     <configuration name="Test Map" type="PythonConfigurationType" factoryName="Python">
@@ -121,8 +131,6 @@
       <method v="2" />
     </configuration>
     <list>
-      <item itemvalue="CMake Application.EngineMetadata" />
-      <item itemvalue="CMake Application.Engine" />
       <item itemvalue="Python.Test Map" />
     </list>
   </component>
@@ -141,6 +149,7 @@
       <workItem from="1594568312794" duration="100000" />
       <workItem from="1594568468068" duration="1471000" />
       <workItem from="1597229869500" duration="1697000" />
+      <workItem from="1598817222123" duration="6000" />
     </task>
     <task id="LOCAL-00001" summary="Made changes for compilation under Linux">
       <created>1594569277042</created>
@@ -149,7 +158,14 @@
       <option name="project" value="LOCAL" />
       <updated>1594569277042</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="Made some changes to CMakeLists.txt and code for Linux builds">
+      <created>1597928483595</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1597928483596</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -169,7 +185,8 @@
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Made changes for compilation under Linux" />
-    <option name="LAST_COMMIT_MESSAGE" value="Made changes for compilation under Linux" />
+    <MESSAGE value="Made some changes to CMakeLists.txt and code for Linux builds" />
+    <option name="LAST_COMMIT_MESSAGE" value="Made some changes to CMakeLists.txt and code for Linux builds" />
   </component>
   <component name="WindowStateProjectService">
     <state x="384" y="128" width="1264" height="810" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1597224948018">

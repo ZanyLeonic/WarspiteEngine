@@ -6,10 +6,10 @@
 trigger:
 - master
 - develop
-- pybind
+- launchv2
 
 jobs:
-- job: Windows
+- job: "Windows_x64"
   pool:
     vmImage: 'windows-2019'
   steps:
@@ -33,32 +33,57 @@ jobs:
   - task: MSBuild@1
     displayName: "Compiling project"
     inputs:
-      solution: 'INSTALL.vcxproj'
+      solution: 'build/ALL_BUILD.vcxproj'
       msbuildArchitecture: 'x64'
       platform: 'x64'
       configuration: 'Debug'
       maximumCpuCount: true
       createLogFile: true
 
-  - task: CopyFiles@2
-    displayName: "Copying DLLs to root drop"
+  - task: PublishBuildArtifacts@1
+    displayName: "Publishing build artifacts"
     inputs:
-      SourceFolder: 'C:/Program Files (x86)/Warspite/Warspite/Debug'
-      Contents: '**'
-      TargetFolder: 'C:/Program Files (x86)/Warspite/Warspite'
+      PathtoPublish: 'build/Debug/'
+      ArtifactName: 'windows-x64'
+      publishLocation: 'Container'
 
-  - task: DeleteFiles@1
-    displayName: "Deleting duplicate DLLs"
+- job: "Windows_x86"
+  pool:
+    vmImage: 'windows-2019'
+  steps:
+  - task: Cache@2
     inputs:
-      SourceFolder: 'C:/Program Files (x86)/Warspite/Warspite/Debug'
-      Contents: '**'
-      RemoveSourceFolder: true
+      key: 'v1-x86 | vcpkg | "$(Agent.OS)" | "C:\vcpkg\.git\HEAD"'
+      restoreKeys: |
+        v1-x86 | vcpkg | "$(Agent.OS)"
+        vcpkg | "$(Agent.OS)"
+        vcpkg
+      path: 'C:\vcpkg'
+      cacheHitVar: VCPKG_CACHE_RESTORED
+    displayName: Cache vcpkg
+
+  - task: PowerShell@2
+    displayName: "Installing dependencies + Making build files"
+    inputs:
+     filePath: 'build-deps-x86.ps1'
+     arguments: 'C:\vcpkg --CI'
+     workingDirectory: '$(System.DefaultWorkingDirectory)'
+
+  - task: MSBuild@1
+    displayName: "Compiling project"
+    inputs:
+      solution: 'build-win32/ALL_BUILD.vcxproj'
+      msbuildArchitecture: 'x86'
+      platform: 'Win32'
+      configuration: 'Debug'
+      maximumCpuCount: true
+      createLogFile: true
 
   - task: PublishBuildArtifacts@1
     displayName: "Publishing build artifacts"
     inputs:
-      PathtoPublish: 'C:/Program Files (x86)/Warspite/'
-      ArtifactName: 'windows'
+      PathtoPublish: 'build-win32/Debug/'
+      ArtifactName: 'windows-x86'
       publishLocation: 'Container'
 
 - job: Ubuntu
@@ -80,6 +105,6 @@ jobs:
     - task: PublishBuildArtifacts@1
       displayName: "Publishing build artifacts"
       inputs:
-        PathtoPublish: '/usr/local/Warspite/'
+        PathtoPublish: '/usr/local/bin/Warspite/'
         ArtifactName: 'linux'
         publishLocation: 'Container'

@@ -2,98 +2,100 @@
 # project specific logic here.
 cmake_minimum_required (VERSION 3.8)
 
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY_DEBUG "${BIN_PATH_DEBUG}/bin" )
+
 set(WarspiteEngine_Src
-        AudioSource.cpp
-        AnimatedGraphic.cpp
-        Button.cpp
-        Camera.cpp
-        CTexture.cpp
-        FPSCounter.cpp
-        Enemy.cpp
-        EngineFileSystem.cpp
-        FontManager.cpp
-        TextObject.cpp
-        Game.cpp
-        GameObjectDictionary.cpp
-        GameStateBase.cpp
-        GameStateDictionary.cpp
-        GameStateManager.cpp
-        InputHandler.cpp
-        Level.cpp
-        LevelParser.cpp
-        LogicAuto.cpp
-        main.cpp
-        MainMenuState.cpp
-        MapObject.cpp
-        ObjectLayer.cpp
-        PauseState.cpp
-        Player.cpp
-        PlayState.cpp
-        ScriptManager.cpp
-        ScriptWrappers.cpp
-        SoundManager.cpp
-        StateParser.cpp
-        TestObject.cpp
-        TextureManager.cpp
-        TileLayer.cpp
-        WarspiteObject.cpp
-        WarspiteUtil.cpp
+        src/AudioSource.cpp
+        src/AnimatedGraphic.cpp
+        src/Button.cpp
+        src/Camera.cpp
+        src/CTexture.cpp
+        src/FPSCounter.cpp
+        src/Enemy.cpp
+        src/EngineFileSystem.cpp
+        src/FontManager.cpp
+        src/TextObject.cpp
+        src/Game.cpp
+        src/GameObjectDictionary.cpp
+        src/GameStateBase.cpp
+        src/GameStateDictionary.cpp
+        src/GameStateManager.cpp
+        src/InputHandler.cpp
+        src/Level.cpp
+        src/LevelParser.cpp
+        src/LogicAuto.cpp
+        src/main.cpp
+        src/MainMenuState.cpp
+        src/MapObject.cpp
+        src/ObjectLayer.cpp
+        src/PauseState.cpp
+        src/Player.cpp
+        src/PlayState.cpp
+        src/ScriptManager.cpp
+        src/ScriptWrappers.cpp
+        src/SoundManager.cpp
+        src/StateParser.cpp
+        src/TestObject.cpp
+        src/TextureManager.cpp
+        src/TileLayer.cpp
+        src/WarspiteObject.cpp
+        src/WarspiteUtil.cpp
         )
 
 set(WarspiteEngine_Header
-        AudioSource.h
-        AnimatedGraphic.h
-        Button.h
-        Camera.h
-        CTexture.h
-        FPSCounter.h
-        Enemy.h
-        EngineFileSystem.h
-        EngineTypes.h
-        FontManager.h
-        TextObject.h
-        Game.h
-        GameObject.h
-        GameObjectDictionary.h
-        GameState.h
-        GameStateBase.h
-        GameStateDictionary.h
-        GameStateManager.h
-        InputHandler.h
-        Layer.h
-        Level.h
-        LevelParser.h
-        LogicAuto.h
-        MainMenuState.h
-        MapObject.h
-        MenuState.h
-        ObjectLayer.h
-        ObjectFactory.h
-        ObjectParams.h
-        PauseState.h
-        Player.h
-        PlayState.h
-        ScriptManager.h
-        ScriptWrappers.h
-        SoundManager.h
-        StateParser.h
-        TestObject.h
-        TextureManager.h
-        TileLayer.h
-        Vector2D.h
-        WarspiteObject.h
-        WarspiteUtil.h
+        src/AudioSource.h
+        src/AnimatedGraphic.h
+        src/Button.h
+        src/Camera.h
+        src/CTexture.h
+        src/FPSCounter.h
+        src/Enemy.h
+        src/EngineFileSystem.h
+        ../shared/src/EngineTypes.h
+        src/FontManager.h
+        src/TextObject.h
+        src/Game.h
+        ../shared/src/GameObject.h
+        src/GameObjectDictionary.h
+        ../shared/src/GameState.h
+        src/GameStateBase.h
+        src/GameStateDictionary.h
+        src/GameStateManager.h
+        src/InputHandler.h
+        ../shared/src/Layer.h
+        src/Level.h
+        src/LevelParser.h
+        src/LogicAuto.h
+        src/MainMenuState.h
+        src/MapObject.h
+        src/MenuState.h
+        src/ObjectLayer.h
+        ../shared/src/ObjectFactory.h
+        ../shared/src/ObjectParams.h
+        src/PauseState.h
+        src/Player.h
+        src/PlayState.h
+        src/ScriptManager.h
+        src/ScriptWrappers.h
+        src/SoundManager.h
+        src/StateParser.h
+        src/TestObject.h
+        src/TextureManager.h
+        src/TileLayer.h
+        ../shared/src/Vector2D.h
+        src/WarspiteObject.h
+        src/WarspiteUtil.h
         )
 
 # Thirdparty code
 set (WarspiteEngine_Src
         ${WarspiteEngine_Src}
-        etc/Base64.cpp
+        src/etc/Base64.cpp
         )
 
 set (WarspiteEngine_Header
         ${WarspiteEngine_Header}
-        etc/Base64.h
+        src/etc/Base64.h
         )
 
 if (WIN32)
@@ -106,21 +108,11 @@ if (WIN32)
     set(SDL2_TTF_LIBRARIES SDL2::SDL2_ttf)
 endif()
 
-# Apply some debug options
-if (CMAKE_BUILD_TYPE STREQUAL "Debug")
-    message(STATUS "Debug build")
-    add_compile_definitions(WARDEBUG)
-endif()
-
 find_package(Python3 COMPONENTS Interpreter Development REQUIRED)
 
-message(STATUS "Python3_LIBRARIES = ${Python3_LIBRARIES}")
-message(STATUS "Python3_EXECUTABLE = ${Python3_EXECUTABLE}")
-message(STATUS "Python3_INCLUDE_DIRS = ${Python3_INCLUDE_DIRS}")
-
 add_custom_target(EngineMetadata
-        COMMAND "${Python3_EXECUTABLE}" "${CMAKE_CURRENT_SOURCE_DIR}/EngineMetadata.py"
-        COMMENT "Generating build metadata..."
+        COMMAND "${Python3_EXECUTABLE}" "${CMAKE_CURRENT_SOURCE_DIR}/src/EngineMetadata.py"
+        COMMENT "Generating build Engine metadata..."
 )
 
 find_package(fmt CONFIG REQUIRED)
@@ -157,12 +149,13 @@ set (Warspite_Libs
 )
 
 if(UNIX)
-set (Warspite_Libs
-    ${Warspite_Libs}
-    stdc++fs
-)
+    set (Warspite_Libs
+        ${Warspite_Libs}
+        stdc++fs
+    )
 endif()
 
+include_directories(${SHARED_INCLUDE_DIR})
 include_directories(${Python3_INCLUDE_DIRS})
 include_directories(${SPDLOG_INCLUDE_DIR})
 include_directories(${PYBIND11_INCLUDE_DIRS})
@@ -178,9 +171,10 @@ include_directories(${ZLIB_INCLUDE_DIRS})
 # Linking errors if we don't do this.
 link_directories(${Python3_LIBRARY_DIRS})
 
+include (GenerateExportHeader)
 # Add source to this project's executable.
-add_executable (${PROJECT_NAME} ${WarspiteEngine_Src} ${WarspiteEngine_Header})
-add_dependencies(${PROJECT_NAME} EngineMetadata)
+add_library(${MOD_NAME} SHARED ${WarspiteEngine_Src} ${WarspiteEngine_Header})
+add_dependencies(${MOD_NAME} EngineMetadata)
 
 # As a last ditch effort...
 if ("${Python_EXECUTABLE}" STREQUAL "")
@@ -191,7 +185,8 @@ if ("${Python_EXECUTABLE}" STREQUAL "")
     endif()
 endif()
 
-target_link_libraries(${PROJECT_NAME} PUBLIC ${Warspite_Libs})
+target_link_libraries(${MOD_NAME} PUBLIC ${Warspite_Libs})
+set_target_properties(${MOD_NAME} PROPERTIES VS_DEBUGGER_WORKING_DIRECTORY "${BIN_PATH_DEBUG}")
 
 if(CMAKE_SIZEOF_VOID_P EQUAL 8)
     add_definitions(-DENV64BIT)
@@ -199,11 +194,12 @@ else()
     add_definitions(-DENV32BIT)
 endif()
 
-install(TARGETS ${PROJECT_NAME} RUNTIME DESTINATION ./Warspite)
-
-if (WIN32)
+if (UNIX)
+    install(FILES ${CMAKE_BINARY_DIR}/Engine/lib${MOD_NAME}.so DESTINATION ./bin/${PROJECT_NAME}/bin)
+elseif (WIN32)
+    install(TARGETS ${MOD_NAME} RUNTIME DESTINATION ./bin)
     install(DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/
-            DESTINATION ./Warspite
+            DESTINATION ./bin
             FILES_MATCHING PATTERN "*.dll"
             PATTERN ".cmake" EXCLUDE
             PATTERN "CMakeFiles" EXCLUDE
@@ -211,5 +207,3 @@ if (WIN32)
             PATTERN "Testing" EXCLUDE
             )
 endif()
-
-install (DIRECTORY assets DESTINATION ./Warspite)

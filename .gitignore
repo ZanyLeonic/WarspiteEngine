@@ -5,6 +5,7 @@
 # Prerequisites
 *.d
 EngineMetadata.h
+GameDLLMetadata.h
 
 # Compiled Object files
 *.slo
@@ -49,6 +50,7 @@ compile_commands.json
 CTestTestfile.cmake
 _deps
 build/
+build-win32/
 
 ### CMake Patch ###
 # External projects
@@ -409,3 +411,4 @@ out/
 Engine/logs/**
 *.vcxproj*
 *.sln
+/Launcher/main/ws

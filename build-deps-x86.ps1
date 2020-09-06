@@ -1,14 +1,14 @@
 # Based on a script from CommitteeOfZero/impacto
 param(
-    [ValidateSet("x64", "x86")][string]$Arch = "x64",
-    [string]$VcpkgDir = $env:VCPKG_INSTALLATION_ROOT
+    [string]$VcpkgDir = $env:VCPKG_INSTALLATION_ROOT,
+    [string]$CI = ""
 )
 
 function SetEnv() {
     $vswhere = "${env:ProgramFiles(x86)}/Microsoft Visual Studio/Installer/vswhere.exe"
     $ip = & $vswhere -prerelease -latest -property InstallationPath
     if ($ip -and (test-path "$ip\Common7\Tools\vsdevcmd.bat")) {
-        & "${env:COMSPEC}" /s /c "`"$ip\Common7\Tools\vsdevcmd.bat`" -arch=x64 -no_logo && set" | foreach-object {
+        & "${env:COMSPEC}" /s /c "`"$ip\Common7\Tools\vsdevcmd.bat`" -arch=x86 -no_logo && set" | foreach-object {
             $name, $value = $_ -split '=', 2
             set-content env:\"$name" $value
         }
@@ -20,12 +20,31 @@ function GenerateProjectFiles() {
     if (!(Get-Command cmake -ErrorAction SilentlyContinue)) {
         SetEnv
     }
-    $bargs = @( 
-    "-DCMAKE_TOOLCHAIN_FILE=$VcpkgDir\scripts\buildsystems\vcpkg.cmake",
-    '-DCMAKE_BUILD_TYPE="Debug"', 
-    "-DVCPKG_TARGET_TRIPLET=$Arch-windows",
-	"-Bbuild",
-    ".")
+	
+	$bargs = @("")
+	
+	if ($CI -eq "--CI")
+	{
+		$bargs = @( 
+		"-AWin32",
+		"-DCMAKE_TOOLCHAIN_FILE=$VcpkgDir\scripts\buildsystems\vcpkg.cmake",
+		'-DCMAKE_BUILD_TYPE="Debug"', 
+		"-DVCPKG_TARGET_TRIPLET=x86-windows",
+		"-DPYTHON_EXECUTABLE:FILEPATH=C:\hostedtoolcache\windows\Python\3.8.5\x86\python.exe",
+		"-Bbuild-win32",
+		".")
+	}
+	else
+	{
+		$bargs = @( 
+		"-AWin32",
+		"-DCMAKE_TOOLCHAIN_FILE=$VcpkgDir\scripts\buildsystems\vcpkg.cmake",
+		'-DCMAKE_BUILD_TYPE="Debug"', 
+		"-DVCPKG_TARGET_TRIPLET=x86-windows",
+		"-DPYTHON_EXECUTABLE:FILEPATH=C:\Program Files (x86)\Python38-32\python.exe",
+		"-Bbuild-win32",
+		".")
+	}
     & cmake $bargs
 	
 	Write-Output "Finished generating project files."
@@ -51,7 +70,7 @@ function InstallPackages() {
         $local_vcpkg = $true
     }
 
-    & $vcpkg install sdl2 sdl2-image[libjpeg-turbo,libwebp,tiff] sdl2-ttf libvorbis rapidjson zlib openal-soft python3 pybind11 spdlog fmt --triplet $Arch-windows
+    & $vcpkg install sdl2 sdl2-image[libjpeg-turbo,libwebp,tiff] sdl2-ttf libvorbis rapidjson zlib openal-soft python3 pybind11 spdlog fmt --triplet x86-windows
     if ($local_vcpkg) {
         & $vcpkg integrate install
         Write-Output "Cleaning up..."
