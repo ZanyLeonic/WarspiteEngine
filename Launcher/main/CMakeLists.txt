@@ -27,7 +27,7 @@ elseif(UNIX)
 endif()
 
 # So these libraries will actually recompile whenever the Launcher is ran.
-add_dependencies(LauncherMain ${MOD_NAME} ${GAME_NAME})
+add_dependencies(LauncherMain ${MOD_NAME} ${GAME_NAME} Launcher)
 
 target_link_libraries(LauncherMain PUBLIC ${LauncherMain_Libs})
 set_target_properties(LauncherMain PROPERTIES 

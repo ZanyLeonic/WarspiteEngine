@@ -14,7 +14,6 @@ class IGameObject;
 class IWGame
 {
 public:
-
     virtual void Draw() = 0;
     virtual void OnThink() = 0;
     virtual void HandleEvents() = 0;

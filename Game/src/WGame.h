@@ -44,5 +44,4 @@ private:
 	
 	IGame* tObj = nullptr;
 };
-
 #endif
