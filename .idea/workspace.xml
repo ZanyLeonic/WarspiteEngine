@@ -1,7 +1,31 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="BranchesTreeState">
+    <expand>
+      <path>
+        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="LOCAL_ROOT" type="e8cecc67:BranchNodeDescriptor" />
+      </path>
+      <path>
+        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="REMOTE_ROOT" type="e8cecc67:BranchNodeDescriptor" />
+      </path>
+      <path>
+        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="REMOTE_ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="GROUP_NODE:origin" type="e8cecc67:BranchNodeDescriptor" />
+      </path>
+    </expand>
+    <select />
+  </component>
   <component name="CMakeRunConfigurationManager" shouldGenerate="true" shouldDeleteObsolete="true">
-    <generated />
+    <generated>
+      <config projectName="Warspite" targetName="ProjectMetadata" />
+      <config projectName="Warspite" targetName="LauncherMain" />
+      <config projectName="Warspite" targetName="Launcher" />
+      <config projectName="Warspite" targetName="EngineMetadata" />
+      <config projectName="Warspite" targetName="WarspiteEngine" />
+    </generated>
   </component>
   <component name="CMakeSettings">
     <configurations>
@@ -9,10 +33,9 @@
     </configurations>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="543719c6-8c94-4a69-8f9a-51660507439a" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/Engine/Player.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Engine/Player.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Engine/SoundManager.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Engine/SoundManager.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Engine/WarspiteGame.Build.txt" beforeDir="false" afterPath="$PROJECT_DIR$/Engine/WarspiteGame.Build.txt" afterDir="false" />
+    <list default="true" id="543719c6-8c94-4a69-8f9a-51660507439a" name="Default Changelist" comment="Made some changes to CMakeLists.txt and code for Linux builds">
+      <change beforePath="$PROJECT_DIR$/Game/src/WGame.h" beforeDir="false" afterPath="$PROJECT_DIR$/Game/src/WGame.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/shared/src/IWGame.h" beforeDir="false" afterPath="$PROJECT_DIR$/shared/src/IWGame.h" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -23,6 +46,11 @@
     <option name="formatViaClangd" value="false" />
   </component>
   <component name="Git.Settings">
+    <option name="RECENT_BRANCH_BY_REPOSITORY">
+      <map>
+        <entry key="$PROJECT_DIR$" value="master" />
+      </map>
+    </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="ProjectId" id="1bm9ejGdKPxB7961uTCYE9uCOLT" />
@@ -36,7 +64,77 @@
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="cf.first.check.clang-format" value="false" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="node.js.detected.package.eslint" value="true" />
+    <property name="node.js.detected.package.tslint" value="true" />
+    <property name="node.js.path.for.package.eslint" value="project" />
+    <property name="node.js.path.for.package.tslint" value="project" />
+    <property name="node.js.selected.package.eslint" value="(autodetect)" />
+    <property name="node.js.selected.package.tslint" value="(autodetect)" />
+    <property name="settings.editor.selected.configurable" value="CMakeSettings" />
   </component>
+  <component name="RunManager" selected="Python.Test Map">
+    <configuration default="true" type="CMakeRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" PASS_PARENT_ENVS_2="true">
+      <method v="2">
+        <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
+      </method>
+    </configuration>
+    <configuration default="true" type="GradleAppRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" PASS_PARENT_ENVS_2="true">
+      <method v="2">
+        <option name="com.jetbrains.cidr.cpp.gradle.execution.GradleNativeBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="EngineMetadata" type="CMakeRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" PASS_PARENT_ENVS_2="true" PROJECT_NAME="Warspite" TARGET_NAME="EngineMetadata" CONFIG_NAME="Debug">
+      <method v="2">
+        <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="Engine" type="CMakeRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" WORKING_DIR="file://$PROJECT_DIR$/Engine" PASS_PARENT_ENVS_2="true" PROJECT_NAME="Warspite" TARGET_NAME="Warspite" CONFIG_NAME="Debug" RUN_TARGET_PROJECT_NAME="Warspite" RUN_TARGET_NAME="Warspite">
+      <method v="2">
+        <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="LauncherMain" type="CMakeRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" PASS_PARENT_ENVS_2="true" PROJECT_NAME="Warspite" TARGET_NAME="LauncherMain" CONFIG_NAME="Debug" RUN_TARGET_PROJECT_NAME="Warspite" RUN_TARGET_NAME="LauncherMain">
+      <method v="2">
+        <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="Launcher" type="CMakeRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" PASS_PARENT_ENVS_2="true" PROJECT_NAME="Warspite" TARGET_NAME="Launcher" CONFIG_NAME="Debug">
+      <method v="2">
+        <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="WarspiteEngine" type="CMakeRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" PASS_PARENT_ENVS_2="true" PROJECT_NAME="Warspite" TARGET_NAME="WarspiteEngine" CONFIG_NAME="Debug">
+      <method v="2">
+        <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="Test Map" type="PythonConfigurationType" factoryName="Python">
+      <module name="WarspiteGame" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="E:\Users\Kurisu\anaconda3\envs\WarspiteGame\python.exe" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/sdk" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/sdk/ExportMap.py" />
+      <option name="PARAMETERS" value="-map &quot;E:\Projects\WarspiteGame\sdk\maps\map02.json&quot; -baseFolder &quot;assets&quot; -workDir E:\Projects\WarspiteGame\Engine\" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <list>
+      <item itemvalue="Python.Test Map" />
+    </list>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="SvnConfiguration">
     <configuration />
   </component>
@@ -47,10 +145,117 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1589226498810</updated>
+      <workItem from="1593190162533" duration="3753000" />
+      <workItem from="1594568312794" duration="100000" />
+      <workItem from="1594568468068" duration="1471000" />
+      <workItem from="1597229869500" duration="1697000" />
+      <workItem from="1598817222123" duration="6000" />
     </task>
+    <task id="LOCAL-00001" summary="Made changes for compilation under Linux">
+      <created>1594569277042</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1594569277042</updated>
+    </task>
+    <task id="LOCAL-00002" summary="Made some changes to CMakeLists.txt and code for Linux builds">
+      <created>1597928483595</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1597928483596</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
-    <option name="version" value="2" />
+    <option name="version" value="3" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+    <option name="oldMeFiltersMigrated" value="true" />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="Made changes for compilation under Linux" />
+    <MESSAGE value="Made some changes to CMakeLists.txt and code for Linux builds" />
+    <option name="LAST_COMMIT_MESSAGE" value="Made some changes to CMakeLists.txt and code for Linux builds" />
+  </component>
+  <component name="WindowStateProjectService">
+    <state x="384" y="128" width="1264" height="810" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1597224948018">
+      <screen x="0" y="25" width="1918" height="913" />
+    </state>
+    <state x="384" y="179" width="1265" height="845" key="#com.intellij.execution.impl.EditConfigurationsDialog/-1280.54.1280.994/0.0.1920.1050@0.0.1920.1050" timestamp="1593191507008" />
+    <state x="384" y="128" width="1264" height="810" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.25.1918.913@0.25.1918.913" timestamp="1597224948018" />
+    <state x="772" y="295" width="426" height="479" key="FileChooserDialogImpl" timestamp="1597224944144">
+      <screen x="0" y="25" width="1918" height="913" />
+    </state>
+    <state x="773" y="311" key="FileChooserDialogImpl/-1280.54.1280.994/0.0.1920.1050@0.0.1920.1050" timestamp="1593191215096" />
+    <state x="773" y="311" key="FileChooserDialogImpl/-1280.60.1280.994/-2880.76.1600.1200/0.0.1920.1050@0.0.1920.1050" timestamp="1594657936383" />
+    <state x="772" y="295" width="426" height="479" key="FileChooserDialogImpl/0.25.1918.913@0.25.1918.913" timestamp="1597224944144" />
+    <state width="1872" height="290" key="GridCell.Tab.0.bottom" timestamp="1597231387505">
+      <screen x="0" y="25" width="1918" height="913" />
+    </state>
+    <state width="1877" height="352" key="GridCell.Tab.0.bottom/-1280.54.1280.994/0.0.1920.1050@0.0.1920.1050" timestamp="1593197578477" />
+    <state width="1872" height="290" key="GridCell.Tab.0.bottom/0.25.1918.913@0.25.1918.913" timestamp="1597231387505" />
+    <state width="1872" height="290" key="GridCell.Tab.0.center" timestamp="1597231387482">
+      <screen x="0" y="25" width="1918" height="913" />
+    </state>
+    <state width="1877" height="352" key="GridCell.Tab.0.center/-1280.54.1280.994/0.0.1920.1050@0.0.1920.1050" timestamp="1593197578477" />
+    <state width="1872" height="290" key="GridCell.Tab.0.center/0.25.1918.913@0.25.1918.913" timestamp="1597231387482" />
+    <state width="1872" height="290" key="GridCell.Tab.0.left" timestamp="1597231387482">
+      <screen x="0" y="25" width="1918" height="913" />
+    </state>
+    <state width="1877" height="352" key="GridCell.Tab.0.left/-1280.54.1280.994/0.0.1920.1050@0.0.1920.1050" timestamp="1593197578477" />
+    <state width="1872" height="290" key="GridCell.Tab.0.left/0.25.1918.913@0.25.1918.913" timestamp="1597231387482" />
+    <state width="1872" height="290" key="GridCell.Tab.0.right" timestamp="1597231387485">
+      <screen x="0" y="25" width="1918" height="913" />
+    </state>
+    <state width="1877" height="352" key="GridCell.Tab.0.right/-1280.54.1280.994/0.0.1920.1050@0.0.1920.1050" timestamp="1593197578477" />
+    <state width="1872" height="290" key="GridCell.Tab.0.right/0.25.1918.913@0.25.1918.913" timestamp="1597231387485" />
+    <state width="1872" height="290" key="GridCell.Tab.1.bottom" timestamp="1597231386938">
+      <screen x="0" y="25" width="1918" height="913" />
+    </state>
+    <state width="1877" height="352" key="GridCell.Tab.1.bottom/-1280.54.1280.994/0.0.1920.1050@0.0.1920.1050" timestamp="1593197578478" />
+    <state width="1872" height="290" key="GridCell.Tab.1.bottom/0.25.1918.913@0.25.1918.913" timestamp="1597231386938" />
+    <state width="1872" height="290" key="GridCell.Tab.1.center" timestamp="1597231386907">
+      <screen x="0" y="25" width="1918" height="913" />
+    </state>
+    <state width="1877" height="352" key="GridCell.Tab.1.center/-1280.54.1280.994/0.0.1920.1050@0.0.1920.1050" timestamp="1593197578477" />
+    <state width="1872" height="290" key="GridCell.Tab.1.center/0.25.1918.913@0.25.1918.913" timestamp="1597231386907" />
+    <state width="1872" height="290" key="GridCell.Tab.1.left" timestamp="1597231386891">
+      <screen x="0" y="25" width="1918" height="913" />
+    </state>
+    <state width="1877" height="352" key="GridCell.Tab.1.left/-1280.54.1280.994/0.0.1920.1050@0.0.1920.1050" timestamp="1593197578477" />
+    <state width="1872" height="290" key="GridCell.Tab.1.left/0.25.1918.913@0.25.1918.913" timestamp="1597231386891" />
+    <state width="1872" height="290" key="GridCell.Tab.1.right" timestamp="1597231386915">
+      <screen x="0" y="25" width="1918" height="913" />
+    </state>
+    <state width="1877" height="352" key="GridCell.Tab.1.right/-1280.54.1280.994/0.0.1920.1050@0.0.1920.1050" timestamp="1593197578477" />
+    <state width="1872" height="290" key="GridCell.Tab.1.right/0.25.1918.913@0.25.1918.913" timestamp="1597231386915" />
+    <state x="365" y="200" key="SettingsEditor" timestamp="1597224578985">
+      <screen x="0" y="25" width="1918" height="913" />
+    </state>
+    <state x="365" y="201" key="SettingsEditor/-1280.60.1280.994/-2880.76.1600.1200/0.0.1920.1050@0.0.1920.1050" timestamp="1594658717812" />
+    <state x="304" y="225" key="SettingsEditor/0.0.1600.1175@0.0.1600.1175" timestamp="1594567510584" />
+    <state x="365" y="200" key="SettingsEditor/0.25.1918.913@0.25.1918.913" timestamp="1597224578985" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/sdk/ExportMap.py</url>
+          <line>160</line>
+          <option name="timeStamp" value="4" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
   </component>
 </project>

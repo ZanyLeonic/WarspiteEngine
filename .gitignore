@@ -4,7 +4,8 @@
 ### C++ ###
 # Prerequisites
 *.d
-GitVersion.h
+EngineMetadata.h
+GameDLLMetadata.h
 
 # Compiled Object files
 *.slo
@@ -49,6 +50,7 @@ compile_commands.json
 CTestTestfile.cmake
 _deps
 build/
+build-win32/
 
 ### CMake Patch ###
 # External projects
@@ -406,5 +408,7 @@ MigrationBackup/
 # End of https://www.gitignore.io/api/c++,cmake,visualstudio
 
 out/
+Engine/logs/**
 *.vcxproj*
 *.sln
+/Launcher/main/ws

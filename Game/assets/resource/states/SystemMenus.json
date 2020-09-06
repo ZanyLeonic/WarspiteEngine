@@ -1,0 +1,117 @@
+{
+  "states": [
+    {
+      "id": "MainMenu",
+      "textures": [
+        {
+          "id": "PlayButton",
+          "path": "UI/PlayButton.png"
+        },
+        {
+          "id": "ExitButton",
+          "path": "UI/ExitButton.png"
+        }
+      ],
+      "scripts": [],
+      "objects": [
+        {
+          "name": "TestText",
+          "type": "TextObject",
+          "textureid": "TitleText",
+          "script": "",
+          "soundPath": "",
+          "x": 10,
+          "y": 10,
+          "width": 10,
+          "height": 10,
+          "numFrames": 1,
+          "animSpeed": 1,
+          "onClickId": 0,
+          "onEnterId": 0,
+          "onLeaveId": 0
+        },
+        {
+          "name": "PlayBtn",
+          "type": "Button",
+          "textureid": "PlayButton",
+          "script": "",
+          "soundPath": "",
+          "x": 100,
+          "y": 100,
+          "width": 100,
+          "height": 32,
+          "numFrames": 3,
+          "animSpeed": 1,
+          "onClickId": 1,
+          "onEnterId": 0,
+          "onLeaveId": 0
+        },
+        {
+          "name": "ExitBtn",
+          "type": "Button",
+          "textureid": "ExitButton",
+          "script": "",
+          "soundPath": "",
+          "x": 100,
+          "y": 300,
+          "width": 100,
+          "height": 32,
+          "numFrames": 3,
+          "animSpeed": 1,
+          "onClickId": 2,
+          "onEnterId": 0,
+          "onLeaveId": 0
+        }
+      ]
+    },
+    {
+      "id": "PauseState",
+      "textures": [
+        {
+          "id": "ResumeButton",
+          "path": "UI/ResumeButton.png"
+        },
+        {
+          "id": "ExitButton",
+          "path": "UI/ExitButton.png"
+        }
+      ],
+      "scripts": [],
+      "objects": [
+        {
+          "name": "ResumeBtn",
+          "type": "Button",
+          "textureid": "ResumeButton",
+          "script": "",
+          "soundPath": "",
+          "x": 100,
+          "y": 100,
+          "width": 100,
+          "height": 32,
+          "numFrames": 3,
+          "animSpeed": 1,
+          "onClickId": 1,
+          "onEnterId": 0,
+          "onLeaveId": 0
+        },
+        {
+          "name": "ExitpBtn",
+          "type": "Button",
+          "textureid": "ExitButton",
+          "script": "",
+          "soundPath": "",
+          "x": 100,
+          "y": 200,
+          "width": 100,
+          "height": 32,
+          "numFrames": 3,
+          "animSpeed": 1,
+          "onClickId": 2,
+          "onEnterId": 0,
+          "onLeaveId": 0
+        }
+      ]
+    }
+  ],
+  "type": "StateFile"
+}

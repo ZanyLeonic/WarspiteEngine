@@ -16,18 +16,23 @@ function SetEnv() {
 }
 
 function GenerateProjectFiles() {
+	Write-Output "Generating project files..."
     if (!(Get-Command cmake -ErrorAction SilentlyContinue)) {
         SetEnv
     }
-    $args = @( 
+    $bargs = @( 
     "-DCMAKE_TOOLCHAIN_FILE=$VcpkgDir\scripts\buildsystems\vcpkg.cmake",
     '-DCMAKE_BUILD_TYPE="Debug"', 
     "-DVCPKG_TARGET_TRIPLET=$Arch-windows",
+	"-Bbuild",
     ".")
-    & cmake $args
+    & cmake $bargs
+	
+	Write-Output "Finished generating project files."
 }
 
 function InstallPackages() {
+	Write-Output "Installing dependencies..."
     $vcpkg = "$VcpkgDir/vcpkg.exe"
     if (!(Get-Command $vcpkg -ErrorAction SilentlyContinue)) {
         $vcpkg = "vcpkg"
@@ -46,14 +51,16 @@ function InstallPackages() {
         $local_vcpkg = $true
     }
 
-    & $vcpkg install sdl2 sdl2-image[libjpeg-turbo,libwebp,tiff] sdl2-ttf libvorbis rapidjson zlib --triplet $Arch-windows
+    & $vcpkg install sdl2 sdl2-image[libjpeg-turbo,libwebp,tiff] sdl2-ttf libvorbis rapidjson zlib openal-soft python3 pybind11 spdlog fmt --triplet $Arch-windows
     if ($local_vcpkg) {
         & $vcpkg integrate install
         Write-Output "Cleaning up..."
         Remove-Item build/vcpkg/downloads -Recurse
         Remove-Item build/vcpkg/buildtrees -Recurse
     }
+	Write-Output "Dependencies installed."
 }
 
+# I don't care about errors or warnings cringe
 InstallPackages
 GenerateProjectFiles
