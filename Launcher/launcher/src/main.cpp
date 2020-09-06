@@ -9,13 +9,13 @@ typedef IWGame* (*GameDLL_t)(int argc, char** argv, std::map<ESingletonIDs, void
 typedef int (*Engine_t)(int argc, char** argv, GameDLL_t pGameDLL);
 
 extern "C" __declspec(dllexport) int __cdecl LauncherMain(HINSTANCE hInstance,
-	HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nShowCmd, char* basePath)
+	HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nShowCmd)
 {
 	char buf[4096];
 	char buf2[4096];
 
-	snprintf(buf, sizeof(buf), "%s\\bin\\%s.dll", basePath, MOD_NAME);
-	snprintf(buf2, sizeof(buf2), "%s\\assets\\bin\\%s.dll", basePath, GAME_NAME);
+	snprintf(buf, sizeof(buf), "%s.dll", MOD_NAME);
+	snprintf(buf2, sizeof(buf2), "%s.dll", GAME_NAME);
 
 	HINSTANCE engine = LoadLibraryEx(buf, NULL, LOAD_WITH_ALTERED_SEARCH_PATH);
 	HINSTANCE game = LoadLibraryEx(buf2, NULL, LOAD_WITH_ALTERED_SEARCH_PATH);

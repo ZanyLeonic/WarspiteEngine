@@ -37,7 +37,7 @@ int UpdateStream(SStreamingAudioData& audioData)
 		{
 			// Continue to read the OGG file
 			std::int32_t result = ov_read(&audioData.OggVorbisFile, &data[sizeRead], BUFFER_SIZE - sizeRead, 0, 2, 1,
-										  reinterpret_cast<int *>(&audioData.OggCurrentSection));
+				reinterpret_cast<int*>(&audioData.OggCurrentSection));
 
 			if (result == OV_HOLE)
 			{
@@ -100,7 +100,7 @@ int audioStreamUpdate(void* data)
 		as->StreamCreated(as);
 
 	CSoundManager::Instance()->GetStreams().push_back(as);
-	
+
 	while (as->Finished != true)
 	{
 		if (as->UpdateCallback)
@@ -119,7 +119,7 @@ int audioStreamUpdate(void* data)
 		as->File.clear();
 		as->File.close();
 	}
-	
+
 	return 0;
 }
 
@@ -298,7 +298,7 @@ int createStreamOnThread(void* pdata)
 		{
 			// Read a part of the OGG file
 			std::int32_t result = ov_read(&audioData->OggVorbisFile, &data[dataSoFar], BUFFER_SIZE - dataSoFar, 0, 2, 1,
-										  reinterpret_cast<int *>(&audioData->OggCurrentSection));
+				reinterpret_cast<int*>(&audioData->OggCurrentSection));
 			if (result == OV_HOLE)
 			{
 				spdlog::error("ERROR: OV_HOLE found in initial read of buffer {}", i);
@@ -426,6 +426,14 @@ CSoundManager::CSoundManager()
 	// Enumerate all our devices
 	getAvailableDevices(devices, NULL);
 
+	// If no devices can be found
+	if (devices.size() == 0)
+	{
+		spdlog::error("Cannot find any valid audio devices!");
+		spdlog::error("Audio will not be available this app session.");
+		return;
+	}
+
 	spdlog::info("Using device \"{}\"...", devices[0].c_str());
 
 	// Open the first device we get
@@ -434,7 +442,7 @@ CSoundManager::CSoundManager()
 	if (!openALDevice)
 	{
 		spdlog::error("ERROR: Cannot open device \"{}\"!", devices[0].c_str());
-        spdlog::warn("SoundManager failed to initialise.");
+		spdlog::warn("SoundManager failed to initialise.");
 		return;
 	}
 
@@ -442,7 +450,7 @@ CSoundManager::CSoundManager()
 	if (!alcCall(alcCreateContext, openALContext, openALDevice, openALDevice, nullptr) || !openALContext)
 	{
 		spdlog::error("ERROR: Could not create audio context");
-        spdlog::warn("SoundManager failed to initialise.");
+		spdlog::warn("SoundManager failed to initialise.");
 		return;
 	}
 
@@ -452,7 +460,7 @@ CSoundManager::CSoundManager()
 		|| contextMadeCurrent != ALC_TRUE)
 	{
 		spdlog::error("ERROR: Could not make audio context current");
-        spdlog::warn("SoundManager failed to initialise.");
+		spdlog::warn("SoundManager failed to initialise.");
 		return;
 	}
 
@@ -462,7 +470,7 @@ CSoundManager::CSoundManager()
 		return;
 	}
 
-    m_initalised = true;
+	m_initalised = true;
 	// We somehow survived! fhew.
 	spdlog::info("SoundManager initialised.");
 }
@@ -480,17 +488,18 @@ void CSoundManager::OnThink()
 void CSoundManager::Destroy()
 {
 	spdlog::info("Destroying active AudioStreams...");
-	for (int i=0;i < streams.size();i++)
+	for (int i = 0; i < streams.size(); i++)
 	{
 		alCall(alSourcei, streams[i]->Source, AL_BUFFER, 0);
-        alCall(alDeleteSources, 1, &streams[i]->Source);
-        alCall(alDeleteBuffers, (ALsizei)NUM_BUFFERS, &streams[i]->Buffers[0]);
+		alCall(alDeleteSources, 1, &streams[i]->Source);
+		alCall(alDeleteBuffers, (ALsizei)NUM_BUFFERS, &streams[i]->Buffers[0]);
 	}
 
 	spdlog::info("Destroying device handles...");
+
 	// Try to destroy our device
-	ALCboolean closed;
-	if (!alcCall(alcCloseDevice, closed, openALDevice, openALDevice))
+	// Can't get error, because the device handle is invalid on MS implementations(?)
+	if (!alcCloseDevice(openALDevice))
 	{
 		spdlog::error("ERROR: Error while destroying active audio device");
 	}
@@ -502,7 +511,7 @@ void CSoundManager::Destroy()
 
 bool CSoundManager::Load(const std::string& fileName, SWaveFile& file)
 {
-    if(!m_initalised) return false;
+	if (!m_initalised) return false;
 	// The input already has been loaded! No need to load again.
 	if (file.RawData != nullptr && file.DataSize > 0) return true;
 
@@ -566,7 +575,7 @@ void CSoundManager::StopSound(SWaveFile* file)
 {
 	// We are dealing with uninitialised data! don't play!
 	if (file->RawData == nullptr || file->DataSize == 0) return;
-	
+
 	alCall(alSourceStop, file->Source);
 }
 
@@ -765,7 +774,7 @@ bool CSoundManager::loadWav(const std::string& filename, SWaveFile* wf)
 
 bool CSoundManager::CreateStreamFromFile(const std::string& filename, SStreamingAudioData& audioData)
 {
-    if(!m_initalised) return false;
+	if (!m_initalised) return false;
 
 	// Don't try to create a new stream in an already created stream
 	if (audioData.File.is_open()) return false;
@@ -787,13 +796,13 @@ bool CSoundManager::CreateStreamFromFile(const std::string& filename, SStreaming
 // Stream playback control
 void CSoundManager::PlayStream(SStreamingAudioData* audioData)
 {
-    if(!m_initalised) return;
+	if (!m_initalised) return;
 
 	if (!audioData->File.is_open()) return;
-	
-    // Fully stop the source than play.
-    alCall(alSourceStop, audioData->Source);
-    alCall(alSourcePlay, audioData->Source);
+
+	// Fully stop the source than play.
+	alCall(alSourceStop, audioData->Source);
+	alCall(alSourcePlay, audioData->Source);
 
 	// Only call the callback if it exists
 	if (audioData->PlayCallback)
@@ -802,13 +811,13 @@ void CSoundManager::PlayStream(SStreamingAudioData* audioData)
 
 void CSoundManager::PauseStream(SStreamingAudioData* audioData)
 {
-    if(!m_initalised) return;
+	if (!m_initalised) return;
 
 	ALint st;
 	alCall(alGetSourcei, audioData->Source, AL_SOURCE_STATE, &st);
 
 	if (st != AL_PLAYING) return;
-	
+
 	alCall(alSourcePause, audioData->Source);
 
 	// Only call the callback if it exists
@@ -818,7 +827,7 @@ void CSoundManager::PauseStream(SStreamingAudioData* audioData)
 
 void CSoundManager::StopStream(SStreamingAudioData* audioData)
 {
-    if(!m_initalised) return;
+	if (!m_initalised) return;
 
 	ALint st;
 	alCall(alGetSourcei, audioData->Source, AL_SOURCE_STATE, &st);
@@ -826,8 +835,8 @@ void CSoundManager::StopStream(SStreamingAudioData* audioData)
 	if (st != AL_PLAYING) return;
 
 	audioData->Finished = true;
-	
-	streams.erase(std::remove(streams.begin(),streams.end(), audioData),	streams.end());
+
+	streams.erase(std::remove(streams.begin(), streams.end(), audioData), streams.end());
 }
 
 void CSoundManager::DeleteStream(SStreamingAudioData* audioData)

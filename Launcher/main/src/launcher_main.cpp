@@ -17,7 +17,7 @@
 #endif
 
 #ifdef _WIN32
-typedef int (*LauncherMain_t)(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nShowCmd, char* basePath);
+typedef int (*LauncherMain_t)(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nShowCmd);
 #elif _UNIX
 typedef int (*LauncherMain_t)(int argc, char** argv);
 #endif
@@ -80,9 +80,9 @@ int WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int n
 		{
 			basePath = GetBaseDir(moduleBuffer);
 
-			snprintf(szBuf, sizeof(szBuf), "PATH=%s\\bin;%s", basePath, pPath);
+			snprintf(szBuf, sizeof(szBuf), "PATH=%s\\bin;%s\\assets\\bin;%s", basePath, basePath, pPath);
 			_putenv(szBuf);
-			snprintf(szBuf, sizeof(szBuf), "%s\\bin\\launcher.dll", basePath);
+			snprintf(szBuf, sizeof(szBuf), "launcher.dll");
 
 			HINSTANCE launcher = LoadLibraryEx(szBuf, NULL, LOAD_WITH_ALTERED_SEARCH_PATH);
 
@@ -99,8 +99,13 @@ int WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int n
 				LocalFree(pszError);
 				return 0;
 			}
+
+			// Load our distributed DLLs from bin instead of the Windows Folder >:(
+			snprintf(szBuf, sizeof(szBuf), "%s\\bin", basePath);
+			SetDllDirectoryA(szBuf); // might be unsafe but ehhhhhhhhhhhhhhh
+
 			LauncherMain_t main = (LauncherMain_t)GetProcAddress(launcher, "LauncherMain");
-			return main(hInstance, hPrevInstance, lpCmdLine, nShowCmd, basePath);
+			return main(hInstance, hPrevInstance, lpCmdLine, nShowCmd);
 		}
 	}
 	return -1;
