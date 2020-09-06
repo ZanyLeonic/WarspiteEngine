@@ -488,7 +488,7 @@ void CSoundManager::OnThink()
 void CSoundManager::Destroy()
 {
 	spdlog::info("Destroying active AudioStreams...");
-	for (int i = 0; i < streams.size(); i++)
+	for (size_t i = 0; i < streams.size(); i++)
 	{
 		alCall(alSourcei, streams[i]->Source, AL_BUFFER, 0);
 		alCall(alDeleteSources, 1, &streams[i]->Source);
