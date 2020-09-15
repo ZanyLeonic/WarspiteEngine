@@ -22,27 +22,16 @@ find_package(spdlog CONFIG REQUIRED)
 find_package(pybind11 CONFIG REQUIRED)
 find_package(fmt CONFIG REQUIRED)
 
-find_library(GAME_SDK discord_game_sdk)
-find_library(GAME_SDK_CPP discord_game_sdk_cpp)
-find_path(GAME_SDK_INCLUDE discord-game-sdk/discord.h)
-
-message(STATUS "Found GAME_SDK: ${GAME_SDK}")
-message(STATUS "Found GAME_SDK_CPP: ${GAME_SDK_CPP}")
-message(STATUS "Found GAME_SDK_INCLUDE: ${GAME_SDK_INCLUDE}")
-
 set (WarspiteGame_Libs
     ${SPDLOG_LIBRARY}
     ${PYBIND11_LIBRARIES}
     fmt::fmt
-    ${GAME_SDK}
-    ${GAME_SDK_CPP}
 )
 
 include_directories("${PROJECT_SOURCE_DIR}/engine")
 include_directories(${SHARED_INCLUDE_DIR})
 include_directories(${SPDLOG_INCLUDE_DIR})
 include_directories(${PYBIND11_INCLUDE_DIRS})
-include_directories(${GAME_SDK_INCLUDE})
 
 include (GenerateExportHeader)
 
@@ -64,7 +53,6 @@ add_custom_command(TARGET ${GAME_NAME} POST_BUILD
                        "${CMAKE_CURRENT_SOURCE_DIR}/assets" "${BIN_PATH_DEBUG}/assets/")
 
 target_link_libraries(${GAME_NAME} PUBLIC ${WarspiteGame_Libs})
-
 set_target_properties(${GAME_NAME} PROPERTIES VS_DEBUGGER_WORKING_DIRECTORY "${BIN_PATH_DEBUG}")
 
 if(CMAKE_SIZEOF_VOID_P EQUAL 8)
