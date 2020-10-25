@@ -10,6 +10,7 @@ set(WarspiteEngine_Src
         src/Button.cpp
         src/Camera.cpp
         src/CTexture.cpp
+        src/ConfigParser.cpp
         src/FPSCounter.cpp
         src/Enemy.cpp
         src/EngineFileSystem.cpp
@@ -48,6 +49,7 @@ set(WarspiteEngine_Header
         src/Button.h
         src/Camera.h
         src/CTexture.h
+        src/ConfigParser.h
         src/FPSCounter.h
         src/Enemy.h
         src/EngineFileSystem.h
