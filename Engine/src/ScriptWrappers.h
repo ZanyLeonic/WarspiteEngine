@@ -214,6 +214,14 @@ struct SInputObject : SBaseWrapper<CInputHandler>
 	bool SetReleaseState(int key, bool state) const;
 	bool AddActionKeyDown(int key, const KeyCallback callBack) const;
 	bool AddActionKeyUp(int key, const KeyCallback callBack) const;
+
+	bool SetAxisValue(std::string name, SDL_Scancode key, float value) const;
+	bool RemoveAxisValue(std::string name, SDL_Scancode key) const;
+
+	float GetAxisValue(std::string name)const;
+
+	bool RemoveAxis(std::string name)const;
+	bool RemoveAllAxis()const;
 };
 
 struct SGameObject : SBaseWrapper<CBaseGame>

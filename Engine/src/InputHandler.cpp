@@ -214,9 +214,64 @@ void CInputHandler::SetAxisValue(std::string name, SDL_Scancode key, float value
 	m_keyAxisValue[name] = axisVal;
 }
 
+void CInputHandler::RemoveAxisValue(std::string name, SDL_Scancode key)
+{
+	if (!name.empty())
+	{
+		m_keyVirtualAxis.erase(key);
+		m_keyAxisValue[name].erase(key);
+		spdlog::debug("Removed keycode \"{}\" from axis \"{}\" successfully", key, name);
+	}
+	spdlog::warn("Something called to remove a key from an axis with no axis name defined!");
+}
+
 float CInputHandler::GetAxisValue(std::string name)
 {
 	return m_currentKeyAxisValue[name];
+}
+
+void CInputHandler::RemoveAxis(std::string name)
+{
+	if (!name.empty())
+	{
+		std::map<SDL_Scancode, std::string>::iterator it;
+		std::vector<SDL_Scancode> toBeRemoved = {};
+
+		// Iterate to remove all keys referencing this axis
+		for (it = m_keyVirtualAxis.begin(); it != m_keyVirtualAxis.end(); it++)
+		{
+			if (it->second == name)
+			{
+				// Keep track of all the keys used.
+				toBeRemoved.push_back(it->first);
+
+				// Remove the found keypair
+				m_keyVirtualAxis.erase(it);
+			}
+		}
+		
+		// Remove the values stored for these axis
+		m_currentKeyAxisValue.erase(name);
+		m_keyAxisValue.erase(name);
+
+		// Don't keep track of keys from deleted axis
+		for (int i = 0; i < toBeRemoved.size(); i++)
+		{
+			m_keyAxisStates.erase(toBeRemoved[i]);
+		}
+
+		spdlog::debug("Removed axis \"{}\" successfully", name);
+	}
+	spdlog::warn("Something called to remove an axis with no axis name defined!");
+}
+
+void CInputHandler::RemoveAllAxis()
+{
+	// Just clear all of our maps.
+	m_keyVirtualAxis.clear();
+	m_currentKeyAxisValue.clear();
+	m_keyAxisValue.clear();
+	m_keyAxisStates.clear();
 }
 
 void CInputHandler::onKeyDown()

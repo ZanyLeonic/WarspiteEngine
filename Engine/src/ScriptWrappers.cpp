@@ -119,7 +119,12 @@ PYBIND11_MODULE(engine, m) {
 		.def("get_y_axis", &SInputObject::GetYAxis, "Returns the value of the specified Y value on the specified axis on the specified controller")
 		.def("set_release_state", &SInputObject::SetReleaseState, "Sets the release state of the specified key")
 		.def("add_action_keydown", &SInputObject::AddActionKeyDown, "Binds the execution of the specified method when the specified key is down")
-		.def("add_action_keyup", &SInputObject::AddActionKeyUp, "Binds the execution of the specified method when the specified key is released");
+		.def("add_action_keyup", &SInputObject::AddActionKeyUp, "Binds the execution of the specified method when the specified key is released")
+		.def("set_axis_value", &SInputObject::SetAxisValue, "Binds a keycode to the specified float value in a virtual axis")
+		.def("remove_axis_value", &SInputObject::RemoveAxisValue, "Removes a bind of a keycode to a float in a virtual axis")
+		.def("get_axis_value", &SInputObject::GetAxisValue, "Retrieves the current value of the specified virtual axis")
+		.def("remove_axis", &SInputObject::RemoveAxis, "Removes the specified virutal axis")
+		.def("remove_all_axis", &SInputObject::RemoveAllAxis, "Removes all currently defined virtual axes in the Engine.");
 
 	py::class_<SGameObject>(m, "GameObject", "A container that allows interaction with more misc aspects of the Engine's APIs. (Do not call this - use engine.game)")
 		.def(py::init<CBaseGame*>())
@@ -489,6 +494,40 @@ bool SInputObject::AddActionKeyUp(int key, const KeyCallback callBack) const
 {
 	if (!IsValid()) return false;
 	m_inst->AddActionKeyUp((SDL_Scancode)key, callBack);
+	return true;
+}
+
+bool SInputObject::SetAxisValue(std::string name, SDL_Scancode key, float value) const
+{
+	if (!IsValid()) return false;
+	m_inst->SetAxisValue(name, key, value);
+	return true;
+}
+
+bool SInputObject::RemoveAxisValue(std::string name, SDL_Scancode key) const
+{
+	if (!IsValid()) return false;
+	m_inst->RemoveAxisValue(name, key);
+	return true;
+}
+
+float SInputObject::GetAxisValue(std::string name) const
+{
+	if (!IsValid()) return 0.0f;
+	return m_inst->GetAxisValue(name);
+}
+
+bool SInputObject::RemoveAxis(std::string name) const
+{
+	if (!IsValid()) return false;
+	m_inst->RemoveAxis(name);
+	return true;
+}
+
+bool SInputObject::RemoveAllAxis() const
+{
+	if (!IsValid()) return false;
+	m_inst->RemoveAllAxis();
 	return true;
 }
 

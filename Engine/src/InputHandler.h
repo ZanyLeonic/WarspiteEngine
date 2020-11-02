@@ -51,7 +51,12 @@ public:
 	void SetReleaseState(SDL_Scancode key, bool state);
 
 	void SetAxisValue(std::string name, SDL_Scancode key, float value);
+	void RemoveAxisValue(std::string name, SDL_Scancode key);
+
 	float GetAxisValue(std::string name);
+
+	void RemoveAxis(std::string name);
+	void RemoveAllAxis();
 
 	CVector2D* GetMousePosition()
 	{
