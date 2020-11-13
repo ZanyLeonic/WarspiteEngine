@@ -24,6 +24,8 @@ CLevel* CLevelParser::ParseLevel(const char* levelFile)
 
 	if (CEngineFileSystem::ReadJSON(levelFile, &tLevel))
 	{
+		spdlog::debug("Loading level \"{}\"...", levelFile);
+
 		std::string sL = levelFile;
 		CLevel* pLevel = new CLevel(sL);
 
@@ -279,6 +281,9 @@ void CLevelParser::parseBackgroundColour(const std::string* colourVal)
 		spdlog::warn("Value: {}", *colourVal);
 		break;
 	};
+
+	spdlog::debug("Input HEX bg colour: \"{}\"", *colourVal);
+	spdlog::debug("Output RGB values: {} {} {}", r, g, b);
 
 	SDL_SetRenderDrawColor(CBaseGame::Instance()->GetRenderer(), r, g, b, a);
 }

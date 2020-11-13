@@ -29,9 +29,11 @@
             "program": "${workspaceFolder}/sdk/ExportMap.py",
             "args": [
                 "-map",
-                "${workspaceFolder}/sdk/test.json",
+                "${workspaceFolder}/sdk/maps/map02.json",
                 "-workDir",
-                "${workspaceFolder}/Engine"
+                "${workspaceFolder}/build/Debug",
+                "-baseFolder",
+                "${workspaceFolder}/build/Debug/assets"
             ],
             "console": "integratedTerminal"
         }

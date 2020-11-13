@@ -39,7 +39,7 @@ bool CPlayState::OnPlay()
 			return;
 		});
 
-	CInputHandler::Instance()->AddActionKeyDown(SDL_SCANCODE_8, [this] {
+	CInputHandler::Instance()->AddActionKeyDown(SDL_SCANCODE_7, [this] {
 		if (CBaseGame::Instance()->GetStateManager()->GetCurrentState()->GetStateID() != SID_PAUSE)
 		{
 			CScriptManager::Instance()->Load(SGameScript::file("Script2", CEngineFileSystem::ResolvePath("test2.py", CEngineFileSystem::EPathType::SCRIPT)));
@@ -47,7 +47,7 @@ bool CPlayState::OnPlay()
 		}
 		});
 
-	CInputHandler::Instance()->AddActionKeyUp(SDL_SCANCODE_8, [this] {
+	CInputHandler::Instance()->AddActionKeyUp(SDL_SCANCODE_7, [this] {
 		return;
 		});
 	
@@ -153,10 +153,11 @@ bool CPlayState::OnPlay()
 	CInputHandler::Instance()->AddActionKeyUp(SDL_SCANCODE_5, [this] {
 		return;
 		});
-	CInputHandler::Instance()->AddActionKeyDown(SDL_SCANCODE_7, [this] {
+
+	CInputHandler::Instance()->AddActionKeyDown(SDL_SCANCODE_8, [this] {
 		CSoundManager::Instance()->StopStream(&testStream2);
 		});
-	CInputHandler::Instance()->AddActionKeyUp(SDL_SCANCODE_7, [this] {
+	CInputHandler::Instance()->AddActionKeyUp(SDL_SCANCODE_8, [this] {
 		return;
 		});
 
@@ -181,8 +182,6 @@ bool CPlayState::OnPlay()
 		CTextureManager::Instance()->CreateCheckboardPattern(m_screenSize, "levelLoadFail", CBaseGame::Instance()->GetRenderer());
 		SDL_SetRenderDrawColor(CBaseGame::Instance()->GetRenderer(), 255, 255, 255, 255);
 	}
-	
-
 
 	CInputHandler::Instance()->AddActionKeyDown(SDL_SCANCODE_8, [this] {
 		spdlog::info("test axis value: {}", CInputHandler::Instance()->GetAxisValue("test"));

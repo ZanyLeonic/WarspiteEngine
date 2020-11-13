@@ -151,7 +151,7 @@ if "properties" in mapData:
                 copyfile(propFile, nPropFile)
                 print("Moving file from {0} to {1}...".format(propFile, nPropFile))
 
-            mapData["properties"][i]["value"] = str(nPropFile.relative_to(workingDir))
+            mapData["properties"][i]["value"] = str(nPropFile.relative_to(baseFolder))
 print("Checked property values")
 
 nMapFile = Path(os.path.join(workingDir, baseFolder, "maps", mapFile.name))

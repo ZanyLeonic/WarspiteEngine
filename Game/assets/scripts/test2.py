@@ -1,5 +1,7 @@
 import engine
 
+print("Running callback script...")
+
 def press_callback():
     print("A was pressed!")
 
