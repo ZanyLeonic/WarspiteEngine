@@ -12,7 +12,7 @@
  "layers":[
         {
          "compression":"zlib",
-         "data":"eJztk0EOgkAUxWYAQUEFRFDuf1F7ABaTvET+4jXprtvmlFKFNTZ4Scfkk7oWO7ziDftg3YB3fOATx2DdhDO+cMF3sG7FDT\/4xT1Yd8RZL\/iZ\/3R+przzC1rnF7Qu0gul+Bmt8zNaF+kZv6B1fkHrIr1Qip\/ROj+jdZGe+QFL0R55",
+         "data":"eJztkzkKw0AQBFeyLFuSb+v8\/0ddgSOzwUIHGkw3VDBQTFZVSqmGAzRwTPlVO3ktnOAMHfTBvAEucIUb3L\/3Lzmv9J\/iPeAJL3jDGMybYIYFVtiCebnt1cI\/NxPJczPlnlvQPLegeZFaKJ2b0Tw3o3mRmnELmucWNC9SC6VzM5rnZjQvUjMfX30etQ==",
          "encoding":"base64",
          "height":30,
          "id":2,
@@ -140,12 +140,12 @@
         {
          "name":"Player",
          "type":"file",
-         "value":"..\/..\/Engine\/assets\/textures\/player.png"
+         "value":"..\/..\/Game\/assets\/textures\/player.png"
         }, 
         {
          "name":"TestObject",
          "type":"file",
-         "value":"..\/..\/Engine\/assets\/textures\/dev\/Black_22x27.bmp"
+         "value":"..\/..\/game\/assets\/textures\/dev\/Black_22x27.bmp"
         }, 
         {
          "name":"TestScript",
@@ -153,7 +153,7 @@
          "value":"..\/scripts\/test2.py"
         }],
  "renderorder":"right-down",
- "tiledversion":"1.3.3",
+ "tiledversion":"1.3.5",
  "tileheight":32,
  "tilesets":[
         {

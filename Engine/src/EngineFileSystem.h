@@ -7,7 +7,7 @@
 
 // For now - hard code it
 #ifndef DLLBUILD
-#define BASEDIR "./assets"
+#define BASEDIR "assets"
 #else
 #define BASEDIR "../assets"
 #endif
