@@ -4,7 +4,7 @@
 
 #include "MenuState.h"
 #include "EngineTypes.h"
-#include <SDL_Scancode.h>
+#include <SDL2/SDL_scancode.h>
 
 class CInputState
 	: public CMenuState
