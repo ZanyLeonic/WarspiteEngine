@@ -53,7 +53,7 @@ private:
 	int m_onEnterID = 0;
 	int m_onLeaveID = 0;	
 
-	CVector2D& m_pinitalPos = CVector2D(0,0);
+	CVector2D m_initalPos;
 };
 REG_OBJ_TO_REF(Button, CButton);
 #endif
