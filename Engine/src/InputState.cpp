@@ -2,10 +2,11 @@
 #include "FontManager.h"
 #include "InputHandler.h"
 #include "TextureManager.h"
-#include <fmt\format.h>
 #include "Game.h"
 #include "Button.h"
 #include "StateParser.h"
+
+#include <fmt\format.h>
 
 CInputState::CInputState()
 {
