@@ -212,8 +212,8 @@ struct SInputObject : SBaseWrapper<CInputHandler>
 	float GetYAxis(int joy, int stick) const;
 	
 	bool SetReleaseState(int key, bool state) const;
-	bool AddActionKeyDown(int key, const KeyCallback callBack) const;
-	bool AddActionKeyUp(int key, const KeyCallback callBack) const;
+	bool AddActionKeyDown(int key, const HKeyCallback callBack) const;
+	bool AddActionKeyUp(int key, const HKeyCallback callBack) const;
 
 	bool SetAxisValue(std::string name, SDL_Scancode key, float value) const;
 	bool RemoveAxisValue(std::string name, SDL_Scancode key) const;

@@ -484,14 +484,14 @@ bool SInputObject::SetReleaseState(int key, bool state) const
 	return true;
 }
 
-bool SInputObject::AddActionKeyDown(int key, const KeyCallback callBack) const
+bool SInputObject::AddActionKeyDown(int key, const HKeyCallback callBack) const
 {
 	if (!IsValid()) return false;
 	m_inst->AddActionKeyDown((SDL_Scancode)key, callBack);
 	return true;
 }
 
-bool SInputObject::AddActionKeyUp(int key, const KeyCallback callBack) const
+bool SInputObject::AddActionKeyUp(int key, const HKeyCallback callBack) const
 {
 	if (!IsValid()) return false;
 	m_inst->AddActionKeyUp((SDL_Scancode)key, callBack);

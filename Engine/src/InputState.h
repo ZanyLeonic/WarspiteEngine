@@ -23,11 +23,11 @@ private:
 	virtual void SetCallbacks(const std::vector<HButtonCallback>& callbacks);
 
 	static bool s_InputToMainMenu();
+	static std::string GetStringifiedMouseButton(int pMouseButton);
 
-	//void OnKeyDown(SDL_Scancode e);
-	//void OnKeyUp(SDL_Scancode e);
-
+	std::vector<std::string> m_mouseActive = {};
 	std::vector<std::string> m_keysActive = {};
+	std::vector<std::string> m_joyActive = {};
 };
 
 REG_STATE_TO_REF(InputState, CInputState)

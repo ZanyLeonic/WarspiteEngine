@@ -163,7 +163,7 @@ float CInputHandler::GetYAxis(int joy, int stick)
 	return 0;
 }
 
-void CInputHandler::AddActionKeyDown(SDL_Scancode key, KeyCallback callBack)
+void CInputHandler::AddActionKeyDown(SDL_Scancode key, HKeyCallback callBack)
 {
 	if (!m_keyReleased[key])
 	{
@@ -172,7 +172,7 @@ void CInputHandler::AddActionKeyDown(SDL_Scancode key, KeyCallback callBack)
 	m_actionKeyDownCallbacks[key] = callBack;
 }
 
-void CInputHandler::AddActionKeyUp(SDL_Scancode key, KeyCallback callBack)
+void CInputHandler::AddActionKeyUp(SDL_Scancode key, HKeyCallback callBack)
 {
 	if (!m_keyReleased[key])
 	{
@@ -191,14 +191,45 @@ void CInputHandler::RemoveActionKeyUp(SDL_Scancode key)
 	m_actionKeyUpCallbacks.erase(key);
 }
 
-void CInputHandler::AddOnKeyDown(KeyCallback callBack)
+void CInputHandler::AddOnKeyDown(HKeyCallback callBack)
 {
 	m_keyDownCallbacks.push_back(callBack);
 }
 
-void CInputHandler::AddOnKeyUp(KeyCallback callBack)
+void CInputHandler::AddOnKeyUp(HKeyCallback callBack)
 {
 	m_keyUpCallbacks.push_back(callBack);
+}
+
+void CInputHandler::AddOnJoyDown(HInputCallback callBack)
+{
+	m_joyDownCallbacks.push_back(callBack);
+}
+
+void CInputHandler::AddOnJoyUp(HInputCallback callBack)
+{
+	m_joyUpCallbacks.push_back(callBack);
+}
+
+void CInputHandler::AddOnMouseDown(HInputCallback callBack)
+{
+	m_mouseDownCallbacks.push_back(callBack);
+}
+
+void CInputHandler::AddOnMouseUp(HInputCallback callBack)
+{
+	m_mouseUpCallbacks.push_back(callBack);
+}
+
+// An okay stop gap - for now.
+void CInputHandler::RemoveOnCallbacks()
+{
+	m_keyDownCallbacks.clear();
+	m_keyUpCallbacks.clear();
+	m_joyDownCallbacks.clear();
+	m_joyUpCallbacks.clear();
+	m_mouseDownCallbacks.clear();
+	m_mouseUpCallbacks.clear();
 }
 
 bool CInputHandler::IsKeyDown(SDL_Scancode key)
@@ -300,7 +331,7 @@ void CInputHandler::onKeyDown(SDL_Event& event)
 
 	if (m_actionKeyDownCallbacks.size() != 0)
 	{
-		std::map<SDL_Scancode, KeyCallback>::iterator it;
+		std::map<SDL_Scancode, HKeyCallback>::iterator it;
 
 		for (it = m_actionKeyDownCallbacks.begin(); it != m_actionKeyDownCallbacks.end(); it++)
 		{
@@ -337,7 +368,7 @@ void CInputHandler::onKeyUp(SDL_Event& event)
 
 	if (m_actionKeyUpCallbacks.size() != 0)
 	{
-		std::map<SDL_Scancode, KeyCallback>::iterator it;
+		std::map<SDL_Scancode, HKeyCallback>::iterator it;
 
 		for (it = m_actionKeyUpCallbacks.begin(); it != m_actionKeyUpCallbacks.end(); it++)
 		{
@@ -431,6 +462,14 @@ void CInputHandler::onMouseButtonDown(SDL_Event& event)
 	{
 		m_mouseButtonStates[RIGHT] = true;
 	}
+
+	if (m_mouseDownCallbacks.size() != 0)
+	{
+		for (int i = 0; i < m_mouseDownCallbacks.size(); i++)
+		{
+			m_mouseDownCallbacks[i](event);
+		}
+	}
 }
 
 void CInputHandler::onMouseButtonUp(SDL_Event& event)
@@ -448,6 +487,14 @@ void CInputHandler::onMouseButtonUp(SDL_Event& event)
 	if (event.button.button == SDL_BUTTON_RIGHT)
 	{
 		m_mouseButtonStates[RIGHT] = false;
+	}
+
+	if (m_mouseUpCallbacks.size() != 0)
+	{
+		for (int i = 0; i < m_mouseUpCallbacks.size(); i++)
+		{
+			m_mouseUpCallbacks[i](event);
+		}
 	}
 }
 
@@ -528,6 +575,14 @@ void CInputHandler::onJoystickButtonDown(SDL_Event& event)
 	int whichOne = event.jaxis.which;
 
 	m_buttonStates[whichOne][event.jbutton.button] = true;
+
+	if (m_joyDownCallbacks.size() != 0)
+	{
+		for (int i = 0; i < m_joyDownCallbacks.size(); i++)
+		{
+			m_joyDownCallbacks[i](event);
+		}
+	}
 }
 
 void CInputHandler::onJoystickButtonUp(SDL_Event& event)
@@ -535,4 +590,12 @@ void CInputHandler::onJoystickButtonUp(SDL_Event& event)
 	int whichOne = event.jaxis.which;
 
 	m_buttonStates[whichOne][event.jbutton.button] = false;
+
+	if (m_joyUpCallbacks.size() != 0)
+	{
+		for (int i = 0; i < m_joyUpCallbacks.size(); i++)
+		{
+			m_joyUpCallbacks[i](event);
+		}
+	}
 }

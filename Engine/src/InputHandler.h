@@ -45,16 +45,24 @@ public:
 	bool GetMouseButtonState(int buttonNumber) { return m_mouseButtonStates[buttonNumber]; }
 
 	// For specific keys
-	void AddActionKeyDown(SDL_Scancode key, KeyCallback callBack);
-	void AddActionKeyUp(SDL_Scancode key, KeyCallback callBack);
+	void AddActionKeyDown(SDL_Scancode key, HKeyCallback callBack);
+	void AddActionKeyUp(SDL_Scancode key, HKeyCallback callBack);
 
 	void RemoveActionKeyDown(SDL_Scancode key);
 	void RemoveActionKeyUp(SDL_Scancode key);
 
 	// When any keystate changes
 	// TODO: make a way for other devs to remove callbacks
-	void AddOnKeyDown(KeyCallback callBack);
-	void AddOnKeyUp(KeyCallback callBack);
+	void AddOnKeyDown(HKeyCallback callBack);
+	void AddOnKeyUp(HKeyCallback callBack);
+
+	void AddOnJoyDown(HInputCallback callBack);
+	void AddOnJoyUp(HInputCallback callBack);
+
+	void AddOnMouseDown(HInputCallback callBack);
+	void AddOnMouseUp(HInputCallback callBack);
+
+	void RemoveOnCallbacks();
 
 	bool IsKeyDown(SDL_Scancode key);
 	void SetReleaseState(SDL_Scancode key, bool state);
@@ -99,11 +107,17 @@ private:
 	std::vector<std::pair<CVector2D*, CVector2D*>> m_joystickValues;
 	std::vector<std::vector<bool>> m_buttonStates;
 
-	std::map<SDL_Scancode, KeyCallback> m_actionKeyDownCallbacks;
-	std::map<SDL_Scancode, KeyCallback> m_actionKeyUpCallbacks;
+	std::map<SDL_Scancode, HKeyCallback> m_actionKeyDownCallbacks;
+	std::map<SDL_Scancode, HKeyCallback> m_actionKeyUpCallbacks;
 
-	std::vector<KeyCallback> m_keyDownCallbacks;
-	std::vector<KeyCallback> m_keyUpCallbacks;
+	std::vector<HKeyCallback> m_keyDownCallbacks;
+	std::vector<HKeyCallback> m_keyUpCallbacks;
+
+	std::vector<HInputCallback> m_joyDownCallbacks;
+	std::vector<HInputCallback> m_joyUpCallbacks;
+
+	std::vector<HInputCallback> m_mouseDownCallbacks;
+	std::vector<HInputCallback> m_mouseUpCallbacks;
 
 	std::map<SDL_Scancode, bool> m_keyReleased;
 
