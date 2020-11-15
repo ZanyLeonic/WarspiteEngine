@@ -4,6 +4,7 @@
 cmake_minimum_required (VERSION 3.8)
 
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY_DEBUG "${BIN_PATH_DEBUG}/bin" )
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY_RELEASE "${BIN_PATH_RELEASE}/bin" )
 
 if (WIN32)
     set (Launcher_Src
@@ -19,10 +20,18 @@ set (Launcher_Header)
 
 include (GenerateExportHeader)
 add_library (Launcher SHARED ${Launcher_Src} ${Launcher_Header})
-set_target_properties(Launcher PROPERTIES 
-                        OUTPUT_NAME "launcher"
-                        VS_DEBUGGER_WORKING_DIRECTORY "${BIN_PATH_DEBUG}"
-)
+
+if (CMAKE_BUILD_TYPE STREQUAL "Debug")
+    set_target_properties(Launcher PROPERTIES 
+                            OUTPUT_NAME "launcher"
+                            VS_DEBUGGER_WORKING_DIRECTORY "${BIN_PATH_DEBUG}"
+    )
+else()
+    set_target_properties(Launcher PROPERTIES 
+                            OUTPUT_NAME "launcher"
+                            VS_DEBUGGER_WORKING_DIRECTORY "${BIN_PATH_RELEASE}"
+    )
+endif()
 
 if (UNIX)
     install(FILES ${CMAKE_BINARY_DIR}/Launcher/launcher/liblauncher.so DESTINATION ./bin/${PROJECT_NAME}/bin)

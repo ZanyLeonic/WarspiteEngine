@@ -4,6 +4,8 @@
 cmake_minimum_required (VERSION 3.8)
 
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY_DEBUG "${BIN_PATH_DEBUG}/assets/bin" )
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY_RELEASE "${BIN_PATH_RELEASE}/assets/bin" )
+
 set(WarspiteGame_Src
     src/WGame.cpp
     src/main.cpp
@@ -47,13 +49,23 @@ if ("${Python_EXECUTABLE}" STREQUAL "")
     endif()
 endif()
 
+if (CMAKE_BUILD_TYPE STREQUAL "Debug")
 # Copy assets for debug
-add_custom_command(TARGET ${GAME_NAME} POST_BUILD
-                   COMMAND ${CMAKE_COMMAND} -E copy_directory
-                       "${CMAKE_CURRENT_SOURCE_DIR}/assets" "${BIN_PATH_DEBUG}/assets/")
+    add_custom_command(TARGET ${GAME_NAME} POST_BUILD
+                    COMMAND ${CMAKE_COMMAND} -E copy_directory
+                        "${CMAKE_CURRENT_SOURCE_DIR}/assets" "${BIN_PATH_DEBUG}/assets/")
+                        
+    set_target_properties(${GAME_NAME} PROPERTIES VS_DEBUGGER_WORKING_DIRECTORY "${BIN_PATH_DEBUG}")
+else()
+# Copy assets for release
+    add_custom_command(TARGET ${GAME_NAME} POST_BUILD
+                    COMMAND ${CMAKE_COMMAND} -E copy_directory
+                        "${CMAKE_CURRENT_SOURCE_DIR}/assets" "${BIN_PATH_RELEASE}/assets/")
+
+    set_target_properties(${GAME_NAME} PROPERTIES VS_DEBUGGER_WORKING_DIRECTORY "${BIN_PATH_RELEASE}")
+endif()
 
 target_link_libraries(${GAME_NAME} PUBLIC ${WarspiteGame_Libs})
-set_target_properties(${GAME_NAME} PROPERTIES VS_DEBUGGER_WORKING_DIRECTORY "${BIN_PATH_DEBUG}")
 
 if(CMAKE_SIZEOF_VOID_P EQUAL 8)
     add_definitions(-DENV64BIT)

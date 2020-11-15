@@ -181,8 +181,6 @@ bool CPlayState::OnPlay()
 		CTextureManager::Instance()->CreateCheckboardPattern(m_screenSize, "levelLoadFail", CBaseGame::Instance()->GetRenderer());
 		SDL_SetRenderDrawColor(CBaseGame::Instance()->GetRenderer(), 255, 255, 255, 255);
 	}
-	
-
 
 	CInputHandler::Instance()->AddActionKeyDown(SDL_SCANCODE_8, [this] {
 		spdlog::info("test axis value: {}", CInputHandler::Instance()->GetAxisValue("test"));
@@ -192,7 +190,7 @@ bool CPlayState::OnPlay()
 		});
 
 	spdlog::info("Entering PlayState");
-	
+
 	return true;
 }
 
@@ -212,6 +210,11 @@ void CPlayState::Draw()
 
 void CPlayState::OnThink()
 {
+	//std::cout << '\r' << "Movement Axis Values: "
+	//	<< " MoveForward: " << CInputHandler::Instance()->GetAxisValue("MoveForward")
+	//	<< " MoveRight:   " << CInputHandler::Instance()->GetAxisValue("MoveRight")
+	//	<< std::flush << "     ";
+
 	if (pLevel != 0)
 		pLevel->OnThink();
 

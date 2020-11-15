@@ -29,10 +29,18 @@ endif()
 # So these libraries will actually recompile whenever the Launcher is ran.
 add_dependencies(LauncherMain ${MOD_NAME} ${GAME_NAME} Launcher)
 
+if (CMAKE_BUILD_TYPE STREQUAL "Debug")
+    set_target_properties(LauncherMain PROPERTIES 
+        OUTPUT_NAME "ws"
+        VS_DEBUGGER_WORKING_DIRECTORY "${BIN_PATH_DEBUG}")
+else()
+# Copy assets for release
+    set_target_properties(LauncherMain PROPERTIES 
+        OUTPUT_NAME "ws"
+        VS_DEBUGGER_WORKING_DIRECTORY "${BIN_PATH_RELEASE}")
+endif()
+
 target_link_libraries(LauncherMain PUBLIC ${LauncherMain_Libs})
-set_target_properties(LauncherMain PROPERTIES 
-                        OUTPUT_NAME "ws"
-                        VS_DEBUGGER_WORKING_DIRECTORY "${BIN_PATH_DEBUG}")
 
 if (UNIX)
     install(TARGETS LauncherMain RUNTIME DESTINATION ./bin/${PROJECT_NAME})
