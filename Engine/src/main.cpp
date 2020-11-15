@@ -43,6 +43,9 @@ extern "C" int Engine(int argc, char** argv, GameDLL_t pGameDLL)
 		spdlog::set_default_logger(combined_logger);
 
 		spdlog::set_pattern("[%Y-%m-%d %H:%M:%S.%e (%z)] [Thread/%t] [%n/%^%l%$] %v ");
+#ifdef WARDEBUG
+		spdlog::set_level(spdlog::level::debug);
+#endif
 	}
 	catch (const spdlog::spdlog_ex& ex)
 	{

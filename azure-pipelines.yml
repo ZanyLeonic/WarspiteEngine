@@ -6,7 +6,6 @@
 trigger:
 - master
 - develop
-- launchv2
 
 jobs:
 - job: "Windows_x64"
@@ -75,7 +74,7 @@ jobs:
       solution: 'build-win32/ALL_BUILD.vcxproj'
       msbuildArchitecture: 'x86'
       platform: 'Win32'
-      configuration: 'DRelease'
+      configuration: 'Release'
       maximumCpuCount: true
       createLogFile: true
 

@@ -33,6 +33,10 @@ CLevel* CLevelParser::ParseLevel(const char* levelFile)
 		pLevel->m_width = tLevel["width"].GetInt();
 		pLevel->m_tileSize = tLevel["tilewidth"].GetInt();
 
+		spdlog::debug("*** Level information start ***");
+		spdlog::debug("Dimensions: {}x{}", pLevel->m_width, pLevel->m_height);
+		spdlog::debug("Tile Width: {}", pLevel->m_tileSize);
+
 		std::string bgColour = tLevel.HasMember("backgroundcolor") ? tLevel["backgroundcolor"].GetString() : "#FFFFFF";
 
 		parseBackgroundColour(&bgColour);
@@ -41,8 +45,12 @@ CLevel* CLevelParser::ParseLevel(const char* levelFile)
 		pLevel->m_LevelSize.SetX((float)pLevel->m_width * (float)pLevel->m_tileSize);
 		pLevel->m_LevelSize.SetY((float)pLevel->m_height * (float)pLevel->m_tileSize);
 
+		spdlog::debug("Level size: {}x{}", pLevel->m_LevelSize.GetX(), pLevel->m_LevelSize.GetY());
+
 		assert(tLevel["tilesets"].IsArray());
 		const Value& tilesets = tLevel["tilesets"].GetArray();
+
+		spdlog::debug("Tilesets used: {}", tilesets.Size());
 
 		for (SizeType i = 0; i < tilesets.Size(); i++)
 		{
@@ -55,6 +63,9 @@ CLevel* CLevelParser::ParseLevel(const char* levelFile)
 			// Storing in a variable first to prevent implicit conversion
 			// (some C++ compilers do not like that.)
 			const Value& properties = tLevel["properties"].GetArray();
+
+			spdlog::debug("Number of external files used: {}", properties.Size());
+
 			for (SizeType i = 0; i < properties.Size(); i++)
 			{
 				// Ignore any other types of properties when attempting to load textures + scripts.
@@ -66,6 +77,8 @@ CLevel* CLevelParser::ParseLevel(const char* levelFile)
 		// If we don't have an array - something is wrong.
 		assert(tLevel["layers"].IsArray());
 		const Value& layers = tLevel["layers"].GetArray();
+
+		spdlog::debug("Layers defined: {}", layers.Size());
 
 		for (SizeType i = 0; i < layers.Size(); i++)
 		{
@@ -80,6 +93,8 @@ CLevel* CLevelParser::ParseLevel(const char* levelFile)
 				parseObjectLayer(&layers[i], pLevel->GetLayers());
 			}			
 		}
+
+		spdlog::debug("*** Level information end ***");
 
 		return pLevel;
 	}
@@ -175,6 +190,8 @@ void CLevelParser::parseTilesets(const rapidjson::Value* pTilesetRoot, std::vect
 
 void CLevelParser::parseTileLayer(const rapidjson::Value* pTileElement, CLevel* pLevel)
 {
+	spdlog::debug("Parsing TileLayer...");
+
 	// Make the JSON value an object to manipulate better.
 	const Value::ConstObject& obj = pTileElement->GetObject();
 
@@ -235,16 +252,22 @@ void CLevelParser::parseFiles(const rapidjson::Value* pFileRoot)
 	// Get the correct type of the value. (should be an object)
 	const Value::ConstObject& o = pFileRoot->GetObject();
 
+	spdlog::debug("Processing file: \"{}\"...", o["value"].GetString());
+
 	if (CWarspiteUtil::GetFileExtenstion(o["value"].GetString()) == ".py")
 	{
 		CScriptManager::Instance()->Load(SGameScript::file(o["name"].GetString(), CEngineFileSystem::ResolvePath(o["value"].GetString(), 
 										 CEngineFileSystem::EPathType::SCRIPT)));
+		spdlog::debug("Loaded script \"{}\"", CEngineFileSystem::ResolvePath(o["value"].GetString(),
+			CEngineFileSystem::EPathType::SCRIPT));
 		return;
 	}
 	
 	// Load the texture via the TextureManager with the info inside the object.
 	CTextureManager::Instance()->Load(CEngineFileSystem::ResolvePath(o["value"].GetString(), CEngineFileSystem::EPathType::TEXTURE),
                                       o["name"].GetString(),CBaseGame::Instance()->GetRenderer());
+	spdlog::debug("Loaded image \"{}\"", CEngineFileSystem::ResolvePath(o["value"].GetString(),
+		CEngineFileSystem::EPathType::TEXTURE));
 }
 
 void CLevelParser::parseBackgroundColour(const std::string* colourVal)
@@ -285,6 +308,8 @@ void CLevelParser::parseBackgroundColour(const std::string* colourVal)
 
 void CLevelParser::parseObjectLayer(const rapidjson::Value* pObjectVal, std::vector<ILayer*>* pLayer)
 {
+	spdlog::debug("Parsing ObjectLayer...");
+
 	// Get our JSON values to their types.
 	const Value::ConstObject& o = pObjectVal->GetObject();
 	const Value::ConstArray& a = o["objects"].GetArray();
@@ -292,6 +317,8 @@ void CLevelParser::parseObjectLayer(const rapidjson::Value* pObjectVal, std::vec
 	// Create our ObjectLayer we are filling with data.
 	CObjectLayer* pObjectLayer = new CObjectLayer();
 	
+	spdlog::debug("GameObjects defined: {}", a.Size());
+
 	// iterate through each object we have.
 	for (SizeType i = 0; i < a.Size(); i++)
 	{
@@ -304,6 +331,12 @@ void CLevelParser::parseObjectLayer(const rapidjson::Value* pObjectVal, std::vec
 		pOP->SetFactoryID(b["type"].GetString());
 		pOP->SetName(b["name"].GetString());
 
+		spdlog::debug("*** Load object start ***");
+
+		spdlog::debug("Object name: {}", pOP->GetName());
+		spdlog::debug("Factory name: {}", pOP->GetFactoryID());
+		spdlog::debug("Object position: {}x{}", pOP->GetX(), pOP->GetY());
+
 		// Create the object that is defined
 		IGameObject* pGameObject = CGameObjectDictionary::Instance()
 			->Create(pOP->GetFactoryID());
@@ -314,9 +347,21 @@ void CLevelParser::parseObjectLayer(const rapidjson::Value* pObjectVal, std::vec
 			// iterate
 			const Value::ConstArray& d = b["properties"].GetArray();
 			
+			spdlog::debug("Number of properties defined: {}", d.Size());
+			spdlog::debug("*** Property loading start ***");
+
 			for (SizeType j = 0; j < d.Size(); j++)
 			{
 				std::string propName = d[j]["name"].GetString();
+
+				if (d[j]["value"].IsString())
+				{
+					spdlog::debug("Name: \"{}\" Value: \"{}\"", propName, d[j]["value"].GetString());
+				}
+				else
+				{
+					spdlog::debug("Name: \"{}\" Value: \"{}\"", propName, d[j]["value"].GetInt());
+				}
 
 				switch (GetMapProp(propName))
 				{
@@ -356,10 +401,13 @@ void CLevelParser::parseObjectLayer(const rapidjson::Value* pObjectVal, std::vec
 					break;
 				}
 			}
+			spdlog::debug("*** Property loading end ***");
 		}
 		// intialise the object with the data obtained.
 		pGameObject->Load(pOP);
 		pObjectLayer->GetGameObjects()->push_back(pGameObject);
+		
+		spdlog::debug("*** Load object end ***");
 	}
 
 	// Add the object layer to the Level object
