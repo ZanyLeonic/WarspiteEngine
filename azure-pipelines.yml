@@ -36,14 +36,14 @@ jobs:
       solution: 'build/ALL_BUILD.vcxproj'
       msbuildArchitecture: 'x64'
       platform: 'x64'
-      configuration: 'Debug'
+      configuration: 'Release'
       maximumCpuCount: true
       createLogFile: true
 
   - task: PublishBuildArtifacts@1
     displayName: "Publishing build artifacts"
     inputs:
-      PathtoPublish: 'build/Debug/'
+      PathtoPublish: 'build/Release/'
       ArtifactName: 'windows-x64'
       publishLocation: 'Container'
 
@@ -75,14 +75,14 @@ jobs:
       solution: 'build-win32/ALL_BUILD.vcxproj'
       msbuildArchitecture: 'x86'
       platform: 'Win32'
-      configuration: 'Debug'
+      configuration: 'DRelease'
       maximumCpuCount: true
       createLogFile: true
 
   - task: PublishBuildArtifacts@1
     displayName: "Publishing build artifacts"
     inputs:
-      PathtoPublish: 'build-win32/Debug/'
+      PathtoPublish: 'build-win32/Release/'
       ArtifactName: 'windows-x86'
       publishLocation: 'Container'
 
