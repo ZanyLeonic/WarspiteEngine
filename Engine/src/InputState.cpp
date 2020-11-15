@@ -6,7 +6,7 @@
 #include "Button.h"
 #include "StateParser.h"
 
-#include <fmt\format.h>
+#include <fmt/format.h>
 
 CInputState::CInputState()
 {
