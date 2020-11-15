@@ -19,6 +19,7 @@ private:
 
 	static bool s_menuToPlay();
 	static bool s_exitFromMenu();
+	static bool s_menuToInput();
 };
 
 REG_STATE_TO_REF(MainMenu, CMainMenuState)

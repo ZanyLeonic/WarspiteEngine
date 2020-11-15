@@ -71,7 +71,7 @@ bool CFontManager::RemoveFont(std::string name, std::string type, int size)
 }
 
 bool CFontManager::RenderText(std::string text, std::string fontID, std::string textureID, 
-	EFontRenderType rType, SDL_Colour tColour, SDL_Colour bColour)
+	EFontRenderType rType, SDL_Colour tColour, SDL_Colour bColour, Uint32 width)
 {
 	SDL_Surface* pSurface = nullptr;
 
@@ -84,13 +84,16 @@ bool CFontManager::RenderText(std::string text, std::string fontID, std::string 
 	switch (rType)
 	{
 	case EFontRenderType::SOLID:
-		pSurface = TTF_RenderUTF8_Solid(m_loadedFonts[fontID], text.c_str(), tColour);
+		pSurface = TTF_RenderText_Solid(m_loadedFonts[fontID], text.c_str(), tColour);
 		break;
 	case EFontRenderType::BLENDED:
-		pSurface = TTF_RenderUTF8_Blended(m_loadedFonts[fontID], text.c_str(), tColour);
+		pSurface = TTF_RenderText_Blended(m_loadedFonts[fontID], text.c_str(), tColour);
+		break;
+	case EFontRenderType::BLENDED_WRAPPED:
+		pSurface = TTF_RenderText_Blended_Wrapped(m_loadedFonts[fontID], text.c_str(), tColour, width);
 		break;
 	case EFontRenderType::SHADED:
-		pSurface = TTF_RenderUTF8_Shaded(m_loadedFonts[fontID], text.c_str(), tColour, bColour);
+		pSurface = TTF_RenderText_Shaded(m_loadedFonts[fontID], text.c_str(), tColour, bColour);
 		break;
 	default:
 		spdlog::warn("Unsupported or undefined type of text rendering!");

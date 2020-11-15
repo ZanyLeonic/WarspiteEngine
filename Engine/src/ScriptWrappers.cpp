@@ -3,6 +3,7 @@
 #include <pybind11/embed.h>
 #include <pybind11/functional.h>
 #include <spdlog/spdlog.h>
+#include <SDL_scancode.h>
 
 #include "Camera.h"
 #include "InputHandler.h"

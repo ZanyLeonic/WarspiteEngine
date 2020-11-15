@@ -12,6 +12,8 @@ CButton::CButton() :
 	if (m_OnClick == 0) m_OnClick = std::bind(&CButton::onClick, this);
 	if (m_OnEnter == 0) m_OnEnter = std::bind(&CButton::onEnter, this);
 	if (m_OnLeave == 0) m_OnLeave = std::bind(&CButton::onLeave, this);
+
+	m_pinitalPos = *CInputHandler::Instance()->GetMousePosition();
 }
 
 void CButton::Load(const CObjectParams* pParams)
@@ -33,6 +35,9 @@ bool CButton::OnThink()
 	// Get the mouse Position on the screen
 	CVector2D* pMousePos = CInputHandler::Instance()->
 		GetMousePosition();
+
+	// Stop clicking a button while changing states
+	if (m_pinitalPos == *pMousePos) return false;
 
 	// Is it within the boundaries of the CButton?
 	if (pMousePos->GetX() < (m_position.GetX() + m_width)

@@ -48,8 +48,8 @@ void CPlayer::OnPlay()
 
 void CPlayer::Load(const CObjectParams* pParams)
 {
-	CInputHandler::Instance()->AddActionKeyDown(SDL_SCANCODE_C, std::bind(&CPlayer::KeyDown, this));
-	CInputHandler::Instance()->AddActionKeyUp(SDL_SCANCODE_C, std::bind(&CPlayer::KeyUp, this));
+	//CInputHandler::Instance()->AddActionKeyDown(SDL_SCANCODE_C, std::bind(&CPlayer::KeyDown, this));
+	//CInputHandler::Instance()->AddActionKeyUp(SDL_SCANCODE_C, std::bind(&CPlayer::KeyUp, this));
 
 	CWarspiteObject::Load(pParams);
 }
@@ -97,15 +97,15 @@ void CPlayer::Draw()
 	}
 }
 
-void CPlayer::KeyDown()
-{
-	spdlog::info("Key has been pressed down!");
-}
-
-void CPlayer::KeyUp()
-{
-	spdlog::info("Key has been released!");
-}
+//void CPlayer::KeyDown(SDL_Scancode& e)
+//{
+//	spdlog::info("Key has been pressed down!");
+//}
+//
+//void CPlayer::KeyUp(SDL_Scancode& e)
+//{
+//	spdlog::info("Key has been released!");
+//}
 
 void CPlayer::HandleInput()
 {

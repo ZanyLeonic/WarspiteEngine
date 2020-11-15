@@ -20,11 +20,13 @@ add_custom_target(GameDLLMetadata
         COMMENT "Generating build metadata..."
 )
 
+find_package(SDL2 CONFIG REQUIRED)
 find_package(spdlog CONFIG REQUIRED)
 find_package(pybind11 CONFIG REQUIRED)
 find_package(fmt CONFIG REQUIRED)
 
 set (WarspiteGame_Libs
+    ${SDL2_LIBRARIES}
     ${SPDLOG_LIBRARY}
     ${PYBIND11_LIBRARIES}
     fmt::fmt
@@ -32,6 +34,7 @@ set (WarspiteGame_Libs
 
 include_directories("${PROJECT_SOURCE_DIR}/engine")
 include_directories(${SHARED_INCLUDE_DIR})
+include_directories(${SDL2_INCLUDE_DIRS})
 include_directories(${SPDLOG_INCLUDE_DIR})
 include_directories(${PYBIND11_INCLUDE_DIRS})
 

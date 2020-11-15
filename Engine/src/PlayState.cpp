@@ -28,18 +28,18 @@ bool CPlayState::OnPlay()
 	CStateParser::ParseState(CEngineFileSystem::ResolvePath("PlayState.json", CEngineFileSystem::EPathType::STATE).c_str(), GetStateID(), &m_GameObjects, &m_TextureIDList, &m_ScriptIDList);
 	pLevel = CLevelParser::ParseLevel(CEngineFileSystem::ResolvePath("map02.json", CEngineFileSystem::EPathType::MAP).c_str());
 
-	CInputHandler::Instance()->AddActionKeyDown(SDL_SCANCODE_ESCAPE, [this] {
+	CInputHandler::Instance()->AddActionKeyDown(SDL_SCANCODE_ESCAPE, [this](SDL_Scancode e) {
 			if (CBaseGame::Instance()->GetStateManager()->GetCurrentState()->GetStateID() != SID_PAUSE)
 			{
 				CBaseGame::Instance()->GetStateManager()->PushState(CGameStateDictionary::Instance()->Create(SID_PAUSE));
 			}
 		});
 
-	CInputHandler::Instance()->AddActionKeyUp(SDL_SCANCODE_ESCAPE, [this] {
+	CInputHandler::Instance()->AddActionKeyUp(SDL_SCANCODE_ESCAPE, [this](SDL_Scancode e) {
 			return;
 		});
 
-	CInputHandler::Instance()->AddActionKeyDown(SDL_SCANCODE_8, [this] {
+	CInputHandler::Instance()->AddActionKeyDown(SDL_SCANCODE_8, [this](SDL_Scancode e) {
 		if (CBaseGame::Instance()->GetStateManager()->GetCurrentState()->GetStateID() != SID_PAUSE)
 		{
 			CScriptManager::Instance()->Load(SGameScript::file("Script2", CEngineFileSystem::ResolvePath("test2.py", CEngineFileSystem::EPathType::SCRIPT)));
@@ -47,7 +47,7 @@ bool CPlayState::OnPlay()
 		}
 		});
 
-	CInputHandler::Instance()->AddActionKeyUp(SDL_SCANCODE_8, [this] {
+	CInputHandler::Instance()->AddActionKeyUp(SDL_SCANCODE_8, [this](SDL_Scancode e) {
 		return;
 		});
 	
@@ -83,80 +83,80 @@ bool CPlayState::OnPlay()
 	};
 
 	// Load Wave
-	CInputHandler::Instance()->AddActionKeyDown(SDL_SCANCODE_0, [this] {
+	CInputHandler::Instance()->AddActionKeyDown(SDL_SCANCODE_0, [this](SDL_Scancode e) {
 			CSoundManager::Instance()->Load(CEngineFileSystem::ResolvePath("mycode.wav", CEngineFileSystem::EPathType::SOUND), testFile);
 		});
-	CInputHandler::Instance()->AddActionKeyUp(SDL_SCANCODE_0, [this] {
+	CInputHandler::Instance()->AddActionKeyUp(SDL_SCANCODE_0, [this](SDL_Scancode e) {
 			return;
 		});
 
 	// Play Wave
-	CInputHandler::Instance()->AddActionKeyDown(SDL_SCANCODE_9, [this] {
+	CInputHandler::Instance()->AddActionKeyDown(SDL_SCANCODE_9, [this](SDL_Scancode e) {
 		CSoundManager::Instance()->PlaySound(&testFile);
 		});
-	CInputHandler::Instance()->AddActionKeyUp(SDL_SCANCODE_9, [this] {
+	CInputHandler::Instance()->AddActionKeyUp(SDL_SCANCODE_9, [this](SDL_Scancode e) {
 		return;
 		});
 
 	// Load
-	CInputHandler::Instance()->AddActionKeyDown(SDL_SCANCODE_1, [this] {
+	CInputHandler::Instance()->AddActionKeyDown(SDL_SCANCODE_1, [this](SDL_Scancode e) {
 		CSoundManager::Instance()->CreateStreamFromFile(CEngineFileSystem::ResolvePath("teststream.ogg", CEngineFileSystem::EPathType::SOUND), testStream);
 		
 
 		CSoundManager::Instance()->CreateStreamFromFile(CEngineFileSystem::ResolvePath("teststream2.ogg", CEngineFileSystem::EPathType::SOUND), testStream2);
 		});
-	CInputHandler::Instance()->AddActionKeyUp(SDL_SCANCODE_1, [this] {
+	CInputHandler::Instance()->AddActionKeyUp(SDL_SCANCODE_1, [this](SDL_Scancode e) {
 		return;
 		});
 
 	// Stream 1
-	CInputHandler::Instance()->AddActionKeyDown(SDL_SCANCODE_2, [this] {
+	CInputHandler::Instance()->AddActionKeyDown(SDL_SCANCODE_2, [this](SDL_Scancode e) {
 		alCall(alSourcef, testStream.Source, AL_PITCH, 1.0f);
 		alCall(alSourcef, testStream.Source, AL_GAIN, 1.0f);
 		alCall(alSource3f, testStream.Source, AL_POSITION, 50.f, 50.f, 0.f);
 		alCall(alSource3f, testStream.Source, AL_VELOCITY, 0.f, 0.f, 0.f);
 		CSoundManager::Instance()->PlayStream(&testStream);
 		});
-	CInputHandler::Instance()->AddActionKeyUp(SDL_SCANCODE_2, [this] {
+	CInputHandler::Instance()->AddActionKeyUp(SDL_SCANCODE_2, [this](SDL_Scancode e) {
 		return;
 		});
 	
-	CInputHandler::Instance()->AddActionKeyDown(SDL_SCANCODE_3, [this] {
+	CInputHandler::Instance()->AddActionKeyDown(SDL_SCANCODE_3, [this](SDL_Scancode e) {
 		CSoundManager::Instance()->PauseStream(&testStream);
 		});
-	CInputHandler::Instance()->AddActionKeyUp(SDL_SCANCODE_3, [this] {
+	CInputHandler::Instance()->AddActionKeyUp(SDL_SCANCODE_3, [this](SDL_Scancode e) {
 		return;
 		});
-	CInputHandler::Instance()->AddActionKeyDown(SDL_SCANCODE_6, [this] {
+	CInputHandler::Instance()->AddActionKeyDown(SDL_SCANCODE_6, [this](SDL_Scancode e) {
 		CSoundManager::Instance()->StopStream(&testStream);
 		});
-	CInputHandler::Instance()->AddActionKeyUp(SDL_SCANCODE_6, [this] {
+	CInputHandler::Instance()->AddActionKeyUp(SDL_SCANCODE_6, [this](SDL_Scancode e) {
 		return;
 		});
 
 	// Stream 2
-	CInputHandler::Instance()->AddActionKeyDown(SDL_SCANCODE_4, [this] {
+	CInputHandler::Instance()->AddActionKeyDown(SDL_SCANCODE_4, [this](SDL_Scancode e) {
 		alCall(alSourcef, testStream2.Source, AL_PITCH, 1.0f);
 		alCall(alSourcef, testStream2.Source, AL_GAIN, 1.0f);
 		alCall(alSource3f, testStream2.Source, AL_POSITION, 180.f, 180.f, 0.f);
 		alCall(alSource3f, testStream2.Source, AL_VELOCITY, 0.f, 0.f, 0.f);
 		CSoundManager::Instance()->PlayStream(&testStream2);
 		});
-	CInputHandler::Instance()->AddActionKeyUp(SDL_SCANCODE_4, [this] {
+	CInputHandler::Instance()->AddActionKeyUp(SDL_SCANCODE_4, [this](SDL_Scancode e) {
 		return;
 		});
 	
 	// Play
-	CInputHandler::Instance()->AddActionKeyDown(SDL_SCANCODE_5, [this] {
+	CInputHandler::Instance()->AddActionKeyDown(SDL_SCANCODE_5, [this](SDL_Scancode e) {
 		CSoundManager::Instance()->PauseStream(&testStream2);
 		});
-	CInputHandler::Instance()->AddActionKeyUp(SDL_SCANCODE_5, [this] {
+	CInputHandler::Instance()->AddActionKeyUp(SDL_SCANCODE_5, [this](SDL_Scancode e) {
 		return;
 		});
-	CInputHandler::Instance()->AddActionKeyDown(SDL_SCANCODE_7, [this] {
+	CInputHandler::Instance()->AddActionKeyDown(SDL_SCANCODE_7, [this](SDL_Scancode e) {
 		CSoundManager::Instance()->StopStream(&testStream2);
 		});
-	CInputHandler::Instance()->AddActionKeyUp(SDL_SCANCODE_7, [this] {
+	CInputHandler::Instance()->AddActionKeyUp(SDL_SCANCODE_7, [this](SDL_Scancode e) {
 		return;
 		});
 
@@ -182,10 +182,10 @@ bool CPlayState::OnPlay()
 		SDL_SetRenderDrawColor(CBaseGame::Instance()->GetRenderer(), 255, 255, 255, 255);
 	}
 
-	CInputHandler::Instance()->AddActionKeyDown(SDL_SCANCODE_8, [this] {
+	CInputHandler::Instance()->AddActionKeyDown(SDL_SCANCODE_8, [this](SDL_Scancode e) {
 		spdlog::info("test axis value: {}", CInputHandler::Instance()->GetAxisValue("test"));
 		});
-	CInputHandler::Instance()->AddActionKeyUp(SDL_SCANCODE_8, [this] {
+	CInputHandler::Instance()->AddActionKeyUp(SDL_SCANCODE_8, [this](SDL_Scancode e) {
 		return;
 		});
 

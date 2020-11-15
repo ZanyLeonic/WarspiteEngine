@@ -5,6 +5,7 @@
 #include <functional>
 #include <memory>
 #include <map>
+#include <SDL2/SDL_scancode.h>
 
 struct SInputObject;
 struct SGameObject;
@@ -12,7 +13,7 @@ struct SLevelObject;
 class IGame;
 class IWGame;
 
-typedef std::function<void()> KeyCallback;
+typedef std::function<void(SDL_Scancode)> KeyCallback;
 typedef std::function<bool()> HButtonCallback;
 
 typedef std::shared_ptr<SGameObject>  PGamePtr;

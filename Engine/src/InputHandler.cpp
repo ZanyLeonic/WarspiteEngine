@@ -60,12 +60,12 @@ void CInputHandler::OnThink()
 				break;
 
 			case SDL_KEYDOWN:
-				onKeyDown();
+				onKeyDown(e);
 				setAxisValues();
 				break;
 
 			case SDL_KEYUP:
-				onKeyUp();
+				onKeyUp(e);
 				setAxisValues();
 				break;
 
@@ -169,7 +169,7 @@ void CInputHandler::AddActionKeyDown(SDL_Scancode key, KeyCallback callBack)
 	{
 		m_keyReleased[key] = true;
 	}
-	m_keyDownCallbacks[key] = callBack;
+	m_actionKeyDownCallbacks[key] = callBack;
 }
 
 void CInputHandler::AddActionKeyUp(SDL_Scancode key, KeyCallback callBack)
@@ -178,7 +178,27 @@ void CInputHandler::AddActionKeyUp(SDL_Scancode key, KeyCallback callBack)
 	{
 		m_keyReleased[key] = true;
 	}
-	m_keyUpCallbacks[key] = callBack;
+	m_actionKeyUpCallbacks[key] = callBack;
+}
+
+void CInputHandler::RemoveActionKeyDown(SDL_Scancode key)
+{
+	m_actionKeyDownCallbacks.erase(key);
+}
+
+void CInputHandler::RemoveActionKeyUp(SDL_Scancode key)
+{
+	m_actionKeyUpCallbacks.erase(key);
+}
+
+void CInputHandler::AddOnKeyDown(KeyCallback callBack)
+{
+	m_keyDownCallbacks.push_back(callBack);
+}
+
+void CInputHandler::AddOnKeyUp(KeyCallback callBack)
+{
+	m_keyUpCallbacks.push_back(callBack);
 }
 
 bool CInputHandler::IsKeyDown(SDL_Scancode key)
@@ -274,15 +294,15 @@ void CInputHandler::RemoveAllAxis()
 	m_keyAxisStates.clear();
 }
 
-void CInputHandler::onKeyDown()
+void CInputHandler::onKeyDown(SDL_Event& event)
 {
 	m_keystates = (Uint8*)SDL_GetKeyboardState(0);
 
-	if (m_keyDownCallbacks.size() != 0)
+	if (m_actionKeyDownCallbacks.size() != 0)
 	{
 		std::map<SDL_Scancode, KeyCallback>::iterator it;
 
-		for (it = m_keyDownCallbacks.begin(); it != m_keyDownCallbacks.end(); it++)
+		for (it = m_actionKeyDownCallbacks.begin(); it != m_actionKeyDownCallbacks.end(); it++)
 		{
 			if (m_keystates[it->first] == 1
 				&& m_keyReleased[it->first] == true)
@@ -291,7 +311,7 @@ void CInputHandler::onKeyDown()
 
 				try 
 				{
-					it->second();
+					it->second(it->first);
 				}
 				catch(std::exception e)
 				{
@@ -301,17 +321,25 @@ void CInputHandler::onKeyDown()
 			}
 		}
 	}
+
+	if (m_keyDownCallbacks.size() != 0)
+	{
+		for (int i = 0; i < m_keyDownCallbacks.size(); i++)
+		{
+			m_keyDownCallbacks[i](event.key.keysym.scancode);
+		}
+	}
 }
 
-void CInputHandler::onKeyUp()
+void CInputHandler::onKeyUp(SDL_Event& event)
 {
 	m_keystates = (Uint8*)SDL_GetKeyboardState(0);
 
-	if (m_keyUpCallbacks.size() != 0)
+	if (m_actionKeyUpCallbacks.size() != 0)
 	{
 		std::map<SDL_Scancode, KeyCallback>::iterator it;
 
-		for (it = m_keyUpCallbacks.begin(); it != m_keyUpCallbacks.end(); it++)
+		for (it = m_actionKeyUpCallbacks.begin(); it != m_actionKeyUpCallbacks.end(); it++)
 		{
 			if (m_keystates[it->first] == 0
 				&& m_keyReleased[it->first] == false)
@@ -320,7 +348,7 @@ void CInputHandler::onKeyUp()
 
 				try
 				{
-					it->second();
+					it->second(it->first);
 				}
 				catch (std::exception e)
 				{
@@ -328,6 +356,14 @@ void CInputHandler::onKeyUp()
 					spdlog::error("Exception: {}", e.what());
 				}
 			}
+		}
+	}
+
+	if (m_keyUpCallbacks.size() != 0)
+	{
+		for (int i = 0; i < m_keyUpCallbacks.size(); i++)
+		{
+			m_keyUpCallbacks[i](event.key.keysym.scancode);
 		}
 	}
 }

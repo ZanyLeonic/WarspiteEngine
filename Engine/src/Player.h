@@ -17,8 +17,8 @@ public:
 	bool OnThink();
 	void Draw();
 
-	void KeyDown();
-	void KeyUp();
+	//void KeyDown(SDL_Scancode e);
+	//void KeyUp(SDL_Scancode e);
 
 private:
 	void HandleInput();

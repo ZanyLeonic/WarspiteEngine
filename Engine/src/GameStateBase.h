@@ -12,6 +12,7 @@
 
 // This part is where the IDs are defined
 #define SID_MM "MainMenu"
+#define SID_INPUT "InputState"
 #define SID_PLAY "PlayState"
 #define SID_PAUSE "PauseState"
 

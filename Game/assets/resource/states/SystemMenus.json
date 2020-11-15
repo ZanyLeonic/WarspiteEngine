@@ -10,6 +10,10 @@
         {
           "id": "ExitButton",
           "path": "UI/ExitButton.png"
+        },
+        {
+          "id": "InputButton",
+          "path": "UI/InputButton.png"
         }
       ],
       "scripts": [],
@@ -43,6 +47,22 @@
           "numFrames": 3,
           "animSpeed": 1,
           "onClickId": 1,
+          "onEnterId": 0,
+          "onLeaveId": 0
+        },
+        {
+          "name": "InputBtn",
+          "type": "Button",
+          "textureid": "InputButton",
+          "script": "",
+          "soundPath": "",
+          "x": 100,
+          "y": 200,
+          "width": 100,
+          "height": 32,
+          "numFrames": 3,
+          "animSpeed": 1,
+          "onClickId": 3,
           "onEnterId": 0,
           "onLeaveId": 0
         },
@@ -95,18 +115,62 @@
           "onLeaveId": 0
         },
         {
-          "name": "ExitpBtn",
+          "name": "ExitBtn",
           "type": "Button",
           "textureid": "ExitButton",
           "script": "",
           "soundPath": "",
           "x": 100,
-          "y": 200,
+          "y": 300,
           "width": 100,
           "height": 32,
           "numFrames": 3,
           "animSpeed": 1,
           "onClickId": 2,
+          "onEnterId": 0,
+          "onLeaveId": 0
+        }
+      ]
+    },
+    {
+      "id": "InputState",
+      "textures": [
+        {
+          "id": "ExitButton",
+          "path": "UI/ExitButton.png"
+        }
+      ],
+      "scripts": [],
+      "objects": [
+        {
+          "name": "TitleText",
+          "type": "TextObject",
+          "textureid": "TitleText",
+          "script": "",
+          "soundPath": "",
+          "x": 5,
+          "y": 10,
+          "width": 10,
+          "height": 10,
+          "numFrames": 1,
+          "animSpeed": 1,
+          "onClickId": 0,
+          "onEnterId": 0,
+          "onLeaveId": 0
+        },
+        {
+          "name": "ExitBtn",
+          "type": "Button",
+          "textureid": "ExitButton",
+          "script": "",
+          "soundPath": "",
+          "x": 530,
+          "y": 5,
+          "width": 100,
+          "height": 32,
+          "numFrames": 3,
+          "animSpeed": 1,
+          "onClickId": 1,
           "onEnterId": 0,
           "onLeaveId": 0
         }

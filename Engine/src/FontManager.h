@@ -29,6 +29,7 @@ public:
 		SOLID = 1,
 		SHADED = 2,
 		BLENDED = 3,
+		BLENDED_WRAPPED = 4
 	};
 
 	bool LoadFont(std::string path, std::string type, int size);
@@ -36,7 +37,7 @@ public:
 
 	bool RenderText(std::string text, std::string fontID, std::string textureID, 
 		EFontRenderType rType = EFontRenderType::BLENDED, 
-		SDL_Colour tColour = { 0,0,0 }, SDL_Colour bColour = { 255,255,255 });
+		SDL_Colour tColour = { 0,0,0 }, SDL_Colour bColour = { 255,255,255 }, Uint32 width = 0);
 
 	bool IsLoaded(std::string name, std::string type, int size);
 

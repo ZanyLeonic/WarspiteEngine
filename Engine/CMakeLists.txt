@@ -23,6 +23,7 @@ set(WarspiteEngine_Src
         src/GameStateDictionary.cpp
         src/GameStateManager.cpp
         src/InputHandler.cpp
+        src/InputState.cpp
         src/Level.cpp
         src/LevelParser.cpp
         src/LogicAuto.cpp
@@ -65,6 +66,7 @@ set(WarspiteEngine_Header
         src/GameStateDictionary.h
         src/GameStateManager.h
         src/InputHandler.h
+        src/InputState.h
         ../shared/src/Layer.h
         src/Level.h
         src/LevelParser.h
