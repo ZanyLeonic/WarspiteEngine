@@ -71,7 +71,7 @@ STileset CTileLayer::GetTilesetByID(int tileID)
 			return m_tilesets[i];
 		}
 
-		std::cout << "Cannot find tileset, returning an empty tileset\n";
+		spdlog::warn("Cannot find tileset for TileID ({}), returning an empty tileset", tileID);
 	}
 
 	return STileset();

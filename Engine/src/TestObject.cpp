@@ -8,5 +8,5 @@ CTestObject::CTestObject()
 
 void CTestObject::collide()
 {
-	std::cout << "Collided!\n";
+	
 }

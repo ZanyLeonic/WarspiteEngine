@@ -2,6 +2,7 @@
 #include <filesystem>
 #include <iostream>
 #include <rapidjson/filereadstream.h>
+#include <spdlog/spdlog.h>
 
 namespace fs = std::filesystem;
 
@@ -60,8 +61,8 @@ bool CEngineFileSystem::ReadJSON(std::string path, rapidjson::Document* inDoc)
 		// Have we parsed the JSON correctly?
 		if (inDoc->HasParseError())
 		{
-			std::cout << "An error has occurred when loading \"" << path << "\"\n";
-			std::cout << inDoc->GetParseError() << "\n";
+			spdlog::error("An error has occurred when loading \"{}\"", path);
+			spdlog::error("Error code from RapidJSON: {}", inDoc->GetParseError());
 			return false;
 		}
 		fclose(fp);

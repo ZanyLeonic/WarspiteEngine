@@ -1,5 +1,6 @@
 #include "GameObjectDictionary.h"
 #include <iostream>
+#include <spdlog/spdlog.h>
 
 CGameObjectDictionary* CGameObjectDictionary::s_pInstance = 0;
 
@@ -26,7 +27,7 @@ IGameObject* CGameObjectDictionary::Create(std::string typeID)
 
 	if (it == m_creators.end())
 	{
-		std::cout << "Cannot find Object of type: " << typeID << "\n";
+		spdlog::warn("Cannot find Object of type: \"{}\"", typeID);
 		return nullptr;
 	}
 

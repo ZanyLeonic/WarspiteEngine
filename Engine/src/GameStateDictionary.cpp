@@ -1,5 +1,6 @@
 #include "GameStateDictionary.h"
 #include <iostream>
+#include <spdlog/spdlog.h>
 
 CGameStateDictionary* CGameStateDictionary::s_pInstance = 0;
 
@@ -26,7 +27,7 @@ CGameStateBase* CGameStateDictionary::Create(std::string stateID)
 
 	if (it == m_creators.end())
 	{
-		std::cout << "Cannot find state of ID: " << stateID << "\n";
+		spdlog::warn("Cannot find state of ID: \"{}\"", stateID);
 		return nullptr;
 	}
 
