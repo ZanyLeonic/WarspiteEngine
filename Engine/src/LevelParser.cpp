@@ -335,7 +335,7 @@ void CLevelParser::parseObjectLayer(const rapidjson::Value* pObjectVal, std::vec
 
 		spdlog::debug("Object name: {}", pOP->GetName());
 		spdlog::debug("Factory name: {}", pOP->GetFactoryID());
-		spdlog::debug("Object position: {}x{}", pOP->GetX(), pOP->GetY());
+		spdlog::debug("Object position: ({}, {})", pOP->GetX(), pOP->GetY());
 
 		// Create the object that is defined
 		IGameObject* pGameObject = CGameObjectDictionary::Instance()
