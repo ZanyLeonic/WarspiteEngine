@@ -6,7 +6,7 @@
 #include <memory>
 #include <map>
 #include <SDL2/SDL_scancode.h>
-#include <SDL2/SDL_Events.h>
+#include <SDL2/SDL_events.h>
 
 struct SInputObject;
 struct SGameObject;
