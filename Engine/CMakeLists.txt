@@ -205,7 +205,11 @@ else()
 endif()
 
 if (UNIX)
-    install(FILES ${CMAKE_BINARY_DIR}/Engine/lib${MOD_NAME}.so DESTINATION ./bin/${PROJECT_NAME}/bin)
+    if (CMAKE_BUILD_TYPE STREQUAL "Debug")
+        install(FILES ${CMAKE_RUNTIME_OUTPUT_DIRECTORY_DEBUG}/lib${MOD_NAME}.so DESTINATION ./bin/${PROJECT_NAME}/bin)
+    else()
+        install(FILES ${CMAKE_RUNTIME_OUTPUT_DIRECTORY_RELEASE}/lib${MOD_NAME}.so DESTINATION ./bin/${PROJECT_NAME}/bin)
+    endif()
 elseif (WIN32)
     install(TARGETS ${MOD_NAME} RUNTIME DESTINATION ./bin)
     install(DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/

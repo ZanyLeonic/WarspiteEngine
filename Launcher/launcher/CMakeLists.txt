@@ -34,7 +34,11 @@ else()
 endif()
 
 if (UNIX)
-    install(FILES ${CMAKE_BINARY_DIR}/Launcher/launcher/liblauncher.so DESTINATION ./bin/${PROJECT_NAME}/bin)
+    if (CMAKE_BUILD_TYPE STREQUAL "Debug")
+        install(FILES ${CMAKE_RUNTIME_OUTPUT_DIRECTORY_DEBUG}/liblauncher.so DESTINATION ./bin/${PROJECT_NAME}/bin)
+    else()
+        install(FILES ${CMAKE_RUNTIME_OUTPUT_DIRECTORY_RELEASE}/liblauncher.so DESTINATION ./bin/${PROJECT_NAME}/bin)
+    endif()
 elseif (WIN32)
     install(TARGETS Launcher RUNTIME DESTINATION ./bin)
     install(DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/
