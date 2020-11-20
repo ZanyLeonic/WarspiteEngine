@@ -1,6 +1,7 @@
 #include <string>
 #include <iostream>
 #include <cassert>
+#include <cstring>
 #include <dlfcn.h>
 #include <stdlib.h>
 #include <limits.h>
@@ -38,7 +39,7 @@ extern "C" int LauncherMain(int argc, char** argv)
 	char* modName = MOD_NAME;
 	char* gameName = GAME_NAME;
 
-	GetGameParam(__argv, __argc, gameName);
+	GetGameParam(argv, argc, gameName);
 
 	const char* pBinaryName = engine_binary("bin/lib", modName, ".so");
 	const char* pGameBinaryN = engine_binary("assets/bin/lib", gameName, ".so");
