@@ -14,6 +14,11 @@ bool CGame::Init(int argc, char** argv, std::map<ESingletonIDs, void(*)>* pPtrs)
 
     tObj = (IGame*)m_ptrs[ESingletonIDs::GAME];
 
+    spdlog::info("**************************");
+    spdlog::info("You are currently running");
+    spdlog::info("DLL 2!");
+    spdlog::info("Modularity for the WIN!!!");
+    spdlog::info("**************************");
     // Add Game related init code here
     spdlog::info("Is the game running? {}", (tObj->IsRunning() ? "Yes" : "No"));
 
