@@ -35,8 +35,8 @@ bool GetGameParam(char** argv, int argc, char*& gameName)
 
 extern "C" int LauncherMain(int argc, char** argv)
 {
-	char* modName = MOD_NAME_L;
-	char* gameName = GAME_NAME_L;
+	char* modName = MOD_NAME;
+	char* gameName = GAME_NAME;
 
 	GetGameParam(__argv, __argc, gameName);
 
