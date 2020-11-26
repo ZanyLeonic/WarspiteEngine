@@ -46,6 +46,19 @@
                 "${workspaceFolder}/build/Debug"
             ],
             "console": "integratedTerminal"
+        },
+        {
+            "name": "Python: Test Run Map (with Engine)",
+            "type": "python",
+            "request": "launch",
+            "program": "${workspaceFolder}/sdk/RunEngine.py",
+            "args": [
+                "-map",
+                "${workspaceFolder}/sdk/maps/map02.json",
+                "-engine",
+                "${workspaceFolder}/build/Release/ws.exe"
+            ],
+            "console": "integratedTerminal"
         }
     ]
 }

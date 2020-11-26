@@ -414,3 +414,5 @@ Engine/logs/**
 /Launcher/main/ws
 /rel-test/Launcher/main
 /Rel/Release2
+
+!dist/redist/*.exe
