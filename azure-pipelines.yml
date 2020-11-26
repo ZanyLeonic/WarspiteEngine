@@ -27,6 +27,7 @@ jobs:
     displayName: "Installing dependencies + Making build files"
     inputs:
      filePath: 'build-deps.ps1'
+     arguments: 'Release'
      workingDirectory: '$(System.DefaultWorkingDirectory)'
 
   - task: MSBuild@1
@@ -64,8 +65,8 @@ jobs:
   - task: PowerShell@2
     displayName: "Installing dependencies + Making build files"
     inputs:
-     filePath: 'build-deps-x86.ps1'
-     arguments: 'C:\vcpkg --CI'
+     filePath: 'build-deps-ci-x86.ps1'
+     arguments: 'Release true'
      workingDirectory: '$(System.DefaultWorkingDirectory)'
 
   - task: MSBuild@1

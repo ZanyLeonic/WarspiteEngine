@@ -1,8 +1,14 @@
 # Based on a script from CommitteeOfZero/impacto
 param(
-    [string]$VcpkgDir = $env:VCPKG_INSTALLATION_ROOT,
-    [string]$CI = ""
+    [ValidateSet("Debug", "Release")][string]$BuildType = "Debug",
+    [string]$CI = "",
+    [string]$BuildLocation = "build-win32",
+    [string]$VcpkgDir = $env:VCPKG_INSTALLATION_ROOT
 )
+
+Write-Output "**** THIS IS A CONTINUOUS INTEGRATION SCRIPT ****"
+Write-Output "**** NOT INTENDED FOR USE ON MACHINES OTHER THAN CI! ****"
+Write-Output "**** Please use the build-deps.ps1 instead! ****"
 
 function SetEnv() {
     $vswhere = "${env:ProgramFiles(x86)}/Microsoft Visual Studio/Installer/vswhere.exe"
@@ -23,15 +29,15 @@ function GenerateProjectFiles() {
 	
 	$bargs = @("")
 	
-	if ($CI -eq "--CI")
+	if ($CI -eq "true")
 	{
 		$bargs = @( 
 		"-AWin32",
 		"-DCMAKE_TOOLCHAIN_FILE=$VcpkgDir\scripts\buildsystems\vcpkg.cmake",
-		'-DCMAKE_BUILD_TYPE="Debug"', 
+		"-DCMAKE_BUILD_TYPE=`"$BuildType`"", 
 		"-DVCPKG_TARGET_TRIPLET=x86-windows",
 		"-DPYTHON_EXECUTABLE:FILEPATH=C:\hostedtoolcache\windows\Python\3.8.5\x86\python.exe",
-		"-Bbuild-win32",
+		"-B$BuildLocation",
 		".")
 	}
 	else
@@ -39,10 +45,10 @@ function GenerateProjectFiles() {
 		$bargs = @( 
 		"-AWin32",
 		"-DCMAKE_TOOLCHAIN_FILE=$VcpkgDir\scripts\buildsystems\vcpkg.cmake",
-		'-DCMAKE_BUILD_TYPE="Debug"', 
+		'-DCMAKE_BUILD_TYPE=`"$BuildType`"', 
 		"-DVCPKG_TARGET_TRIPLET=x86-windows",
 		"-DPYTHON_EXECUTABLE:FILEPATH=C:\Program Files (x86)\Python38-32\python.exe",
-		"-Bbuild-win32",
+		"-B$BuildLocation",
 		".")
 	}
     & cmake $bargs

@@ -1,5 +1,7 @@
 # Based on a script from CommitteeOfZero/impacto
 param(
+    [ValidateSet("Debug", "Release")][string]$BuildType = "Debug",
+    [string]$BuildLocation = "build",
     [ValidateSet("x64", "x86")][string]$Arch = "x64",
     [string]$VcpkgDir = $env:VCPKG_INSTALLATION_ROOT
 )
@@ -22,9 +24,9 @@ function GenerateProjectFiles() {
     }
     $bargs = @( 
     "-DCMAKE_TOOLCHAIN_FILE=$VcpkgDir\scripts\buildsystems\vcpkg.cmake",
-    '-DCMAKE_BUILD_TYPE="Debug"', 
+    "-DCMAKE_BUILD_TYPE=`"$BuildType`"", 
     "-DVCPKG_TARGET_TRIPLET=$Arch-windows",
-	"-Bbuild",
+	"-B$BuildLocation",
     ".")
     & cmake $bargs
 	

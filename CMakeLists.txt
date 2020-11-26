@@ -14,6 +14,8 @@ set(CMAKE_CXX_EXTENSIONS OFF)
 # Our custom find CMakeFiles for dependencies 
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/CMakeModules/")
 
+message(STATUS "Build configured as a ${CMAKE_BUILD_TYPE} build")
+
 # Apply some debug options
 if (CMAKE_BUILD_TYPE STREQUAL "Debug")
     add_compile_definitions(WARDEBUG)

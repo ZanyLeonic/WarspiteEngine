@@ -59,6 +59,15 @@ if (CMAKE_BUILD_TYPE STREQUAL "Debug")
                         "${CMAKE_CURRENT_SOURCE_DIR}/assets" "${BIN_PATH_DEBUG}/assets/")
                         
     set_target_properties(${GAME_NAME} PROPERTIES VS_DEBUGGER_WORKING_DIRECTORY "${BIN_PATH_DEBUG}")
+
+    if (UNIX)
+        add_custom_command(TARGET ${GAME_NAME} POST_BUILD
+            COMMAND ${CMAKE_COMMAND} -E copy $<TARGET_FILE:${GAME_NAME}> "${BIN_PATH_DEBUG}/assets/bin/lib${GAME_NAME}.so"
+        )
+        add_custom_command(TARGET ${GAME_NAME} POST_BUILD
+            COMMAND ${CMAKE_COMMAND} -E remove $<TARGET_FILE:${GAME_NAME}>
+        )
+    endif()
 else()
 # Copy assets for release
     add_custom_command(TARGET ${GAME_NAME} POST_BUILD
@@ -66,6 +75,15 @@ else()
                         "${CMAKE_CURRENT_SOURCE_DIR}/assets" "${BIN_PATH_RELEASE}/assets/")
 
     set_target_properties(${GAME_NAME} PROPERTIES VS_DEBUGGER_WORKING_DIRECTORY "${BIN_PATH_RELEASE}")
+
+    if (UNIX)
+        add_custom_command(TARGET ${GAME_NAME} POST_BUILD
+            COMMAND ${CMAKE_COMMAND} -E copy $<TARGET_FILE:${GAME_NAME}> "${BIN_PATH_RELEASE}/assets/bin/lib${GAME_NAME}.so"
+        )
+        add_custom_command(TARGET ${GAME_NAME} POST_BUILD
+            COMMAND ${CMAKE_COMMAND} -E remove $<TARGET_FILE:${GAME_NAME}>
+        )
+    endif()
 endif()
 
 target_link_libraries(${GAME_NAME} PUBLIC ${WarspiteGame_Libs})
