@@ -19,6 +19,39 @@ typedef IWGame* (*GameDLL_t)(int argc, char** argv, std::map<ESingletonIDs, void
 const int FPS = 62;
 const int DELAY_TIME = 1000 / FPS;
 
+const char* WIDTH_PARAM = "-w";
+const char* HEIGHT_PARAM = "-h";
+
+#ifndef WARDEBUG
+bool DevFlagExists(char** argv, int argc)
+{
+	if (argc <= 1) return false;
+
+	for (int i = 0; i < argc; i++)
+	{
+		if (strcmp(argv[i], "-dev") == 0) return true;
+	}
+
+	return false;
+}
+#endif
+
+bool GetParam(char** argv, int argc, const char* param, char*& returnval)
+{
+	if (argc <= 1) return false;
+
+	for (int i = 0; i < argc; i++)
+	{
+		if (strcmp(argv[i], param) == 0 && (i + 1) < argc)
+		{
+			returnval = argv[i + 1];
+			return true;
+		}
+	}
+
+	return false;
+}
+
 #ifdef _WIN32
 extern "C" __declspec(dllexport) int __cdecl Engine(int argc, char** argv, GameDLL_t pGameDLL)
 #elif _UNIX
@@ -45,6 +78,11 @@ extern "C" int Engine(int argc, char** argv, GameDLL_t pGameDLL)
 		spdlog::set_pattern("[%Y-%m-%d %H:%M:%S.%e (%z)] [Thread/%t] [%n/%^%l%$] %v ");
 #ifdef WARDEBUG
 		spdlog::set_level(spdlog::level::debug);
+#else
+		if (DevFlagExists(argv, argc))
+		{
+			spdlog::set_level(spdlog::level::debug);
+		}
 #endif
 	}
 	catch (const spdlog::spdlog_ex& ex)
@@ -55,10 +93,18 @@ extern "C" int Engine(int argc, char** argv, GameDLL_t pGameDLL)
 	spdlog::info("Warspite Engine");
 	
 #ifndef WARDEBUG
-	snprintf(title, sizeof(title), "Engine (%d/%s)", GAME_BUILD_NUMBER, GAME_GIT_DESC);
+	if (DevFlagExists(argv, argc))
+	{
+		snprintf(title, sizeof(title), "Engine (DEV) (%d/%s)", GAME_BUILD_NUMBER, GAME_GIT_DESC);
+		spdlog::debug("Running in developer mode.");
+	}
+	else
+	{
+		snprintf(title, sizeof(title), "Engine (%d/%s)", GAME_BUILD_NUMBER, GAME_GIT_DESC);
+	}
 #else
 	snprintf(title, sizeof(title), "Engine (DEBUG) (%d/%s)", GAME_BUILD_NUMBER, GAME_GIT_DESC);
-	spdlog::debug("This is a debug build.\n");
+	spdlog::debug("This is a debug build.");
 #endif
 
 	auto start = std::chrono::system_clock::now();
@@ -83,7 +129,46 @@ extern "C" int Engine(int argc, char** argv, GameDLL_t pGameDLL)
 	spdlog::info("Attempting Game initialization...");
 	spdlog::info("Target FPS is {} FPS", FPS);
 
-	if (CBaseGame::Instance()->Init(title, 100, 100, 640, 480, false, argc, argv, pGameDLL))
+	spdlog::debug("**** PARAMETER LISTING BEGIN ****");
+	for (int i = 0; i < argc; i++)
+	{
+		spdlog::debug("[{}]: \"{}\"", i, argv[i]);
+	}
+	spdlog::debug("**** PARAMETER LISTING END ****");
+
+	int desiredWidth = DEF_WIDTH;
+	int desiredHeight = DEF_HEIGHT;
+
+	char* widthParam = "";
+	char* heightParam = "";
+
+	if (GetParam(argv, argc, WIDTH_PARAM, widthParam))
+	{
+		desiredWidth = atoi(widthParam);
+
+		if ((desiredWidth == 0)
+			|| desiredHeight < DEF_WIDTH)
+		{
+			spdlog::warn("Specified width parameter is too low or invalid.");
+			spdlog::warn("Got \"{}\", Lowest supported value \"{}\"", desiredWidth, DEF_WIDTH);
+			desiredWidth = DEF_WIDTH;
+		}
+	}
+
+	if (GetParam(argv, argc, HEIGHT_PARAM, widthParam))
+	{
+		desiredHeight = atoi(widthParam);
+
+		if (desiredHeight == 0
+			|| desiredHeight < DEF_HEIGHT)
+		{
+			spdlog::warn("Specified height parameter is too low or invalid.");
+			spdlog::warn("Got \"{}\", Lowest supported value \"{}\"", desiredHeight, DEF_HEIGHT);
+			desiredHeight = DEF_HEIGHT;
+		}
+	}
+
+	if (CBaseGame::Instance()->Init(title, 100, 100, desiredWidth, desiredHeight, false, argc, argv, pGameDLL))
 	{
 		IWGame* pGD = CBaseGame::Instance()->GetGameDLLClass();
 

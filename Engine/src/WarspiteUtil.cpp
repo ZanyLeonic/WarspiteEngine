@@ -117,3 +117,19 @@ IGameObject* CWarspiteUtil::FindGameObject(CLevel* pLevel, std::string id)
 	}
 	return nullptr;
 }
+
+bool CWarspiteUtil::GetParam(char** argv, int argc, const char* param, char*& returnval)
+{
+	if (argc <= 1) return false;
+
+	for (int i = 0; i < argc; i++)
+	{
+		if (strcmp(argv[i], param) == 0 && (i + 1) < argc)
+		{
+			returnval = argv[i + 1];
+			return true;
+		}
+	}
+
+	return false;
+}

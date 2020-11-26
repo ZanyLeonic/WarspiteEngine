@@ -37,5 +37,8 @@ public:
     virtual char** const GetArgv() = 0;
 
     virtual IWGame* const GetGameDLLClass() = 0;
+
+    virtual bool const StartedWithMapParam() = 0;
+	virtual std::string const GetMapParamName() = 0;
 };
 #endif

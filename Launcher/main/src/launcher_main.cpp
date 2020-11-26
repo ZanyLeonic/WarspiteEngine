@@ -54,17 +54,32 @@ static char* GetBaseDir(const char* pFileName)
 	return basedir;
 }
 
+bool DevFlagExists(char** argv, int argc)
+{
+	if (argc <= 1) return false;
+
+	for (int i = 0; i < argc; i++)
+	{
+		if (strcmp(argv[i], "-dev") == 0) return true;
+	}
+
+	return false;
+}
+
 #ifdef _WIN32
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nShowCmd)
 {
 #ifdef USE_CONSOLE
-	// Create a console and output all stdout and sterr to it.
-	AllocConsole();
+	if (!DevFlagExists(__argv, __argc))
+	{
+		// Create a console and output all stdout and sterr to it.
+		AllocConsole();
 
-	// Redirect the std stuff
-	freopen("CONIN$", "r", stdin);
-	freopen("CONOUT$", "w", stdout);
-	freopen("CONOUT$", "w", stderr);
+		// Redirect the std stuff
+		freopen("CONIN$", "r", stdin);
+		freopen("CONOUT$", "w", stdout);
+		freopen("CONOUT$", "w", stderr);
+	}
 #endif
 	char* pPath = nullptr;
 

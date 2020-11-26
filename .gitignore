@@ -412,3 +412,5 @@ Engine/logs/**
 *.vcxproj*
 *.sln
 /Launcher/main/ws
+/rel-test/Launcher/main
+/Rel/Release2

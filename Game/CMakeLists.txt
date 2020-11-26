@@ -78,11 +78,13 @@ endif()
 
 if (UNIX)
     if (CMAKE_BUILD_TYPE STREQUAL "Debug")
+        install (DIRECTORY ${BIN_PATH_DEBUG}/assets DESTINATION ./bin/${PROJECT_NAME})
         install(FILES ${CMAKE_RUNTIME_OUTPUT_DIRECTORY_DEBUG}/lib${GAME_NAME}.so DESTINATION ./bin/${PROJECT_NAME}/assets/bin)
     else()
+        install (DIRECTORY ${BIN_PATH_RELEASE}/assets DESTINATION ./bin/${PROJECT_NAME})
         install(FILES ${CMAKE_RUNTIME_OUTPUT_DIRECTORY_RELEASE}/lib${GAME_NAME}.so DESTINATION ./bin/${PROJECT_NAME}/assets/bin)
     endif()
-    install (DIRECTORY assets DESTINATION ./bin/${PROJECT_NAME})
+    
 elseif (WIN32)
     install(TARGETS ${GAME_NAME} RUNTIME DESTINATION ./assets/bin)
 

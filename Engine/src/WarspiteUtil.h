@@ -21,6 +21,7 @@ public:
 	static std::vector<std::string> SplitString(const std::string& inStr, const char& inD);
 
 	static IGameObject* FindGameObject(CLevel* pLevel, std::string id);
+	static bool GetParam(char** argv, int argc, const char* param, char*& returnval);
 };
 
 class NotImplemented : public std::logic_error

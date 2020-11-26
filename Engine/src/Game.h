@@ -65,6 +65,9 @@ public:
 
 	virtual IWGame* const GetGameDLLClass() { return pGame; }
 
+	virtual bool const StartedWithMapParam() { return m_bStartedWithMapParam; }
+	virtual std::string const GetMapParamName() { return m_sMapName; }
+
 private:
 	CGameStateManager* m_pGameStateManager;
 
@@ -93,5 +96,8 @@ private:
 	char** m_argv;
 
 	bool m_bRunning = false;
+	bool m_bStartedWithMapParam = false;
+
+	std::string m_sMapName = "";
 };
 #endif /* defined(__Game__) */

@@ -25,7 +25,8 @@ IGame* CBaseGame::Instance()
 }
 
 // Initialises the major parts of the engine
-bool CBaseGame::Init(const char* title, int xpos, int ypos, int width, int height, bool fullscreen, int argc, char** argv, GameDLL_t pGameDLL)
+bool CBaseGame::Init(const char* title, int xpos, int ypos, int width, int height, 
+	bool fullscreen, int argc, char** argv, GameDLL_t pGameDLL)
 {
 	// Init our FPS stuff
 	// Set all frame times to 0ms.
@@ -107,6 +108,18 @@ bool CBaseGame::Init(const char* title, int xpos, int ypos, int width, int heigh
 
 		// Run the GameDLL's init
 		pGame = pGameDLL(m_argc, m_argv, &m_singletonPtrs);
+
+		char* mapName = "";
+
+		if (CWarspiteUtil::GetParam(argv, argc, "-map", mapName))
+		{
+			m_bStartedWithMapParam = true;
+			m_sMapName = std::string(mapName);
+
+			m_pGameStateManager->ModifyState(CGameStateDictionary::Instance()->Create(SID_PLAY));
+
+			m_bStartedWithMapParam = false;
+		}
 
 		if (pGame != nullptr) return true;
 	}

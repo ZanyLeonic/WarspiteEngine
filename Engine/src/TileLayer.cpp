@@ -47,6 +47,8 @@ void CTileLayer::Draw()
 
 			id--;
 
+			assert(tileset.NumColumns > 0);
+
 			CTextureManager::Instance()->DrawTile(tileset.Name, tileset.Margin, tileset.Spacing,
 				(int)(((j * m_tileSize)) - cCamPos.GetX()), (int)(((i * m_tileSize)) - cCamPos.GetY()), m_tileSize, m_tileSize, // X, Y, width and height
 				(id - (tileset.FirstGID - 1)) / tileset.NumColumns, (id - (tileset.FirstGID - 1)) % tileset.NumColumns, // Row and frame
