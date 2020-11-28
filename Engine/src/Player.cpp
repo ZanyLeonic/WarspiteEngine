@@ -22,8 +22,8 @@ CPlayer::CPlayer()
 void CPlayer::OnPlay()
 {
 	// Are we in the PlayState?
-	std::shared_ptr<CPlayState> ps 
-		= std::dynamic_pointer_cast<CPlayState>(CBaseGame::Instance()->GetStateManager()->GetCurrentState());
+	bool ps 
+		= CBaseGame::Instance()->GetStateManager()->GetCurrentStateID() == SID_PLAY;
 
 	CInputHandler::Instance()->SetAxisValue("MoveForward", SDL_SCANCODE_UP, -1.f);
 	CInputHandler::Instance()->SetAxisValue("MoveForward", SDL_SCANCODE_DOWN, 1.f);
@@ -32,18 +32,18 @@ void CPlayer::OnPlay()
 
 	if (ps)
 	{
-		// If so - we can grab the current level and its Layers
-		std::vector<ILayer*> objs = *ps->GetLoadedLevel()->GetLayers();
+		//// If so - we can grab the current level and its Layers
+		//std::vector<ILayer*> objs = *ps->GetLoadedLevel()->GetLayers();
 
-		for (size_t i = 0; i < objs.size(); i++)
-		{
-			// Only care about the ObjectLayers - since that's what we are going to collide with.
-			CObjectLayer* obl = dynamic_cast<CObjectLayer*>(objs[i]);
-			if (!obl) continue;
+		//for (size_t i = 0; i < objs.size(); i++)
+		//{
+		//	// Only care about the ObjectLayers - since that's what we are going to collide with.
+		//	CObjectLayer* obl = dynamic_cast<CObjectLayer*>(objs[i]);
+		//	if (!obl) continue;
 
-			// Add each GameObject vector to a vector of vectors.
-			m_objects.push_back(obl->GetGameObjects());
-		}
+		//	// Add each GameObject vector to a vector of vectors.
+		//	m_objects.push_back(obl->GetGameObjects());
+		//}
 	}
 }
 
@@ -196,11 +196,12 @@ bool CPlayer::IsPositionFree(CVector2D* pNext)
 	}
 
 	// Also do a check if we are going off the level
-	std::shared_ptr<CPlayState> pPS = std::static_pointer_cast<CPlayState>(CBaseGame::Instance()->GetStateManager()->GetCurrentState());
+	bool ps
+		= CBaseGame::Instance()->GetStateManager()->GetCurrentStateID() == SID_PLAY;
 	
-	if (pPS != nullptr)
+	if (ps)
 	{
-		CLevel* pLevel = pPS->GetLoadedLevel();
+		/*CLevel* pLevel = pPS->GetLoadedLevel();
 
 		if ((pNext->GetX() < 0) || (pNext->GetX() + PLAYER_WIDTH > pLevel->m_LevelSize.GetX()))
 		{
@@ -210,7 +211,7 @@ bool CPlayer::IsPositionFree(CVector2D* pNext)
 		if ((pNext->GetY() < 0) || (pNext->GetY() + PLAYER_HEIGHT > pLevel->m_LevelSize.GetY()))
 		{
 			return false;
-		}
+		}*/
 	}
 
 	// Nothing is in the way!

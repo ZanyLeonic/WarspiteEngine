@@ -4,10 +4,9 @@
 
 #include "ObjectFactory.h"
 #include "IGameStateDictionary.h"
+#include "GameStateBase.h"
 #include <string>
 #include <map>
-
-class CGameStateBase;
 
 // I know it is clone of the GameObject version, but I need to get it working first.
 class CGameStateDictionary : public IGameStateDictionary
@@ -27,7 +26,7 @@ public:
 	}
 
 	bool RegisterType(std::string stateID, IObjectFactory<CGameStateBase>* pCreator);
-	std::shared_ptr<CGameStateBase> Create(std::string stateID);
+	std::unique_ptr<CGameStateBase> Create(std::string stateID);
 private:
 	std::map<std::string, IObjectFactory<CGameStateBase>*> m_creators;
 };
@@ -44,9 +43,9 @@ public:
 	}
 
 	// Simply returns the type our template is.
-	std::shared_ptr<CGameStateBase> Create()
+	std::unique_ptr<CGameStateBase> Create()
 	{
-		return std::make_shared<T>();
+		return std::make_unique<T>();
 	}
 
 	// Returns the size of our template

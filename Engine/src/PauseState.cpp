@@ -32,7 +32,7 @@ void CPauseState::SetCallbacks(const std::vector<HButtonCallback>& callbacks)
 
 	for (size_t i = 0; i < m_GameObjects.size(); i++)
 	{
-		std::shared_ptr<CButton> pButton = std::dynamic_pointer_cast<CButton>(m_GameObjects[i]);
+		CButton* pButton = dynamic_cast<CButton*>(m_GameObjects[i].get());
 
 		if (pButton)
 		{
@@ -54,7 +54,7 @@ bool CPauseState::s_continueGame()
 
 bool CPauseState::s_exitToMenu()
 {
-	CBaseGame::Instance()->GetStateManager()->ModifyState(CGameStateDictionary::Instance()->Create(SID_MM));
+	CBaseGame::Instance()->GetStateManager()->ModifyState(std::move(CGameStateDictionary::Instance()->Create(SID_MM)));
 
 	return false;
 }

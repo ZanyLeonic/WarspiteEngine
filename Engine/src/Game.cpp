@@ -76,7 +76,7 @@ bool CBaseGame::Init(const char* title, int xpos, int ypos, int width, int heigh
 				}
 
 				m_pGameStateManager = new CGameStateManager();
-				m_pGameStateManager->ModifyState(CGameStateDictionary::Instance()->Create(SID_MM));
+				m_pGameStateManager->ModifyState(std::move(CGameStateDictionary::Instance()->Create(SID_MM)));
 				
 				m_pGarbageCollector = new CGarbageCollector();
 
@@ -118,7 +118,7 @@ bool CBaseGame::Init(const char* title, int xpos, int ypos, int width, int heigh
 			m_bStartedWithMapParam = true;
 			m_sMapName = std::string(mapName);
 
-			m_pGameStateManager->ModifyState(CGameStateDictionary::Instance()->Create(SID_PLAY));
+			m_pGameStateManager->ModifyState(std::move(CGameStateDictionary::Instance()->Create(SID_PLAY)));
 
 			m_bStartedWithMapParam = false;
 		}

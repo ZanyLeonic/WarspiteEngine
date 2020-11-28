@@ -9,6 +9,8 @@ class CTextObject :
 {
 public:
 	CTextObject();
+	~CTextObject();
+
 	void Load(const CObjectParams* pParams) override;
 };
 REG_OBJ_TO_REF(TextObject, CTextObject);

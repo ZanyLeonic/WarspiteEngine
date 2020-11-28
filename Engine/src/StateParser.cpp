@@ -10,7 +10,7 @@
 
 using namespace rapidjson;
 
-bool CStateParser::ParseState(const char* stateFile, std::string stateID, std::vector<std::shared_ptr<IGameObject>>* pObjects, 
+bool CStateParser::ParseState(const char* stateFile, std::string stateID, std::vector<std::unique_ptr<IGameObject>>* pObjects, 
 	std::vector<std::string>* pTextureIDs, std::vector<std::string>* pScriptRefs)
 {
 	// Read our JSON document.
@@ -87,7 +87,7 @@ bool CStateParser::ParseState(const char* stateFile, std::string stateID, std::v
 	return false;
 }
 
-void CStateParser::ParseObjects(const rapidjson::Value* pStateRoot, std::vector<std::shared_ptr<IGameObject>>* pObjects)
+void CStateParser::ParseObjects(const rapidjson::Value* pStateRoot, std::vector<std::unique_ptr<IGameObject>>* pObjects)
 {
 	spdlog::debug("*** Parsing Objects start ***");
 	// Get the object array.
@@ -128,7 +128,7 @@ void CStateParser::ParseObjects(const rapidjson::Value* pStateRoot, std::vector<
 			b["x"].GetFloat(), b["y"].GetFloat());
 
 		// Attempt to create the object type.
-		std::shared_ptr<IGameObject> pGameObject =
+		std::unique_ptr<IGameObject> pGameObject =
 			CGameObjectDictionary::Instance()->Create(b["type"].GetString());
 
 		CObjectParams* pOP = new CObjectParams(b["x"].GetFloat(), b["y"].GetFloat());
@@ -191,7 +191,7 @@ void CStateParser::ParseObjects(const rapidjson::Value* pStateRoot, std::vector<
 		pGameObject->Load(pOP);
 
 		// Add it to the m_GameObjects
-		pObjects->push_back(pGameObject);
+		pObjects->push_back(std::move(pGameObject));
 
 		spdlog::debug("Pushed GameObject with info!");
 		spdlog::debug("*** Object creation finished ***");

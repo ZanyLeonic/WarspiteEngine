@@ -228,7 +228,7 @@ struct SGameObject : SBaseWrapper<CBaseGame>
 {
 	SGameObject(CBaseGame* pClass) : SBaseWrapper<CBaseGame>(pClass) {}
 
-	std::unique_ptr<SWarState> GetCurrentState() const;
+	std::string GetCurrentStateID() const;
 	bool ChangeState(std::string stateID) const;
 	std::unique_ptr<SWarObject> GetPlayer() const;
 	bool LoadTexture(std::string texPath, std::string texID) const;

@@ -7,10 +7,9 @@ void CGarbageCollector::OnThink()
 
 	for (int i = 0; i < m_StatesDeletionQueue.size(); i++)
 	{
-		std::shared_ptr<CGameStateBase> l = m_StatesDeletionQueue[i];
-
-		if (l->StateFinishedDrawing() && l->StateFinishedTicking())
+		if (m_StatesDeletionQueue[i]->StateFinishedTicking())
 		{
+			m_StatesDeletionQueue[i].reset(nullptr);
 			m_StatesDeletionQueue.erase(m_StatesDeletionQueue.begin() + i);
 		}
 	}
@@ -20,7 +19,7 @@ void CGarbageCollector::Destroy()
 {
 }
 
-void CGarbageCollector::MarkStateForDeletion(std::shared_ptr<CGameStateBase> state)
+void CGarbageCollector::MarkStateForDeletion(std::unique_ptr<CGameStateBase> state)
 {
-	m_StatesDeletionQueue.push_back(state);
+	m_StatesDeletionQueue.push_back(std::move(state));
 }

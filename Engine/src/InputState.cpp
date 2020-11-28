@@ -226,14 +226,16 @@ bool CInputState::OnEnd()
 		CTextureManager::Instance()->m_textureMap["__inputRead"] = nullptr;
 	}
 
-	return true;
+	CFontManager::Instance()->RemoveFont("Roboto", "Regular", 28);
+
+	return CGameStateBase::OnEnd();
 }
 
 void CInputState::SetCallbacks(const std::vector<HButtonCallback>& callbacks)
 {
 	for (size_t i = 0; i < m_GameObjects.size(); i++)
 	{
-		std::shared_ptr<CButton> pButton = std::dynamic_pointer_cast<CButton>(m_GameObjects[i]);
+		CButton* pButton = dynamic_cast<CButton*>(m_GameObjects[i].get());
 
 		if (pButton)
 		{
@@ -279,6 +281,6 @@ void CInputState::SetCallbacks(const std::vector<HButtonCallback>& callbacks)
 bool CInputState::s_InputToMainMenu()
 {
 	spdlog::info("Back button clicked");
-	CBaseGame::Instance()->GetStateManager()->ModifyState(CGameStateDictionary::Instance()->Create(SID_MM));
+	CBaseGame::Instance()->GetStateManager()->ModifyState(std::move(CGameStateDictionary::Instance()->Create(SID_MM)));
 	return true;
 }

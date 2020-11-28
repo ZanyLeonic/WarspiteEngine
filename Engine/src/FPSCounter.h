@@ -10,6 +10,7 @@ class CFPSCounter :
 {
 public:
 	CFPSCounter();
+	~CFPSCounter();
 
 	void Load(const CObjectParams* pParams) override;
 	void Draw() override;

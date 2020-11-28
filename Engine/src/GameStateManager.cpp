@@ -3,18 +3,14 @@
 #include "GarbageCollector.h"
 #include "Game.h"
 
-std::shared_ptr<CGameStateBase> CGameStateManager::GetCurrentState()
+const std::string CGameStateManager::GetCurrentStateID()
 {
-	if (!m_GameStates.empty())
-	{
-		return m_GameStates.back();
-	}
-	return 0;
+	return m_GameStates.back()->GetStateID();
 }
 
-void CGameStateManager::PushState(std::shared_ptr<CGameStateBase> pState)
+void CGameStateManager::PushState(std::unique_ptr<CGameStateBase> pState)
 {
-	m_GameStates.push_back(pState);
+	m_GameStates.push_back(std::move(pState));
 	m_GameStates.back()->OnPlay();
 }
 
@@ -27,7 +23,7 @@ void CGameStateManager::PopState()
 		// returns true.
 		if (m_GameStates.back()->OnEnd())
 		{
-			CBaseGame::Instance()->GetGarbageCollector()->MarkStateForDeletion(m_GameStates.back());
+			CBaseGame::Instance()->GetGarbageCollector()->MarkStateForDeletion(std::move(m_GameStates.back()));
 
 			// ...and remove its Pointer from the queue.
 			m_GameStates.pop_back();
@@ -51,7 +47,7 @@ void CGameStateManager::OnThink()
 	}
 }
 
-void CGameStateManager::ModifyState(std::shared_ptr<CGameStateBase> pState)
+void CGameStateManager::ModifyState(std::unique_ptr<CGameStateBase> pState)
 {
 	if (!m_GameStates.empty())
 	{
@@ -63,12 +59,12 @@ void CGameStateManager::ModifyState(std::shared_ptr<CGameStateBase> pState)
 
 		if (m_GameStates.back()->OnEnd())
 		{
-			CBaseGame::Instance()->GetGarbageCollector()->MarkStateForDeletion(m_GameStates.back());
+			CBaseGame::Instance()->GetGarbageCollector()->MarkStateForDeletion(std::move(m_GameStates.back()));
 			m_GameStates.pop_back();
 		}
 	}
 
 	// Add the new state the queue and run their OnPlay method.
-	m_GameStates.push_back(pState);
+	m_GameStates.push_back(std::move(pState));
 	m_GameStates.back()->OnPlay();
 }

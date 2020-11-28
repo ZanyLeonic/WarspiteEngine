@@ -37,7 +37,7 @@ bool CPlayState::OnPlay()
 	}
 
 	CInputHandler::Instance()->AddActionKeyDown(SDL_SCANCODE_ESCAPE, [this](SDL_Scancode e) {
-			if (CBaseGame::Instance()->GetStateManager()->GetCurrentState()->GetStateID() != SID_PAUSE)
+			if (CBaseGame::Instance()->GetStateManager()->GetCurrentStateID() != SID_PAUSE)
 			{
 				CBaseGame::Instance()->GetStateManager()->PushState(CGameStateDictionary::Instance()->Create(SID_PAUSE));
 			}
@@ -48,7 +48,7 @@ bool CPlayState::OnPlay()
 		});
 
 	CInputHandler::Instance()->AddActionKeyDown(SDL_SCANCODE_8, [this](SDL_Scancode e) {
-		if (CBaseGame::Instance()->GetStateManager()->GetCurrentState()->GetStateID() != SID_PAUSE)
+		if (CBaseGame::Instance()->GetStateManager()->GetCurrentStateID() != SID_PAUSE)
 		{
 			CScriptManager::Instance()->Load(SGameScript::file("Script2", CEngineFileSystem::ResolvePath("test2.py", CEngineFileSystem::EPathType::SCRIPT)));
 			CScriptManager::Instance()->RunFromRef("Script2");

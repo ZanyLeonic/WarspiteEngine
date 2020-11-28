@@ -4,10 +4,9 @@
 
 #include "ObjectFactory.h"
 #include "IGameObjectDictionary.h"
+#include "GameObject.h"
 #include <string>
 #include <map>
-
-class IGameObject;
 
 // Singleton class
 class CGameObjectDictionary : public IGameObjectDictionary
@@ -27,7 +26,7 @@ public:
 	}
 
 	virtual bool RegisterType(std::string typeID, IObjectFactory<IGameObject>* pCreator);
-	virtual std::shared_ptr<IGameObject> Create(std::string typeID);
+	virtual std::unique_ptr<IGameObject> Create(std::string typeID);
 private:
 	std::map<std::string, IObjectFactory<IGameObject>*> m_creators;
 };
@@ -46,9 +45,9 @@ public:
 	}
 
 	// Simply returns the type our template is.
-	std::shared_ptr<IGameObject> Create()
+	std::unique_ptr<IGameObject> Create()
 	{
-		return std::make_shared<T>();
+		return std::make_unique<T>();
 	}
 
 	// Returns the size of our template

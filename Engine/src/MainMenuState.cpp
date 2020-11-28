@@ -45,7 +45,7 @@ void CMainMenuState::SetCallbacks(const std::vector<HButtonCallback>& callbacks)
 {
 	for (size_t i = 0; i < m_GameObjects.size(); i++)
 	{
-		std::shared_ptr<CButton> pButton = std::dynamic_pointer_cast<CButton>(m_GameObjects[i]);
+		CButton* pButton = dynamic_cast<CButton*>(m_GameObjects[i].get());
 
 		if (pButton)
 		{
@@ -92,7 +92,7 @@ void CMainMenuState::SetCallbacks(const std::vector<HButtonCallback>& callbacks)
 bool CMainMenuState::s_menuToPlay()
 {
 	spdlog::info("Play button clicked");
-	CBaseGame::Instance()->GetStateManager()->ModifyState(CGameStateDictionary::Instance()->Create(SID_PLAY));
+	CBaseGame::Instance()->GetStateManager()->ModifyState(std::move(CGameStateDictionary::Instance()->Create(SID_PLAY)));
 	return true;
 }
 
@@ -106,6 +106,6 @@ bool CMainMenuState::s_exitFromMenu()
 bool CMainMenuState::s_menuToInput()
 {
 	spdlog::info("Input button clicked");
-	CBaseGame::Instance()->GetStateManager()->ModifyState(CGameStateDictionary::Instance()->Create(SID_INPUT));
+	CBaseGame::Instance()->GetStateManager()->ModifyState(std::move(CGameStateDictionary::Instance()->Create(SID_INPUT)));
 	return true;
 }

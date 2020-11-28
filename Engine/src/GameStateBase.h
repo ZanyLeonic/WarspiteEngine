@@ -9,6 +9,7 @@
 #include "EngineTypes.h"
 
 #include <vector>
+#include <memory>
 
 // This part is where the IDs are defined
 #define SID_MM "MainMenu"
@@ -28,7 +29,7 @@ public:
 	bool OnPlay() override;
 	bool OnEnd() override;
 
-	virtual std::vector<std::shared_ptr<IGameObject>> GetGameObjects() const { return m_GameObjects; }
+	// virtual std::vector<std::unique_ptr<IGameObject>> GetGameObjects() const { return m_GameObjects; }
 	virtual std::vector<std::string> GetLoadedTextures() const { return m_TextureIDList; }
 	virtual std::vector<std::string> GetLoadedScripts() const { return m_ScriptIDList; }
 	
@@ -39,7 +40,7 @@ public:
 	virtual bool StateFinishedDrawing() const { return m_bDrawingFinished; }
 	
 protected:
-	std::vector<std::shared_ptr<IGameObject>> m_GameObjects;
+	std::vector<std::unique_ptr<IGameObject>> m_GameObjects;
 	std::vector<std::string> m_TextureIDList;
 	std::vector<std::string> m_ScriptIDList;
 

@@ -20,6 +20,8 @@ bool CGameStateBase::OnEnd()
 	for (size_t i = 0; i < m_GameObjects.size(); i++)
 	{
 		m_GameObjects[i]->Destroy();
+		m_GameObjects[i].reset(nullptr);
+		m_GameObjects.erase(m_GameObjects.begin() + i);
 	}
 
 	for (size_t i = 0; i < m_TextureIDList.size(); i++)
@@ -42,13 +44,10 @@ void CGameStateBase::OnThink()
 {
 	for (size_t i = 0; i < m_GameObjects.size(); i++)
 	{	
-		if (m_GameObjects.size() < 15 && m_shouldTick)
+		if (m_shouldTick)
 			m_GameObjects[i]->OnThink();
 		else
-		{
-			spdlog::warn("Warning! Invalid State caught!");
-			return;
-		}
+			break;
 	}
 
 	m_bTickingFinished = !m_shouldTick;
@@ -58,8 +57,10 @@ void CGameStateBase::Draw()
 {
 	for (size_t i = 0; i < m_GameObjects.size(); i++)
 	{
-		if (m_GameObjects[i] && m_shouldDraw)
+		if (m_shouldDraw)
 			m_GameObjects[i]->Draw();
+		else
+			break;
 	}
 
 	m_bDrawingFinished = !m_shouldDraw;

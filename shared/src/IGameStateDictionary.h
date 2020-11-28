@@ -13,6 +13,6 @@ class IGameStateDictionary
 {
 public:
 	virtual bool RegisterType(std::string stateID, IObjectFactory<CGameStateBase>* pCreator) = 0;
-	virtual std::shared_ptr<CGameStateBase> Create(std::string stateID) = 0;
+	virtual std::unique_ptr<CGameStateBase> Create(std::string stateID) = 0;
 };
 #endif

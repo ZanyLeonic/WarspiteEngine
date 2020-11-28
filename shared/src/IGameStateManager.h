@@ -10,10 +10,10 @@ class CGameStateBase;
 class IGameStateManager
 {
 public:
-	virtual std::shared_ptr<CGameStateBase> GetCurrentState() = 0;
+	virtual const std::string GetCurrentStateID() = 0;
 
-	virtual void PushState(std::shared_ptr<CGameStateBase> pState) = 0;
-	virtual void ModifyState(std::shared_ptr<CGameStateBase> pState) = 0;
+	virtual void PushState(std::unique_ptr<CGameStateBase> pState) = 0;
+	virtual void ModifyState(std::unique_ptr<CGameStateBase> pState) = 0;
 
 	virtual void PopState() = 0;
 

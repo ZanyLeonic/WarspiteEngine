@@ -21,7 +21,7 @@ bool CGameObjectDictionary::RegisterType(std::string typeID, IObjectFactory<IGam
 }
 
 // Returns a GameObject that our GameObjectFactory created
-std::shared_ptr<IGameObject> CGameObjectDictionary::Create(std::string typeID)
+std::unique_ptr<IGameObject> CGameObjectDictionary::Create(std::string typeID)
 {
 	auto it = m_creators.find(typeID);
 

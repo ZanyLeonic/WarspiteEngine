@@ -9,7 +9,7 @@ template<class T>
 class IObjectFactory
 {
 public:
-	virtual std::shared_ptr<T> Create() = 0;
+	virtual std::unique_ptr<T> Create() = 0;
 	virtual size_t GetObjectSize() = 0;
 };
 #endif // ifndef __OBJECTFACTORY_H__

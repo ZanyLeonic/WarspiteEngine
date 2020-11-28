@@ -129,7 +129,7 @@ PYBIND11_MODULE(engine, m) {
 
 	py::class_<SGameObject>(m, "GameObject", "A container that allows interaction with more misc aspects of the Engine's APIs. (Do not call this - use engine.game)")
 		.def(py::init<CBaseGame*>())
-		.def("get_current_state", &SGameObject::GetCurrentState, "Returns the state that is currently loaded")
+		// .def("get_current_state", &SGameObject::GetCurrentState, "Returns the state that is currently loaded")
 		.def("change_state", &SGameObject::ChangeState, "Changes the current state to the specified state")
 		.def("get_player", &SGameObject::GetPlayer, "Returns the currently registered player object")
 		.def("load_texture", &SGameObject::LoadTexture, "Loads the specified texture into the manager with the specified ID");
@@ -531,25 +531,22 @@ bool SInputObject::RemoveAllAxis() const
 	return true;
 }
 
-std::unique_ptr<SWarState> SGameObject::GetCurrentState() const
+std::string SGameObject::GetCurrentStateID() const
 {
-	if (!IsValid()) return nullptr;
-	return std::unique_ptr<SWarState>(new SWarState(m_inst->GetStateManager()->GetCurrentState().get()));
+	if (!IsValid()) return "";
+	return m_inst->GetStateManager()->GetCurrentStateID();
 }
 
 bool SGameObject::ChangeState(std::string stateID) const
 {
-	if (m_inst->GetStateManager()->GetCurrentState()->GetStateID() != stateID)
-	{
-		m_inst->GetStateManager()->ModifyState(CGameStateDictionary::Instance()->Create(stateID));
-		return true;
-	}
-	return false;
+	if (!IsValid()) return false;
+	m_inst->GetStateManager()->ModifyState(std::move(CGameStateDictionary::Instance()->Create(stateID)));
+	return true;
 }
 
 std::unique_ptr<SWarObject> SGameObject::GetPlayer() const
 {
-	if (m_inst->GetPlayer() == nullptr) return nullptr;
+	/*if (m_inst->GetPlayer() == nullptr) return nullptr;
 
 	std::shared_ptr<CPlayState> pState = std::dynamic_pointer_cast<CPlayState>(m_inst->GetStateManager()->GetCurrentState());
 	if (!pState) return nullptr;
@@ -562,7 +559,7 @@ std::unique_ptr<SWarObject> SGameObject::GetPlayer() const
 		if (pNew == nullptr) return nullptr;
 
 		return std::unique_ptr<SWarObject>(pNew);
-	}
+	}*/
 
 	return nullptr;
 }

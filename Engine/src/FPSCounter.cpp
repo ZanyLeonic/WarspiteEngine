@@ -10,6 +10,13 @@ CFPSCounter::CFPSCounter()
 	CFontManager::Instance()->LoadFont(CEngineFileSystem::ResolvePath("Roboto.json", CEngineFileSystem::EPathType::FONTS), "Regular", 16);
 }
 
+CFPSCounter::~CFPSCounter()
+{
+	if (CTextureManager::Instance()->m_textureMap[m_textureID] != nullptr)
+		SDL_DestroyTexture(CTextureManager::Instance()->m_textureMap[m_textureID]->GetTexture());
+	CFontManager::Instance()->RemoveFont("Roboto", "Regular", 16);
+}
+
 void CFPSCounter::Load(const CObjectParams* pParams)
 {
 	// Do nothing.
