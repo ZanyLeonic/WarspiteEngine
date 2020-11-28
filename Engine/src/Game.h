@@ -12,6 +12,7 @@
 
 #include "EngineTypes.h"
 #include "GameStateManager.h"
+#include "GarbageCollector.h"
 #include "MainMenuState.h"
 #include "Vector2D.h"
 
@@ -54,6 +55,7 @@ public:
 	virtual SDL_Renderer* const GetRenderer() { return m_pRenderer; }
 	virtual SDL_Window* const GetWindow() { return m_pWindow; }
 	virtual CGameStateManager* const GetStateManager() { return m_pGameStateManager; }
+	virtual CGarbageCollector* const GetGarbageCollector() { return m_pGarbageCollector; }
 
 	virtual CVector2D const GetViewportSize() { return m_viewportSize; }
 
@@ -70,6 +72,7 @@ public:
 
 private:
 	CGameStateManager* m_pGameStateManager;
+	CGarbageCollector* m_pGarbageCollector;
 
 	SDL_Window* m_pWindow = nullptr;
 	SDL_Renderer* m_pRenderer = nullptr;

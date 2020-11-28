@@ -8,6 +8,7 @@ struct SDL_Renderer;
 struct SDL_Window;
 
 class CGameStateManager;
+class CGarbageCollector;
 class CVector2D;
 class IGameObject;
 
@@ -27,6 +28,7 @@ public:
     virtual SDL_Renderer* const GetRenderer() = 0;
     virtual SDL_Window* const GetWindow() = 0;
     virtual CGameStateManager* const GetStateManager() = 0;
+    virtual CGarbageCollector* const GetGarbageCollector() = 0;
 
     virtual CVector2D const GetViewportSize() = 0;
 

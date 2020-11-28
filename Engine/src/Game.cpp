@@ -78,6 +78,8 @@ bool CBaseGame::Init(const char* title, int xpos, int ypos, int width, int heigh
 				m_pGameStateManager = new CGameStateManager();
 				m_pGameStateManager->ModifyState(CGameStateDictionary::Instance()->Create(SID_MM));
 				
+				m_pGarbageCollector = new CGarbageCollector();
+
 				m_argc = argc;
 				m_argv = argv;
 			}
@@ -198,6 +200,7 @@ void CBaseGame::OnThink()
 
 	// Call the current GameState functionality via the GameStateManager.
 	m_pGameStateManager->OnThink();
+	m_pGarbageCollector->OnThink();
 	
 	CCamera::Instance()->OnThink();
 }
@@ -218,6 +221,9 @@ void CBaseGame::Destroy()
 	// Destroy the Renderer before the window
 	SDL_DestroyRenderer(m_pRenderer);
 	SDL_DestroyWindow(m_pWindow);
+
+	// Clean up any left stuff before closing completely.
+	m_pGarbageCollector->Destroy();
 
 	SDL_Quit();
 }

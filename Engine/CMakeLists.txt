@@ -22,6 +22,7 @@ set(WarspiteEngine_Src
         src/GameStateBase.cpp
         src/GameStateDictionary.cpp
         src/GameStateManager.cpp
+		src/GarbageCollector.cpp
         src/InputHandler.cpp
         src/InputState.cpp
         src/Level.cpp
@@ -65,6 +66,7 @@ set(WarspiteEngine_Header
         src/GameStateBase.h
         src/GameStateDictionary.h
         src/GameStateManager.h
+		src/GarbageCollector.h
         src/InputHandler.h
         src/InputState.h
         ../shared/src/Layer.h

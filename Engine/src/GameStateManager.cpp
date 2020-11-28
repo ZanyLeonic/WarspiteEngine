@@ -1,5 +1,7 @@
 #include "GameStateManager.h"
 #include "GameStateBase.h"
+#include "GarbageCollector.h"
+#include "Game.h"
 
 std::shared_ptr<CGameStateBase> CGameStateManager::GetCurrentState()
 {
@@ -25,6 +27,8 @@ void CGameStateManager::PopState()
 		// returns true.
 		if (m_GameStates.back()->OnEnd())
 		{
+			CBaseGame::Instance()->GetGarbageCollector()->MarkStateForDeletion(m_GameStates.back());
+
 			// ...and remove its Pointer from the queue.
 			m_GameStates.pop_back();
 		}
@@ -59,6 +63,7 @@ void CGameStateManager::ModifyState(std::shared_ptr<CGameStateBase> pState)
 
 		if (m_GameStates.back()->OnEnd())
 		{
+			CBaseGame::Instance()->GetGarbageCollector()->MarkStateForDeletion(m_GameStates.back());
 			m_GameStates.pop_back();
 		}
 	}

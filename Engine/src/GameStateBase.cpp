@@ -42,9 +42,16 @@ void CGameStateBase::OnThink()
 {
 	for (size_t i = 0; i < m_GameObjects.size(); i++)
 	{	
-		if (m_GameObjects[i] && m_shouldTick) 
+		if (m_GameObjects.size() < 15 && m_shouldTick)
 			m_GameObjects[i]->OnThink();
+		else
+		{
+			spdlog::warn("Warning! Invalid State caught!");
+			return;
+		}
 	}
+
+	m_bTickingFinished = !m_shouldTick;
 }
 
 void CGameStateBase::Draw()
@@ -54,4 +61,6 @@ void CGameStateBase::Draw()
 		if (m_GameObjects[i] && m_shouldDraw)
 			m_GameObjects[i]->Draw();
 	}
+
+	m_bDrawingFinished = !m_shouldDraw;
 }

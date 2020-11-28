@@ -25,5 +25,8 @@ public:
 
 	virtual bool ShouldBeTicking() const = 0;
 	virtual bool ShouldBeDrawing() const = 0;
+
+	virtual bool StateFinishedTicking() const = 0;
+	virtual bool StateFinishedDrawing() const = 0;
 };
 #endif

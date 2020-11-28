@@ -34,6 +34,9 @@ public:
 	
 	virtual bool ShouldBeTicking() const { return m_shouldTick; }
 	virtual bool ShouldBeDrawing() const { return m_shouldDraw; }
+
+	virtual bool StateFinishedTicking() const { return m_bTickingFinished; }
+	virtual bool StateFinishedDrawing() const { return m_bDrawingFinished; }
 	
 protected:
 	std::vector<std::shared_ptr<IGameObject>> m_GameObjects;
@@ -42,6 +45,9 @@ protected:
 
 	bool m_shouldTick = false;
 	bool m_shouldDraw = false;
+
+	bool m_bTickingFinished = true;
+	bool m_bDrawingFinished = true;
 	
 	std::string s_UIID;
 };
