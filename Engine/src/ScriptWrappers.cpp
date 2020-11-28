@@ -362,17 +362,17 @@ std::unique_ptr<SWarObject> SLevelObject::CreateObject(std::string factID, CObje
 {
 	if (!IsValid()) nullptr;
 	// Create the object and load the params provided.
-	IGameObject* pObj = CGameObjectDictionary::Instance()->Create(factID);
+	std::shared_ptr<IGameObject> pObj = CGameObjectDictionary::Instance()->Create(factID);
 	if (pObj == nullptr) return nullptr; // a bit redundant but it prevents a reference of a nullptr
 
 	pObj->Load(&params);
 
-	std::vector<IGameObject*>* pSL = m_inst->GetScriptLayer()->GetGameObjects();
+	std::vector<std::shared_ptr<IGameObject>>* pSL = m_inst->GetScriptLayer()->GetGameObjects();
 
 	pSL->push_back(pObj);
 	pObj->OnPlay();
 
-	auto* pNew = new SWarObject(dynamic_cast<CWarspiteObject*>(pObj));
+	auto* pNew = new SWarObject(dynamic_cast<CWarspiteObject*>(pObj.get()));
 	if (pNew == nullptr) return nullptr;
 
 	// lul will this work? nope.
@@ -383,11 +383,10 @@ std::unique_ptr<SWarObject> SLevelObject::FindGameObject(std::string id)
 {
 	if (!IsValid()) return nullptr;
 
-	IGameObject* found = CWarspiteUtil::FindGameObject(m_inst, id);
-
+	std::shared_ptr<IGameObject> found = CWarspiteUtil::FindGameObject(m_inst, id);
 	if (found)
 	{
-		auto* pNew = new SWarObject(dynamic_cast<CWarspiteObject*>(found));
+		auto* pNew = new SWarObject(dynamic_cast<CWarspiteObject*>(found.get()));
 		if (pNew == nullptr) return nullptr;
 
 		return std::unique_ptr<SWarObject>(pNew);
@@ -396,9 +395,9 @@ std::unique_ptr<SWarObject> SLevelObject::FindGameObject(std::string id)
 	return nullptr;
 }
 
-std::vector<std::vector<IGameObject*>*> SLevelObject::GetGameObjects() const
+std::vector<std::vector<std::shared_ptr<IGameObject>>*> SLevelObject::GetGameObjects() const
 {
-	if (!IsValid()) return std::vector<std::vector<IGameObject*>*>();
+	if (!IsValid()) return std::vector<std::vector<std::shared_ptr<IGameObject>>*>();
 
 	return m_inst->GetGameObjects();
 }
@@ -535,7 +534,7 @@ bool SInputObject::RemoveAllAxis() const
 std::unique_ptr<SWarState> SGameObject::GetCurrentState() const
 {
 	if (!IsValid()) return nullptr;
-	return std::unique_ptr<SWarState>(new SWarState(m_inst->GetStateManager()->GetCurrentState()));
+	return std::unique_ptr<SWarState>(new SWarState(m_inst->GetStateManager()->GetCurrentState().get()));
 }
 
 bool SGameObject::ChangeState(std::string stateID) const
@@ -552,14 +551,14 @@ std::unique_ptr<SWarObject> SGameObject::GetPlayer() const
 {
 	if (m_inst->GetPlayer() == nullptr) return nullptr;
 
-	CPlayState* pState = dynamic_cast<CPlayState*>(m_inst->GetStateManager()->GetCurrentState());
+	std::shared_ptr<CPlayState> pState = std::dynamic_pointer_cast<CPlayState>(m_inst->GetStateManager()->GetCurrentState());
 	if (!pState) return nullptr;
 	
-	IGameObject* found = CWarspiteUtil::FindGameObject(pState->GetLoadedLevel(), "Player");
+	std::shared_ptr<IGameObject> found = CWarspiteUtil::FindGameObject(pState->GetLoadedLevel(), "Player");
 
 	if (found)
 	{
-		auto* pNew = new SWarObject(dynamic_cast<CWarspiteObject*>(found));
+		auto* pNew = new SWarObject(dynamic_cast<CWarspiteObject*>(found.get()));
 		if (pNew == nullptr) return nullptr;
 
 		return std::unique_ptr<SWarObject>(pNew);

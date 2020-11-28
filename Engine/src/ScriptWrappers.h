@@ -183,7 +183,7 @@ struct SLevelObject : SBaseWrapper<CLevel>
 	CVector2D GetLevelSize() const;
 	std::unique_ptr<SWarObject> CreateObject(std::string factID, CObjectParams params) const;
 	std::unique_ptr<SWarObject> FindGameObject(std::string id);
-	std::vector<std::vector<IGameObject*>*> GetGameObjects() const;
+	std::vector<std::vector<std::shared_ptr<IGameObject>>*> GetGameObjects() const;
 };
 
 struct SCameraObject : SBaseWrapper<CCamera>

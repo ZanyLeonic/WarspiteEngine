@@ -1,7 +1,7 @@
 #include "GameStateManager.h"
 #include "GameStateBase.h"
 
-CGameStateBase* CGameStateManager::GetCurrentState()
+std::shared_ptr<CGameStateBase> CGameStateManager::GetCurrentState()
 {
 	if (!m_GameStates.empty())
 	{
@@ -10,7 +10,7 @@ CGameStateBase* CGameStateManager::GetCurrentState()
 	return 0;
 }
 
-void CGameStateManager::PushState(CGameStateBase* pState)
+void CGameStateManager::PushState(std::shared_ptr<CGameStateBase> pState)
 {
 	m_GameStates.push_back(pState);
 	m_GameStates.back()->OnPlay();
@@ -25,8 +25,6 @@ void CGameStateManager::PopState()
 		// returns true.
 		if (m_GameStates.back()->OnEnd())
 		{
-			// Delete the actual object in memory
-			delete m_GameStates.back();
 			// ...and remove its Pointer from the queue.
 			m_GameStates.pop_back();
 		}
@@ -35,7 +33,7 @@ void CGameStateManager::PopState()
 
 void CGameStateManager::Draw()
 {
-	if (!m_GameStates.empty())
+	if (!m_GameStates.empty() && m_GameStates.back())
 	{
 		m_GameStates.back()->Draw();
 	}
@@ -43,13 +41,13 @@ void CGameStateManager::Draw()
 
 void CGameStateManager::OnThink()
 {
-	if (!m_GameStates.empty())
+	if (!m_GameStates.empty() && m_GameStates.back())
 	{
 		m_GameStates.back()->OnThink();
 	}
 }
 
-void CGameStateManager::ModifyState(CGameStateBase* pState)
+void CGameStateManager::ModifyState(std::shared_ptr<CGameStateBase> pState)
 {
 	if (!m_GameStates.empty())
 	{
@@ -61,7 +59,6 @@ void CGameStateManager::ModifyState(CGameStateBase* pState)
 
 		if (m_GameStates.back()->OnEnd())
 		{
-			delete m_GameStates.back();
 			m_GameStates.pop_back();
 		}
 	}

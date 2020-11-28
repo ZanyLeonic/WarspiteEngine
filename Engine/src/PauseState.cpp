@@ -32,10 +32,10 @@ void CPauseState::SetCallbacks(const std::vector<HButtonCallback>& callbacks)
 
 	for (size_t i = 0; i < m_GameObjects.size(); i++)
 	{
-		if (dynamic_cast<CButton*>(m_GameObjects[i]))
+		std::shared_ptr<CButton> pButton = std::dynamic_pointer_cast<CButton>(m_GameObjects[i]);
+
+		if (pButton)
 		{
-			CButton* pButton =
-				dynamic_cast<CButton*>(m_GameObjects[i]);
 
 			pButton->OnClick(callbacks[pButton->GetOnClickID()]);
 			pButton->OnEnter(callbacks[pButton->GetOnEnterID()]);

@@ -2,6 +2,7 @@
 #ifndef __IGAMESTATEMANAGER_H__
 #define __IGAMESTATEMANAGER_H__
 
+#include <memory>
 #include "EngineTypes.h"
 
 class CGameStateBase;
@@ -9,10 +10,10 @@ class CGameStateBase;
 class IGameStateManager
 {
 public:
-	virtual CGameStateBase* GetCurrentState() = 0;
+	virtual std::shared_ptr<CGameStateBase> GetCurrentState() = 0;
 
-	virtual void PushState(CGameStateBase* pState) = 0;
-	virtual void ModifyState(CGameStateBase* pState) = 0;
+	virtual void PushState(std::shared_ptr<CGameStateBase> pState) = 0;
+	virtual void ModifyState(std::shared_ptr<CGameStateBase> pState) = 0;
 
 	virtual void PopState() = 0;
 

@@ -33,21 +33,25 @@ bool CGameStateBase::OnEnd()
 	return true;
 }
 
+CGameStateBase::~CGameStateBase()
+{
+	m_GameObjects.clear();
+}
+
 void CGameStateBase::OnThink()
 {
-	if (!m_shouldTick) return;
 	for (size_t i = 0; i < m_GameObjects.size(); i++)
 	{	
-		if (!m_GameObjects[i]->OnThink()) return;
+		if (m_GameObjects[i] && m_shouldTick) 
+			m_GameObjects[i]->OnThink();
 	}
 }
 
 void CGameStateBase::Draw()
 {
-	if (!m_shouldDraw) return;
-
 	for (size_t i = 0; i < m_GameObjects.size(); i++)
 	{
-		m_GameObjects[i]->Draw();
+		if (m_GameObjects[i] && m_shouldDraw)
+			m_GameObjects[i]->Draw();
 	}
 }

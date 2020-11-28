@@ -12,6 +12,6 @@ class IGameObjectDictionary
 {
 public:
 	virtual bool RegisterType(std::string typeID, IObjectFactory<IGameObject>* pCreator) = 0;
-	virtual IGameObject* Create(std::string typeID) = 0;
+	virtual std::shared_ptr<IGameObject> Create(std::string typeID) = 0;
 };
 #endif

@@ -1,4 +1,6 @@
 #include "WarspiteUtil.h"
+
+#include <memory>
 #include <fstream>
 #include <sstream>
 #include <vector>
@@ -95,9 +97,9 @@ std::vector<std::string> CWarspiteUtil::SplitString(const std::string& inStr, co
 	return out;
 }
 
-IGameObject* CWarspiteUtil::FindGameObject(CLevel* pLevel, std::string id)
+std::shared_ptr<IGameObject> CWarspiteUtil::FindGameObject(CLevel* pLevel, std::string id)
 {
-	std::vector<std::vector<IGameObject*>*> m_objects = pLevel->GetGameObjects();
+	std::vector<std::vector<std::shared_ptr<IGameObject>>*> m_objects = pLevel->GetGameObjects();
 
 	// Add the ScriptLayer
 	m_objects.push_back(pLevel->GetScriptLayer()->GetGameObjects());
@@ -108,7 +110,7 @@ IGameObject* CWarspiteUtil::FindGameObject(CLevel* pLevel, std::string id)
 		if (!m_objects[i]) continue;
 
 		// Get an rvalue of the list of GameObject's for the iterated layer
-		std::vector<IGameObject*>& ir = *m_objects[i];
+		std::vector<std::shared_ptr<IGameObject>>& ir = *m_objects[i];
 
 		for (size_t j = 0; j < ir.size(); j++)
 		{

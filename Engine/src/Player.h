@@ -30,7 +30,7 @@ private:
 
 	void DecideFrame();
 
-	std::vector<std::vector<IGameObject*>*> m_objects;
+	std::vector<std::vector<std::shared_ptr<IGameObject>>*> m_objects;
 
 	CVector2D lastPosition;
 	CVector2D nextPosition;

@@ -22,7 +22,8 @@ CPlayer::CPlayer()
 void CPlayer::OnPlay()
 {
 	// Are we in the PlayState?
-	CPlayState* ps = dynamic_cast<CPlayState*>(CBaseGame::Instance()->GetStateManager()->GetCurrentState());
+	std::shared_ptr<CPlayState> ps 
+		= std::dynamic_pointer_cast<CPlayState>(CBaseGame::Instance()->GetStateManager()->GetCurrentState());
 
 	CInputHandler::Instance()->SetAxisValue("MoveForward", SDL_SCANCODE_UP, -1.f);
 	CInputHandler::Instance()->SetAxisValue("MoveForward", SDL_SCANCODE_DOWN, 1.f);
@@ -182,12 +183,12 @@ bool CPlayer::IsPositionFree(CVector2D* pNext)
 		if (!m_objects[i]) continue;
 
 		// Get an rvalue of the list of GameObject's for the iterated layer
-		std::vector<IGameObject*>& ir = *m_objects[i];
+		std::vector<std::shared_ptr<IGameObject>>& ir = *m_objects[i];
 
 		for (size_t j = 0; j < ir.size(); j++)
 		{
 			// Check if the GameObject is in the way and isn't us + collision flag
-			if (ir[j] != this && ir[j]->GetPosition() == nPos && ir[j]->ShouldCollide())
+			if (ir[j].get() != this && ir[j]->GetPosition() == nPos && ir[j]->ShouldCollide())
 			{
 				return false;
 			}
@@ -195,7 +196,8 @@ bool CPlayer::IsPositionFree(CVector2D* pNext)
 	}
 
 	// Also do a check if we are going off the level
-	CPlayState* pPS = static_cast<CPlayState*>(CBaseGame::Instance()->GetStateManager()->GetCurrentState());
+	std::shared_ptr<CPlayState> pPS = std::static_pointer_cast<CPlayState>(CBaseGame::Instance()->GetStateManager()->GetCurrentState());
+	
 	if (pPS != nullptr)
 	{
 		CLevel* pLevel = pPS->GetLoadedLevel();

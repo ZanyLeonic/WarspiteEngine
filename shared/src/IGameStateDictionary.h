@@ -3,6 +3,7 @@
 #define __IGAMESTATEDICT_H_
 
 #include <string>
+#include <memory>
 #include "EngineTypes.h"
 #include "ObjectFactory.h"
 
@@ -12,6 +13,6 @@ class IGameStateDictionary
 {
 public:
 	virtual bool RegisterType(std::string stateID, IObjectFactory<CGameStateBase>* pCreator) = 0;
-	virtual CGameStateBase* Create(std::string stateID) = 0;
+	virtual std::shared_ptr<CGameStateBase> Create(std::string stateID) = 0;
 };
 #endif

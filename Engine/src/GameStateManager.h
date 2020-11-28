@@ -2,6 +2,7 @@
 #ifndef __GAMESTATEMANAGER_H__
 #define __GAMESTATEMANAGER_H__
 
+#include <memory>
 #include <vector>
 #include "IGameStateManager.h"
 
@@ -10,10 +11,10 @@ class CGameStateBase;
 class CGameStateManager : public IGameStateManager
 {
 public:
-	CGameStateBase* GetCurrentState();
+	std::shared_ptr<CGameStateBase> GetCurrentState();
 
-	virtual void PushState(CGameStateBase* pState);
-	virtual void ModifyState(CGameStateBase* pState);
+	virtual void PushState(std::shared_ptr<CGameStateBase> pState);
+	virtual void ModifyState(std::shared_ptr<CGameStateBase> pState);
 
 	virtual void PopState();
 
@@ -21,7 +22,7 @@ public:
 	virtual void OnThink();
 
 private:
-	std::vector<CGameStateBase*> m_GameStates;
+	std::vector<std::shared_ptr<CGameStateBase>> m_GameStates;
 };
 
 #endif

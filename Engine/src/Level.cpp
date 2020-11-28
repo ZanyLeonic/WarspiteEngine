@@ -48,9 +48,9 @@ void CLevel::Draw()
 	m_scriptLayer->Draw();
 }
 
-std::vector<std::vector<IGameObject*>*> CLevel::GetGameObjects()
+std::vector<std::vector<std::shared_ptr<IGameObject>>*> CLevel::GetGameObjects()
 {
-	std::vector<std::vector<IGameObject*>*> out;
+	std::vector<std::vector<std::shared_ptr<IGameObject>>*> out;
 	
 	for(size_t i = 0; i < m_layers.size(); i++)
 	{

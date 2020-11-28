@@ -2,6 +2,7 @@
 #ifndef __CWarspiteUtil_H__
 #define __CWarspiteUtil_H__
 
+#include <memory>
 #include <string>
 #include <stdexcept>
 #include <vector>
@@ -20,7 +21,7 @@ public:
 
 	static std::vector<std::string> SplitString(const std::string& inStr, const char& inD);
 
-	static IGameObject* FindGameObject(CLevel* pLevel, std::string id);
+	static std::shared_ptr<IGameObject> FindGameObject(CLevel* pLevel, std::string id);
 	static bool GetParam(char** argv, int argc, const char* param, char*& returnval);
 };
 

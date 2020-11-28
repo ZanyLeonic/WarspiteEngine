@@ -20,8 +20,8 @@ public:
 	void SetY(float y) { m_y = y; }
 
 	// Returns the magnitude of the vector
-	float Length() const { return sqrt(pow(m_x, 2) + pow(m_y, 2)); }
-	int Length_i() const { return static_cast<int>(sqrt(pow(m_x, 2) + pow(m_y, 2))); }
+	float Length() const { return sqrtf(powf(m_x, 2) + powf(m_y, 2)); }
+	int Length_i() const { return static_cast<int>(sqrtf(powf(m_x, 2) + powf(m_y, 2))); }
 	void Normalize() 
 	{
 		float l = Length();

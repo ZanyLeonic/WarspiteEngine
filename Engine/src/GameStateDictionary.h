@@ -27,7 +27,7 @@ public:
 	}
 
 	bool RegisterType(std::string stateID, IObjectFactory<CGameStateBase>* pCreator);
-	CGameStateBase* Create(std::string stateID);
+	std::shared_ptr<CGameStateBase> Create(std::string stateID);
 private:
 	std::map<std::string, IObjectFactory<CGameStateBase>*> m_creators;
 };
@@ -44,9 +44,9 @@ public:
 	}
 
 	// Simply returns the type our template is.
-	CGameStateBase* Create()
+	std::shared_ptr<CGameStateBase> Create()
 	{
-		return new T;
+		return std::make_shared<T>();
 	}
 
 	// Returns the size of our template

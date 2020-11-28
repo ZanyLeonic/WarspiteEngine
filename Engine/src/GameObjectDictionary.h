@@ -27,7 +27,7 @@ public:
 	}
 
 	virtual bool RegisterType(std::string typeID, IObjectFactory<IGameObject>* pCreator);
-	virtual IGameObject* Create(std::string typeID);
+	virtual std::shared_ptr<IGameObject> Create(std::string typeID);
 private:
 	std::map<std::string, IObjectFactory<IGameObject>*> m_creators;
 };
@@ -46,9 +46,9 @@ public:
 	}
 
 	// Simply returns the type our template is.
-	IGameObject* Create()
+	std::shared_ptr<IGameObject> Create()
 	{
-		return new T;
+		return std::make_shared<T>();
 	}
 
 	// Returns the size of our template

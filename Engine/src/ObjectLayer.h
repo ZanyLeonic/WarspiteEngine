@@ -2,6 +2,7 @@
 #ifndef __OBJECTLAYER_H__
 #define __OBJECTLAYER_H__
 #include <vector>
+#include <memory>
 
 #include "Layer.h"
 #include "GameObject.h"
@@ -15,12 +16,12 @@ public:
 	virtual void OnThink();
 	virtual void Draw();
 
-	std::vector<IGameObject*>* GetGameObjects()
+	std::vector<std::shared_ptr<IGameObject>>* GetGameObjects()
 	{
 		return &m_GameObjects;
 	}
 private:
-	std::vector<IGameObject*> m_GameObjects;
+	std::vector<std::shared_ptr<IGameObject>> m_GameObjects;
 };
 
 #endif // ifndef __OBJECTLAYER_H__

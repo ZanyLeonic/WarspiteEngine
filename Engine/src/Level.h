@@ -5,6 +5,7 @@
 class IGameObject;
 class CObjectLayer;
 
+#include <memory>
 #include <string>
 #include <vector>
 
@@ -56,7 +57,7 @@ public:
 		return m_path;
 	}
 
-	std::vector<std::vector<IGameObject*>*> GetGameObjects();
+	std::vector<std::vector<std::shared_ptr<IGameObject>>*> GetGameObjects();
 	CObjectLayer* GetScriptLayer() const { return m_scriptLayer; }
 	
 	CVector2D m_LevelSize;

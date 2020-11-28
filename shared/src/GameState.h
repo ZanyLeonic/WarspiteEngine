@@ -4,6 +4,7 @@
 
 #include <string>
 #include <vector>
+#include <memory>
 
 class IGameObject;
 
@@ -18,7 +19,7 @@ public:
 
 	virtual std::string GetStateID() const = 0;
 
-	virtual std::vector<IGameObject*> GetGameObjects() const = 0;
+	virtual std::vector<std::shared_ptr<IGameObject>> GetGameObjects() const = 0;
 	virtual std::vector<std::string> GetLoadedTextures() const = 0;
 	virtual std::vector<std::string> GetLoadedScripts() const = 0;
 
