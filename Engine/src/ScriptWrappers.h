@@ -230,6 +230,7 @@ struct SGameObject : SBaseWrapper<CBaseGame>
 
 	std::string GetCurrentStateID() const;
 	bool ChangeState(std::string stateID) const;
+	bool IsColliding(CVector2D v1) const;
 	std::unique_ptr<SWarObject> GetPlayer() const;
 	bool LoadTexture(std::string texPath, std::string texID) const;
 };

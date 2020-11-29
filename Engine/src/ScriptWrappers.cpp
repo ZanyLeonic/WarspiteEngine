@@ -129,7 +129,8 @@ PYBIND11_MODULE(engine, m) {
 
 	py::class_<SGameObject>(m, "GameObject", "A container that allows interaction with more misc aspects of the Engine's APIs. (Do not call this - use engine.game)")
 		.def(py::init<CBaseGame*>())
-		// .def("get_current_state", &SGameObject::GetCurrentState, "Returns the state that is currently loaded")
+		.def("get_current_state_id", &SGameObject::GetCurrentStateID, "Returns the id of the state that is currently loaded")
+		.def("is_colliding", &SGameObject::IsColliding, "Returns if the specified Vector2D will collide with any other GameObject.")
 		.def("change_state", &SGameObject::ChangeState, "Changes the current state to the specified state")
 		.def("get_player", &SGameObject::GetPlayer, "Returns the currently registered player object")
 		.def("load_texture", &SGameObject::LoadTexture, "Loads the specified texture into the manager with the specified ID");
@@ -391,14 +392,12 @@ std::unique_ptr<SWarObject> SLevelObject::FindGameObject(std::string id)
 
 		return std::unique_ptr<SWarObject>(pNew);
 	}
-
 	return nullptr;
 }
 
 std::vector<std::vector<std::shared_ptr<IGameObject>>*> SLevelObject::GetGameObjects() const
 {
 	if (!IsValid()) return std::vector<std::vector<std::shared_ptr<IGameObject>>*>();
-
 	return m_inst->GetGameObjects();
 }
 
@@ -544,24 +543,17 @@ bool SGameObject::ChangeState(std::string stateID) const
 	return true;
 }
 
+bool SGameObject::IsColliding(CVector2D v1) const
+{
+	if (!IsValid()) return false;
+	return m_inst->GetStateManager()->IsColliding(v1);
+}
+
 std::unique_ptr<SWarObject> SGameObject::GetPlayer() const
 {
-	/*if (m_inst->GetPlayer() == nullptr) return nullptr;
+	if (m_inst->GetPlayer() == nullptr) return nullptr;
 
-	std::shared_ptr<CPlayState> pState = std::dynamic_pointer_cast<CPlayState>(m_inst->GetStateManager()->GetCurrentState());
-	if (!pState) return nullptr;
-	
-	std::shared_ptr<IGameObject> found = CWarspiteUtil::FindGameObject(pState->GetLoadedLevel(), "Player");
-
-	if (found)
-	{
-		auto* pNew = new SWarObject(dynamic_cast<CWarspiteObject*>(found.get()));
-		if (pNew == nullptr) return nullptr;
-
-		return std::unique_ptr<SWarObject>(pNew);
-	}*/
-
-	return nullptr;
+	return std::unique_ptr<SWarObject>(new SWarObject(dynamic_cast<CWarspiteObject*>(m_inst->GetPlayer())));
 }
 
 bool SGameObject::LoadTexture(std::string texPath, std::string texID) const

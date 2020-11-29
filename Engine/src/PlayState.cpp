@@ -223,6 +223,18 @@ bool CPlayState::IsColliding(CVector2D v1)
 
 	if (pLevel)
 	{
+		// Script layer has priority
+		std::vector<std::shared_ptr<IGameObject>>  sObjs = *pLevel->GetScriptLayer()->GetGameObjects();
+
+		for (size_t k = 0; k < sObjs.size(); k++)
+		{
+			// Check if the GameObject is in the way and isn't us + collision flag
+			if (sObjs[k].get() != CBaseGame::Instance()->GetPlayer() && sObjs[k]->GetPosition() == v1 && sObjs[k]->ShouldCollide())
+			{
+				return true;
+			}
+		}
+
 		// If so - we can grab the current level and its Layers
 		std::vector<ILayer*> objs = *pLevel->GetLayers();
 

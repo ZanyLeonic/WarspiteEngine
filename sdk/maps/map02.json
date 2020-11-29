@@ -140,12 +140,12 @@
         {
          "name":"Player",
          "type":"file",
-         "value":"..\/..\/Game\/assets\/textures\/player.png"
+         "value":"..\/textures\/player.png"
         }, 
         {
          "name":"TestObject",
          "type":"file",
-         "value":"..\/..\/game\/assets\/textures\/dev\/Black_22x27.bmp"
+         "value":"..\/textures\/dev\/Black_22x27.bmp"
         }, 
         {
          "name":"TestScript",
@@ -158,7 +158,7 @@
  "tilesets":[
         {
          "firstgid":1,
-         "source":"TestTiles.json"
+         "source":"..\/tilesets\/TestTiles.json"
         }],
  "tilewidth":32,
  "type":"map",
