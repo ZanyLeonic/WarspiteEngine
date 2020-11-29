@@ -198,11 +198,6 @@ void CPlayState::Draw()
 
 void CPlayState::OnThink()
 {
-	//std::cout << '\r' << "Movement Axis Values: "
-	//	<< " MoveForward: " << CInputHandler::Instance()->GetAxisValue("MoveForward")
-	//	<< " MoveRight:   " << CInputHandler::Instance()->GetAxisValue("MoveRight")
-	//	<< std::flush << "     ";
-
 	if (pLevel != 0)
 		pLevel->OnThink();
 
@@ -220,6 +215,37 @@ bool CPlayState::OnEnd()
 	CGameStateBase::OnEnd();
 
 	return true;
+}
+
+bool CPlayState::IsColliding(CVector2D v1)
+{
+	bool sGameCollide = false;
+
+	if (pLevel)
+	{
+		// If so - we can grab the current level and its Layers
+		std::vector<ILayer*> objs = *pLevel->GetLayers();
+
+		for (size_t i = 0; i < objs.size(); i++)
+		{
+			// Only care about the ObjectLayers - since that's what we are going to collide with.
+			CObjectLayer* obl = dynamic_cast<CObjectLayer*>(objs[i]);
+			if (!obl) continue;
+			
+			std::vector<std::shared_ptr<IGameObject>> cObjs = *obl->GetGameObjects();
+
+			for (size_t j = 0; j < cObjs.size(); j++)
+			{
+				// Check if the GameObject is in the way and isn't us + collision flag
+				if (cObjs[j].get() != CBaseGame::Instance()->GetPlayer() && cObjs[j]->GetPosition() == v1 && cObjs[j]->ShouldCollide())
+				{
+					return true;
+				}
+			}
+		}
+	}
+
+	return false;
 }
 
 void CPlayState::s_PlayCallback(SStreamingAudioData* as)

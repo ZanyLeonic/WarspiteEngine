@@ -21,37 +21,17 @@ CPlayer::CPlayer()
 
 void CPlayer::OnPlay()
 {
-	// Are we in the PlayState?
-	bool ps 
-		= CBaseGame::Instance()->GetStateManager()->GetCurrentStateID() == SID_PLAY;
-
+	// Input binding
 	CInputHandler::Instance()->SetAxisValue("MoveForward", SDL_SCANCODE_UP, -1.f);
 	CInputHandler::Instance()->SetAxisValue("MoveForward", SDL_SCANCODE_DOWN, 1.f);
 	CInputHandler::Instance()->SetAxisValue("MoveRight", SDL_SCANCODE_LEFT, -1.f);
 	CInputHandler::Instance()->SetAxisValue("MoveRight", SDL_SCANCODE_RIGHT, 1.f);
 
-	if (ps)
-	{
-		//// If so - we can grab the current level and its Layers
-		//std::vector<ILayer*> objs = *ps->GetLoadedLevel()->GetLayers();
-
-		//for (size_t i = 0; i < objs.size(); i++)
-		//{
-		//	// Only care about the ObjectLayers - since that's what we are going to collide with.
-		//	CObjectLayer* obl = dynamic_cast<CObjectLayer*>(objs[i]);
-		//	if (!obl) continue;
-
-		//	// Add each GameObject vector to a vector of vectors.
-		//	m_objects.push_back(obl->GetGameObjects());
-		//}
-	}
+	CBaseGame::Instance()->SetPlayer(this);
 }
 
 void CPlayer::Load(const CObjectParams* pParams)
 {
-	//CInputHandler::Instance()->AddActionKeyDown(SDL_SCANCODE_C, std::bind(&CPlayer::KeyDown, this));
-	//CInputHandler::Instance()->AddActionKeyUp(SDL_SCANCODE_C, std::bind(&CPlayer::KeyUp, this));
-
 	CWarspiteObject::Load(pParams);
 }
 
@@ -98,16 +78,6 @@ void CPlayer::Draw()
 	}
 }
 
-//void CPlayer::KeyDown(SDL_Scancode& e)
-//{
-//	spdlog::info("Key has been pressed down!");
-//}
-//
-//void CPlayer::KeyUp(SDL_Scancode& e)
-//{
-//	spdlog::info("Key has been released!");
-//}
-
 void CPlayer::HandleInput()
 {
 	if (m_timeLeft >= 100)
@@ -136,7 +106,7 @@ void CPlayer::MoveForward(float axis)
 
 	// Analog movement coming never.
 	curPos.SetY(curPos.GetY() + (m_moveStep * axis));
-	if (IsPositionFree(&curPos))
+	if (!WillCollide(&curPos))
 	{
 		moving = true;
 		lastPosition = m_position;
@@ -158,7 +128,7 @@ void CPlayer::MoveRight(float axis)
 	m_currentRow = (axis > 0) ? 4 : 3;
 
 	curPos.SetX(curPos.GetX() + (m_moveStep * axis));
-	if (IsPositionFree(&curPos))
+	if (!WillCollide(&curPos))
 	{
 		moving = true;
 		lastPosition = m_position;
@@ -172,27 +142,11 @@ void CPlayer::MoveRight(float axis)
 	}
 }
 
-bool CPlayer::IsPositionFree(CVector2D* pNext)
+bool CPlayer::WillCollide(CVector2D* pNext)
 {
-	// Get the value from the pointer and store it in a rvalue.
-	CVector2D nPos = CVector2D(*pNext);
-
-	// Go through each ObjectLayer we got earlier
-	for (size_t i = 0; i < m_objects.size(); i++)
+	if (CBaseGame::Instance()->GetStateManager()->IsColliding(*pNext))
 	{
-		if (!m_objects[i]) continue;
-
-		// Get an rvalue of the list of GameObject's for the iterated layer
-		std::vector<std::shared_ptr<IGameObject>>& ir = *m_objects[i];
-
-		for (size_t j = 0; j < ir.size(); j++)
-		{
-			// Check if the GameObject is in the way and isn't us + collision flag
-			if (ir[j].get() != this && ir[j]->GetPosition() == nPos && ir[j]->ShouldCollide())
-			{
-				return false;
-			}
-		}
+		return true;
 	}
 
 	// Also do a check if we are going off the level
@@ -201,21 +155,17 @@ bool CPlayer::IsPositionFree(CVector2D* pNext)
 	
 	if (ps)
 	{
-		/*CLevel* pLevel = pPS->GetLoadedLevel();
+		CVector2D pLevelSize = CCamera::Instance()->GetLevelSize();
 
-		if ((pNext->GetX() < 0) || (pNext->GetX() + PLAYER_WIDTH > pLevel->m_LevelSize.GetX()))
+		if ((pNext->GetX() < 0) || (pNext->GetX() + PLAYER_WIDTH > pLevelSize.GetX())
+			&& (pNext->GetY() < 0) || (pNext->GetY() + PLAYER_HEIGHT > pLevelSize.GetY()))
 		{
-			return false;
+			return true;
 		}
-
-		if ((pNext->GetY() < 0) || (pNext->GetY() + PLAYER_HEIGHT > pLevel->m_LevelSize.GetY()))
-		{
-			return false;
-		}*/
 	}
 
 	// Nothing is in the way!
-	return true;
+	return false;
 }
 
 void CPlayer::DecideFrame()

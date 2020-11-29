@@ -26,11 +26,9 @@ private:
 	void MoveForward(float axis);
 	void MoveRight(float axis);
 	
-	bool IsPositionFree(CVector2D* pNext);
+	bool WillCollide(CVector2D* pNext);
 
 	void DecideFrame();
-
-	std::vector<std::vector<std::shared_ptr<IGameObject>>*> m_objects;
 
 	CVector2D lastPosition;
 	CVector2D nextPosition;

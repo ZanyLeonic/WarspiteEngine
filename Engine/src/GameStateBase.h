@@ -39,6 +39,8 @@ public:
 	virtual bool StateFinishedTicking() const { return m_bTickingFinished; }
 	virtual bool StateFinishedDrawing() const { return m_bDrawingFinished; }
 	
+	virtual bool IsColliding(CVector2D v1);
+
 protected:
 	std::vector<std::unique_ptr<IGameObject>> m_GameObjects;
 

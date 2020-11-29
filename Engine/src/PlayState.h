@@ -22,6 +22,8 @@ public:
 
 	CWarspiteObject* GetPlayer() const { return m_player; }
 
+	bool IsColliding(CVector2D v1) override;
+
 private:
 	CLevel* pLevel;
 	PLevelPtr m_levelPtr;

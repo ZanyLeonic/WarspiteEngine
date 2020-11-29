@@ -12,6 +12,7 @@ class CGameStateManager : public IGameStateManager
 {
 public:
 	virtual const std::string GetCurrentStateID();
+	virtual const bool IsColliding(CVector2D v1);
 
 	virtual void PushState(std::unique_ptr<CGameStateBase> pState);
 	virtual void ModifyState(std::unique_ptr<CGameStateBase> pState);
