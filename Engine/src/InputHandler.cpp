@@ -51,12 +51,12 @@ void CInputHandler::OnThink()
 				onMouseMove(e);
 				break;
 
-			case SDL_MOUSEBUTTONDOWN:
-				onMouseButtonDown(e);
-				break;
-
 			case SDL_MOUSEBUTTONUP:
 				onMouseButtonUp(e);
+				break;
+
+			case SDL_MOUSEBUTTONDOWN:
+				onMouseButtonDown(e);
 				break;
 
 			case SDL_KEYDOWN:
