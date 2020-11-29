@@ -167,7 +167,7 @@ Section "${PRODUCT_NAME} SDK" SECTION_AUTH
   File /r "${AUTHTOOLSDIR}\WarspiteGame.AuthoringTools\bin\Release\"
   File /r "${AUTHTOOLSDIR}\WarspiteGame.AuthoringTools.Debugger\bin\Release\"
 
-  CreateShortCut "$INSTDIR\sdk\Generate Tiled Project.lnk" "$INSTDIR\sdk\tools\SetupTiledProject.py"
+  CreateShortCut "$INSTDIR\sdk\Generate Tiled Project.lnk" "$WINDIR\py.exe" '-3 "$INSTDIR\sdk\tools\SetupTiledProject.py"'
 
   ; Give the location of our paths 
   DetailPrint "Configuring Authoring Tools..."
@@ -188,11 +188,14 @@ Section "Start menu shortcuts" SECTION_START_MENU_SHORTCUTS
   CreateShortCut "$SMPROGRAMS\${PRODUCT_NAME}\SDK\${PRODUCT_NAME} Authoring Tools.lnk" "$INSTDIR\sdk\bin\${AUTHOR_EXE}"
   CreateShortCut "$SMPROGRAMS\${PRODUCT_NAME}\SDK\${PRODUCT_NAME} Debugger.lnk" "$INSTDIR\sdk\bin\${AUTHOR_DEBUG_EXE}"
   CreateShortCut "$SMPROGRAMS\${PRODUCT_NAME}\SDK\${PRODUCT_NAME} SDK folder.lnk" "$INSTDIR\sdk\"
+
+  CreateShortCut "$SMPROGRAMS\${PRODUCT_NAME}\SDK\Launch ${PRODUCT_NAME} with Debugger.lnk" "$INSTDIR\sdk\bin\${AUTHOR_DEBUG_EXE}" "$INSTDIR\${PRODUCT_EXE}"
+  CreateShortCut "$SMPROGRAMS\${PRODUCT_NAME}\SDK\Generate Tiled Project.lnk" "$WINDIR\py.exe" '-3 "$INSTDIR\sdk\tools\SetupTiledProject.py"'
   ${Endif}
 SectionEnd
 
 Section "Desktop shortcut" SECTION_DESKTOP_SHORTCUT
-  CreateShortCut "$DESKTOP\${PRODUCT_NAME}.lnk" "$INSTDIR\${PRODUCT_EXE}"
+  CreateShortCut "$DESKTOP\${PRODUCT_NAME}Engine.lnk" "$INSTDIR\${PRODUCT_EXE}"
 SectionEnd
 
 Section /o "Visual C++ Redistributable 2019 (x64)"
@@ -213,11 +216,11 @@ Section /o ".NET 4.0 Framework (x86/x64)"
   DetailPrint ".NET Framework 4.0 installer exited with: $0"
 SectionEnd
 
-Section "Python 3.8.5 (x64)"
-  DetailPrint "Installing Python 3.8.5 (x64)"
+Section "Python 3 (x64)"
+  DetailPrint "Installing Python 3 (x64)"
   SetOutPath "$INSTDIR"
   File "redist\python-3.8.5-amd64.exe"
-  ExecWait '"$INSTDIR\python-3.8.5-amd64.exe" /quiet Shorcuts=0 AssociateFiles=1' $0
+  ExecWait '"$INSTDIR\python-3.8.5-amd64.exe" /quiet InstallAllUsers=1 Shorcuts=0 AssociateFiles=1 Include_launcher=1 InstallLauncherAllUsers=1' $0
   Delete "$INSTDIR\python-3.8.5-amd64.exe"
   DetailPrint "Python 3.8.5 installer exited with: $0"
 SectionEnd
@@ -231,17 +234,19 @@ Section Uninstall
   DeleteRegKey /ifempty HKCU "Software\${PRODUCT_NAME}"
 
   ; Delete start menu shortcuts
-  Delete "$SMPROGRAMS\${PRODUCT_NAME}\${PRODUCT_NAME}.lnk"
+  Delete "$SMPROGRAMS\${PRODUCT_NAME}\${PRODUCT_NAME}Engine.lnk"
   Delete "$SMPROGRAMS\${PRODUCT_NAME}\Uninstall.lnk"
   RMDir "$SMPROGRAMS\${PRODUCT_NAME}"
 
   ; Delete desktop shortcut
-  Delete "$DESKTOP\${PRODUCT_NAME}.lnk"
+  Delete "$DESKTOP\${PRODUCT_NAME}Engine.lnk"
 
   ; SDK
   Delete "$SMPROGRAMS\${PRODUCT_NAME}\SDK\${PRODUCT_NAME} Authoring Tools.lnk" 
   Delete "$SMPROGRAMS\${PRODUCT_NAME}\SDK\${PRODUCT_NAME} Debugger.lnk"
   Delete "$SMPROGRAMS\${PRODUCT_NAME}\SDK\${PRODUCT_NAME} SDK folder.lnk"
+  Delete "$SMPROGRAMS\${PRODUCT_NAME}\SDK\Launch ${PRODUCT_NAME} with Debugger.lnk"
+  Delete "$SMPROGRAMS\${PRODUCT_NAME}\SDK\Generate Tiled Project.lnk"
   RMDir "$SMPROGRAMS\${PRODUCT_NAME}\SDK"
   RMDir /r "$INSTDIR\sdk\"
 
