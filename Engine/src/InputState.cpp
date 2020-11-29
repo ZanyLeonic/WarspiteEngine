@@ -231,53 +231,6 @@ bool CInputState::OnEnd()
 	return CGameStateBase::OnEnd();
 }
 
-void CInputState::SetCallbacks(const std::vector<HButtonCallback>& callbacks)
-{
-	for (size_t i = 0; i < m_GameObjects.size(); i++)
-	{
-		CButton* pButton = dynamic_cast<CButton*>(m_GameObjects[i].get());
-
-		if (pButton)
-		{
-			// So we don't crash when we try add something new.
-			size_t cbSize = m_callbacks.size() - 1;
-
-			if (pButton->GetOnClickID() > cbSize)
-			{
-				spdlog::warn("OnClickID event ID for Button object \"{}\" is larger than the defined callbacks!",
-					m_GameObjects[i]->GetName());
-				spdlog::warn("Is this JSON intended for this version of the Engine or did some forget to implement the callback?");
-			}
-			else
-			{
-				pButton->OnClick(callbacks[pButton->GetOnClickID()]);
-			}
-
-			if (pButton->GetOnEnterID() > cbSize)
-			{
-				spdlog::warn("OnEnterID event ID for Button object \"{}\" is larger than the defined callbacks!",
-					m_GameObjects[i]->GetName());
-				spdlog::warn("Is this JSON intended for this version of the Engine or did some forget to implement the callback?");
-			}
-			else
-			{
-				pButton->OnEnter(callbacks[pButton->GetOnEnterID()]);
-			}
-
-			if (pButton->GetOnLeaveID() > cbSize)
-			{
-				spdlog::warn("OnLeaveID event ID for Button object \"{}\" is larger than the defined callbacks!",
-					m_GameObjects[i]->GetName());
-				spdlog::warn("Is this JSON intended for this version of the Engine or did some forget to implement the callback?");
-			}
-			else
-			{
-				pButton->OnLeave(callbacks[pButton->GetOnLeaveID()]);
-			}
-		}
-	}
-}
-
 bool CInputState::s_InputToMainMenu()
 {
 	spdlog::info("Back button clicked");

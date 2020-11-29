@@ -33,19 +33,20 @@ public:
 	virtual std::vector<std::string> GetLoadedTextures() const { return m_TextureIDList; }
 	virtual std::vector<std::string> GetLoadedScripts() const { return m_ScriptIDList; }
 	
-	virtual bool ShouldBeTicking() const { return m_shouldTick; }
-	virtual bool ShouldBeDrawing() const { return m_shouldDraw; }
+	virtual bool ShouldBeTicking() const { return m_bShouldTick; }
+	virtual bool ShouldBeDrawing() const { return m_bShouldDraw; }
 
 	virtual bool StateFinishedTicking() const { return m_bTickingFinished; }
 	virtual bool StateFinishedDrawing() const { return m_bDrawingFinished; }
 	
 protected:
 	std::vector<std::unique_ptr<IGameObject>> m_GameObjects;
+
 	std::vector<std::string> m_TextureIDList;
 	std::vector<std::string> m_ScriptIDList;
 
-	bool m_shouldTick = false;
-	bool m_shouldDraw = false;
+	bool m_bShouldTick = false;
+	bool m_bShouldDraw = false;
 
 	bool m_bTickingFinished = true;
 	bool m_bDrawingFinished = true;

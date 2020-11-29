@@ -26,25 +26,6 @@ bool CPauseState::OnEnd()
 	return CGameStateBase::OnEnd();
 }
 
-void CPauseState::SetCallbacks(const std::vector<HButtonCallback>& callbacks)
-{
-	// MenuState::SetCallbacks(callbacks);
-
-	for (size_t i = 0; i < m_GameObjects.size(); i++)
-	{
-		CButton* pButton = dynamic_cast<CButton*>(m_GameObjects[i].get());
-
-		if (pButton)
-		{
-
-			pButton->OnClick(callbacks[pButton->GetOnClickID()]);
-			pButton->OnEnter(callbacks[pButton->GetOnEnterID()]);
-			pButton->OnLeave(callbacks[pButton->GetOnLeaveID()]);
-		}
-	}
-}
-
-
 bool CPauseState::s_continueGame()
 {
 	CBaseGame::Instance()->GetStateManager()->PopState();

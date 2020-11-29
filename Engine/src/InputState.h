@@ -20,8 +20,6 @@ public:
 	virtual std::string GetStateID() const { return s_UIID; }
 
 private:
-	virtual void SetCallbacks(const std::vector<HButtonCallback>& callbacks);
-
 	static bool s_InputToMainMenu();
 	static std::string GetStringifiedMouseButton(int pMouseButton);
 

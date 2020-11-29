@@ -4,8 +4,8 @@
 
 bool CGameStateBase::OnPlay()
 {
-	m_shouldTick = true;
-	m_shouldDraw = true;
+	m_bShouldTick = true;
+	m_bShouldDraw = true;
 
 	return true;
 }
@@ -13,8 +13,8 @@ bool CGameStateBase::OnPlay()
 bool CGameStateBase::OnEnd()
 {
 	// Stop accessing pointers that are about to be destroyed!
-	m_shouldTick = false;
-	m_shouldDraw = false;
+	m_bShouldTick = false;
+	m_bShouldDraw = false;
 
 	// Destroying everything!
 	for (size_t i = 0; i < m_GameObjects.size(); i++)
@@ -44,24 +44,24 @@ void CGameStateBase::OnThink()
 {
 	for (size_t i = 0; i < m_GameObjects.size(); i++)
 	{	
-		if (m_shouldTick)
+		if (m_bShouldTick)
 			m_GameObjects[i]->OnThink();
 		else
 			break;
 	}
 
-	m_bTickingFinished = !m_shouldTick;
+	m_bTickingFinished = !m_bShouldTick;
 }
 
 void CGameStateBase::Draw()
 {
 	for (size_t i = 0; i < m_GameObjects.size(); i++)
 	{
-		if (m_shouldDraw)
+		if (m_bShouldDraw)
 			m_GameObjects[i]->Draw();
 		else
 			break;
 	}
 
-	m_bDrawingFinished = !m_shouldDraw;
+	m_bDrawingFinished = !m_bShouldDraw;
 }

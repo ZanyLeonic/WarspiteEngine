@@ -15,8 +15,6 @@ public:
 	virtual std::string GetStateID() const { return s_UIID; }
 
 private:
-	virtual void SetCallbacks(const std::vector<HButtonCallback>& callbacks);
-
 	static bool s_menuToPlay();
 	static bool s_exitFromMenu();
 	static bool s_menuToInput();

@@ -13,8 +13,6 @@ public:
 	virtual std::string GetStateID() const { return s_UIID; }
 
 private:
-	virtual void SetCallbacks(const std::vector<HButtonCallback>& callbacks);
-
 	static bool s_continueGame();
 	static bool s_exitToMenu();
 };
