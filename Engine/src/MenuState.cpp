@@ -2,6 +2,7 @@
 
 #include "Button.h"
 #include <spdlog/spdlog.h>
+#include <limits>
 
 void CMenuState::SetCallbacks(const std::vector<HButtonCallback>& callbacks)
 {
@@ -12,8 +13,10 @@ void CMenuState::SetCallbacks(const std::vector<HButtonCallback>& callbacks)
 
 		if (pButton)
 		{
+			assert(!((m_callbacks.size() - 1) > std::numeric_limits<int>::max() && "Callback list larger than signed int max"));
+
 			// So we don't crash when we try add something new.
-			size_t cbSize = m_callbacks.size() - 1;
+			int cbSize = static_cast<int>(m_callbacks.size() - 1);
 
 			if (pButton->GetOnClickID() > cbSize)
 			{

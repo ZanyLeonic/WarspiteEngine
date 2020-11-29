@@ -306,7 +306,7 @@ void CInputHandler::RemoveAxis(std::string name)
 		m_keyAxisValue.erase(name);
 
 		// Don't keep track of keys from deleted axis
-		for (int i = 0; i < toBeRemoved.size(); i++)
+		for (size_t i = 0; i < toBeRemoved.size(); i++)
 		{
 			m_keyAxisStates.erase(toBeRemoved[i]);
 		}
@@ -355,7 +355,7 @@ void CInputHandler::onKeyDown(SDL_Event& event)
 
 	if (m_keyDownCallbacks.size() != 0)
 	{
-		for (int i = 0; i < m_keyDownCallbacks.size(); i++)
+		for (size_t i = 0; i < m_keyDownCallbacks.size(); i++)
 		{
 			m_keyDownCallbacks[i](event.key.keysym.scancode);
 		}
@@ -392,7 +392,7 @@ void CInputHandler::onKeyUp(SDL_Event& event)
 
 	if (m_keyUpCallbacks.size() != 0)
 	{
-		for (int i = 0; i < m_keyUpCallbacks.size(); i++)
+		for (size_t i = 0; i < m_keyUpCallbacks.size(); i++)
 		{
 			m_keyUpCallbacks[i](event.key.keysym.scancode);
 		}
@@ -465,7 +465,7 @@ void CInputHandler::onMouseButtonDown(SDL_Event& event)
 
 	if (m_mouseDownCallbacks.size() != 0)
 	{
-		for (int i = 0; i < m_mouseDownCallbacks.size(); i++)
+		for (size_t i = 0; i < m_mouseDownCallbacks.size(); i++)
 		{
 			m_mouseDownCallbacks[i](event);
 		}
@@ -491,7 +491,7 @@ void CInputHandler::onMouseButtonUp(SDL_Event& event)
 
 	if (m_mouseUpCallbacks.size() != 0)
 	{
-		for (int i = 0; i < m_mouseUpCallbacks.size(); i++)
+		for (size_t i = 0; i < m_mouseUpCallbacks.size(); i++)
 		{
 			m_mouseUpCallbacks[i](event);
 		}
@@ -593,7 +593,7 @@ void CInputHandler::onJoystickButtonUp(SDL_Event& event)
 
 	if (m_joyUpCallbacks.size() != 0)
 	{
-		for (int i = 0; i < m_joyUpCallbacks.size(); i++)
+		for (size_t i = 0; i < m_joyUpCallbacks.size(); i++)
 		{
 			m_joyUpCallbacks[i](event);
 		}

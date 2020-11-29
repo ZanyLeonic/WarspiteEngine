@@ -5,7 +5,7 @@ void CGarbageCollector::OnThink()
 {
 	if (m_StatesDeletionQueue.empty()) return;
 
-	for (int i = 0; i < m_StatesDeletionQueue.size(); i++)
+	for (size_t i = 0; i < m_StatesDeletionQueue.size(); i++)
 	{
 		if (m_StatesDeletionQueue[i]->StateFinishedTicking())
 		{

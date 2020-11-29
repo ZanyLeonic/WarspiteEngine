@@ -39,7 +39,7 @@ bool CGameStateBase::IsColliding(CVector2D v1)
 {
 	if (!m_GameObjects.empty())
 	{
-		for (int i = 0; i < m_GameObjects.size(); i++)
+		for (size_t i = 0; i < m_GameObjects.size(); i++)
 		{
 			// See if you can find a colliding object.
 			if (m_GameObjects[i]->GetPosition() == v1)

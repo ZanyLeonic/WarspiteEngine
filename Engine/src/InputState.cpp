@@ -27,7 +27,7 @@ bool CInputState::OnPlay()
 	CInputHandler::Instance()->AddOnKeyDown([this](SDL_Scancode e) {
 			std::string keyName = std::string(SDL_GetKeyName(SDL_GetKeyFromScancode(e)));
 
-			for (int i = 0; i < m_keysActive.size(); i++)
+			for (size_t i = 0; i < m_keysActive.size(); i++)
 			{
 				if (keyName == m_keysActive[i]) return;
 			}
@@ -38,7 +38,7 @@ bool CInputState::OnPlay()
 	CInputHandler::Instance()->AddOnKeyUp([this](SDL_Scancode e) {
 			std::string keyName = std::string(SDL_GetKeyName(SDL_GetKeyFromScancode(e)));
 
-			for (int i = 0; i < m_keysActive.size(); i++)
+			for (size_t i = 0; i < m_keysActive.size(); i++)
 			{
 				if (keyName == m_keysActive[i])
 				{
@@ -53,7 +53,7 @@ bool CInputState::OnPlay()
 		
 		if (mouseName == "") return;
 
-		for (int i = 0; i < m_mouseActive.size(); i++)
+		for (size_t i = 0; i < m_mouseActive.size(); i++)
 		{
 			if (mouseName == m_mouseActive[i]) return;
 		}
@@ -67,7 +67,7 @@ bool CInputState::OnPlay()
 
 		if (mouseName == "") return;
 
-		for (int i = 0; i < m_mouseActive.size(); i++)
+		for (size_t i = 0; i < m_mouseActive.size(); i++)
 		{
 			if (mouseName == m_mouseActive[i])
 			{
@@ -80,7 +80,7 @@ bool CInputState::OnPlay()
 	CInputHandler::Instance()->AddOnJoyDown([this](SDL_Event e) {
 		std::string joyBtn = fmt::format(FMT_STRING("Joy Button {}"), e.jbutton.button);
 
-		for (int i = 0; i < m_joyActive.size(); i++)
+		for (size_t i = 0; i < m_joyActive.size(); i++)
 		{
 			if (joyBtn == m_joyActive[i]) return;
 		}
@@ -91,7 +91,7 @@ bool CInputState::OnPlay()
 	CInputHandler::Instance()->AddOnJoyUp([this](SDL_Event e) {
 		std::string joyBtn = fmt::format(FMT_STRING("Joy Button {}"), e.jbutton.button);
 
-		for (int i = 0; i < m_joyActive.size(); i++)
+		for (size_t i = 0; i < m_joyActive.size(); i++)
 		{
 			if (joyBtn == m_joyActive[i])
 			{
@@ -160,19 +160,19 @@ void CInputState::OnThink()
 
 	std::string keysDown = "";
 
-	for (int i = 0; i < m_mouseActive.size(); i++)
+	for (size_t i = 0; i < m_mouseActive.size(); i++)
 	{
 		keysDown += m_mouseActive[i];
 		keysDown += " ";
 	}
 
-	for (int i = 0; i < m_keysActive.size(); i++)
+	for (size_t i = 0; i < m_keysActive.size(); i++)
 	{
 		keysDown += m_keysActive[i];
 		keysDown += " ";
 	}
 
-	for (int i = 0; i < m_joyActive.size(); i++)
+	for (size_t i = 0; i < m_joyActive.size(); i++)
 	{
 		keysDown += m_joyActive[i];
 		keysDown += " ";
