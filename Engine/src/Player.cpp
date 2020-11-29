@@ -158,7 +158,7 @@ bool CPlayer::WillCollide(CVector2D* pNext)
 		CVector2D pLevelSize = CCamera::Instance()->GetLevelSize();
 
 		if ((pNext->GetX() < 0) || (pNext->GetX() + PLAYER_WIDTH > pLevelSize.GetX())
-			&& (pNext->GetY() < 0) || (pNext->GetY() + PLAYER_HEIGHT > pLevelSize.GetY()))
+			|| (pNext->GetY() < 0) || (pNext->GetY() + PLAYER_HEIGHT > pLevelSize.GetY()))
 		{
 			return true;
 		}

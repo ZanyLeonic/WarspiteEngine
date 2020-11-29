@@ -23,7 +23,7 @@
 
 ; Build directory
 ; Change if you used CMake in another folder
-!define BUILDDIR "..\build"
+!define BUILDDIR "..\rel-build"
 !define AUTHTOOLSDIR "..\..\WarspiteGame.AuthoringTools"
 
 ; Version information
@@ -42,7 +42,7 @@ VIProductVersion "${PRODUCT_VERSION}.0"
 ; Main settings
 BrandingText "${PRODUCT_NAME} ${PRO_GIT_DESC}"
 Name "${PRODUCT_NAME}"
-OutFile "output\${PRODUCT_NAME}Setup.exe"
+OutFile "output\${PRODUCT_NAME}Setup-x64.exe"
 SetCompressor /SOLID lzma
 Unicode true
 
