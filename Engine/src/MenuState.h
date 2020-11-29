@@ -1,9 +1,11 @@
 #pragma once
 #ifndef __MENUSTATE_H__
 #define __MENUSTATE_H__
+
 #include "GameStateBase.h"
 #include "EngineTypes.h"
 #include <vector>
+
 class CMenuState : public CGameStateBase
 {
 protected:

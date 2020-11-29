@@ -5,6 +5,7 @@
 #include "Player.h"
 #include "StateParser.h"
 #include "LevelParser.h"
+#include "ObjectLayer.h"
 #include <spdlog/spdlog.h>
 
 #include "PlayState.h"
@@ -26,7 +27,7 @@ bool CPlayState::OnPlay()
 	m_screenSize = CBaseGame::Instance()->GetViewportSize();
 
 	CStateParser::ParseState(CEngineFileSystem::ResolvePath("PlayState.json", CEngineFileSystem::EPathType::STATE).c_str(), GetStateID(), &m_GameObjects, &m_TextureIDList, &m_ScriptIDList);
-	
+
 	if (CBaseGame::Instance()->StartedWithMapParam())
 	{
 		pLevel = CLevelParser::ParseLevel(CEngineFileSystem::ResolvePath(fmt::format(FMT_STRING("{}.json"), CBaseGame::Instance()->GetMapParamName()), CEngineFileSystem::EPathType::MAP).c_str());
@@ -37,14 +38,14 @@ bool CPlayState::OnPlay()
 	}
 
 	CInputHandler::Instance()->AddActionKeyDown(SDL_SCANCODE_ESCAPE, [this](SDL_Scancode e) {
-			if (CBaseGame::Instance()->GetStateManager()->GetCurrentStateID() != SID_PAUSE)
-			{
-				CBaseGame::Instance()->GetStateManager()->PushState(CGameStateDictionary::Instance()->Create(SID_PAUSE));
-			}
+		if (CBaseGame::Instance()->GetStateManager()->GetCurrentStateID() != SID_PAUSE)
+		{
+			CBaseGame::Instance()->GetStateManager()->PushState(CGameStateDictionary::Instance()->Create(SID_PAUSE));
+		}
 		});
 
 	CInputHandler::Instance()->AddActionKeyUp(SDL_SCANCODE_ESCAPE, [this](SDL_Scancode e) {
-			return;
+		return;
 		});
 
 	CInputHandler::Instance()->AddActionKeyDown(SDL_SCANCODE_8, [this](SDL_Scancode e) {
@@ -58,44 +59,22 @@ bool CPlayState::OnPlay()
 	CInputHandler::Instance()->AddActionKeyUp(SDL_SCANCODE_8, [this](SDL_Scancode e) {
 		return;
 		});
-	
+
 	// This callback code is disgusting - but it works so I don't care.
-	testStream.PlayCallback = [this](SStreamingAudioData* as)
-	{
-		spdlog::info("Playing: \"{}\".", as->Filename.c_str());
-	};
-	
-	testStream.PauseCallback = [this](SStreamingAudioData* as)
-	{
-		spdlog::info("Paused: \"{}\".", as->Filename.c_str());
-	};
+	testStream.PlayCallback = s_PlayCallback;
+	testStream.PauseCallback = s_PauseCallback;
+	testStream.StopCallback = s_StopCallback;
 
-	testStream.StopCallback = [this](SStreamingAudioData* as)
-	{
-		spdlog::info("Stopped: \"{}\".", as->Filename.c_str());
-	};
-
-	testStream2.PlayCallback = [this](SStreamingAudioData* as)
-	{
-		spdlog::info("Playing: \"{}\".", as->Filename.c_str());
-	};
-
-	testStream2.PauseCallback = [this](SStreamingAudioData* as)
-	{
-		spdlog::info("Paused: \"{}\".", as->Filename.c_str());
-	};
-
-	testStream2.StopCallback = [this](SStreamingAudioData* as)
-	{
-		spdlog::info("Stopped: \"{}\".", as->Filename.c_str());
-	};
+	testStream2.PlayCallback = s_PlayCallback;
+	testStream2.PauseCallback = s_PauseCallback;
+	testStream2.StopCallback = s_StopCallback;
 
 	// Load Wave
 	CInputHandler::Instance()->AddActionKeyDown(SDL_SCANCODE_0, [this](SDL_Scancode e) {
-			CSoundManager::Instance()->Load(CEngineFileSystem::ResolvePath("mycode.wav", CEngineFileSystem::EPathType::SOUND), testFile);
+		CSoundManager::Instance()->Load(CEngineFileSystem::ResolvePath("mycode.wav", CEngineFileSystem::EPathType::SOUND), testFile);
 		});
 	CInputHandler::Instance()->AddActionKeyUp(SDL_SCANCODE_0, [this](SDL_Scancode e) {
-			return;
+		return;
 		});
 
 	// Play Wave
@@ -109,7 +88,7 @@ bool CPlayState::OnPlay()
 	// Load
 	CInputHandler::Instance()->AddActionKeyDown(SDL_SCANCODE_1, [this](SDL_Scancode e) {
 		CSoundManager::Instance()->CreateStreamFromFile(CEngineFileSystem::ResolvePath("teststream.ogg", CEngineFileSystem::EPathType::SOUND), testStream);
-		
+
 
 		CSoundManager::Instance()->CreateStreamFromFile(CEngineFileSystem::ResolvePath("teststream2.ogg", CEngineFileSystem::EPathType::SOUND), testStream2);
 		});
@@ -128,7 +107,7 @@ bool CPlayState::OnPlay()
 	CInputHandler::Instance()->AddActionKeyUp(SDL_SCANCODE_2, [this](SDL_Scancode e) {
 		return;
 		});
-	
+
 	CInputHandler::Instance()->AddActionKeyDown(SDL_SCANCODE_3, [this](SDL_Scancode e) {
 		CSoundManager::Instance()->PauseStream(&testStream);
 		});
@@ -153,7 +132,7 @@ bool CPlayState::OnPlay()
 	CInputHandler::Instance()->AddActionKeyUp(SDL_SCANCODE_4, [this](SDL_Scancode e) {
 		return;
 		});
-	
+
 	// Play
 	CInputHandler::Instance()->AddActionKeyDown(SDL_SCANCODE_5, [this](SDL_Scancode e) {
 		CSoundManager::Instance()->PauseStream(&testStream2);
@@ -172,6 +151,7 @@ bool CPlayState::OnPlay()
 	{
 		// Give the camera the Level size
 		CCamera::Instance()->SetLevelSize(pLevel->m_LevelSize);
+		// CBaseGame::Instance()->SetLoadedLevel(pLevel);
 
 		// Assign the Level attribute to the current loaded level
 		if (CScriptManager::Instance()->GetEngineModule().attr(LEVELOBJECT_NAME).is_none())
@@ -179,12 +159,12 @@ bool CPlayState::OnPlay()
 			m_levelPtr = std::make_shared<SLevelObject>(SLevelObject(pLevel));
 			CScriptManager::Instance()->GetEngineModule().attr(LEVELOBJECT_NAME) = m_levelPtr;
 		}
-		
+
 		// Execute the OnPlay method on all the GameObjects in all Object Layers
 		pLevel->OnPlay();
 	}
 	else
-	{ 
+	{
 		// If a failure happens when attempting to load - this will let us know something is up.
 		CTextureManager::Instance()->CreateCheckboardPattern(m_screenSize, "levelLoadFail", CBaseGame::Instance()->GetRenderer());
 		SDL_SetRenderDrawColor(CBaseGame::Instance()->GetRenderer(), 255, 255, 255, 255);
@@ -232,7 +212,7 @@ void CPlayState::OnThink()
 bool CPlayState::OnEnd()
 {
 	spdlog::info("Exiting PlayState");
-	
+
 	// Execute the OnPlay method on all the GameObjects in all Object Layers
 	if (pLevel != 0)
 		pLevel->Destroy();
@@ -240,4 +220,19 @@ bool CPlayState::OnEnd()
 	CGameStateBase::OnEnd();
 
 	return true;
+}
+
+void CPlayState::s_PlayCallback(SStreamingAudioData* as)
+{
+	spdlog::info("Playing: \"{}\".", as->Filename.c_str());
+}
+
+void CPlayState::s_PauseCallback(SStreamingAudioData* as)
+{
+	spdlog::info("Paused: \"{}\".", as->Filename.c_str());
+}
+
+void CPlayState::s_StopCallback(SStreamingAudioData* as)
+{
+	spdlog::info("Stopped: \"{}\".", as->Filename.c_str());
 }

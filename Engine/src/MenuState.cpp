@@ -12,7 +12,6 @@ void CMenuState::SetCallbacks(const std::vector<HButtonCallback>& callbacks)
 
 		if (pButton)
 		{
-
 			// So we don't crash when we try add something new.
 			size_t cbSize = m_callbacks.size() - 1;
 

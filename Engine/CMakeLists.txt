@@ -29,6 +29,7 @@ set(WarspiteEngine_Src
         src/LevelParser.cpp
         src/LogicAuto.cpp
         src/main.cpp
+        src/MenuState.cpp
         src/MainMenuState.cpp
         src/MapObject.cpp
         src/ObjectLayer.cpp
