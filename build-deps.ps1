@@ -2,6 +2,7 @@
 param(
     [ValidateSet("Debug", "Release")][string]$BuildType = "Debug",
     [string]$BuildLocation = "build",
+	[string]$SrcDir = ".",
     [ValidateSet("x64", "x86")][string]$Arch = "x64",
     [string]$VcpkgDir = $env:VCPKG_INSTALLATION_ROOT
 )
@@ -27,7 +28,7 @@ function GenerateProjectFiles() {
     "-DCMAKE_BUILD_TYPE=`"$BuildType`"", 
     "-DVCPKG_TARGET_TRIPLET=$Arch-windows",
 	"-B$BuildLocation",
-    ".")
+    "$SrcDir")
     & cmake $bargs
 	
 	Write-Output "Finished generating project files."

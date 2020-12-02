@@ -21,15 +21,16 @@ const int DELAY_TIME = 1000 / FPS;
 
 const char* WIDTH_PARAM = "-w";
 const char* HEIGHT_PARAM = "-h";
+const char* FULLSCREEN_PARAM = "-f";
 
 #ifndef WARDEBUG
-bool DevFlagExists(char** argv, int argc)
+bool FlagExists(char** argv, int argc, const char* flag)
 {
 	if (argc <= 1) return false;
 
 	for (int i = 0; i < argc; i++)
 	{
-		if (strcmp(argv[i], "-dev") == 0) return true;
+		if (strcmp(argv[i], flag) == 0) return true;
 	}
 
 	return false;
@@ -79,7 +80,7 @@ extern "C" int Engine(int argc, char** argv, GameDLL_t pGameDLL)
 #ifdef WARDEBUG
 		spdlog::set_level(spdlog::level::debug);
 #else
-		if (DevFlagExists(argv, argc))
+		if (FlagExists(argv, argc, "-dev"))
 		{
 			spdlog::set_level(spdlog::level::debug);
 		}
@@ -93,7 +94,7 @@ extern "C" int Engine(int argc, char** argv, GameDLL_t pGameDLL)
 	spdlog::info("Warspite Engine");
 	
 #ifndef WARDEBUG
-	if (DevFlagExists(argv, argc))
+	if (FlagExists(argv, argc, "-dev"))
 	{
 		snprintf(title, sizeof(title), "Engine (DEV) (%d/%s)", GAME_BUILD_NUMBER, GAME_GIT_DESC);
 		spdlog::debug("Running in developer mode.");
@@ -138,6 +139,7 @@ extern "C" int Engine(int argc, char** argv, GameDLL_t pGameDLL)
 
 	int desiredWidth = DEF_WIDTH;
 	int desiredHeight = DEF_HEIGHT;
+	bool desiredFullscreen = FlagExists(argv, argc, FULLSCREEN_PARAM);
 
 	char* widthParam = "";
 	char* heightParam = "";
@@ -147,7 +149,7 @@ extern "C" int Engine(int argc, char** argv, GameDLL_t pGameDLL)
 		desiredWidth = atoi(widthParam);
 
 		if ((desiredWidth == 0)
-			|| desiredHeight < DEF_WIDTH)
+			|| desiredWidth < DEF_WIDTH)
 		{
 			spdlog::warn("Specified width parameter is too low or invalid.");
 			spdlog::warn("Got \"{}\", Lowest supported value \"{}\"", desiredWidth, DEF_WIDTH);
@@ -168,7 +170,7 @@ extern "C" int Engine(int argc, char** argv, GameDLL_t pGameDLL)
 		}
 	}
 
-	if (CBaseGame::Instance()->Init(title, 100, 100, desiredWidth, desiredHeight, false, argc, argv, pGameDLL))
+	if (CBaseGame::Instance()->Init(title, 100, 100, desiredWidth, desiredHeight, desiredFullscreen, argc, argv, pGameDLL))
 	{
 		IWGame* pGD = CBaseGame::Instance()->GetGameDLLClass();
 

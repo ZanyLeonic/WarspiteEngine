@@ -49,7 +49,7 @@ bool CBaseGame::Init(const char* title, int xpos, int ypos, int width, int heigh
 			flags = SDL_WINDOW_FULLSCREEN;
 		}
 
-		spdlog::info("SDL init success");
+		spdlog::info("SDL initalisation success");
 		// init the window
 		m_pWindow = SDL_CreateWindow(title, xpos, ypos, width, height, flags);
 		m_viewportSize = CVector2D((float)width, (float)height);
@@ -85,17 +85,17 @@ bool CBaseGame::Init(const char* title, int xpos, int ypos, int width, int heigh
 			}
 			else
 			{
-				spdlog::error("Render init fail");
+				spdlog::error("Render initalisation fail");
 				return false; // renderer init fail
 			}
 		}
 		else
 		{
-			spdlog::error("SDL init fail");
+			spdlog::error("SDL initalisation fail");
 			return false; // SDL init fail
 		}
 
-		spdlog::info("Init success");
+		spdlog::info("Initalisation success");
 		m_bRunning = true; // everything inited successfully, start the main loop
 
 		std::map<ESingletonIDs, void(*)> m_singletonPtrs

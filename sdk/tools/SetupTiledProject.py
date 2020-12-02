@@ -73,7 +73,7 @@ if __name__ == "__main__":
         sys.exit(-1)
 
     # Get our python install
-    pythonExecutable = sys.executable
+    pythonExecutable = "\"{0}\"".format(sys.executable)
 
     # Grab our Warspite install from the installer
     access_registry = winreg.ConnectRegistry(None, winreg.HKEY_CURRENT_USER)
