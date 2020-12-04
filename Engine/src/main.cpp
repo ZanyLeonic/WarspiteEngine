@@ -23,7 +23,6 @@ const char* WIDTH_PARAM = "-w";
 const char* HEIGHT_PARAM = "-h";
 const char* FULLSCREEN_PARAM = "-f";
 
-#ifndef WARDEBUG
 bool FlagExists(char** argv, int argc, const char* flag)
 {
 	if (argc <= 1) return false;
@@ -35,7 +34,6 @@ bool FlagExists(char** argv, int argc, const char* flag)
 
 	return false;
 }
-#endif
 
 bool GetParam(char** argv, int argc, const char* param, char*& returnval)
 {
