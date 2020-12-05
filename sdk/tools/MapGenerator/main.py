@@ -1,6 +1,13 @@
 import math
+import json
+from enum import Enum
 
+class TileTypes(Enum):
+    Grass = 0
+    Water = 1
+    Stone = 2
 
+progress = 0.0
 
 class Vector2(object):
     x = 0
@@ -54,21 +61,15 @@ def perlin(x, y):
 
     return interpolate(ix0, ix1, sy) 
 
-#t = Vector2(12.0, 30.0)
-#p = Vector2(5.0, 7.0)
-
-#print("First vector length: {0}".format(t.length()))
-#print("Second vector length: {0}".format(p.length()))
-
-#x = t + p
-#z = t - p
-
-#print("Third vector length: {0}".format(x.length()))
-#print("Fourth vector length: {0}".format(z.length()))
-
-size = (1024, 1024)
+size = (256, 256)
 scale = 100.0
+noise = []
 world = []
+
+for i in range(size[0]):
+    noise.append([])
+    for j in range(size[1]):
+        noise[i].append(0)
 
 for i in range(size[0]):
     world.append([])
@@ -77,6 +78,24 @@ for i in range(size[0]):
 
 for i in range(size[0]):
     for j in range(size[1]):
-        world[i][j] = perlin(i / scale, j / scale)
+        noise[i][j] = perlin(i / scale, j / scale)
+        progress = ((i / size[0]) * 100)
+        print("Generating noise {0}% done". format(round(progress, 2)), end="\r")
+        # print("\nNoise: {0}".format(noise[i][j]))
 
-print(world)
+for i in range(size[0]):
+    for j in range(size[1]):
+        v = noise[i][j]
+        if (v > 0.01):
+            world[i][j] = TileTypes.Stone.value
+        elif (v > 0):
+            world[i][j] = TileTypes.Grass.value
+        else:
+            world[i][j] = TileTypes.Water.value
+
+map = None
+with open("../../maps/untitled.json") as f:
+    map = json.load(f)
+
+if (map == None):
+    raise IOError("Cannot load map file.")
