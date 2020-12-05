@@ -27,6 +27,11 @@ void CPlayer::OnPlay()
 	CInputHandler::Instance()->SetAxisValue("MoveRight", SDL_SCANCODE_LEFT, -1.f);
 	CInputHandler::Instance()->SetAxisValue("MoveRight", SDL_SCANCODE_RIGHT, 1.f);
 
+	CInputHandler::Instance()->SetAxisValue("MoveForward", SDL_SCANCODE_W, -1.f);
+	CInputHandler::Instance()->SetAxisValue("MoveForward", SDL_SCANCODE_S, 1.f);
+	CInputHandler::Instance()->SetAxisValue("MoveRight", SDL_SCANCODE_A, -1.f);
+	CInputHandler::Instance()->SetAxisValue("MoveRight", SDL_SCANCODE_D, 1.f);
+
 	CBaseGame::Instance()->SetPlayer(this);
 }
 
@@ -82,9 +87,40 @@ void CPlayer::HandleInput()
 {
 	if (m_timeLeft >= 100)
 	{
-		// Can this code be improved? (I hope so.)	
-		MoveForward(CInputHandler::Instance()->GetAxisValue("MoveForward"));
-		MoveRight(CInputHandler::Instance()->GetAxisValue("MoveRight"));
+		if (CInputHandler::Instance()->JoysticksInitialised())
+		{
+			CVector2D tMove;
+
+			if (CInputHandler::Instance()->GetXAxis(0, 1) > 0 ||
+				CInputHandler::Instance()->GetXAxis(0, 1) < 0)
+			{
+				tMove.SetX(tMove.GetX() + (1 * CInputHandler::Instance()->GetXAxis(0, 1)));
+			}
+			if (CInputHandler::Instance()->GetYAxis(0, 1) > 0 ||
+				CInputHandler::Instance()->GetYAxis(0, 1) < 0)
+			{
+				tMove.SetY(tMove.GetY() + (1 * CInputHandler::Instance()->GetYAxis(0, 1)));
+			}
+			if (CInputHandler::Instance()->GetXAxis(0, 2) > 0 ||
+				CInputHandler::Instance()->GetXAxis(0, 2) < 0)
+			{
+				tMove.SetX(tMove.GetX() + (1 * CInputHandler::Instance()->GetXAxis(0, 2)));
+			}
+			if (CInputHandler::Instance()->GetYAxis(0, 2) > 0 ||
+				CInputHandler::Instance()->GetYAxis(0, 2) < 0)
+			{
+				tMove.SetY(tMove.GetY() + (1 * CInputHandler::Instance()->GetYAxis(0, 2)));
+			}
+
+			MoveForward(tMove.GetY() + CInputHandler::Instance()->GetAxisValue("MoveForward"));
+			MoveRight(tMove.GetX() + CInputHandler::Instance()->GetAxisValue("MoveRight"));
+		}
+		else
+		{
+			// Can this code be improved? (I hope so.)	
+			MoveForward(CInputHandler::Instance()->GetAxisValue("MoveForward"));
+			MoveRight(CInputHandler::Instance()->GetAxisValue("MoveRight"));
+		}
 
 		if (m_timeLeft >= 100)
 		{
