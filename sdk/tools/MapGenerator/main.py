@@ -1,11 +1,12 @@
 import math
 import json
+import sys
 from enum import Enum
 
 class TileTypes(Enum):
-    Grass = 0
-    Water = 1
-    Stone = 2
+    Grass = 1
+    Water = 2
+    Stone = 3
 
 progress = 0.0
 
@@ -72,11 +73,6 @@ for i in range(size[0]):
         noise[i].append(0)
 
 for i in range(size[0]):
-    world.append([])
-    for j in range(size[1]):
-        world[i].append(0)
-
-for i in range(size[0]):
     for j in range(size[1]):
         noise[i][j] = perlin(i / scale, j / scale)
         progress = ((i / size[0]) * 100)
@@ -86,16 +82,22 @@ for i in range(size[0]):
 for i in range(size[0]):
     for j in range(size[1]):
         v = noise[i][j]
-        if (v > 0.01):
-            world[i][j] = TileTypes.Stone.value
-        elif (v > 0):
-            world[i][j] = TileTypes.Grass.value
+        if (v < -0.1):
+            world.append(TileTypes.Stone.value)
+        elif (v < 0.4):
+            world.append(TileTypes.Water.value)
         else:
-            world[i][j] = TileTypes.Water.value
+            world.append(TileTypes.Grass.value)
 
 map = None
-with open("../../maps/untitled.json") as f:
+with open(sys.argv[1], 'r') as f:
     map = json.load(f)
 
 if (map == None):
     raise IOError("Cannot load map file.")
+
+map['layers'][0]['data'] = world
+
+with open(sys.argv[1], 'w') as f:
+    json.dump(map, f, indent = 3)
+

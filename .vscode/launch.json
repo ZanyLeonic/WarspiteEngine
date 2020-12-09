@@ -38,7 +38,7 @@
             "name": "Python: Test Export Map",
             "type": "python",
             "request": "launch",
-            "program": "${workspaceFolder}/sdk/ExportMap.py",
+            "program": "${workspaceFolder}/sdk/tools/ExportMap.py",
             "args": [
                 "-map",
                 "${workspaceFolder}/sdk/maps/map02.json",
@@ -51,7 +51,7 @@
             "name": "Python: Test Run Map (with Engine)",
             "type": "python",
             "request": "launch",
-            "program": "${workspaceFolder}/sdk/RunEngine.py",
+            "program": "${workspaceFolder}/sdk/tools/RunEngine.py",
             "args": [
                 "-map",
                 "${workspaceFolder}/sdk/maps/map02.json",
@@ -59,6 +59,16 @@
                 "${workspaceFolder}/build/Release/ws.exe"
             ],
             "console": "integratedTerminal"
-        }
+        },
+        {
+            "name": "Python: Random Map Generator",
+            "type": "python",
+            "request": "launch",
+            "program": "${workspaceFolder}/sdk/tools/MapGenerator/main.py",
+            "args": [
+                "${workspaceFolder}/sdk/maps/untitled.json"
+            ],
+            "console": "integratedTerminal"
+        },
     ]
 }
