@@ -30,7 +30,8 @@ enum class ESingletonIDs
 	STATEDICT = 3,
 	STATEMGR = 4,
 	SCRIPTMGR = 5,
-	SOUNDMGR = 6
+	SOUNDMGR = 6,
+	CAMERA = 7
 };
 
 typedef IWGame* (*GameDLL_t)(int argc, char** argv, std::map<ESingletonIDs, void(*)>* pPtrs);

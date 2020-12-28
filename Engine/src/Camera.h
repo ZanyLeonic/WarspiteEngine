@@ -2,13 +2,14 @@
 #ifndef __CAMERA_H__
 #define __CAMERA_H__
 
+#include "ICamera.h"
 #include <memory>
 #include "Vector2D.h"
 
 struct SCameraObject;
 typedef std::shared_ptr<SCameraObject> PCameraPtr;
 
-class CCamera
+class CCamera : public ICamera
 {
 public:
 	static CCamera* Instance()

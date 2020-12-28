@@ -6,12 +6,16 @@ cmake_minimum_required (VERSION 3.8)
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY_DEBUG "${BIN_PATH_DEBUG}/assets/bin" )
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY_RELEASE "${BIN_PATH_RELEASE}/assets/bin" )
 
+add_compile_definitions(_GAME_)
+
 set(WarspiteGame_Src
     src/WGame.cpp
     src/main.cpp
+    src/TestGObject.cpp
 )
 set(WarspiteGame_Header
     src/WGame.h
+    src/TestGObject.h
 )
 
 find_package(Python3 COMPONENTS Interpreter REQUIRED)

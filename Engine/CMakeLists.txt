@@ -5,6 +5,8 @@ cmake_minimum_required (VERSION 3.8)
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY_DEBUG "${BIN_PATH_DEBUG}/bin" )
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY_RELEASE "${BIN_PATH_RELEASE}/bin" )
 
+add_compile_definitions(_ENGINE_)
+
 set(WarspiteEngine_Src
         src/AudioSource.cpp
         src/AnimatedGraphic.cpp

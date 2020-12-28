@@ -105,7 +105,8 @@ bool CBaseGame::Init(const char* title, int xpos, int ypos, int width, int heigh
 			{ ESingletonIDs::SOUNDMGR,   (void(*))CSoundManager::Instance()},
 			{ ESingletonIDs::STATEMGR,	 (void(*))GetStateManager()},
 			{ ESingletonIDs::STATEDICT,  (void(*))CGameStateDictionary::Instance()},
-			{ ESingletonIDs::OBJDICT,    (void(*))CGameObjectDictionary::Instance()}
+			{ ESingletonIDs::OBJDICT,    (void(*))CGameObjectDictionary::Instance()},
+			{ ESingletonIDs::CAMERA,     (void(*))CCamera::Instance()}
 		};
 
 		// Run the GameDLL's init
