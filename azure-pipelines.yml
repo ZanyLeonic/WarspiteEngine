@@ -89,7 +89,6 @@ jobs:
 - job: Ubuntu
   pool:
     vmImage: ubuntu-20.04
-    RPi
   steps:
     - task: Bash@3
       displayName: "Installing dependencies + Making build files"
@@ -108,4 +107,27 @@ jobs:
       inputs:
         PathtoPublish: '/usr/local/bin/Warspite/'
         ArtifactName: 'linux'
+        publishLocation: 'Container'
+        
+- job: Ubuntu-ARM64
+  pool:
+    RPi
+  steps:
+    - task: Bash@3
+      displayName: "Installing dependencies + Making build files"
+      inputs:
+        filePath: 'build-deps.sh'
+        workingDirectory: '$(System.DefaultWorkingDirectory)'
+
+    - task: Bash@3
+      displayName: "Building project"
+      inputs:
+        filePath: 'build.sh'
+        workingDirectory: '$(System.DefaultWorkingDirectory)'
+
+    - task: PublishBuildArtifacts@1
+      displayName: "Publishing build artifacts"
+      inputs:
+        PathtoPublish: '/usr/local/bin/Warspite/'
+        ArtifactName: 'linux-arm64'
         publishLocation: 'Container'
