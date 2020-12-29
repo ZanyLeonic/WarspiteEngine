@@ -89,6 +89,7 @@ jobs:
 - job: Ubuntu
   pool:
     vmImage: ubuntu-20.04
+    RPi
   steps:
     - task: Bash@3
       displayName: "Installing dependencies + Making build files"
