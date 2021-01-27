@@ -147,6 +147,22 @@ bool CPlayState::OnPlay()
 		return;
 	});
 
+	// Try test state
+	CInputHandler::Instance()->AddActionKeyDown(SDL_SCANCODE_B, [this](SDL_Scancode e) {
+		if (CBaseGame::Instance()->GetStateManager()->GetCurrentStateID() != SID_TEST)
+		{
+			CBaseGame::Instance()->GetStateManager()->PushState(CGameStateDictionary::Instance()->Create(SID_TEST));
+		}
+		else if (CBaseGame::Instance()->GetStateManager()->GetCurrentStateID() == SID_TEST
+			&& CBaseGame::Instance()->GetStateManager()->GetCurrentStateID() != SID_PLAY)
+		{
+			CBaseGame::Instance()->GetStateManager()->PopState();
+		}
+		});
+	CInputHandler::Instance()->AddActionKeyUp(SDL_SCANCODE_B, [this](SDL_Scancode e) {
+		return;
+		});
+
 	if (pLevel)
 	{
 		// Give the camera the Level size
@@ -212,6 +228,7 @@ bool CPlayState::OnEnd()
 	CInputHandler::Instance()->RemoveActionKeyDown(SDL_SCANCODE_7);
 	CInputHandler::Instance()->RemoveActionKeyDown(SDL_SCANCODE_8);
 	CInputHandler::Instance()->RemoveActionKeyDown(SDL_SCANCODE_9);
+	CInputHandler::Instance()->RemoveActionKeyDown(SDL_SCANCODE_B);
 
 	CInputHandler::Instance()->RemoveActionKeyUp(SDL_SCANCODE_ESCAPE);
 	CInputHandler::Instance()->RemoveActionKeyUp(SDL_SCANCODE_0);
@@ -224,6 +241,7 @@ bool CPlayState::OnEnd()
 	CInputHandler::Instance()->RemoveActionKeyUp(SDL_SCANCODE_7);
 	CInputHandler::Instance()->RemoveActionKeyUp(SDL_SCANCODE_8);
 	CInputHandler::Instance()->RemoveActionKeyUp(SDL_SCANCODE_9);
+	CInputHandler::Instance()->RemoveActionKeyUp(SDL_SCANCODE_B);
 
 	// Execute the OnPlay method on all the GameObjects in all Object Layers
 	if (pLevel != 0)

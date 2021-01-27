@@ -21,7 +21,7 @@ set(WarspiteEngine_Src
         src/TextObject.cpp
         src/Game.cpp
         src/GameObjectDictionary.cpp
-        src/GameStateBase.cpp
+        ../shared/src/GameStateBase.cpp
         src/GameStateDictionary.cpp
         src/GameStateManager.cpp
 		src/GarbageCollector.cpp
@@ -66,7 +66,7 @@ set(WarspiteEngine_Header
         ../shared/src/GameObject.h
         src/GameObjectDictionary.h
         ../shared/src/GameState.h
-        src/GameStateBase.h
+        ../shared/src/GameStateBase.h
         src/GameStateDictionary.h
         src/GameStateManager.h
 		src/GarbageCollector.h

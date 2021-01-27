@@ -1,6 +1,20 @@
 #include "GameStateBase.h"
-#include "Game.h"
+#ifdef _ENGINE_
 #include "TextureManager.h"
+#include "Game.h"
+#elif _GAME_
+#include "ITextureManager.h"
+#include "WGame.h"
+#include "IGame.h"
+#include "Vector2D.h"
+#endif
+
+CGameStateBase::CGameStateBase()
+{
+#ifdef _GAME_
+	pTex = (ITextureManager*)CGame::Instance()->GetPointers()[ESingletonIDs::TEXTUREMANAGER];
+#endif
+}
 
 bool CGameStateBase::OnPlay()
 {
@@ -26,7 +40,11 @@ bool CGameStateBase::OnEnd()
 
 	for (size_t i = 0; i < m_TextureIDList.size(); i++)
 	{
+#ifdef _ENGINE_
 		CTextureManager::Instance()->Remove(m_TextureIDList[i]);
+#elif _GAME_
+		pTex->Remove(m_TextureIDList[i]);
+#endif
 	}
 
 	m_GameObjects.clear();

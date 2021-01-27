@@ -6,7 +6,11 @@
 #include "GameObject.h"
 #include "EngineFileSystem.h"
 #include "GameStateDictionary.h"
+#include "IGameStateFactory.h"
 #include "EngineTypes.h"
+#ifdef _GAME_
+#include "ITextureManager.h"
+#endif
 
 #include <vector>
 #include <memory>
@@ -16,11 +20,13 @@
 #define SID_INPUT "InputState"
 #define SID_PLAY "PlayState"
 #define SID_PAUSE "PauseState"
+#define SID_TEST "TestState"
 
 class CGameStateBase :
 	public CGameState
 {
 public:
+	CGameStateBase();
 	~CGameStateBase();
 
 	void OnThink() override;
@@ -54,5 +60,9 @@ protected:
 	bool m_bDrawingFinished = true;
 	
 	std::string s_UIID;
+private:
+#ifdef _GAME_
+	ITextureManager* pTex = nullptr;
+#endif
 };
 #endif
