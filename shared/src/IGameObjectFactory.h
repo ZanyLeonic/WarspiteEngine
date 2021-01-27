@@ -2,8 +2,11 @@
 #ifndef __IGAMEOBJFACT_H_
 #define __IGAMEOBJFACT_H_
 
+#include "ObjectFactory.h"
 #ifdef _ENGINE_
 #include "GameObjectDictionary.h"
+#elif _GAME_
+#include "ObjectRegisterBuffer.h"
 #endif
 
 // For real - what will create our GameObject.
@@ -19,11 +22,8 @@ public:
 		// Register ourselves in the dictionary.
 		CGameObjectDictionary::Instance()->RegisterType(pMapRef, this);
 #elif _GAME_
-// TODO: Find a way to load the GameDLL when the pointers are populated.
-//
-//		IGameObjectDictionary* obj = (IGameObjectDictionary*)(CGame::Instance()->GetPointers()[ESingletonIDs::OBJDICT]);
-//
-//		obj->RegisterType(pMapRef, this);
+		// TODO: Find a way to load the GameDLL when the pointers are populated.
+		CObjectRegisterBuffer::Instance()->RegisterType(pMapRef, this);
 #endif
 	}
 

@@ -2,6 +2,7 @@
 #include "IGame.h"
 #include <spdlog/spdlog.h>
 #include "EngineTypes.h"
+#include "ObjectRegisterBuffer.h"
 #include "Vector2D.h"
 
 CGame* CGame::s_pInstance = 0;
@@ -11,6 +12,9 @@ bool CGame::Init(int argc, char** argv, std::map<ESingletonIDs, void(*)>* pPtrs)
 {
     // Test stuff
     m_ptrs = *pPtrs;
+
+    // Register the GameObjects
+    CObjectRegisterBuffer::Instance()->AddAllRegistered();
 
     tObj = (IGame*)m_ptrs[ESingletonIDs::GAME];
 

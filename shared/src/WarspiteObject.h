@@ -6,6 +6,7 @@
 #include "GameObject.h"
 #include "GameObjectDictionary.h"
 #include "ITextureManager.h"
+#include "IGameObjectFactory.h"
 #include "ObjectParams.h"
 #include "Vector2D.h"
 #include <memory>

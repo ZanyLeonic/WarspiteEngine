@@ -12,11 +12,13 @@ set(WarspiteGame_Src
     src/WGame.cpp
     src/main.cpp
     src/TestGObject.cpp
+    src/ObjectRegisterBuffer.cpp
     ../shared/src/WarspiteObject.cpp
 )
 set(WarspiteGame_Header
     src/WGame.h
     src/TestGObject.h
+    src/ObjectRegisterBuffer.h
     ../shared/src/WarspiteObject.h
 )
 
