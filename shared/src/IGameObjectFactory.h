@@ -2,6 +2,10 @@
 #ifndef __IGAMEOBJFACT_H_
 #define __IGAMEOBJFACT_H_
 
+#ifdef _ENGINE_
+#include "GameObjectDictionary.h"
+#endif
+
 // For real - what will create our GameObject.
 // A template class to know what we are creating.
 template <class T>
@@ -14,7 +18,7 @@ public:
 #ifdef _ENGINE_
 		// Register ourselves in the dictionary.
 		CGameObjectDictionary::Instance()->RegisterType(pMapRef, this);
-#else _GAME_
+#elif _GAME_
 // TODO: Find a way to load the GameDLL when the pointers are populated.
 //
 //		IGameObjectDictionary* obj = (IGameObjectDictionary*)(CGame::Instance()->GetPointers()[ESingletonIDs::OBJDICT]);
