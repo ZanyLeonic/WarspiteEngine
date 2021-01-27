@@ -98,24 +98,30 @@ bool CBaseGame::Init(const char* title, int xpos, int ypos, int width, int heigh
 		spdlog::info("Initalisation success");
 		m_bRunning = true; // everything inited successfully, start the main loop
 
+		// Allow the GameDLL to access the pointers of our Singletons
+		// It is a nasty implementation, but I am not entirely sure how to do otherwise.
 		std::map<ESingletonIDs, void(*)> m_singletonPtrs
 		{
-			{ ESingletonIDs::GAME,		 (void(*))this},
-			{ ESingletonIDs::SCRIPTMGR,	 (void(*))CScriptManager::Instance()},
-			{ ESingletonIDs::SOUNDMGR,   (void(*))CSoundManager::Instance()},
-			{ ESingletonIDs::STATEMGR,	 (void(*))GetStateManager()},
-			{ ESingletonIDs::STATEDICT,  (void(*))CGameStateDictionary::Instance()},
-			{ ESingletonIDs::OBJDICT,    (void(*))CGameObjectDictionary::Instance()},
-			{ ESingletonIDs::CAMERA,     (void(*))CCamera::Instance()}
+			{ ESingletonIDs::GAME,				(void(*))this},
+			{ ESingletonIDs::OBJDICT,			(void(*))CGameObjectDictionary::Instance()},
+			{ ESingletonIDs::SCRIPTMGR,			(void(*))CScriptManager::Instance()},
+			{ ESingletonIDs::SOUNDMGR,			(void(*))CSoundManager::Instance()},
+			{ ESingletonIDs::STATEMGR,			(void(*))GetStateManager()},
+			{ ESingletonIDs::STATEDICT,			(void(*))CGameStateDictionary::Instance()},
+			{ ESingletonIDs::OBJDICT,			(void(*))CGameObjectDictionary::Instance()},
+			{ ESingletonIDs::CAMERA,			(void(*))CCamera::Instance()},
+			{ ESingletonIDs::TEXTUREMANAGER,    (void(*))CTextureManager::Instance()}
 		};
 
 		// Run the GameDLL's init
 		pGame = pGameDLL(m_argc, m_argv, &m_singletonPtrs);
 
+		// Try and get the map specified in the command line
 		char* mapName = "";
 
 		if (CWarspiteUtil::GetParam(argv, argc, "-map", mapName))
 		{
+			// If it exists, try loading the map specified.
 			m_bStartedWithMapParam = true;
 			m_sMapName = std::string(mapName);
 

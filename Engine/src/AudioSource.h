@@ -4,6 +4,7 @@
 
 #include "MapObject.h"
 #include "SoundManager.h"
+#include "IGameObjectFactory.h"
 
 class CAudioSource :
 	public CMapObject

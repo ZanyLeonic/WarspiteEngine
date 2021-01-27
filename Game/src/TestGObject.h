@@ -2,11 +2,11 @@
 #ifndef __TestGObject_h__
 #define __TestGObject_h__
 
-#include "GameObject.h"
+#include "WarspiteObject.h"
 #include "IGameObjectDictionary.h"
 
 class CTestGObject :
-	public IGameObject
+	public CWarspiteObject
 {
 public:
 	CTestGObject();

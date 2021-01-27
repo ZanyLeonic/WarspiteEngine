@@ -31,7 +31,16 @@ enum class ESingletonIDs
 	STATEMGR = 4,
 	SCRIPTMGR = 5,
 	SOUNDMGR = 6,
-	CAMERA = 7
+	CAMERA = 7,
+	TEXTUREMANAGER = 8
+};
+
+// Simply a way of not exposing the whole of SDL to the GameDLL
+enum class EWarRendererFlip
+{
+ 	FLIP_NONE = 0x00000000,     /**< Do not flip */
+    FLIP_HORIZONTAL = 0x00000001,    /**< flip horizontally */
+    FLIP_VERTICAL = 0x00000002     /**< flip vertically */
 };
 
 typedef IWGame* (*GameDLL_t)(int argc, char** argv, std::map<ESingletonIDs, void(*)>* pPtrs);

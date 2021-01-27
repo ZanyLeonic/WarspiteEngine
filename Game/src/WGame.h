@@ -1,6 +1,6 @@
 #pragma once
-#ifndef __Game_H__
-#define __Game_H__
+#ifndef __WGame_H__
+#define __WGame_H__
 
 #include <map>
 #include "EngineTypes.h"

@@ -45,7 +45,7 @@ set(WarspiteEngine_Src
         src/TestObject.cpp
         src/TextureManager.cpp
         src/TileLayer.cpp
-        src/WarspiteObject.cpp
+        ../shared/src/WarspiteObject.cpp
         src/WarspiteUtil.cpp
         )
 
@@ -93,7 +93,7 @@ set(WarspiteEngine_Header
         src/TextureManager.h
         src/TileLayer.h
         ../shared/src/Vector2D.h
-        src/WarspiteObject.h
+        ../shared/src/WarspiteObject.h
         src/WarspiteUtil.h
         )
 
@@ -165,6 +165,8 @@ if(UNIX)
     )
 endif()
 
+include_directories("${PROJECT_SOURCE_DIR}/Engine/src")
+include_directories("${PROJECT_SOURCE_DIR}/Game/src")
 include_directories(${SHARED_INCLUDE_DIR})
 include_directories(${Python3_INCLUDE_DIRS})
 include_directories(${SPDLOG_INCLUDE_DIR})

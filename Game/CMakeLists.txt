@@ -12,10 +12,12 @@ set(WarspiteGame_Src
     src/WGame.cpp
     src/main.cpp
     src/TestGObject.cpp
+    ../shared/src/WarspiteObject.cpp
 )
 set(WarspiteGame_Header
     src/WGame.h
     src/TestGObject.h
+    ../shared/src/WarspiteObject.h
 )
 
 find_package(Python3 COMPONENTS Interpreter REQUIRED)
@@ -36,7 +38,8 @@ set (WarspiteGame_Libs
     fmt::fmt
 )
 
-include_directories("${PROJECT_SOURCE_DIR}/engine")
+include_directories("${PROJECT_SOURCE_DIR}/Engine/src")
+include_directories("${PROJECT_SOURCE_DIR}/Game/src")
 include_directories(${SHARED_INCLUDE_DIR})
 include_directories(${SDL2_INCLUDE_DIRS})
 include_directories(${SPDLOG_INCLUDE_DIR})

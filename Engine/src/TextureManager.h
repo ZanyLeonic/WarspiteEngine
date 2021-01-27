@@ -2,15 +2,12 @@
 #ifndef __TextureManager__
 #define __TextureManager__
 
+#include "ITextureManager.h"
 #include <SDL.h>
-#include <string>
-#include <map>
 #include "CTexture.h"
 
-class CTexture;
-class CVector2D;
-
-class CTextureManager
+class CTextureManager :
+	public ITextureManager
 {
 	static CTextureManager* s_pInstance;
 	CTextureManager() {}
@@ -34,23 +31,23 @@ public:
 	// draw
 	void Draw(std::string id, int x, int y, int width, int height,
 		SDL_Renderer* pRenderer, double angle = 0.0f, 
-		SDL_Point* center = nullptr, SDL_RendererFlip flip = SDL_FLIP_NONE);
+		CVector2D* center = nullptr, EWarRendererFlip flip = EWarRendererFlip::FLIP_NONE);
 
 	// draw
 	void Draw(CTexture* texture, int x, int y, SDL_Renderer* pRenderer, 
-		double angle = 0.0f, SDL_Point* center = nullptr,
-		SDL_RendererFlip flip = SDL_FLIP_NONE);
+		double angle = 0.0f, CVector2D* center = nullptr,
+		EWarRendererFlip flip = EWarRendererFlip::FLIP_NONE);
 
 	// drawframe
 	void DrawFrame(std::string id, int x, int y, int width, int height,
 		int currentRow, int currentFrame, SDL_Renderer* pRenderer, 
-		double angle = 0.0f, SDL_Point* center = nullptr, 
-		SDL_RendererFlip flip = SDL_FLIP_NONE);
+		double angle = 0.0f, CVector2D* center = nullptr,
+		EWarRendererFlip flip = EWarRendererFlip::FLIP_NONE);
 
 	void DrawFrame(CTexture* texture, int x, int y,
 		int currentRow, int currentFrame, SDL_Renderer* pRenderer,
-		double angle = 0.0f, SDL_Point* center = nullptr,
-		SDL_RendererFlip flip = SDL_FLIP_NONE);
+		double angle = 0.0f, CVector2D* center = nullptr,
+		EWarRendererFlip flip = EWarRendererFlip::FLIP_NONE);
 
 	void DrawTile(std::string id, int margin, int spacing, 
 		int x, int y, int width, int height, int currentRow, 

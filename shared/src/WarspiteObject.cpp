@@ -1,11 +1,22 @@
-#include "WarspiteObject.h"
+#ifdef _ENGINE_
 #include "TextureManager.h"
 #include "Game.h"
+#elif _GAME_
+#include "ITextureManager.h"
+#include "WGame.h"
+#include "IGame.h"
+#endif
+
+#include "WarspiteObject.h"
 
 CWarspiteObject::CWarspiteObject() 
 	: IGameObject(), m_height(0), m_width(0), 
 	m_numFrames(1), m_currentFrame(0), m_currentRow(0)
 {
+#ifdef _GAME_
+	pTex = (ITextureManager*)CGame::Instance()->GetPointers()[ESingletonIDs::TEXTUREMANAGER];
+	pGame = (IGame*)CGame::Instance()->GetPointers()[ESingletonIDs::GAME];
+#endif
 }
 
 void CWarspiteObject::Load(const CObjectParams* pParams)
@@ -32,6 +43,7 @@ void CWarspiteObject::OnPlay()
 
 void CWarspiteObject::Draw()
 {
+#ifdef _ENGINE_
 	if (m_velocity.GetX() > 0)
 	{
 		CTextureManager::Instance()->DrawFrame(m_textureID, (int)m_position.GetX(),
@@ -45,6 +57,21 @@ void CWarspiteObject::Draw()
 			(int)m_position.GetY(), m_width, m_height,
 			m_currentRow, m_currentFrame, CBaseGame::Instance()->GetRenderer());
 	}
+#elif _GAME_
+	if (m_velocity.GetX() > 0)
+	{
+		pTex->DrawFrame(m_textureID, (int)m_position.GetX(),
+			(int)m_position.GetY(), m_width, m_height,
+			m_currentRow, m_currentFrame, pGame->GetRenderer(),
+			0.0, nullptr, EWarRendererFlip::FLIP_HORIZONTAL);
+	}
+	else
+	{
+		pTex->DrawFrame(m_textureID, (int)m_position.GetX(),
+			(int)m_position.GetY(), m_width, m_height,
+			m_currentRow, m_currentFrame, pGame->GetRenderer());
+	}
+#endif
 }
 
 bool CWarspiteObject::OnThink()

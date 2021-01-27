@@ -3,3 +3,10 @@
 *.bmp filter=lfs diff=lfs merge=lfs -text
 *.jpg filter=lfs diff=lfs merge=lfs -text
 *.png filter=lfs diff=lfs merge=lfs -text
+
+*   text=auto
+*.h text eol=lf
+*.cpp text eol=lf
+*.py text eol=lf
+*.ps1 text eol=crlf 
+*.sh text eol=lf 

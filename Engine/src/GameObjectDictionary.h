@@ -4,6 +4,7 @@
 
 #include "ObjectFactory.h"
 #include "IGameObjectDictionary.h"
+#include "IGameObjectFactory.h"
 #include "GameObject.h"
 #include <string>
 #include <map>
@@ -30,5 +31,4 @@ public:
 private:
 	std::map<std::string, IObjectFactory<IGameObject>*> m_creators;
 };
-
 #endif

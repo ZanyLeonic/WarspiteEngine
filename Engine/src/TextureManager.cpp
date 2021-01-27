@@ -94,7 +94,7 @@ void CTextureManager::CreateCheckboardPattern(CVector2D size, std::string texNam
 
 void CTextureManager::Draw(std::string id, int x, int y, int width, int height,
 	SDL_Renderer* pRenderer, double angle,
-	SDL_Point* center, SDL_RendererFlip flip)
+	CVector2D* center, EWarRendererFlip flip)
 {
 	// Don't try to draw if there is no id specified.
 	if (id == "") return;
@@ -102,6 +102,13 @@ void CTextureManager::Draw(std::string id, int x, int y, int width, int height,
 
 	SDL_Rect srcRect;
 	SDL_Rect destRect;
+	SDL_Point destCentre;
+
+	if (center != nullptr)
+	{
+		destCentre.x = center->GetX();
+		destCentre.y = center->GetY();
+	}
 
 	srcRect.x = 0;
 	srcRect.y = 0;
@@ -111,18 +118,25 @@ void CTextureManager::Draw(std::string id, int x, int y, int width, int height,
 	destRect.y = y;
 
 	SDL_RenderCopyEx(pRenderer, m_textureMap[id]->GetTexture(), &srcRect,
-		&destRect, angle, center, flip);
+		&destRect, angle, &destCentre, (SDL_RendererFlip)flip);
 }
 
 void CTextureManager::Draw(CTexture* tex, int x, int y,
 	SDL_Renderer* pRenderer, double angle, 
-	SDL_Point* center, SDL_RendererFlip flip)
+	CVector2D* center, EWarRendererFlip flip)
 {
 	// Don't try to draw if there is no id specified.
 	if (tex == nullptr) return;
 
 	SDL_Rect srcRect;
 	SDL_Rect destRect;
+	SDL_Point destCentre;
+
+	if (center != nullptr)
+	{
+		destCentre.x = center->GetX();
+		destCentre.y = center->GetY();
+	}
 
 	srcRect.x = 0;
 	srcRect.y = 0;
@@ -132,12 +146,12 @@ void CTextureManager::Draw(CTexture* tex, int x, int y,
 	destRect.y = y;
 
 	SDL_RenderCopyEx(pRenderer, tex->GetTexture(), &srcRect,
-		&destRect, angle, center, flip);
+		&destRect, angle, &destCentre, (SDL_RendererFlip)flip);
 }
 
 void CTextureManager::DrawFrame(std::string id, int x, int y, int width, int height,
 	int currentRow, int currentFrame, SDL_Renderer* pRenderer,
-	double angle, SDL_Point* center, SDL_RendererFlip flip)
+	double angle, CVector2D* center, EWarRendererFlip flip)
 {
 	if (id == "") return;
 	if (m_textureMap[id] == nullptr) return;
@@ -153,16 +167,24 @@ void CTextureManager::DrawFrame(std::string id, int x, int y, int width, int hei
 	destRect.y = y;
 
 	SDL_RenderCopyEx(pRenderer, m_textureMap[id]->GetTexture(), 
-		&srcRect, &destRect, 0, 0, flip);
+		&srcRect, &destRect, 0, 0, (SDL_RendererFlip)flip);
 }
 
 void CTextureManager::DrawFrame(CTexture* tex, int x, int y, int currentRow,
-	int currentFrame, SDL_Renderer* pRenderer, double angle, SDL_Point* center, SDL_RendererFlip flip)
+	int currentFrame, SDL_Renderer* pRenderer, double angle, CVector2D* center, 
+	EWarRendererFlip flip)
 {
 	if (tex == nullptr) return;
 
-	SDL_Rect srcRect;
-	SDL_Rect destRect;
+	SDL_Rect  srcRect;
+	SDL_Rect  destRect;
+	SDL_Point destCentre;
+
+	if (center != nullptr)
+	{
+		destCentre.x = center->GetX();
+		destCentre.y = center->GetY();
+	}
 
 	srcRect.x = tex->GetWidth() * currentFrame;
 	srcRect.y = tex->GetHeight() * (currentRow - 1);
@@ -172,7 +194,7 @@ void CTextureManager::DrawFrame(CTexture* tex, int x, int y, int currentRow,
 	destRect.y = y;
 
 	SDL_RenderCopyEx(pRenderer, tex->GetTexture(),
-		&srcRect, &destRect, angle, center, flip);
+		&srcRect, &destRect, angle, &destCentre, (SDL_RendererFlip)flip);
 }
 
 void CTextureManager::DrawTile(std::string id, int margin, int spacing, 

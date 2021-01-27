@@ -4,7 +4,8 @@
 #define __CWarspiteObject__
 
 #include "GameObject.h"
-#include "GameObjectDictionary.h" // Include used for classes that derive it! Do not remove!!!
+#include "GameObjectDictionary.h"
+#include "ITextureManager.h"
 #include "ObjectParams.h"
 #include "Vector2D.h"
 #include <memory>
@@ -71,5 +72,9 @@ protected:
 
 	bool m_collidable = false;
 	bool m_overlap = false;
+#ifdef _GAME_
+	IGame* pGame = nullptr;
+	ITextureManager* pTex = nullptr;
+#endif
 };
 #endif /* defined(__CWarspiteObject__) */
