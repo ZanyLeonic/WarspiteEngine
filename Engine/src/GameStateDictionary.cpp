@@ -1,4 +1,5 @@
 #include "GameStateDictionary.h"
+#include "GameStateBase.h"
 #include <iostream>
 #include <spdlog/spdlog.h>
 

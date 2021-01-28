@@ -5,7 +5,6 @@
 #include "GameState.h"
 #include "GameObject.h"
 #include "EngineFileSystem.h"
-#include "GameStateDictionary.h"
 #include "IGameStateFactory.h"
 #include "EngineTypes.h"
 #ifdef _GAME_
