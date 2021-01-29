@@ -21,7 +21,7 @@ bool CTestState::OnEnd()
 
 void CTestState::Draw()
 {
-
+    
 }
 
 void CTestState::OnThink()

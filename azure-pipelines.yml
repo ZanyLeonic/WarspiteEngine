@@ -7,22 +7,15 @@ trigger:
 - master
 - develop
 
+variables:
+- name: VCPKG_BINARY_SOURCES
+  value: 'clear;nuget,https://poweredbykurisu.pkgs.visualstudio.com/_packaging/poweredbykurisu/nuget/v3/index.json,readwrite'
+
 jobs:
 - job: "Windows_x64"
   pool:
     vmImage: 'windows-2019'
   steps:
-  - task: Cache@2
-    inputs:
-      key: 'v8 | vcpkg | "$(Agent.OS)" | "C:\vcpkg\.git\HEAD"'
-      restoreKeys: |
-        v8 | vcpkg | "$(Agent.OS)"
-        vcpkg | "$(Agent.OS)"
-        vcpkg
-      path: 'C:\vcpkg'
-      cacheHitVar: VCPKG_CACHE_RESTORED
-    displayName: Cache vcpkg
-
   - task: PowerShell@2
     displayName: "Installing dependencies + Making build files"
     inputs:
@@ -51,17 +44,6 @@ jobs:
   pool:
     vmImage: 'windows-2019'
   steps:
-  - task: Cache@2
-    inputs:
-      key: 'v1-x86 | vcpkg | "$(Agent.OS)" | "C:\vcpkg\.git\HEAD"'
-      restoreKeys: |
-        v1-x86 | vcpkg | "$(Agent.OS)"
-        vcpkg | "$(Agent.OS)"
-        vcpkg
-      path: 'C:\vcpkg'
-      cacheHitVar: VCPKG_CACHE_RESTORED
-    displayName: Cache vcpkg
-
   - task: PowerShell@2
     displayName: "Installing dependencies + Making build files"
     inputs:
@@ -107,8 +89,8 @@ jobs:
       inputs:
         PathtoPublish: '/usr/local/bin/Warspite/'
         ArtifactName: 'linux'
-        publishLocation: 'Container'
-        
+        publishLocation: 'Container'  
+ 
 - job: Ubuntu_ARM64
   pool:
     RPi
