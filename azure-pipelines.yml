@@ -9,7 +9,7 @@ trigger:
 
 variables:
 - name: VCPKG_BINARY_SOURCES
-  value: 'clear;nuget,https://poweredbykurisu.pkgs.visualstudio.com/_packaging/poweredbykurisu/nuget/v3/index.json,readwrite'
+  value: 'clear;nuget,https://poweredbykurisu.pkgs.visualstudio.com/WarspiteGame/_packaging/WarspiteGame_Feed/nuget/v3/index.json,readwrite'
 
 jobs:
 - job: "Windows_x64"
