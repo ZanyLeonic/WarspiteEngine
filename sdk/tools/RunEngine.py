@@ -43,7 +43,6 @@ def RunEngine(args):
             print(line.rstrip().decode("utf-8"))
 
 if __name__ == "__main__":
-
     print("{0}".format(appName))
     print("Version: {0}".format(appVer))
     print("Description:\n{0}\n".format(appDesc))
@@ -54,7 +53,7 @@ if __name__ == "__main__":
 
     workingDir = os.path.dirname(engine)
 
-    if (mapFile != None):
+    if (mapFile is None):
         print("Map file defined, exporting before launch...")
         import ExportMap
 
@@ -65,10 +64,9 @@ if __name__ == "__main__":
     # For the engine, so it doesn't crash.
     os.chdir(workingDir)
 
-    if (mapFile != None):
+    if (mapFile is None):
         # Get the map name in a way the engine can use it
         mapName = mapFile.name.replace(mapFile.suffix, "")
-
         largs = [engine, '-map', mapName, '-dev']
 
         RunEngine(largs)
@@ -76,5 +74,3 @@ if __name__ == "__main__":
         largs = [engine, '-dev']
 
         RunEngine(largs)
-
-

@@ -91,8 +91,8 @@ jobs:
       inputs:
         PathtoPublish: '/usr/local/bin/Warspite/'
         ArtifactName: 'linux'
-        publishLocation: 'Container'  
- 
+        publishLocation: 'Container'
+
 - job: Ubuntu_ARM64
   pool:
     RPi

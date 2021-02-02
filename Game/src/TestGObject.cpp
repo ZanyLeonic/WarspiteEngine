@@ -7,9 +7,7 @@ CTestGObject::CTestGObject()
 }
 
 void CTestGObject::Draw()
-{
-
-}
+{}
 
 void CTestGObject::DoDraw(bool newVis)
 {

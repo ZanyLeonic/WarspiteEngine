@@ -1,9 +1,17 @@
 #include "ScriptManager.h"
-#include <iostream>
 #include "ScriptWrappers.h"
+#include <iostream>
 #include <pybind11/embed.h>
 #include <spdlog/spdlog.h>
 #include <spdlog/sinks/stdout_color_sinks.h>
+
+#ifdef _WIN32
+#include <iostream>
+#include <fstream>
+#include <filesystem>
+#include <Windows.h>
+#define PythonPTHName PDLLNAME "._pth"
+#endif
 
 CScriptManager* CScriptManager::s_pInstance = 0;
 
@@ -15,14 +23,32 @@ CScriptManager::CScriptManager()
 	{
 		try
 		{
-			py::initialize_interpreter();
+#ifdef _WIN32
+			std::ofstream pathFile;
+			std::filesystem::path pPath = CWarspiteUtil::GetExecutingDirectory();
+			pPath.append("bin");
+			pPath.append(PythonPTHName);
 
-			main_module = py::module::import("__main__");
-			engine_module = py::module::import("engine");
+			spdlog::info("Executing object: {}", pPath.string());
+
+			pathFile.open(pPath);
+			pathFile << CWarspiteUtil::GetExecutingDirectory() << "platform\\Lib" << std::endl;
+			pathFile << CWarspiteUtil::GetExecutingDirectory() << "platform\\DLLs" << std::endl;
+			pathFile << CWarspiteUtil::GetExecutingDirectory() << "platform\\site-packages" << std::endl;
+			pathFile.close();
+
+			Py_SetProgramName(Py_DecodeLocale(MOD_NAME, 0));
+#endif
+			py::initialize_interpreter();
+#ifdef _WIN32
+			std::filesystem::remove(pPath);
+#endif
+			main_module    = py::module::import("__main__");
+			engine_module  = py::module::import("engine");
 			main_namespace = main_module.attr("__dict__");
-			
+
 			// Show that the ScriptManager is ready
-			SGameScript* test = SGameScript::source("internal_autoexec", "import sys\nprint(\"Using Python Runtime %s.%s.%s\" % (sys.version_info.major, sys.version_info.minor, sys.version_info.micro))\nprint(\"Script Manager is ready!\")\n");
+			SGameScript* test = SGameScript::source("internal_autoexec", "import sys\nprint(\"Using Python Runtime %s.%s.%s\" % (sys.version_info.major, sys.version_info.minor, sys.version_info.micro))\nprint(\"Script Manager is ready!\")\nprint(\"Prefix: %s Path: %s\" % (sys.prefix, sys.path))\n");
 
 			Run(test);
 		}
@@ -76,7 +102,7 @@ bool CScriptManager::Run(SGameScript* script, py::object* ns)
 	{
 		// Grab all the stdout
 		m_stdRedirect = new PyStdErrOutStreamRedirect();
-		
+
 		// Use the namespace provided (if there is one)
 		switch (script->GetScriptType())
 		{
@@ -95,12 +121,12 @@ bool CScriptManager::Run(SGameScript* script, py::object* ns)
 		default:
 			return false; // No type defined? what?
 		}
-		
+
 		delete m_stdRedirect;
-		
+
 		return true;
 	}
-	catch(py::error_already_set const & e)
+	catch (py::error_already_set const& e)
 	{
 		switch (script->GetScriptType())
 		{
@@ -115,11 +141,11 @@ bool CScriptManager::Run(SGameScript* script, py::object* ns)
 			break;
 		}
 		// Print what happened to not make debugging hell.
-			spdlog::error("Error:");
-			spdlog::error(e.what());
-			spdlog::error("Python stderr:");
-			spdlog::error(m_stdRedirect->stderrString());
-			spdlog::error("***Error End***");
+		spdlog::error("Error:");
+		spdlog::error(e.what());
+		spdlog::error("Python stderr:");
+		spdlog::error(m_stdRedirect->stderrString());
+		spdlog::error("***Error End***");
 	}
 
 	delete m_stdRedirect;
@@ -135,7 +161,7 @@ void CScriptManager::printScriptOutput(std::string output)
 {
 	std::vector<std::string> lines = CWarspiteUtil::SplitString(output, '\n');
 
-	for (size_t i=0; i < lines.size(); i++)
+	for (size_t i = 0; i < lines.size(); i++)
 	{
 		spdlog::info(lines[i]);
 	}

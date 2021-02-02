@@ -3,7 +3,16 @@
 #include <memory>
 #include <fstream>
 #include <sstream>
+#include <stdio.h>
 #include <vector>
+
+#ifdef _WIN32
+#include <Windows.h>
+#elif _UNIX
+#include <unistd.h>
+#include <limits.h>
+#include <sys/param.h>
+#endif
 
 #include "Level.h"
 #include "ObjectLayer.h"
@@ -134,4 +143,18 @@ bool CWarspiteUtil::GetParam(char** argv, int argc, const char* param, char*& re
 	}
 
 	return false;
+}
+
+std::string CWarspiteUtil::GetExecutingDirectory()
+{
+	char pBuf[256];
+	size_t len = sizeof(pBuf);
+#ifdef _WIN32
+	GetModuleFileName(NULL, pBuf, len);
+#elif _UNIX
+	int bytes = MIN(readlink("/proc/self/exe", pBuf, len), len - 1);
+	if (bytes >= 0)
+		pBuf[bytes] = '\0';
+#endif
+	return RemoveFileNameFromPath(std::string(pBuf));
 }

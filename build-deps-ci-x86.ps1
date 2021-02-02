@@ -35,8 +35,9 @@ function GenerateProjectFiles() {
 		"-AWin32",
 		"-DCMAKE_TOOLCHAIN_FILE=$VcpkgDir\scripts\buildsystems\vcpkg.cmake",
 		"-DCMAKE_BUILD_TYPE=`"$BuildType`"", 
-		"-DVCPKG_TARGET_TRIPLET=x86-windows",
-		"-DPYTHON_EXECUTABLE:FILEPATH=C:\hostedtoolcache\windows\Python\3.8.5\x86\python.exe",
+        "-DVCPKG_TARGET_TRIPLET=x86-windows",
+        "-DTARGET_ARCH=x86",
+		"-DPYTHON_EXECUTABLE:FILEPATH=C:\hostedtoolcache\windows\Python\3.8.7\x86\python.exe",
 		"-B$BuildLocation",
 		".")
 	}
@@ -46,7 +47,8 @@ function GenerateProjectFiles() {
 		"-AWin32",
 		"-DCMAKE_TOOLCHAIN_FILE=$VcpkgDir\scripts\buildsystems\vcpkg.cmake",
 		'-DCMAKE_BUILD_TYPE=`"$BuildType`"', 
-		"-DVCPKG_TARGET_TRIPLET=x86-windows",
+        "-DVCPKG_TARGET_TRIPLET=x86-windows",
+        "-DTARGET_ARCH=x86",
 		"-DPYTHON_EXECUTABLE:FILEPATH=C:\Program Files (x86)\Python38-32\python.exe",
 		"-B$BuildLocation",
 		".")

@@ -414,5 +414,6 @@ Engine/logs/**
 /Launcher/main/ws
 /rel-test/Launcher/main
 /Rel/Release2
+/Engine/src/PythonInfo.json
 
 !dist/redist/*.exe

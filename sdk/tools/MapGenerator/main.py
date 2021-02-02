@@ -89,15 +89,14 @@ for i in range(size[0]):
         else:
             world.append(TileTypes.Grass.value)
 
-map = None
+mapt = None
 with open(sys.argv[1], 'r') as f:
-    map = json.load(f)
+    mapt = json.load(f)
 
-if (map == None):
+if (map is None):
     raise IOError("Cannot load map file.")
 
-map['layers'][0]['data'] = world
+mapt['layers'][0]['data'] = world
 
 with open(sys.argv[1], 'w') as f:
     json.dump(map, f, indent = 3)
-

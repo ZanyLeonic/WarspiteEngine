@@ -119,11 +119,26 @@ if (WIN32)
 endif()
 
 find_package(Python3 COMPONENTS Interpreter Development REQUIRED)
+find_package(Git REQUIRED)
 
 add_custom_target(EngineMetadata
-        COMMAND "${Python3_EXECUTABLE}" "${CMAKE_CURRENT_SOURCE_DIR}/src/EngineMetadata.py"
+        COMMAND "${Python3_EXECUTABLE}" "${CMAKE_CURRENT_SOURCE_DIR}/src/EngineMetadata.py" "${GIT_EXECUTABLE}"
         COMMENT "Generating build Engine metadata..."
 )
+
+# Download Python
+if (WIN32)
+    message(STATUS "Downloading Python ${Python3_VERSION} (${TARGET_ARCH})...")
+    execute_process(COMMAND 
+        "${Python3_EXECUTABLE}" 
+        "${CMAKE_CURRENT_SOURCE_DIR}/src/DownloadPython.py"
+        "${CMAKE_BINARY_DIR}" 
+        "${Python3_VERSION}" 
+        "${TARGET_ARCH}" 
+        "${CMAKE_BUILD_TYPE}"
+    )
+    message(STATUS "Download finished!")
+endif()
 
 find_package(fmt CONFIG REQUIRED)
 find_package(pybind11 CONFIG REQUIRED)
@@ -135,6 +150,12 @@ find_package(RapidJSON REQUIRED)
 find_package(OpenAL REQUIRED)
 find_package(Vorbis REQUIRED)
 find_package(ZLIB REQUIRED)
+
+if((Python3_FOUND) AND (CMAKE_BUILD_TYPE STREQUAL "Release"))
+    add_compile_definitions(PDLLNAME="python${Python3_VERSION_MAJOR}${Python3_VERSION_MINOR}")
+elseif(Python3_FOUND)
+    add_compile_definitions(PDLLNAME="python${Python3_VERSION_MAJOR}${Python3_VERSION_MINOR}_d")
+endif()
 
 # Add this because apparently find_package(SDL2 REQUIRED) doesn't work right on Arch?
 if("${SDL2_LIBRARIES}" STREQUAL "")

@@ -63,7 +63,7 @@ if __name__ == "__main__":
     print("Description:\n{0}\n".format(appDesc))
 
     # Update your Python
-    if (sys.version.startswith('3') != True):
+    if (not sys.version.startswith('3')):
         print("You need to have at least Python 3 to run this script.")   
         sys.exit(-1)
 

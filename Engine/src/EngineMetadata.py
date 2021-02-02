@@ -86,7 +86,7 @@ def GetTime():
 
 def GetGitDesc():
     try:
-        return str(subprocess.check_output(["git", "describe", "--always"]).strip().decode("utf-8"))
+        return str(subprocess.check_output([sys.argv[1], "describe", "--always"]).strip().decode("utf-8"))
     except FileNotFoundError:
         return "undefined"
 

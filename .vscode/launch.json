@@ -70,5 +70,18 @@
             ],
             "console": "integratedTerminal"
         },
+        {
+            "name": "Python: Download Python Embed",
+            "type": "python",
+            "request": "launch",
+            "program": "${workspaceFolder}/Engine/src/DownloadPython.py",
+            "args": [
+                "E:\\Projects\\WarspiteGame\\build",
+                "3.8.7",
+                "amd64",
+                "Debug"
+            ],
+            "console": "integratedTerminal"
+        }
     ]
 }

@@ -29,8 +29,10 @@ set(WarspiteGame_Header
 )
 
 find_package(Python3 COMPONENTS Interpreter REQUIRED)
+find_package(Git REQUIRED)
+
 add_custom_target(GameDLLMetadata
-        COMMAND "${Python3_EXECUTABLE}" "${CMAKE_CURRENT_SOURCE_DIR}/src/GameDLLMetadata.py"
+        COMMAND "${Python3_EXECUTABLE}" "${CMAKE_CURRENT_SOURCE_DIR}/src/GameDLLMetadata.py" "${GIT_EXECUTABLE}"
         COMMENT "Generating build metadata..."
 )
 

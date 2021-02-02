@@ -3,10 +3,7 @@
 
 CTestObject::CTestObject()
 	: CMapObject()
-{
-}
+{}
 
 void CTestObject::collide()
-{
-	
-}
+{}
