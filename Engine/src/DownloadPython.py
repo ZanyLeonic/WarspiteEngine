@@ -9,28 +9,6 @@ import requests
 import shutil
 import zipfile
 
-# def getFiles(dirName):
-#     listOfFile = os.listdir(dirName)
-#     completeFileList = list()
-#     for file in listOfFile:
-#         completePath = os.path.join(dirName, file)
-#         if os.path.isdir(completePath):
-#             completeFileList = completeFileList + getFiles(completePath)
-#         else:
-#             item = {completePath : hashFile(completePath)}
-#             completeFileList.append(item)
-#     return completeFileList
-
-# def hashFile(fileName):
-#     BLOCKSIZE = 65536
-#     hasher = hashlib.sha1()
-#     with open(fileName, 'rb') as afile:
-#         buf = afile.read(BLOCKSIZE)
-#         while len(buf) > 0:
-#             hasher.update(buf)
-#             buf = afile.read(BLOCKSIZE)
-#     return hasher.hexdigest()
-
 # Base parameters
 base_dir = pathlib.Path(__file__).parent
 base_url = "https://www.python.org/ftp/python/{}/python-{}-embed-{}.zip"
@@ -62,6 +40,10 @@ assert config == "Debug" or config == "Release" # Needs to be 'Debug' or 'Releas
 download_dir = build_dir.joinpath("tmp")
 extracted_dir = pathlib.Path(download_dir, "python")
 result_folder = build_dir.joinpath(config, "platform")
+
+result_DLL_folder = result_folder.joinpath("DLLs")
+result_Lib_folder = result_folder.joinpath("Lib")
+result_site_folder = result_folder.joinpath("sites-packages")
 
 if os.path.exists(result_folder) and os.path.isdir(result_folder):
     if os.listdir(result_folder):
@@ -96,11 +78,11 @@ for i in file_blacklist:
         p.unlink()
         print("Deleted \"{}\"".format(p))
 
-os.makedirs(result_folder.joinpath("DLLs"), exist_ok=True)
-os.makedirs(result_folder.joinpath("Libs"), exist_ok=True)
-os.makedirs(result_folder.joinpath("sites-packages"), exist_ok=True)
+os.makedirs(result_DLL_folder,  exist_ok=True)
+os.makedirs(result_Lib_folder,  exist_ok=True)
+os.makedirs(result_site_folder, exist_ok=True)
 
-with open(result_folder.joinpath("sites-packages", ".empty"), 'w') as f:
+with open(result_site_folder.joinpath(".empty"), 'w') as f:
     f.write("Place 3rd parties libaries here.")
 
 # Copying files to other directory      
@@ -108,19 +90,13 @@ for k in os.listdir(extracted_dir):
     cPath = pathlib.Path(extracted_dir, k)
     if cPath.suffix == ".zip":
         with zipfile.ZipFile(cPath, 'r') as zipObj:
-            zipObj.extractall(result_folder.joinpath("Libs"))
+            zipObj.extractall(result_Lib_folder)
         os.remove(cPath)
     else:
-        dPath = result_folder.joinpath("DLLs", cPath.name)
+        dPath = result_DLL_folder.joinpath(cPath.name)
         if cPath.exists():
             shutil.move(cPath, dPath)
             print("Moved \"{}\" to \"{}\"".format(cPath, dPath))
 
 shutil.rmtree(download_dir) # Delete the old folder
 print("Cleaned up download folder")
-# Caching
-# outList = getFiles(result_folder)
-# cache_list['files'] = outList
-
-# with open(pathlib.Path(base_dir, "PythonInfo.json"), 'w') as f:
-#     json.dump(cache_list, f)
