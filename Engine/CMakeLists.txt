@@ -129,6 +129,12 @@ add_custom_target(EngineMetadata
 # Download Python
 if (WIN32)
     message(STATUS "Downloading Python ${Python3_VERSION} (${TARGET_ARCH})...")
+    execute_process(COMMAND
+    "${Python3_EXECUTABLE}"
+    "-m"
+    "pip"
+    "install" 
+    "requests")
     execute_process(COMMAND 
         "${Python3_EXECUTABLE}" 
         "${CMAKE_CURRENT_SOURCE_DIR}/src/DownloadPython.py"

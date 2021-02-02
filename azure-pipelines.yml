@@ -17,6 +17,7 @@ jobs:
     vmImage: 'windows-2019'
   steps:
   - task: NuGetAuthenticate@0
+    displayName: "Authenicating NuGet"
   - task: PowerShell@2
     displayName: "Installing dependencies + Making build files"
     inputs:
@@ -46,6 +47,7 @@ jobs:
     vmImage: 'windows-2019'
   steps:
   - task: NuGetAuthenticate@0
+    displayName: "Authenicating NuGet"
   - task: PowerShell@2
     displayName: "Installing dependencies + Making build files"
     inputs:

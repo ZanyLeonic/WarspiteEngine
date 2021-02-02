@@ -5,7 +5,7 @@ import os
 import json
 import glob
 import hashlib
-import urllib.request
+import requests
 import shutil
 import zipfile
 
@@ -76,8 +76,17 @@ desired_path = pathlib.Path.joinpath(download_dir, base_filename.format(version,
 desired_url = base_url.format(version, version, arch)
 
 print("Downloading Python {} ({})...".format(version, arch))
-response = urllib.request.urlretrieve(desired_url, desired_path)
+r = requests.get(desired_url)
 print("File downloaded.")
+
+with open(desired_path, 'wb') as f:
+    f.write(r.content)
+
+print("*** File information: ***")
+print(r.status_code)
+print(r.headers['content-type'])
+print(r.encoding)
+print("*** File meta end ***")
 
 with zipfile.ZipFile(desired_path, 'r') as zipObj:
     zipObj.extractall(extracted_dir)
@@ -90,6 +99,9 @@ for i in file_blacklist:
 os.makedirs(result_folder.joinpath("DLLs"), exist_ok=True)
 os.makedirs(result_folder.joinpath("Libs"), exist_ok=True)
 os.makedirs(result_folder.joinpath("sites-packages"), exist_ok=True)
+
+with open(result_folder.joinpath("sites-packages", ".empty"), 'w') as f:
+    f.write("Place 3rd parties libaries here.")
 
 # Copying files to other directory      
 for k in os.listdir(extracted_dir):

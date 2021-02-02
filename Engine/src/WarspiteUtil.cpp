@@ -152,7 +152,7 @@ std::string CWarspiteUtil::GetExecutingDirectory()
 #ifdef _WIN32
 	GetModuleFileName(NULL, pBuf, len);
 #elif _UNIX
-	int bytes = MIN(readlink("/proc/self/exe", pBuf, len), len - 1);
+	int bytes = MIN(readlink("/proc/self/exe\0", pBuf, len), len - 1);
 	if (bytes >= 0)
 		pBuf[bytes] = '\0';
 #endif
