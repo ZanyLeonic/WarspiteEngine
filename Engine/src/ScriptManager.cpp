@@ -34,7 +34,7 @@ CScriptManager::CScriptManager()
 			pathFile.open(pPath);
 			pathFile << CWarspiteUtil::GetExecutingDirectory() << "platform\\Lib" << std::endl;
 			pathFile << CWarspiteUtil::GetExecutingDirectory() << "platform\\DLLs" << std::endl;
-			pathFile << CWarspiteUtil::GetExecutingDirectory() << "platform\\site-packages" << std::endl;
+			pathFile << CWarspiteUtil::GetExecutingDirectory() << "platform\\Lib\\site-packages" << std::endl;
 			pathFile.close();
 
 			Py_SetProgramName(Py_DecodeLocale(MOD_NAME, 0));
