@@ -169,7 +169,7 @@ Section "${PRODUCT_NAME} SDK" SECTION_AUTH
   File /r "${AUTHTOOLSDIR}\WarspiteGame.AuthoringTools\bin\Release\"
   File /r "${AUTHTOOLSDIR}\WarspiteGame.AuthoringTools.Debugger\bin\Release\"
 
-  CreateShortCut "$INSTDIR\sdk\Generate Tiled Project.lnk" "$WINDIR\py.exe" '-3 "$INSTDIR\sdk\tools\SetupTiledProject.py"'
+  CreateShortCut "$INSTDIR\sdk\Generate Tiled Project.lnk" "$INSTDIR\platform\python.exe" '"$INSTDIR\sdk\tools\SetupTiledProject.py"'
 
   ; Give the location of our paths 
   DetailPrint "Configuring Authoring Tools..."
@@ -192,7 +192,7 @@ Section "Start menu shortcuts" SECTION_START_MENU_SHORTCUTS
   CreateShortCut "$SMPROGRAMS\${PRODUCT_NAME}\SDK\${PRODUCT_NAME} SDK folder.lnk" "$INSTDIR\sdk\"
 
   CreateShortCut "$SMPROGRAMS\${PRODUCT_NAME}\SDK\Launch ${PRODUCT_NAME} with Debugger.lnk" "$INSTDIR\sdk\bin\${AUTHOR_DEBUG_EXE}" "$INSTDIR\${PRODUCT_EXE}"
-  CreateShortCut "$SMPROGRAMS\${PRODUCT_NAME}\SDK\Generate Tiled Project.lnk" "$WINDIR\py.exe" '-3 "$INSTDIR\sdk\tools\SetupTiledProject.py"'
+  CreateShortCut "$SMPROGRAMS\${PRODUCT_NAME}\SDK\Generate Tiled Project.lnk" "$INSTDIR\platform\python.exe" '"$INSTDIR\sdk\tools\SetupTiledProject.py"'
   ${Endif}
 SectionEnd
 
@@ -248,6 +248,7 @@ Section Uninstall
   Delete "$INSTDIR\${UNINST_EXE}"
   RMDir /r "$INSTDIR\bin\"
   RMDir /r "$INSTDIR\assets\"
+  RMDir /r "$INSTDIR\platform\"
 SectionEnd
 
 ; ------------------------------------------------------------------------------

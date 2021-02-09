@@ -15,11 +15,14 @@ base_url = "https://www.python.org/ftp/python/{}/python-{}-embed-{}.zip"
 base_filename = "python-{}-embed-{}.zip"
 
 file_blacklist = [
-    "python*.dll",
-    "python*._pth",
+    "python*._pth"
+]
+
+file_copy = [
     "pythonw.exe",
     "python.cat",
-    "python.exe"
+    "python.exe",
+    "python*.dll"
 ]
 
 # Initialise variables
@@ -100,6 +103,12 @@ with open(result_folder.joinpath("README.txt"), 'w') as f:
     print("Place thirdparty libraries in 'Lib/site-packages' like you would for a regular Python install.", file=f)
     print("However, keep in mind some libraries may not be compatible with the environment.", file=f)
     f.flush()
+
+for i in file_copy:
+    for p in extracted_dir.glob(i):
+        diPath = result_folder.joinpath(p.name)
+        shutil.move(p, diPath)
+        print("Moved \"{}\" to \"{}\"".format(p, diPath))
 
 # Copying files to other directory      
 for k in os.listdir(extracted_dir):
