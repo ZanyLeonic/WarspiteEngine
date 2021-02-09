@@ -1,6 +1,6 @@
 #include "MenuState.h"
 
-#include "Button.h"
+#include "UIBase.h"
 #include <spdlog/spdlog.h>
 #include <limits>
 
@@ -9,46 +9,46 @@ void CMenuState::SetCallbacks(const std::vector<HButtonCallback>& callbacks)
 	for (size_t i = 0; i < m_GameObjects.size(); i++)
 	{
 		IGameObject* pBase = m_GameObjects[i].get();
-		CButton* pButton = dynamic_cast<CButton*>(pBase);
+		CUIBase* pUIBase = dynamic_cast<CUIBase*>(pBase);
 
-		if (pButton)
+		if (pUIBase)
 		{
 			assert(!((m_callbacks.size() - 1) > std::numeric_limits<int>::max() && "Callback list larger than signed int max"));
 
 			// So we don't crash when we try add something new.
 			int cbSize = static_cast<int>(m_callbacks.size() - 1);
 
-			if (pButton->GetOnClickID() > cbSize)
+			if (pUIBase->GetOnClickID() > cbSize)
 			{
-				spdlog::warn("OnClickID event ID for Button object \"{}\" is larger than the defined callbacks!",
+				spdlog::warn("OnClickID event ID forUI object \"{}\" is larger than the defined callbacks!",
 					m_GameObjects[i]->GetName());
 				spdlog::warn("Is this JSON intended for this version of the Engine or did some forget to implement the callback?");
 			}
 			else
 			{
-				pButton->OnClick(callbacks[pButton->GetOnClickID()]);
+				pUIBase->OnClick(callbacks[pUIBase->GetOnClickID()]);
 			}
 
-			if (pButton->GetOnEnterID() > cbSize)
+			if (pUIBase->GetOnEnterID() > cbSize)
 			{
-				spdlog::warn("OnEnterID event ID for Button object \"{}\" is larger than the defined callbacks!",
+				spdlog::warn("OnEnterID event ID for UI object \"{}\" is larger than the defined callbacks!",
 					m_GameObjects[i]->GetName());
 				spdlog::warn("Is this JSON intended for this version of the Engine or did some forget to implement the callback?");
 			}
 			else
 			{
-				pButton->OnEnter(callbacks[pButton->GetOnEnterID()]);
+				pUIBase->OnEnter(callbacks[pUIBase->GetOnEnterID()]);
 			}
 
-			if (pButton->GetOnLeaveID() > cbSize)
+			if (pUIBase->GetOnLeaveID() > cbSize)
 			{
-				spdlog::warn("OnLeaveID event ID for Button object \"{}\" is larger than the defined callbacks!",
+				spdlog::warn("OnLeaveID event ID for UI object \"{}\" is larger than the defined callbacks!",
 					m_GameObjects[i]->GetName());
 				spdlog::warn("Is this JSON intended for this version of the Engine or did some forget to implement the callback?");
 			}
 			else
 			{
-				pButton->OnLeave(callbacks[pButton->GetOnLeaveID()]);
+				pUIBase->OnLeave(callbacks[pUIBase->GetOnLeaveID()]);
 			}
 		}
 	}

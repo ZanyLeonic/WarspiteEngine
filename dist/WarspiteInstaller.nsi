@@ -138,6 +138,8 @@ Section "!${PRODUCT_NAME}" SECTION_DEFAULT
   File /r "${BUILDDIR}\Release\bin\"
   SetOutPath "$INSTDIR\assets\"
   File /r "${BUILDDIR}\Release\assets\"
+  SetOutPath "$INSTDIR\platform\"
+  File /r "${BUILDDIR}\Release\platform\"
 
   SetOutPath "$INSTDIR"
 
@@ -214,15 +216,6 @@ Section /o ".NET 4.0 Framework (x86/x64)"
   ExecWait '"$INSTDIR\dotNetFx40_Full_setup.exe" /q' $0
   Delete "$INSTDIR\vcredist_x64.exe"
   DetailPrint ".NET Framework 4.0 installer exited with: $0"
-SectionEnd
-
-Section "Python 3 (x64)"
-  DetailPrint "Installing Python 3 (x64)"
-  SetOutPath "$INSTDIR"
-  File "redist\python-3.8.5-amd64.exe"
-  ExecWait '"$INSTDIR\python-3.8.5-amd64.exe" /quiet InstallAllUsers=1 Shorcuts=0 AssociateFiles=1 Include_launcher=1 InstallLauncherAllUsers=1' $0
-  Delete "$INSTDIR\python-3.8.5-amd64.exe"
-  DetailPrint "Python 3.8.5 installer exited with: $0"
 SectionEnd
 
 ; ------------------------------------------------------------------------------

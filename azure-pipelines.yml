@@ -16,21 +16,19 @@ jobs:
   pool:
     vmImage: 'windows-2019'
   steps:
-  - checkout: self  # self represents the repo where the initial Pipelines YAML file was found
-    lfs: true
   - task: NuGetAuthenticate@0
     displayName: "Authenicating NuGet"
   - task: PowerShell@2
     displayName: "Installing dependencies + Making build files"
     inputs:
-     filePath: 'build-deps.ps1'
-     arguments: 'Release'
-     workingDirectory: '$(System.DefaultWorkingDirectory)'
+      filePath: 'build-deps.ps1'
+      arguments: 'Release rel-build'
+      workingDirectory: '$(System.DefaultWorkingDirectory)'
 
   - task: MSBuild@1
     displayName: "Compiling project"
     inputs:
-      solution: 'build/ALL_BUILD.vcxproj'
+      solution: 'rel-build/ALL_BUILD.vcxproj'
       msbuildArchitecture: 'x64'
       platform: 'x64'
       configuration: 'Release'
@@ -40,16 +38,34 @@ jobs:
   - task: PublishBuildArtifacts@1
     displayName: "Publishing build artifacts"
     inputs:
-      PathtoPublish: 'build/Release/'
+      PathtoPublish: 'rel-build/Release/'
       ArtifactName: 'windows-x64'
+      publishLocation: 'Container'
+  - task: UniversalPackages@0
+    inputs:
+      command: 'download'
+      downloadDirectory: '$(System.DefaultWorkingDirectory)\..'
+      feedsToUse: 'internal'
+      vstsFeed: '55e16e5e-fe3a-4148-a1b4-040681908830'
+      vstsFeedPackage: '83c17eec-44d4-4271-8337-aa4ff030f84f'
+      vstsPackageVersion: '*'
+  - task: nsis@2
+    inputs:
+      scriptFile: 'dist/WarspiteInstaller.nsi'
+      justInclude: 'no'
+      includeMorePlugins: 'no'
+      includeCustomPlugins: 'no'
+  - task: PublishBuildArtifacts@1
+    displayName: "Publishing build artifacts"
+    inputs:
+      PathtoPublish: 'dist/output/'
+      ArtifactName: 'windows-x64-inst'
       publishLocation: 'Container'
 
 - job: "Windows_x86"
   pool:
     vmImage: 'windows-2019'
   steps:
-  - checkout: self  # self represents the repo where the initial Pipelines YAML file was found
-    lfs: true
   - task: NuGetAuthenticate@0
     displayName: "Authenicating NuGet"
   - task: PowerShell@2
@@ -80,8 +96,6 @@ jobs:
   pool:
     vmImage: ubuntu-20.04
   steps:
-  - checkout: self  # self represents the repo where the initial Pipelines YAML file was found
-    lfs: true
   - task: Bash@3
     displayName: "Installing dependencies + Making build files"
     inputs:
@@ -105,8 +119,6 @@ jobs:
   pool:
     RPi
   steps:
-  - checkout: self  # self represents the repo where the initial Pipelines YAML file was found
-    lfs: true
   - task: Bash@3
     displayName: "Installing dependencies + Making build files"
     inputs:

@@ -3,31 +3,10 @@
 #include "Game.h"
 
 CButton::CButton() :
-	CWarspiteObject()
+	CUIBase()
 {
 	m_currentFrame = NO_HOVER; // Frame 0
-	m_collidable = false;
-	
-	// Initial callbacks
-	if (m_OnClick == 0) m_OnClick = std::bind(&CButton::onClick, this);
-	if (m_OnEnter == 0) m_OnEnter = std::bind(&CButton::onEnter, this);
-	if (m_OnLeave == 0) m_OnLeave = std::bind(&CButton::onLeave, this);
-
 	m_initalPos = *CInputHandler::Instance()->GetMousePosition();
-}
-
-void CButton::Load(const CObjectParams* pParams)
-{
-	CWarspiteObject::Load(pParams);
-	
-	m_onClickID = pParams->GetOnClickID();
-	m_onEnterID = pParams->GetOnEnterID();
-	m_onLeaveID = pParams->GetOnLeaveID();
-}
-
-void CButton::Draw()
-{
-	CWarspiteObject::Draw();
 }
 
 bool CButton::OnThink()
@@ -70,42 +49,4 @@ bool CButton::OnThink()
 	}
 
 	return true;
-}
-
-bool CButton::onClick()
-{
-	// default for the callback
-	return true;
-}
-
-bool CButton::onEnter()
-{
-	// default for the callback
-	return true;
-}
-
-bool CButton::onLeave()
-{
-	// default for the callback
-	return true;
-}
-
-void CButton::Destroy()
-{
-	CWarspiteObject::Destroy();
-}
-
-void CButton::OnClick(ButtonCallback e)
-{
-	m_OnClick = e != 0 ? e : std::bind(&CButton::onClick, this);
-}
-
-void CButton::OnEnter(ButtonCallback e)
-{
-	m_OnEnter = e != 0 ? e : std::bind(&CButton::onEnter, this);
-}
-
-void CButton::OnLeave(ButtonCallback e)
-{
-	m_OnLeave = e != 0 ? e : std::bind(&CButton::onLeave, this);
 }
