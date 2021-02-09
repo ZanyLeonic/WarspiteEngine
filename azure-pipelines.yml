@@ -34,27 +34,40 @@ jobs:
       configuration: 'Release'
       maximumCpuCount: true
       createLogFile: true
-
-  - task: PublishBuildArtifacts@1
-    displayName: "Publishing build artifacts"
-    inputs:
-      PathtoPublish: 'rel-build/Release/'
-      ArtifactName: 'windows-x64'
-      publishLocation: 'Container'
   - task: UniversalPackages@0
+    displayName: "Downloading Authoring tools"
     inputs:
       command: 'download'
-      downloadDirectory: '$(System.DefaultWorkingDirectory)\..'
+      downloadDirectory: '$(System.DefaultWorkingDirectory)\..\WarspiteGame.AuthoringTools\'
       feedsToUse: 'internal'
       vstsFeed: '55e16e5e-fe3a-4148-a1b4-040681908830'
       vstsFeedPackage: '83c17eec-44d4-4271-8337-aa4ff030f84f'
       vstsPackageVersion: '*'
+  - task: CopyFiles@2
+    displayName: "Copying SDK to output"
+    inputs:
+      SourceFolder: '$(System.DefaultWorkingDirectory)\sdk\'
+      Contents: '**'
+      TargetFolder: '$(System.DefaultWorkingDirectory)\rel-build\Release\sdk\'
+  - task: CopyFiles@2
+    displayName: "Copying Authoring tools to output"
+    inputs:
+      SourceFolder: '$(System.DefaultWorkingDirectory)\..\WarspiteGame.AuthoringTools\'
+      Contents: '**'
+      TargetFolder: '$(System.DefaultWorkingDirectory)\rel-build\Release\sdk\'
+      flattenFolders: true
   - task: nsis@2
     inputs:
       scriptFile: 'dist/WarspiteInstaller.nsi'
       justInclude: 'no'
       includeMorePlugins: 'no'
       includeCustomPlugins: 'no'
+  - task: PublishBuildArtifacts@1
+    displayName: "Publishing build artifacts"
+    inputs:
+      PathtoPublish: 'rel-build/Release/'
+      ArtifactName: 'windows-x64'
+      publishLocation: 'Container'
   - task: PublishBuildArtifacts@1
     displayName: "Publishing build artifacts"
     inputs:
@@ -84,7 +97,15 @@ jobs:
       configuration: 'Release'
       maximumCpuCount: true
       createLogFile: true
-
+  - task: UniversalPackages@0
+    displayName: "Downloading Authoring tools"
+    inputs:
+      command: 'download'
+      downloadDirectory: '$(System.DefaultWorkingDirectory)'
+      feedsToUse: 'internal'
+      vstsFeed: '55e16e5e-fe3a-4148-a1b4-040681908830'
+      vstsFeedPackage: '83c17eec-44d4-4271-8337-aa4ff030f84f'
+      vstsPackageVersion: '*'
   - task: PublishBuildArtifacts@1
     displayName: "Publishing build artifacts"
     inputs:
