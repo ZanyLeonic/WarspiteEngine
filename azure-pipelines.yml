@@ -54,7 +54,7 @@ jobs:
     inputs:
       SourceFolder: '$(System.DefaultWorkingDirectory)\..\WarspiteGame.AuthoringTools\'
       Contents: '**'
-      TargetFolder: '$(System.DefaultWorkingDirectory)\rel-build\Release\sdk\'
+      TargetFolder: '$(System.DefaultWorkingDirectory)\rel-build\Release\sdk\bin\'
       flattenFolders: true
   - task: nsis@2
     displayName: "Creating installer"
@@ -118,7 +118,7 @@ jobs:
     inputs:
       SourceFolder: '$(System.DefaultWorkingDirectory)\..\WarspiteGame.AuthoringTools\'
       Contents: '**'
-      TargetFolder: '$(System.DefaultWorkingDirectory)\build-win32\Release\sdk\'
+      TargetFolder: '$(System.DefaultWorkingDirectory)\build-win32\Release\sdk\bin\'
       flattenFolders: true
   - task: PublishBuildArtifacts@1
     displayName: "Publishing build artifacts"
