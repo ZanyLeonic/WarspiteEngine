@@ -1,0 +1,102 @@
+[
+    {
+        "color": "#ffff0000",
+        "name": "Bound",
+        "properties": [
+            {
+                "name": "collidable",
+                "type": "bool",
+                "value": true
+            }
+        ]
+    },
+    {
+        "color": "#ffaa00ff",
+        "name": "DoorLink",
+        "properties": [
+            {
+                "name": "locked",
+                "type": "bool",
+                "value": false
+            },
+            {
+                "name": "targetDoorID",
+                "type": "string",
+                "value": ""
+            }
+        ]
+    },
+    {
+        "color": "#ff55ff00",
+        "name": "PlayerSpawn",
+        "properties": [
+            {
+                "name": "numFrames",
+                "type": "int",
+                "value": 3
+            },
+            {
+                "name": "priority",
+                "type": "int",
+                "value": 0
+            },
+            {
+                "name": "textureHeight",
+                "type": "int",
+                "value": 27
+            },
+            {
+                "name": "textureID",
+                "type": "string",
+                "value": "Player"
+            },
+            {
+                "name": "textureWidth",
+                "type": "int",
+                "value": 22
+            }
+        ]
+    },
+    {
+        "color": "#ffa0a0a4",
+        "name": "TestObject",
+        "properties": [
+            {
+                "name": "textureHeight",
+                "type": "int",
+                "value": 27
+            },
+            {
+                "name": "textureID",
+                "type": "string",
+                "value": "TestObject"
+            },
+            {
+                "name": "textureWidth",
+                "type": "int",
+                "value": 22
+            }
+        ]
+    },
+    {
+        "color": "#ffff5500",
+        "name": "Trigger",
+        "properties": [
+            {
+                "name": "fireOnce",
+                "type": "bool",
+                "value": false
+            },
+            {
+                "name": "overlapEndEvent",
+                "type": "int",
+                "value": 0
+            },
+            {
+                "name": "overlapStartEvent",
+                "type": "int",
+                "value": 0
+            }
+        ]
+    }
+]

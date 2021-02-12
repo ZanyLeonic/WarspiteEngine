@@ -59,8 +59,8 @@ public:
 
 	virtual CVector2D const GetViewportSize() { return m_viewportSize; }
 
-	virtual void SetPlayer(IGameObject* pNO) { m_player = pNO; }
-	virtual IGameObject* const GetPlayer() { return m_player; }
+	virtual void SetPlayer(std::shared_ptr<IGameObject> pNO) { m_player = pNO; }
+	virtual std::shared_ptr<IGameObject> const GetPlayer() { return m_player; }
 	
 	virtual int const GetArgc() { return m_argc; }
 	virtual char** const GetArgv() { return m_argv; }
@@ -69,6 +69,9 @@ public:
 
 	virtual bool const StartedWithMapParam() { return m_bStartedWithMapParam; }
 	virtual std::string const GetMapParamName() { return m_sMapName; }
+
+	virtual bool const ShowDebugTiles() { return m_bShowDebugTiles; }
+	virtual void SetDebugTilesVisibility(bool nVal) { m_bShowDebugTiles = nVal; }
 
 private:
 	CGameStateManager* m_pGameStateManager;
@@ -81,7 +84,7 @@ private:
 	SDL_Rect m_sourceRectangle = {}; // the first rectangle
 	SDL_Rect m_destinationRectangle = {}; // another rectangle
 
-	IGameObject* m_player = nullptr;
+	std::shared_ptr<IGameObject> m_player = nullptr;
 	
 	CVector2D m_viewportSize;
 	PGamePtr m_gamePtr;
@@ -100,6 +103,8 @@ private:
 
 	bool m_bRunning = false;
 	bool m_bStartedWithMapParam = false;
+
+	bool m_bShowDebugTiles = true; // Whether we should show bound or player start tiles on levels
 
 	std::string m_sMapName = "";
 };

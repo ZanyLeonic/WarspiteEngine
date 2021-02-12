@@ -3,13 +3,15 @@
 #ifndef __ObjectParams__
 #define __ObjectParams__
 
+struct STileset;
+
 class CObjectParams
 {
 public:
 	// Map Logic overload
 	CObjectParams(float x, float y, const char* script)
 		: m_x(x), m_y(y), m_script(script) {}
-	
+
 	CObjectParams(float x, float y)
 		: m_x(x), m_y(y) {}
 
@@ -26,13 +28,16 @@ public:
 	// Setters
 	void SetName(std::string n) { m_objName = n; }
 	void SetFactoryID(std::string n) { m_factoryID = n; }
-	
+
+	void SetTileID(int gid) { m_gid = gid; }
+	void SetTileset(STileset* tileset) { m_tileset = tileset; }
+
 	void SetWidth(int w) { m_width = w; }
 	void SetHeight(int h) { m_height = h; }
 
 	void SetAnimSpeed(int s) { m_animSpeed = s; }
 	void SetNumFrames(int n) { m_numFrames = n; }
-	
+
 	void SetOnClick(int c) { m_OnClick = c; }
 	void SetOnEnter(int c) { m_OnEnter = c; }
 	void SetOnLeave(int c) { m_OnLeave = c; }
@@ -41,13 +46,16 @@ public:
 
 	void SetTextureID(std::string id) { m_textureID = id; }
 	void SetScript(std::string s) { m_script = s; }
-	
+
 	// Getters
 	float GetX() const { return m_x; }
 	float GetY() const { return m_y; }
 
 	std::string GetName() const { return m_objName; }
 	std::string GetFactoryID() const { return m_factoryID; }
+
+	int GetTileID() const { return m_gid; }
+	STileset* GetTileset() const { return m_tileset; }
 	
 	int GetWidth() const { return m_width; }
 	int GetHeight() const { return m_height; }
@@ -71,6 +79,8 @@ private:
 	std::string m_objName = "";
 	std::string m_factoryID = "";
 	std::string m_soundPath = "";
+
+	int m_gid = -1;
 	
 	float m_x = 0;
 	float m_y = 0;
@@ -84,5 +94,7 @@ private:
 	int m_OnClick = 0;
 	int m_OnEnter = 0;
 	int m_OnLeave = 0;
+
+	STileset* m_tileset = 0;
 };
 #endif /* defined (__ObjectParams__) */

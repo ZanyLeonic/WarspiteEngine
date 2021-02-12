@@ -10,7 +10,7 @@ public:
 	CMapObject();
 	virtual void Draw();
 	virtual void DoDraw(bool newVis);
-private:
+protected:
 	bool bDrawObject = true;
 };
 

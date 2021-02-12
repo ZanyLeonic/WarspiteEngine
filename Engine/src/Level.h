@@ -13,6 +13,12 @@ class CObjectLayer;
 #include "Layer.h"
 #include "WarspiteUtil.h"
 
+struct STileEntity
+{
+	int ID = 0;
+	std::string Type = "";
+};
+
 struct STileset
 {
 	int FirstGID = 0;
@@ -24,6 +30,8 @@ struct STileset
 	int Height = 0;
 	int NumColumns = 0;
 	std::string Name = "";
+
+	std::vector<STileEntity> Tiles;
 };
 
 class CLevel

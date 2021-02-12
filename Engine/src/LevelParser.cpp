@@ -90,7 +90,7 @@ CLevel* CLevelParser::ParseLevel(const char* levelFile)
 			}
 			else if (t == "objectgroup")
 			{
-				parseObjectLayer(&layers[i], pLevel->GetLayers());
+				parseObjectLayer(&layers[i], pLevel->GetLayers(), pLevel->GetTilesets());
 			}			
 		}
 
@@ -161,6 +161,21 @@ void CLevelParser::parseTilesets(const rapidjson::Value* pTilesetRoot, std::vect
 
 			ts.NumColumns = ts.Width / (ts.TileWidth + ts.Spacing);
 
+			if (t.HasMember("tiles") && t["tiles"].IsArray())
+			{
+				const Value::ConstArray& d = t["tiles"].GetArray();
+
+				for (SizeType i = 0; i < d.Size(); i++)
+				{
+					STileEntity te;
+
+					te.ID = d[i]["id"].GetInt();
+					te.Type = d[i]["type"].GetString();
+
+					ts.Tiles.push_back(te);
+				}
+			}
+
 			pTilesets->push_back(ts);
 		}
 	}
@@ -183,6 +198,21 @@ void CLevelParser::parseTilesets(const rapidjson::Value* pTilesetRoot, std::vect
 		ts.Name = obj["name"].GetString();
 
 		ts.NumColumns = ts.Width / (ts.TileWidth + ts.Spacing);
+
+		if (obj.HasMember("tiles") && obj["tiles"].IsArray())
+		{
+			const Value::ConstArray& d = obj["tiles"].GetArray();
+
+			for (SizeType i = 0; i < d.Size(); i++)
+			{
+				STileEntity te;
+
+				te.ID = d[i]["id"].GetInt();
+				te.Type = d[i]["type"].GetString();
+
+				ts.Tiles.push_back(te);
+			}
+		}
 
 		pTilesets->push_back(ts);
 	}
@@ -306,7 +336,7 @@ void CLevelParser::parseBackgroundColour(const std::string* colourVal)
 	SDL_SetRenderDrawColor(CBaseGame::Instance()->GetRenderer(), r, g, b, a);
 }
 
-void CLevelParser::parseObjectLayer(const rapidjson::Value* pObjectVal, std::vector<ILayer*>* pLayer)
+void CLevelParser::parseObjectLayer(const rapidjson::Value* pObjectVal, std::vector<ILayer*>* pLayer, std::vector<STileset>* pTilesets)
 {
 	spdlog::debug("Parsing ObjectLayer...");
 
@@ -328,7 +358,32 @@ void CLevelParser::parseObjectLayer(const rapidjson::Value* pObjectVal, std::vec
 		// Get the desired coordinates
 		CObjectParams* pOP = new CObjectParams(b["x"].GetFloat(), b["y"].GetFloat());
 
-		pOP->SetFactoryID(b["type"].GetString());
+		if (b.HasMember("gid") && b["gid"].IsInt())
+		{
+			const int gid = b["gid"].GetInt();
+			STileset* t = GetTilesetByID(gid, pTilesets);
+
+			if (t->Tiles.size() > 0)
+			{
+				for (size_t i = 0; i < t->Tiles.size(); i++)
+				{
+					int aID = gid - t->FirstGID;
+
+					if (t->Tiles[i].ID == aID)
+					{
+						pOP->SetFactoryID(t->Tiles[i].Type);
+						pOP->SetTileID(gid);
+						pOP->SetTileset(t);
+						break;
+					}
+				}
+			}
+		}
+		else
+		{
+			pOP->SetFactoryID(b["type"].GetString());
+		}
+
 		pOP->SetName(b["name"].GetString());
 
 		spdlog::debug("*** Load object start ***");
@@ -403,13 +458,41 @@ void CLevelParser::parseObjectLayer(const rapidjson::Value* pObjectVal, std::vec
 			}
 			spdlog::debug("*** Property loading end ***");
 		}
-		// intialise the object with the data obtained.
-		pGameObject->Load(pOP);
-		pObjectLayer->GetGameObjects()->push_back(pGameObject);
+
+		// Check if the pointer is valid
+		if (pGameObject != 0)
+		{
+			// intialise the object with the data obtained.
+			pGameObject->Load(pOP);
+			pObjectLayer->GetGameObjects()->push_back(pGameObject);
+		}
 		
 		spdlog::debug("*** Load object end ***");
 	}
 
 	// Add the object layer to the Level object
 	pLayer->push_back(pObjectLayer);
+}
+
+STileset* CLevelParser::GetTilesetByID(int tileID, std::vector<STileset>* pTilesets)
+{
+	std::vector<STileset> tilesets = *pTilesets;
+
+	for (size_t i = 0; i < tilesets.size(); i++)
+	{
+		if (i + (size_t)1 <= tilesets.size() - 1)
+		{
+			if (tileID >= tilesets[i].FirstGID && tileID < tilesets[i + (size_t)1].FirstGID)
+			{
+				return &pTilesets->at(i);
+			}
+		}
+		else
+		{
+			return &pTilesets->at(i);
+		}
+	}
+
+	spdlog::warn("Cannot find tileset for TileID ({}), returning an empty tileset", tileID);
+	return new STileset();
 }

@@ -195,6 +195,8 @@ void CBaseGame::Draw()
 	// Call the current GameState functionality via the GameStateManager.
 	m_pGameStateManager->Draw();
 	m_fpsCounter->Draw();
+	
+	if (m_player != 0) m_player->Draw();
 
 	SDL_RenderPresent(m_pRenderer); // draw to the screen
 }
@@ -208,6 +210,8 @@ void CBaseGame::OnThink()
 	// Call the current GameState functionality via the GameStateManager.
 	m_pGameStateManager->OnThink();
 	m_pGarbageCollector->OnThink();
+
+	if (m_player != 0) m_player->OnThink();
 	
 	CCamera::Instance()->OnThink();
 }

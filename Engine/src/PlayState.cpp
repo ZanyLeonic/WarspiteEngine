@@ -264,7 +264,7 @@ bool CPlayState::IsColliding(CVector2D v1)
 		for (size_t k = 0; k < sObjs.size(); k++)
 		{
 			// Check if the GameObject is in the way and isn't us + collision flag
-			if (sObjs[k].get() != CBaseGame::Instance()->GetPlayer() && sObjs[k]->GetPosition() == v1 && sObjs[k]->ShouldCollide())
+			if (sObjs[k].get() != CBaseGame::Instance()->GetPlayer().get() && sObjs[k]->GetPosition() == v1 && sObjs[k]->ShouldCollide())
 			{
 				return true;
 			}
@@ -284,7 +284,7 @@ bool CPlayState::IsColliding(CVector2D v1)
 			for (size_t j = 0; j < cObjs.size(); j++)
 			{
 				// Check if the GameObject is in the way and isn't us + collision flag
-				if (cObjs[j].get() != CBaseGame::Instance()->GetPlayer() && cObjs[j]->GetPosition() == v1 && cObjs[j]->ShouldCollide())
+				if (cObjs[j].get() != CBaseGame::Instance()->GetPlayer().get() && cObjs[j]->GetPosition() == v1 && cObjs[j]->ShouldCollide())
 				{
 					return true;
 				}

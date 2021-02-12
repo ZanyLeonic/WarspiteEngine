@@ -407,13 +407,18 @@ MigrationBackup/
 
 # End of https://www.gitignore.io/api/c++,cmake,visualstudio
 
-out/
-Engine/logs/**
+# Custom stuff
 *.vcxproj*
 *.sln
+*.tiled-session
+
+out/
+Engine/logs/**
 /Launcher/main/ws
 /rel-test/Launcher/main
 /Rel/Release2
 /Engine/src/PythonInfo.json
 
 !dist/redist/*.exe
+
+# End of custom stuff

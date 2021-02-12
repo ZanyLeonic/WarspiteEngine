@@ -37,6 +37,7 @@ set(WarspiteEngine_Src
         src/ObjectLayer.cpp
         src/PauseState.cpp
         src/Player.cpp
+        src/PlayerSpawn.cpp
         src/PlayState.cpp
         src/ScriptManager.cpp
         src/ScriptWrappers.cpp
@@ -45,6 +46,7 @@ set(WarspiteEngine_Src
         src/TestObject.cpp
         src/TextureManager.cpp
         src/TileLayer.cpp
+        src/TileObject.cpp
 		../shared/src/UIBase.cpp
         ../shared/src/WarspiteObject.cpp
         src/WarspiteUtil.cpp
@@ -85,6 +87,7 @@ set(WarspiteEngine_Header
         ../shared/src/ObjectParams.h
         src/PauseState.h
         src/Player.h
+        src/PlayerSpawn.h
         src/PlayState.h
         src/ScriptManager.h
         src/ScriptWrappers.h
@@ -93,6 +96,7 @@ set(WarspiteEngine_Header
         src/TestObject.h
         src/TextureManager.h
         src/TileLayer.h
+        src/TileObject.h
         ../shared/src/Vector2D.h
 		../shared/src/UIBase.h
         ../shared/src/WarspiteObject.h

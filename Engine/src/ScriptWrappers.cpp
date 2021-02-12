@@ -553,7 +553,7 @@ std::unique_ptr<SWarObject> SGameObject::GetPlayer() const
 {
 	if (m_inst->GetPlayer() == nullptr) return nullptr;
 
-	return std::unique_ptr<SWarObject>(new SWarObject(dynamic_cast<CWarspiteObject*>(m_inst->GetPlayer())));
+	return std::unique_ptr<SWarObject>(new SWarObject(dynamic_cast<CWarspiteObject*>(m_inst->GetPlayer().get())));
 }
 
 bool SGameObject::LoadTexture(std::string texPath, std::string texID) const

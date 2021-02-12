@@ -31,8 +31,6 @@ void CPlayer::OnPlay()
 	CInputHandler::Instance()->SetAxisValue("MoveForward", SDL_SCANCODE_S, 1.f);
 	CInputHandler::Instance()->SetAxisValue("MoveRight", SDL_SCANCODE_A, -1.f);
 	CInputHandler::Instance()->SetAxisValue("MoveRight", SDL_SCANCODE_D, 1.f);
-
-	CBaseGame::Instance()->SetPlayer(this);
 }
 
 void CPlayer::Load(const CObjectParams* pParams)

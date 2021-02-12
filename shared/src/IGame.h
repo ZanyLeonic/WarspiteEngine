@@ -32,8 +32,8 @@ public:
 
     virtual CVector2D const GetViewportSize() = 0;
 
-    virtual void SetPlayer(IGameObject* pNO) = 0;
-    virtual IGameObject* const GetPlayer() = 0;
+    virtual void SetPlayer(std::shared_ptr<IGameObject> pNO) = 0;
+    virtual std::shared_ptr<IGameObject> const GetPlayer() = 0;
 
     virtual int const GetArgc() = 0;
     virtual char** const GetArgv() = 0;
@@ -42,5 +42,8 @@ public:
 
     virtual bool const StartedWithMapParam() = 0;
 	virtual std::string const GetMapParamName() = 0;
+
+    virtual bool const ShowDebugTiles() = 0;
+    virtual void SetDebugTilesVisibility(bool nVal) = 0;
 };
 #endif

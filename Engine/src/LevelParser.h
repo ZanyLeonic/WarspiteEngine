@@ -45,6 +45,8 @@ private:
 	static void parseBackgroundColour(const std::string* colourVal);
 
 	static void parseObjectLayer(const rapidjson::Value* pObjectVal,
-		std::vector<ILayer*>* pLayer);
+		std::vector<ILayer*>* pLayer, std::vector<STileset>* pTilesets);
+
+	static STileset* GetTilesetByID(int tileID, std::vector<STileset>* pTilesets);
 };
 #endif
