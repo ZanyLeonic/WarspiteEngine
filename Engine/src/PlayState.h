@@ -12,24 +12,17 @@ class CPlayState :
 	public CGameStateBase
 {
 public:
-	virtual bool OnPlay();
-	virtual void Draw();
-	virtual void OnThink();
-	virtual bool OnEnd();
+	bool OnPlay() override;
+	void Draw() override;
+	void OnThink() override;
+	bool OnEnd() override;
 
-	virtual std::string GetStateID() const { return s_UIID; }
-	virtual CLevel* GetLoadedLevel() const { return pLevel; }
-
-	CWarspiteObject* GetPlayer() const { return m_player; }
+	std::string GetStateID() const { return s_UIID; }
 
 	bool IsColliding(CVector2D v1) override;
 
 private:
-	CLevel* pLevel;
 	PLevelPtr m_levelPtr;
-
-	CWarspiteObject* m_player;
-
 	CVector2D m_screenSize;
 
 	static void s_PlayCallback(SStreamingAudioData* as);

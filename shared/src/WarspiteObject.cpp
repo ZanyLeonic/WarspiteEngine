@@ -7,6 +7,7 @@
 #include "IGame.h"
 #endif
 
+#include <spdlog/spdlog.h>
 #include "WarspiteObject.h"
 
 CWarspiteObject::CWarspiteObject() 
@@ -35,6 +36,20 @@ void CWarspiteObject::Load(const CObjectParams* pParams)
 	m_currentRow = 1;
 	m_currentFrame = 0;
 	m_numFrames = pParams->GetNumberOfFrames();
+}
+
+void CWarspiteObject::OnOverlapStart()
+{
+	m_isOverlapping = true;
+
+	spdlog::debug("[{}] Overlapping start!", m_objectName);
+}
+
+void CWarspiteObject::OnOverlapEnd()
+{
+	m_isOverlapping = false;
+
+	spdlog::debug("[{}] Overlapping end!", m_objectName);
 }
 
 void CWarspiteObject::OnPlay()
@@ -84,4 +99,4 @@ bool CWarspiteObject::OnThink()
 
 void CWarspiteObject::Destroy()
 {
-}
+} 

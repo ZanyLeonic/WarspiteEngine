@@ -52,26 +52,29 @@ public:
 	// a function to access the private running variable
 	virtual bool IsRunning() { return m_bRunning; }
 
-	virtual SDL_Renderer* const GetRenderer() { return m_pRenderer; }
-	virtual SDL_Window* const GetWindow() { return m_pWindow; }
-	virtual CGameStateManager* const GetStateManager() { return m_pGameStateManager; }
-	virtual CGarbageCollector* const GetGarbageCollector() { return m_pGarbageCollector; }
+	SDL_Renderer* const GetRenderer() { return m_pRenderer; }
+	SDL_Window* const GetWindow() { return m_pWindow; }
+	CGameStateManager* const GetStateManager() { return m_pGameStateManager; }
+	CGarbageCollector* const GetGarbageCollector() { return m_pGarbageCollector; }
 
-	virtual CVector2D const GetViewportSize() { return m_viewportSize; }
+	CVector2D const GetViewportSize() { return m_viewportSize; }
 
-	virtual void SetPlayer(std::shared_ptr<IGameObject> pNO) { m_player = pNO; }
-	virtual std::shared_ptr<IGameObject> const GetPlayer() { return m_player; }
+	void SetPlayer(std::shared_ptr<IGameObject> pNO) { m_player = pNO; }
+	std::shared_ptr<IGameObject> const GetPlayer() { return m_player; }
+
+	void SetLoadedLevel(CLevel* level) { m_pLevel = level; }
+	CLevel* GetLoadedLevel() { return m_pLevel; }
 	
-	virtual int const GetArgc() { return m_argc; }
-	virtual char** const GetArgv() { return m_argv; }
+	int const GetArgc() { return m_argc; }
+	char** const GetArgv() { return m_argv; }
 
-	virtual IWGame* const GetGameDLLClass() { return pGame; }
+	IWGame* const GetGameDLLClass() { return pGame; }
 
-	virtual bool const StartedWithMapParam() { return m_bStartedWithMapParam; }
-	virtual std::string const GetMapParamName() { return m_sMapName; }
+	bool const StartedWithMapParam() { return m_bStartedWithMapParam; }
+	std::string const GetMapParamName() { return m_sMapName; }
 
-	virtual bool const ShowDebugTiles() { return m_bShowDebugTiles; }
-	virtual void SetDebugTilesVisibility(bool nVal) { m_bShowDebugTiles = nVal; }
+	bool const ShowDebugTiles() { return m_bShowDebugTiles; }
+	void SetDebugTilesVisibility(bool nVal) { m_bShowDebugTiles = nVal; }
 
 private:
 	CGameStateManager* m_pGameStateManager;
@@ -85,6 +88,7 @@ private:
 	SDL_Rect m_destinationRectangle = {}; // another rectangle
 
 	std::shared_ptr<IGameObject> m_player = nullptr;
+	CLevel* m_pLevel = nullptr;
 	
 	CVector2D m_viewportSize;
 	PGamePtr m_gamePtr;
@@ -104,7 +108,7 @@ private:
 	bool m_bRunning = false;
 	bool m_bStartedWithMapParam = false;
 
-	bool m_bShowDebugTiles = true; // Whether we should show bound or player start tiles on levels
+	bool m_bShowDebugTiles = false; // Whether we should show bound or player start tiles on levels
 
 	std::string m_sMapName = "";
 };

@@ -4,6 +4,7 @@
  "imagewidth":128,
  "margin":0,
  "name":"EngineTileset",
+ "opacity":128,
  "spacing":0,
  "tilecount":16,
  "tiledversion":"1.4.3",

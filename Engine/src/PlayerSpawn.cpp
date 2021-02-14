@@ -1,13 +1,10 @@
 #include "PlayerSpawn.h"
 #include "Game.h"
 
-CPlayerSpawn::CPlayerSpawn()
-{
-}
-
 void CPlayerSpawn::Load(const CObjectParams* pParams)
 {
 	m_playerSpawnParam = const_cast<CObjectParams*>(pParams);
+	m_collidable = false;
 	
 	if (m_playerSpawnParam != 0)
 	{
@@ -16,6 +13,7 @@ void CPlayerSpawn::Load(const CObjectParams* pParams)
 		m_playerSpawnParam->SetHeight(27);
 		m_playerSpawnParam->SetWidth(22);
 	}
+	CTileObject::Load(pParams);
 }
 
 void CPlayerSpawn::OnPlay()

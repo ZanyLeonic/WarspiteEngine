@@ -26,6 +26,9 @@ public:
 		m_objName(objN), m_factoryID(factID) {}
 
 	// Setters
+	void SetX(float x) { m_x = x; }
+	void SetY(float y) { m_y = y; }
+
 	void SetName(std::string n) { m_objName = n; }
 	void SetFactoryID(std::string n) { m_factoryID = n; }
 
@@ -46,6 +49,8 @@ public:
 
 	void SetTextureID(std::string id) { m_textureID = id; }
 	void SetScript(std::string s) { m_script = s; }
+
+	void SetDoorTargetID(std::string s) { m_doorTargetID = s; }
 
 	// Getters
 	float GetX() const { return m_x; }
@@ -72,6 +77,8 @@ public:
 	std::string GetTextureID() const { return m_textureID; }
 	std::string GetScript() const { return m_script; }
 
+	std::string GetDoorTargetID() const { return m_doorTargetID; }
+
 private:
 	// Metadata + Map Logic
 	std::string m_script = "";
@@ -79,6 +86,8 @@ private:
 	std::string m_objName = "";
 	std::string m_factoryID = "";
 	std::string m_soundPath = "";
+
+	std::string m_doorTargetID = "";
 
 	int m_gid = -1;
 	

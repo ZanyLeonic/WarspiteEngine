@@ -115,7 +115,8 @@ MapProperties CLevelParser::GetMapProp(const std::string prop)
 		{"onClickCallback", MapProperties::PROP_ONCLICKCALL},
 		{"onEnterCallback", MapProperties::PROP_ONENTERCALL},
 		{"onLeaveCallback", MapProperties::PROP_ONLEAVECALL},
-		{"soundPath",		MapProperties::PROP_SOUNDPATH}
+		{"soundPath",		MapProperties::PROP_SOUNDPATH},
+		{"targetDoorID",    MapProperties::PROP_DOORTARGET}
 	};
 
 	auto itr = propStrings.find(prop);
@@ -129,10 +130,10 @@ MapProperties CLevelParser::GetMapProp(const std::string prop)
 
 void CLevelParser::parseTilesets(const rapidjson::Value* pTilesetRoot, std::vector<STileset>* pTilesets)
 {
-	const Value::ConstObject& obj = pTilesetRoot->GetObject();
+	Document obj;
 
-	int fg = obj["firstgid"].GetInt();
-
+	obj.CopyFrom(*pTilesetRoot, obj.GetAllocator());
+	
 	if (obj.HasMember("source"))
 	{
 		Document tileset;
@@ -143,76 +144,40 @@ void CLevelParser::parseTilesets(const rapidjson::Value* pTilesetRoot, std::vect
 		if (CEngineFileSystem::ReadJSON(CEngineFileSystem::ResolvePath(fileName, CEngineFileSystem::EPathType::TILESET), &tileset))
 		{
 			const Value& t = tileset.GetObject();
+			int opacity = 255;
 
-			CTextureManager::Instance()->Load(CEngineFileSystem::ResolvePath(t["image"].GetString(),CEngineFileSystem::EPathType::TEXTURE),
-				t["name"].GetString(), CBaseGame::Instance()->GetRenderer());
-
-			STileset ts;
-
-			ts.Width = t["imagewidth"].GetInt();
-			ts.Height = t["imageheight"].GetInt();
-			ts.FirstGID = fg;
-			ts.TileWidth = t["tilewidth"].GetInt();
-			ts.TileHeight = t["tileheight"].GetInt();
-			ts.Spacing = t["spacing"].GetInt();
-			ts.Margin = t["margin"].GetInt();
-
-			ts.Name = t["name"].GetString();
-
-			ts.NumColumns = ts.Width / (ts.TileWidth + ts.Spacing);
-
-			if (t.HasMember("tiles") && t["tiles"].IsArray())
+			if (t.HasMember("opacity"))
 			{
-				const Value::ConstArray& d = t["tiles"].GetArray();
-
-				for (SizeType i = 0; i < d.Size(); i++)
-				{
-					STileEntity te;
-
-					te.ID = d[i]["id"].GetInt();
-					te.Type = d[i]["type"].GetString();
-
-					ts.Tiles.push_back(te);
-				}
+				opacity = t["opacity"].GetInt();
 			}
 
+			CTextureManager::Instance()->Load(CEngineFileSystem::ResolvePath(t["image"].GetString(),CEngineFileSystem::EPathType::TEXTURE),
+				t["name"].GetString(), CBaseGame::Instance()->GetRenderer(), opacity);
+
+			STileset ts = GatherTilesetInfo(&t);
+
+			ts.FirstGID = obj["firstgid"].GetInt();
+			
 			pTilesets->push_back(ts);
 		}
 	}
 	// Embedded Tilesets
 	else
 	{
-		CTextureManager::Instance()->Load(CEngineFileSystem::ResolvePath(obj["image"].GetString(), CEngineFileSystem::EPathType::TEXTURE),
-			obj["name"].GetString(), CBaseGame::Instance()->GetRenderer());
+		const Value& t = obj.GetObject();
+		int opacity = 255;
 
-		STileset ts;
-
-		ts.Width = obj["imagewidth"].GetInt();
-		ts.Height = obj["imageheight"].GetInt();
-		ts.FirstGID = fg;
-		ts.TileWidth = obj["tilewidth"].GetInt();
-		ts.TileHeight = obj["tileheight"].GetInt();
-		ts.Spacing = obj["spacing"].GetInt();
-		ts.Margin = obj["margin"].GetInt();
-
-		ts.Name = obj["name"].GetString();
-
-		ts.NumColumns = ts.Width / (ts.TileWidth + ts.Spacing);
-
-		if (obj.HasMember("tiles") && obj["tiles"].IsArray())
+		if (t.HasMember("opacity"))
 		{
-			const Value::ConstArray& d = obj["tiles"].GetArray();
-
-			for (SizeType i = 0; i < d.Size(); i++)
-			{
-				STileEntity te;
-
-				te.ID = d[i]["id"].GetInt();
-				te.Type = d[i]["type"].GetString();
-
-				ts.Tiles.push_back(te);
-			}
+			opacity = t["opacity"].GetInt();
 		}
+
+		CTextureManager::Instance()->Load(CEngineFileSystem::ResolvePath(t["image"].GetString(), CEngineFileSystem::EPathType::TEXTURE),
+			t["name"].GetString(), CBaseGame::Instance()->GetRenderer(), opacity);
+
+		STileset ts = GatherTilesetInfo(&t);
+
+		ts.FirstGID = t["firstgid"].GetInt();
 
 		pTilesets->push_back(ts);
 	}
@@ -374,6 +339,10 @@ void CLevelParser::parseObjectLayer(const rapidjson::Value* pObjectVal, std::vec
 						pOP->SetFactoryID(t->Tiles[i].Type);
 						pOP->SetTileID(gid);
 						pOP->SetTileset(t);
+
+						// TODO: Find the issue why the tile objects are offset on Y
+						pOP->SetY(pOP->GetY() - t->TileHeight);
+
 						break;
 					}
 				}
@@ -450,9 +419,12 @@ void CLevelParser::parseObjectLayer(const rapidjson::Value* pObjectVal, std::vec
 				case MapProperties::PROP_SOUNDPATH:
 					pOP->SetSoundPath(d[j]["value"].GetString());
 					break;
+				case MapProperties::PROP_DOORTARGET:
+					pOP->SetDoorTargetID(d[j]["value"].GetString());
+					break;
 				default:
 					// Future proofing incase new properties get added for newer engine version.
-					spdlog::warn("Warning: Unrecongised property \"{}\"!", propName);
+					spdlog::warn("Warning: Unrecognised property \"{}\"!", propName);
 					break;
 				}
 			}
@@ -495,4 +467,39 @@ STileset* CLevelParser::GetTilesetByID(int tileID, std::vector<STileset>* pTiles
 
 	spdlog::warn("Cannot find tileset for TileID ({}), returning an empty tileset", tileID);
 	return new STileset();
+}
+
+STileset CLevelParser::GatherTilesetInfo(const rapidjson::Value* pTilesetRoot)
+{
+	STileset ts;
+	Value::ConstObject &t = pTilesetRoot->GetObject();
+
+	ts.Width = t["imagewidth"].GetInt();
+	ts.Height = t["imageheight"].GetInt();
+
+	ts.TileWidth = t["tilewidth"].GetInt();
+	ts.TileHeight = t["tileheight"].GetInt();
+	ts.Spacing = t["spacing"].GetInt();
+	ts.Margin = t["margin"].GetInt();
+
+	ts.Name = t["name"].GetString();
+
+	ts.NumColumns = ts.Width / (ts.TileWidth + ts.Spacing);
+
+	if (t.HasMember("tiles") && t["tiles"].IsArray())
+	{
+		const Value::ConstArray& d = t["tiles"].GetArray();
+
+		for (SizeType i = 0; i < d.Size(); i++)
+		{
+			STileEntity te;
+
+			te.ID = d[i]["id"].GetInt();
+			te.Type = d[i]["type"].GetString();
+
+			ts.Tiles.push_back(te);
+		}
+	}
+
+	return ts;
 }

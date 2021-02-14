@@ -23,7 +23,7 @@ public:
 		return s_pInstance;
 	}
 
-	bool Load(std::string fileName, std::string id, SDL_Renderer* pRenderer);
+	bool Load(std::string fileName, std::string id, SDL_Renderer* pRenderer, int opacity=255);
 	void Add(CTexture* nText, std::string id);
 
 	void CreateCheckboardPattern(CVector2D size, std::string texName, SDL_Renderer* pRenderer);

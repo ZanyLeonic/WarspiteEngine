@@ -30,11 +30,11 @@ bool CPlayState::OnPlay()
 
 	if (CBaseGame::Instance()->StartedWithMapParam())
 	{
-		pLevel = CLevelParser::ParseLevel(CEngineFileSystem::ResolvePath(fmt::format(FMT_STRING("{}.json"), CBaseGame::Instance()->GetMapParamName()), CEngineFileSystem::EPathType::MAP).c_str());
+		CBaseGame::Instance()->SetLoadedLevel(CLevelParser::ParseLevel(CEngineFileSystem::ResolvePath(fmt::format(FMT_STRING("{}.json"), CBaseGame::Instance()->GetMapParamName()), CEngineFileSystem::EPathType::MAP).c_str()));
 	}
 	else
 	{
-		pLevel = CLevelParser::ParseLevel(CEngineFileSystem::ResolvePath("map01.json", CEngineFileSystem::EPathType::MAP).c_str());
+		CBaseGame::Instance()->SetLoadedLevel(CLevelParser::ParseLevel(CEngineFileSystem::ResolvePath("map01.json", CEngineFileSystem::EPathType::MAP).c_str()));
 	}
 
 	CInputHandler::Instance()->AddActionKeyDown(SDL_SCANCODE_ESCAPE, [this](SDL_Scancode e) {
@@ -163,21 +163,21 @@ bool CPlayState::OnPlay()
 		return;
 		});
 
-	if (pLevel)
+	if (CBaseGame::Instance()->GetLoadedLevel())
 	{
 		// Give the camera the Level size
-		CCamera::Instance()->SetLevelSize(pLevel->m_LevelSize);
+		CCamera::Instance()->SetLevelSize(CBaseGame::Instance()->GetLoadedLevel()->m_LevelSize);
 		// CBaseGame::Instance()->SetLoadedLevel(pLevel);
 
 		// Assign the Level attribute to the current loaded level
 		if (CScriptManager::Instance()->GetEngineModule().attr(LEVELOBJECT_NAME).is_none())
 		{
-			m_levelPtr = std::make_shared<SLevelObject>(SLevelObject(pLevel));
+			m_levelPtr = std::make_shared<SLevelObject>(SLevelObject(CBaseGame::Instance()->GetLoadedLevel()));
 			CScriptManager::Instance()->GetEngineModule().attr(LEVELOBJECT_NAME) = m_levelPtr;
 		}
 
 		// Execute the OnPlay method on all the GameObjects in all Object Layers
-		pLevel->OnPlay();
+		CBaseGame::Instance()->GetLoadedLevel()->OnPlay();
 	}
 	else
 	{
@@ -193,9 +193,9 @@ bool CPlayState::OnPlay()
 
 void CPlayState::Draw()
 {
-	if (pLevel != 0)
+	if (CBaseGame::Instance()->GetLoadedLevel() != 0)
 	{
-		pLevel->Draw();
+		CBaseGame::Instance()->GetLoadedLevel()->Draw();
 	}
 	else
 	{
@@ -207,8 +207,8 @@ void CPlayState::Draw()
 
 void CPlayState::OnThink()
 {
-	if (pLevel != 0)
-		pLevel->OnThink();
+	if (CBaseGame::Instance()->GetLoadedLevel() != 0)
+		CBaseGame::Instance()->GetLoadedLevel()->OnThink();
 
 	CGameStateBase::OnThink();
 }
@@ -244,8 +244,8 @@ bool CPlayState::OnEnd()
 	CInputHandler::Instance()->RemoveActionKeyUp(SDL_SCANCODE_B);
 
 	// Execute the OnPlay method on all the GameObjects in all Object Layers
-	if (pLevel != 0)
-		pLevel->Destroy();
+	if (CBaseGame::Instance()->GetLoadedLevel() != 0)
+		CBaseGame::Instance()->GetLoadedLevel()->Destroy();
 
 	CGameStateBase::OnEnd();
 
@@ -256,22 +256,35 @@ bool CPlayState::IsColliding(CVector2D v1)
 {
 	bool sGameCollide = false;
 
-	if (pLevel)
+	if (CBaseGame::Instance()->GetLoadedLevel())
 	{
 		// Script layer has priority
-		std::vector<std::shared_ptr<IGameObject>>  sObjs = *pLevel->GetScriptLayer()->GetGameObjects();
+		std::vector<std::shared_ptr<IGameObject>>  sObjs = *CBaseGame::Instance()->GetLoadedLevel()->GetScriptLayer()->GetGameObjects();
 
 		for (size_t k = 0; k < sObjs.size(); k++)
 		{
-			// Check if the GameObject is in the way and isn't us + collision flag
-			if (sObjs[k].get() != CBaseGame::Instance()->GetPlayer().get() && sObjs[k]->GetPosition() == v1 && sObjs[k]->ShouldCollide())
+			if (sObjs[k].get() != CBaseGame::Instance()->GetPlayer().get() && sObjs[k]->GetPosition() == v1)
 			{
-				return true;
+				// Trigger overlap statements
+				if (sObjs[k]->ShouldOverlap() && !sObjs[k]->IsOverlapping())
+				{
+					sObjs[k]->OnOverlapStart();
+				}
+
+				// Check if the GameObject is in the way and isn't us + collision flag
+				if (sObjs[k]->ShouldCollide())
+				{
+					return true;
+				}
+			}
+			else if (sObjs[k]->ShouldOverlap() && sObjs[k]->IsOverlapping())
+			{
+				sObjs[k]->OnOverlapEnd();
 			}
 		}
 
 		// If so - we can grab the current level and its Layers
-		std::vector<ILayer*> objs = *pLevel->GetLayers();
+		std::vector<ILayer*> objs = *CBaseGame::Instance()->GetLoadedLevel()->GetLayers();
 
 		for (size_t i = 0; i < objs.size(); i++)
 		{
@@ -284,9 +297,22 @@ bool CPlayState::IsColliding(CVector2D v1)
 			for (size_t j = 0; j < cObjs.size(); j++)
 			{
 				// Check if the GameObject is in the way and isn't us + collision flag
-				if (cObjs[j].get() != CBaseGame::Instance()->GetPlayer().get() && cObjs[j]->GetPosition() == v1 && cObjs[j]->ShouldCollide())
+				if (cObjs[j].get() != CBaseGame::Instance()->GetPlayer().get() && cObjs[j]->GetPosition() == v1)
 				{
-					return true;
+					// Trigger overlap statements
+					if (cObjs[j]->ShouldOverlap() && !cObjs[j]->IsOverlapping())
+					{
+						cObjs[j]->OnOverlapStart();
+					}
+
+					if (cObjs[j]->ShouldCollide())
+					{
+						return true;
+					}
+				}
+				else if (cObjs[j]->ShouldOverlap() && cObjs[j]->IsOverlapping())
+				{
+					cObjs[j]->OnOverlapEnd();
 				}
 			}
 		}

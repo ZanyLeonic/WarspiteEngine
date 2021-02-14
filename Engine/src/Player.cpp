@@ -8,6 +8,7 @@
 #include "ScriptManager.h"
 #include "SoundManager.h"
 #include <iostream>
+#include <algorithm>
 #include <spdlog/spdlog.h>
 
 
@@ -79,6 +80,16 @@ void CPlayer::Draw()
 			m_width, m_height, m_currentRow, m_currentFrame,
 			CBaseGame::Instance()->GetRenderer());
 	}
+}
+
+void CPlayer::AddOverlappedObject(IGameObject* object)
+{
+	m_currentOverlapped.push_back(object);
+}
+
+void CPlayer::RemoveOverlappedObject(IGameObject* object)
+{
+	m_currentOverlapped.erase(std::remove(m_currentOverlapped.begin(), m_currentOverlapped.end(), object), m_currentOverlapped.end());
 }
 
 void CPlayer::HandleInput()

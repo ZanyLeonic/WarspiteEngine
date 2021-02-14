@@ -19,7 +19,8 @@ enum class MapProperties
 	PROP_ONCLICKCALL,
 	PROP_ONENTERCALL,
 	PROP_ONLEAVECALL,
-	PROP_SOUNDPATH
+	PROP_SOUNDPATH,
+	PROP_DOORTARGET
 };
 
 class CLevel;
@@ -48,5 +49,7 @@ private:
 		std::vector<ILayer*>* pLayer, std::vector<STileset>* pTilesets);
 
 	static STileset* GetTilesetByID(int tileID, std::vector<STileset>* pTilesets);
+	
+	static STileset CLevelParser::GatherTilesetInfo(const rapidjson::Value* pTilesetRoot);
 };
 #endif

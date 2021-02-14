@@ -57,7 +57,7 @@ bool CBaseGame::Init(const char* title, int xpos, int ypos, int width, int heigh
 		if (m_pWindow != 0)
 		{
 			spdlog::info("Window creation success");
-			m_pRenderer = SDL_CreateRenderer(m_pWindow, -1, SDL_RENDERER_TARGETTEXTURE | SDL_RENDERER_SOFTWARE);
+			m_pRenderer = SDL_CreateRenderer(m_pWindow, -1, SDL_RENDERER_TARGETTEXTURE | SDL_RENDERER_ACCELERATED);
 
 			if (m_pRenderer != 0) // render init success
 			{

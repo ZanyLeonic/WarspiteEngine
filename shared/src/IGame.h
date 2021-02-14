@@ -11,6 +11,7 @@ class CGameStateManager;
 class CGarbageCollector;
 class CVector2D;
 class IGameObject;
+class CLevel;
 
 class IGame
 {
@@ -34,6 +35,9 @@ public:
 
     virtual void SetPlayer(std::shared_ptr<IGameObject> pNO) = 0;
     virtual std::shared_ptr<IGameObject> const GetPlayer() = 0;
+
+    virtual void SetLoadedLevel(CLevel* level) = 0;
+    virtual CLevel* GetLoadedLevel() = 0;
 
     virtual int const GetArgc() = 0;
     virtual char** const GetArgv() = 0;

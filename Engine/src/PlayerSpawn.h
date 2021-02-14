@@ -7,8 +7,6 @@ class CPlayerSpawn :
     public CTileObject
 {
 public:
-    CPlayerSpawn();
-
     void Load(const CObjectParams* pParams) override;
 
     void OnPlay() override;

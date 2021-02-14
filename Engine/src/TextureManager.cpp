@@ -5,7 +5,7 @@
 CTextureManager* CTextureManager::s_pInstance = 0;
 
 bool CTextureManager::Load(std::string fileName, std::string id, 
-	SDL_Renderer* pRenderer)
+	SDL_Renderer* pRenderer, int opacity)
 {
 	SDL_Surface* pTempSurface = IMG_Load(fileName.c_str());
 
@@ -18,6 +18,12 @@ bool CTextureManager::Load(std::string fileName, std::string id,
 		SDL_CreateTextureFromSurface(pRenderer, pTempSurface);
 
 	SDL_FreeSurface(pTempSurface);
+	
+	if (opacity != 255)
+	{
+		SDL_SetTextureBlendMode(pTexture, SDL_BLENDMODE_BLEND);
+		SDL_SetTextureAlphaMod(pTexture, opacity);
+	}
 
 	// we have loaded the texture ok, add it to the map!
 	if (pTexture != 0)

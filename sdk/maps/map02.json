@@ -12,7 +12,7 @@
  "layers":[
         {
          "compression":"zlib",
-         "data":"eJztkzkKw0AQBFeyLFuSb+v8\/0ddgSOzwUIHGkw3VDBQTFZVSqmGAzRwTPlVO3ktnOAMHfTBvAEucIUb3L\/3Lzmv9J\/iPeAJL3jDGMybYIYFVtiCebnt1cI\/NxPJczPlnlvQPLegeZFaKJ2b0Tw3o3mRmnELmucWNC9SC6VzM5rnZjQvUjMfX30etQ==",
+         "data":"eJztlTcKA0EMAPecc87x\/7\/0FFcdEgjWWMJIMMXCsKgZ1JRSetCHAQyLPI2TN4IxTGAKs2DeHBawhBWs23cXybP+V+NtYAs72MMhmPdS6M4RTnCGC1yV\/77t3eAOD3jCu90vSjPaflGa0fbzaEHytP2iNKPt59GC5Fn7zfshj9dd+Jf74XUXrJ40Xi1kM7\/xshm7ly3UedlCnRepBetkM3VeNlPnRWrmA3TAIrs=",
          "encoding":"base64",
          "height":30,
          "id":2,
@@ -55,7 +55,7 @@
                          "value":22
                         }],
                  "rotation":0,
-                 "type":"Player",
+                 "type":"PlayerSpawn",
                  "visible":true,
                  "width":32,
                  "x":0,
@@ -153,12 +153,25 @@
          "value":"..\/scripts\/test2.py"
         }],
  "renderorder":"right-down",
- "tiledversion":"1.4.2",
+ "tiledversion":"1.4.3",
  "tileheight":32,
  "tilesets":[
         {
          "firstgid":1,
          "source":"..\/tilesets\/TestTiles.json"
+        }, 
+        {
+         "columns":4,
+         "firstgid":26,
+         "image":"E:\/Projects\/WarspiteGame\/sdk\/textures\/dev\/EngineTileset.png",
+         "imageheight":128,
+         "imagewidth":128,
+         "margin":0,
+         "name":"Test",
+         "spacing":0,
+         "tilecount":16,
+         "tileheight":32,
+         "tilewidth":32
         }],
  "tilewidth":32,
  "type":"map",

@@ -24,6 +24,11 @@ public:
 	virtual bool ShouldCollide() = 0;
 	virtual bool ShouldOverlap() = 0;
 
+	virtual bool IsOverlapping() = 0;
+
+	virtual void OnOverlapStart() = 0;
+	virtual void OnOverlapEnd() = 0;
+
 	IGameObject() {} 
 	virtual ~IGameObject() {}
 };

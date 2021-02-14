@@ -62,7 +62,7 @@ bool CGameStateBase::IsColliding(CVector2D v1)
 			// See if you can find a colliding object.
 			if (m_GameObjects[i]->GetPosition() == v1)
 			{
-				return true;
+				return m_GameObjects[i]->ShouldCollide();
 			}
 		}
 	}

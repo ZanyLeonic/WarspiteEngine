@@ -13,7 +13,7 @@ struct SDL_Renderer;
 class ITextureManager
 {
 public:
-	virtual bool Load(std::string fileName, std::string id, SDL_Renderer* pRenderer) = 0;
+	virtual bool Load(std::string fileName, std::string id, SDL_Renderer* pRenderer, int opacity = 255) = 0;
 	virtual void Add(CTexture* nText, std::string id) = 0;
 
 	virtual void CreateCheckboardPattern(CVector2D size, std::string texName, SDL_Renderer* pRenderer) = 0;

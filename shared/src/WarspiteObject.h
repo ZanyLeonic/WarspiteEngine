@@ -54,6 +54,11 @@ public:
 
 	bool ShouldOverlap() override { return m_overlap; }
 	void SetOverlap(bool nO) { m_overlap = nO; }
+
+	bool IsOverlapping() override { return m_isOverlapping; }
+
+	void OnOverlapStart();
+	void OnOverlapEnd();
 	
 protected:
 	CVector2D m_position;
@@ -73,6 +78,8 @@ protected:
 
 	bool m_collidable = false;
 	bool m_overlap = false;
+
+	bool m_isOverlapping = false;
 #ifdef _GAME_
 	IGame* pGame = nullptr;
 	ITextureManager* pTex = nullptr;

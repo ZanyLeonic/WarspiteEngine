@@ -8,6 +8,8 @@ CLogicAuto::CLogicAuto()
 
 void CLogicAuto::OnPlay()
 {
+	CTileObject::OnPlay();
+
 	if (m_scriptName.empty())
 		return;
 	
@@ -16,6 +18,8 @@ void CLogicAuto::OnPlay()
 
 void CLogicAuto::Load(const CObjectParams* pParams)
 {
+	CTileObject::Load(pParams);
+
 	m_position = CVector2D(pParams->GetX(), pParams->GetY());
 	m_scriptName = pParams->GetScript();
 }
