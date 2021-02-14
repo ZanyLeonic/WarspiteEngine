@@ -158,20 +158,20 @@ jobs:
     inputs:
       SourceFolder: '$(System.DefaultWorkingDirectory)/sdk/'
       Contents: '**'
-      TargetFolder: '/usr/local/bin/Warspite/sdk/'
+      TargetFolder: '$(System.DefaultWorkingDirectory)/build/Release/sdk'
 
   - task: CopyFiles@2
     displayName: "Copying Authoring tools to output"
     inputs:
       SourceFolder: '$(System.DefaultWorkingDirectory)/WarspiteGame.AuthoringTools/'
       Contents: '**'
-      TargetFolder: '/usr/local/bin/Warspite/sdk/bin/'
+      TargetFolder: '$(System.DefaultWorkingDirectory)/build/Release/sdk/bin/'
       flattenFolders: true
 
   - task: PublishBuildArtifacts@1
     displayName: "Publishing build artifacts"
     inputs:
-      PathtoPublish: '/usr/local/bin/Warspite/'
+      PathtoPublish: '$(System.DefaultWorkingDirectory)/build/Release/'
       ArtifactName: 'linux'
       publishLocation: 'Container'
 
@@ -190,7 +190,6 @@ jobs:
     inputs:
       filePath: 'build.sh'
       workingDirectory: '$(System.DefaultWorkingDirectory)'
-  
   - task: UniversalPackages@0
     displayName: "Downloading Authoring tools"
     inputs:
@@ -200,25 +199,22 @@ jobs:
       vstsFeed: '55e16e5e-fe3a-4148-a1b4-040681908830'
       vstsFeedPackage: '83c17eec-44d4-4271-8337-aa4ff030f84f'
       vstsPackageVersion: '*'
-
   - task: CopyFiles@2
     displayName: "Copying SDK to output"
     inputs:
       SourceFolder: '$(System.DefaultWorkingDirectory)/sdk/'
       Contents: '**'
-      TargetFolder: '/usr/local/bin/Warspite/sdk/'
-      
+      TargetFolder: '$(System.DefaultWorkingDirectory)/build/Release/sdk'
   - task: CopyFiles@2
     displayName: "Copying Authoring tools to output"
     inputs:
       SourceFolder: '$(System.DefaultWorkingDirectory)/WarspiteGame.AuthoringTools/'
       Contents: '**'
-      TargetFolder: '/usr/local/bin/Warspite/sdk/bin/'
+      TargetFolder: '$(System.DefaultWorkingDirectory)/build/Release/sdk/bin/'
       flattenFolders: true
-
   - task: PublishBuildArtifacts@1
     displayName: "Publishing build artifacts"
     inputs:
-      PathtoPublish: '/usr/local/bin/Warspite/'
-      ArtifactName: 'linux-arm64'
+      PathtoPublish: '$(System.DefaultWorkingDirectory)/build/Release/'
+      ArtifactName: 'linux'
       publishLocation: 'Container'
