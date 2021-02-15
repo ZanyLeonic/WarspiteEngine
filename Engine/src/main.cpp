@@ -155,9 +155,9 @@ extern "C" int Engine(int argc, char** argv, GameDLL_t pGameDLL)
 		}
 	}
 
-	if (GetParam(argv, argc, HEIGHT_PARAM, widthParam))
+	if (GetParam(argv, argc, HEIGHT_PARAM, heightParam))
 	{
-		desiredHeight = atoi(widthParam);
+		desiredHeight = atoi(heightParam);
 
 		if (desiredHeight == 0
 			|| desiredHeight < DEF_HEIGHT)

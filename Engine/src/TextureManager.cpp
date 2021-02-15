@@ -112,8 +112,8 @@ void CTextureManager::Draw(std::string id, int x, int y, int width, int height,
 
 	if (center != nullptr)
 	{
-		destCentre.x = center->GetX();
-		destCentre.y = center->GetY();
+		destCentre.x = (int)center->GetX();
+		destCentre.y = (int)center->GetY();
 	}
 
 	srcRect.x = 0;
@@ -140,14 +140,14 @@ void CTextureManager::Draw(CTexture* tex, int x, int y,
 
 	if (center != nullptr)
 	{
-		destCentre.x = center->GetX();
-		destCentre.y = center->GetY();
+		destCentre.x = (int)center->GetX();
+		destCentre.y = (int)center->GetY();
 	}
 
 	srcRect.x = 0;
 	srcRect.y = 0;
-	srcRect.w = destRect.w = tex->GetWidth();
-	srcRect.h = destRect.h = tex->GetHeight();
+	srcRect.w = destRect.w = (int)tex->GetWidth();
+	srcRect.h = destRect.h = (int)tex->GetHeight();
 	destRect.x = x;
 	destRect.y = y;
 
@@ -188,14 +188,14 @@ void CTextureManager::DrawFrame(CTexture* tex, int x, int y, int currentRow,
 
 	if (center != nullptr)
 	{
-		destCentre.x = center->GetX();
-		destCentre.y = center->GetY();
+		destCentre.x = (int)center->GetX();
+		destCentre.y = (int)center->GetY();
 	}
 
 	srcRect.x = tex->GetWidth() * currentFrame;
 	srcRect.y = tex->GetHeight() * (currentRow - 1);
-	srcRect.w = destRect.w = tex->GetWidth();
-	srcRect.h = destRect.h = tex->GetHeight();
+	srcRect.w = destRect.w = (int)tex->GetWidth();
+	srcRect.h = destRect.h = (int)tex->GetHeight();
 	destRect.x = x;
 	destRect.y = y;
 

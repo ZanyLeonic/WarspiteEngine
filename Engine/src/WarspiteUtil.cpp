@@ -129,7 +129,7 @@ std::shared_ptr<IGameObject> CWarspiteUtil::FindGameObject(CLevel* pLevel, std::
 	return nullptr;
 }
 
-bool CWarspiteUtil::GetParam(char** argv, int argc, const char* param, char*& returnval)
+bool CWarspiteUtil::GetParam(char** argv, int argc, const char* param, char* returnval)
 {
 	if (argc <= 1) return false;
 
@@ -148,10 +148,11 @@ bool CWarspiteUtil::GetParam(char** argv, int argc, const char* param, char*& re
 std::string CWarspiteUtil::GetExecutingDirectory()
 {
 	char pBuf[256];
-	size_t len = sizeof(pBuf);
 #ifdef _WIN32
+	DWORD len = sizeof(pBuf);
 	GetModuleFileName(NULL, pBuf, len);
 #elif _UNIX
+	size_t len = sizeof(pBuf);
 	int bytes = MIN(readlink("/proc/self/exe\0", pBuf, len), len - 1);
 	if (bytes >= 0)
 		pBuf[bytes] = '\0';
