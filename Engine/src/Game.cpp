@@ -117,7 +117,7 @@ bool CBaseGame::Init(const char* title, int xpos, int ypos, int width, int heigh
 		pGame = pGameDLL(m_argc, m_argv, &m_singletonPtrs);
 
 		// Try and get the map specified in the command line
-		char* mapName = "";
+		char mapName[100];
 
 		if (CWarspiteUtil::GetParam(argv, argc, "-map", mapName))
 		{
