@@ -543,9 +543,9 @@ bool SGameObject::ChangeState(std::string stateID) const
 	return true;
 }
 
-bool SGameObject::IsColliding(CVector2D v1) const
+SCollisionData SGameObject::IsColliding(CVector2D v1) const
 {
-	if (!IsValid()) return false;
+	if (!IsValid()) return SCollisionData();
 	return m_inst->GetStateManager()->IsColliding(v1);
 }
 

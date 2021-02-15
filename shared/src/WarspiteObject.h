@@ -56,6 +56,7 @@ public:
 	void SetOverlap(bool nO) { m_overlap = nO; }
 
 	bool IsOverlapping() override { return m_isOverlapping; }
+	bool CancelMovementOnOverlap() override { return m_bCancelMovementOnOverlap; }
 
 	void OnOverlapStart();
 	void OnOverlapEnd();
@@ -80,6 +81,7 @@ protected:
 	bool m_overlap = false;
 
 	bool m_isOverlapping = false;
+	bool m_bCancelMovementOnOverlap = false;
 #ifdef _GAME_
 	IGame* pGame = nullptr;
 	ITextureManager* pTex = nullptr;

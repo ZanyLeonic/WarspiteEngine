@@ -6,6 +6,7 @@
 #include <vector>
 #include <memory>
 #include "GameObject.h"
+#include "EngineTypes.h"
 
 class IGameObject;
 class CVector2D;
@@ -25,7 +26,7 @@ public:
 	virtual std::vector<std::string> GetLoadedTextures() const = 0;
 	virtual std::vector<std::string> GetLoadedScripts() const = 0;
 
-	virtual bool IsColliding(CVector2D v1) = 0;
+	virtual SCollisionData IsColliding(CVector2D v1) = 0;
 
 	virtual bool ShouldBeTicking() const = 0;
 	virtual bool ShouldBeDrawing() const = 0;

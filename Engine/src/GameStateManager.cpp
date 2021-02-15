@@ -8,13 +8,14 @@ const std::string CGameStateManager::GetCurrentStateID()
 	return m_GameStates.back()->GetStateID();
 }
 
-const bool CGameStateManager::IsColliding(CVector2D v1)
+const SCollisionData CGameStateManager::IsColliding(CVector2D v1)
 {
+	SCollisionData r;
 	if (!m_GameStates.empty())
 	{
 		return m_GameStates.back()->IsColliding(v1);
 	}
-	return false;
+	return r;
 }
 
 void CGameStateManager::PushState(std::unique_ptr<CGameStateBase> pState)

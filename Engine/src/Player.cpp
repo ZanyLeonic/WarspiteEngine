@@ -82,14 +82,13 @@ void CPlayer::Draw()
 	}
 }
 
-void CPlayer::AddOverlappedObject(IGameObject* object)
+void CPlayer::SetNextLocation(CVector2D nextLocation)
 {
-	m_currentOverlapped.push_back(object);
-}
-
-void CPlayer::RemoveOverlappedObject(IGameObject* object)
-{
-	m_currentOverlapped.erase(std::remove(m_currentOverlapped.begin(), m_currentOverlapped.end(), object), m_currentOverlapped.end());
+	moving = true;
+	lastPosition = m_position;
+	nextPosition = nextLocation;
+	m_timeLeft = 0;
+	m_stepLastFrame = true;
 }
 
 void CPlayer::HandleInput()
@@ -146,18 +145,33 @@ void CPlayer::MoveForward(float axis)
 {
 	if (axis == 0.f) return;
 	CVector2D curPos = m_position;
+	IGameObject* lastObj = m_slastCollision.m_otherObject;
 	
 	m_currentRow = (axis > 0) ? 1 : 2;
 
 	// Analog movement coming never.
 	curPos.SetY(curPos.GetY() + (m_moveStep * axis));
-	if (!WillCollide(&curPos))
+
+	bool result = WillCollide(&curPos);
+
+	if (!result && m_slastCollision.m_result == ECollisionResult::OVERLAP)
+	{
+		if (m_slastCollision.m_otherObject)
+			m_slastCollision.m_otherObject->OnOverlapStart();
+
+		if (lastObj)
+			lastObj->OnOverlapEnd();
+	}
+	else if (!result)
 	{
 		moving = true;
 		lastPosition = m_position;
 		nextPosition = curPos;
 		m_timeLeft = 0;
 		m_stepLastFrame = true;
+
+		if (lastObj)
+			lastObj->OnOverlapEnd();
 	}
 	else
 	{
@@ -169,17 +183,33 @@ void CPlayer::MoveRight(float axis)
 {
 	if (axis == 0.f) return;
 	CVector2D curPos = m_position;
+	IGameObject* lastObj = m_slastCollision.m_otherObject;
 	
 	m_currentRow = (axis > 0) ? 4 : 3;
 
 	curPos.SetX(curPos.GetX() + (m_moveStep * axis));
-	if (!WillCollide(&curPos))
+
+	bool result = WillCollide(&curPos);
+
+	if (!result && m_slastCollision.m_result == ECollisionResult::OVERLAP)
+	{
+		if (m_slastCollision.m_otherObject)
+			m_slastCollision.m_otherObject->OnOverlapStart();
+
+		if (lastObj)
+			lastObj->OnOverlapEnd();
+	}
+	else if(!result)
 	{
 		moving = true;
 		lastPosition = m_position;
 		nextPosition = curPos;
 		m_timeLeft = 0;
 		m_stepLastFrame = true;
+
+
+		if (lastObj)
+			lastObj->OnOverlapEnd();
 	}
 	else
 	{
@@ -189,10 +219,8 @@ void CPlayer::MoveRight(float axis)
 
 bool CPlayer::WillCollide(CVector2D* pNext)
 {
-	if (CBaseGame::Instance()->GetStateManager()->IsColliding(*pNext))
-	{
-		return true;
-	}
+	SCollisionData r = CBaseGame::Instance()->GetStateManager()->IsColliding(*pNext);
+	m_slastCollision = r;
 
 	// Also do a check if we are going off the level
 	bool ps
@@ -209,8 +237,13 @@ bool CPlayer::WillCollide(CVector2D* pNext)
 		}
 	}
 
-	// Nothing is in the way!
-	return false;
+	switch (r.m_result)
+	{
+	case ECollisionResult::COLLIDED:
+		return true;
+	default:
+		return false; // Nothing in the way
+	}
 }
 
 void CPlayer::DecideFrame()

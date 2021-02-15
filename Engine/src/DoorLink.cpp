@@ -1,6 +1,14 @@
 #include "DoorLink.h"
 #include "Game.h"
+#include "Player.h"
 #include "WarspiteUtil.h"
+#include <memory>
+
+CDoorLink::CDoorLink()
+	: CTileObject()
+{
+	m_bCancelMovementOnOverlap = true;
+}
 
 void CDoorLink::Load(const CObjectParams* pParams)
 {
@@ -24,5 +32,28 @@ void CDoorLink::OnPlay()
 	else
 	{
 		spdlog::warn("[{}] Cannot find target door ID \"{}\"!", m_objectName, m_targetDoorID);
+	}
+}
+
+void CDoorLink::OnOverlapStart()
+{
+	CTileObject::OnOverlapStart();
+
+	std::shared_ptr<CPlayer> pPlayer = std::dynamic_pointer_cast<CPlayer>(CBaseGame::Instance()->GetPlayer());
+	
+	if (!m_bTravelledTo && pPlayer)
+	{
+		m_targetDoor->SetTravelledTo(true);
+		pPlayer->SetNextLocation(m_targetDoor->GetPosition());
+	}
+}
+
+void CDoorLink::OnOverlapEnd()
+{
+	CTileObject::OnOverlapEnd();
+
+	if (m_bTravelledTo)
+	{
+		SetTravelledTo(false);
 	}
 }

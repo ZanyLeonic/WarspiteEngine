@@ -50,6 +50,6 @@ private:
 
 	static STileset* GetTilesetByID(int tileID, std::vector<STileset>* pTilesets);
 	
-	static STileset CLevelParser::GatherTilesetInfo(const rapidjson::Value* pTilesetRoot);
+	static STileset GatherTilesetInfo(const rapidjson::Value* pTilesetRoot);
 };
 #endif

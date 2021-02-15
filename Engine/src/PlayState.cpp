@@ -252,8 +252,9 @@ bool CPlayState::OnEnd()
 	return true;
 }
 
-bool CPlayState::IsColliding(CVector2D v1)
+SCollisionData CPlayState::IsColliding(CVector2D v1)
 {
+	SCollisionData r;
 	bool sGameCollide = false;
 
 	if (CBaseGame::Instance()->GetLoadedLevel())
@@ -265,17 +266,22 @@ bool CPlayState::IsColliding(CVector2D v1)
 		{
 			if (sObjs[k].get() != CBaseGame::Instance()->GetPlayer().get() && sObjs[k]->GetPosition() == v1)
 			{
+				r.m_otherObject = sObjs[k].get();
+				r.m_location = sObjs[k]->GetPosition();
+
 				// Trigger overlap statements
 				if (sObjs[k]->ShouldOverlap() && !sObjs[k]->IsOverlapping())
 				{
-					sObjs[k]->OnOverlapStart();
+					r.m_result = ECollisionResult::OVERLAP;
 				}
 
 				// Check if the GameObject is in the way and isn't us + collision flag
 				if (sObjs[k]->ShouldCollide())
 				{
-					return true;
+					r.m_result = ECollisionResult::COLLIDED;
 				}
+
+				return r;
 			}
 			else if (sObjs[k]->ShouldOverlap() && sObjs[k]->IsOverlapping())
 			{
@@ -299,16 +305,21 @@ bool CPlayState::IsColliding(CVector2D v1)
 				// Check if the GameObject is in the way and isn't us + collision flag
 				if (cObjs[j].get() != CBaseGame::Instance()->GetPlayer().get() && cObjs[j]->GetPosition() == v1)
 				{
+					r.m_otherObject = cObjs[j].get();
+					r.m_location = cObjs[j]->GetPosition();
+
 					// Trigger overlap statements
 					if (cObjs[j]->ShouldOverlap() && !cObjs[j]->IsOverlapping())
 					{
-						cObjs[j]->OnOverlapStart();
+						r.m_result = ECollisionResult::OVERLAP;
 					}
 
 					if (cObjs[j]->ShouldCollide())
 					{
-						return true;
+						r.m_result = ECollisionResult::COLLIDED;
 					}
+
+					return r;
 				}
 				else if (cObjs[j]->ShouldOverlap() && cObjs[j]->IsOverlapping())
 				{
@@ -318,7 +329,7 @@ bool CPlayState::IsColliding(CVector2D v1)
 		}
 	}
 
-	return false;
+	return r;
 }
 
 void CPlayState::s_PlayCallback(SStreamingAudioData* as)

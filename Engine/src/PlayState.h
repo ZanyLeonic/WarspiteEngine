@@ -19,7 +19,7 @@ public:
 
 	std::string GetStateID() const { return s_UIID; }
 
-	bool IsColliding(CVector2D v1) override;
+	SCollisionData IsColliding(CVector2D v1) override;
 
 private:
 	PLevelPtr m_levelPtr;

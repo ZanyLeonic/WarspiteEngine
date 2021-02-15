@@ -7,12 +7,14 @@
 #include <map>
 #include <SDL2/SDL_scancode.h>
 #include <SDL2/SDL_events.h>
+#include "Vector2D.h"
 
 struct SInputObject;
 struct SGameObject;
 struct SLevelObject;
 class IGame;
 class IWGame;
+class IGameObject;
 
 typedef std::function<void(SDL_Scancode)> HKeyCallback;
 typedef std::function<void(SDL_Event)> HInputCallback;
@@ -41,6 +43,20 @@ enum class EWarRendererFlip
  	FLIP_NONE = 0x00000000,     /**< Do not flip */
     FLIP_HORIZONTAL = 0x00000001,    /**< flip horizontally */
     FLIP_VERTICAL = 0x00000002     /**< flip vertically */
+};
+
+enum class ECollisionResult
+{
+	NONE = 0,
+	COLLIDED = 1,
+	OVERLAP = 2
+};
+
+struct SCollisionData
+{
+	IGameObject* m_otherObject = 0;
+	ECollisionResult m_result = ECollisionResult::NONE;
+	CVector2D m_location;
 };
 
 typedef IWGame* (*GameDLL_t)(int argc, char** argv, std::map<ESingletonIDs, void(*)>* pPtrs);

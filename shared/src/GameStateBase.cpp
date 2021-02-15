@@ -53,8 +53,9 @@ bool CGameStateBase::OnEnd()
 	return true;
 }
 
-bool CGameStateBase::IsColliding(CVector2D v1)
+SCollisionData CGameStateBase::IsColliding(CVector2D v1)
 {
+	SCollisionData r;
 	if (!m_GameObjects.empty())
 	{
 		for (size_t i = 0; i < m_GameObjects.size(); i++)
@@ -62,11 +63,15 @@ bool CGameStateBase::IsColliding(CVector2D v1)
 			// See if you can find a colliding object.
 			if (m_GameObjects[i]->GetPosition() == v1)
 			{
-				return m_GameObjects[i]->ShouldCollide();
+				r.m_otherObject = m_GameObjects[i].get();
+				r.m_result = m_GameObjects[i]->ShouldCollide() ? ECollisionResult::COLLIDED : ECollisionResult::NONE;
+				r.m_location = m_GameObjects[i]->GetPosition();
+				
+				return r;
 			}
 		}
 	}
-	return false;
+	return r;
 }
 
 CGameStateBase::~CGameStateBase()
