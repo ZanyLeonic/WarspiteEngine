@@ -52,8 +52,8 @@ void CDoorLink::OnOverlapEnd()
 {
 	CTileObject::OnOverlapEnd();
 
-	if (m_bTravelledTo)
+	if (m_targetDoor->m_bTravelledTo)
 	{
-		SetTravelledTo(false);
+		m_targetDoor->SetTravelledTo(false);
 	}
 }

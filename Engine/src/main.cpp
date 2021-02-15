@@ -35,7 +35,7 @@ bool FlagExists(char** argv, int argc, const char* flag)
 	return false;
 }
 
-bool GetParam(char** argv, int argc, const char* param, char*& returnval)
+bool GetParam(char** argv, int argc, const char* param, char* returnval)
 {
 	if (argc <= 1) return false;
 
@@ -139,8 +139,8 @@ extern "C" int Engine(int argc, char** argv, GameDLL_t pGameDLL)
 	int desiredHeight = DEF_HEIGHT;
 	bool desiredFullscreen = FlagExists(argv, argc, FULLSCREEN_PARAM);
 
-	char* widthParam = "";
-	char* heightParam = "";
+	char widthParam[100];
+	char heightParam[100];
 
 	if (GetParam(argv, argc, WIDTH_PARAM, widthParam))
 	{

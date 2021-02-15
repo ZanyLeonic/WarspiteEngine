@@ -472,7 +472,7 @@ STileset* CLevelParser::GetTilesetByID(int tileID, std::vector<STileset>* pTiles
 STileset CLevelParser::GatherTilesetInfo(const rapidjson::Value* pTilesetRoot)
 {
 	STileset ts;
-	Value::ConstObject &t = pTilesetRoot->GetObject();
+	Value::ConstObject t = pTilesetRoot->GetObject();
 
 	ts.Width = t["imagewidth"].GetInt();
 	ts.Height = t["imageheight"].GetInt();

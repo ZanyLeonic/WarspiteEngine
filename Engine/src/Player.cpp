@@ -11,7 +11,6 @@
 #include <algorithm>
 #include <spdlog/spdlog.h>
 
-
 #define PLAYER_WIDTH 32
 #define PLAYER_HEIGHT 32
 
@@ -42,7 +41,7 @@ void CPlayer::Load(const CObjectParams* pParams)
 bool CPlayer::OnThink()
 {
 	HandleInput();
-	m_currentFrame = 0;
+	m_currentFrame = 1;
 
 	if (moving)
 	{
@@ -147,7 +146,7 @@ void CPlayer::MoveForward(float axis)
 	CVector2D curPos = m_position;
 	IGameObject* lastObj = m_slastCollision.m_otherObject;
 	
-	m_currentRow = (axis > 0) ? 1 : 2;
+	m_currentRow = (axis > 0) ? 1 : 4;
 
 	// Analog movement coming never.
 	curPos.SetY(curPos.GetY() + (m_moveStep * axis));
@@ -157,10 +156,15 @@ void CPlayer::MoveForward(float axis)
 	if (!result && m_slastCollision.m_result == ECollisionResult::OVERLAP)
 	{
 		if (m_slastCollision.m_otherObject)
-			m_slastCollision.m_otherObject->OnOverlapStart();
+			if (!m_slastCollision.m_otherObject->IsOverlapping()
+				&& m_slastCollision.m_otherObject->ShouldOverlap())
+			{
+				m_slastCollision.m_otherObject->OnOverlapStart();
+			}
 
 		if (lastObj)
-			lastObj->OnOverlapEnd();
+			if (lastObj->IsOverlapping() && lastObj->ShouldOverlap())
+				lastObj->OnOverlapEnd();
 	}
 	else if (!result)
 	{
@@ -171,7 +175,8 @@ void CPlayer::MoveForward(float axis)
 		m_stepLastFrame = true;
 
 		if (lastObj)
-			lastObj->OnOverlapEnd();
+			if (lastObj->IsOverlapping() && lastObj->ShouldOverlap())
+				lastObj->OnOverlapEnd();
 	}
 	else
 	{
@@ -185,7 +190,7 @@ void CPlayer::MoveRight(float axis)
 	CVector2D curPos = m_position;
 	IGameObject* lastObj = m_slastCollision.m_otherObject;
 	
-	m_currentRow = (axis > 0) ? 4 : 3;
+	m_currentRow = (axis > 0) ? 3 : 2;
 
 	curPos.SetX(curPos.GetX() + (m_moveStep * axis));
 
@@ -194,10 +199,15 @@ void CPlayer::MoveRight(float axis)
 	if (!result && m_slastCollision.m_result == ECollisionResult::OVERLAP)
 	{
 		if (m_slastCollision.m_otherObject)
-			m_slastCollision.m_otherObject->OnOverlapStart();
+			if (!m_slastCollision.m_otherObject->IsOverlapping()
+				&& m_slastCollision.m_otherObject->ShouldOverlap())
+			{
+				m_slastCollision.m_otherObject->OnOverlapStart();
+			}
 
 		if (lastObj)
-			lastObj->OnOverlapEnd();
+			if (lastObj->IsOverlapping() && lastObj->ShouldOverlap())
+				lastObj->OnOverlapEnd();
 	}
 	else if(!result)
 	{
@@ -209,7 +219,8 @@ void CPlayer::MoveRight(float axis)
 
 
 		if (lastObj)
-			lastObj->OnOverlapEnd();
+			if (lastObj->IsOverlapping() && lastObj->ShouldOverlap())
+				lastObj->OnOverlapEnd();
 	}
 	else
 	{
@@ -252,7 +263,7 @@ void CPlayer::DecideFrame()
 
 	if (m_stepLastFrame)
 	{
-		nFrame = 0;
+		nFrame = 1;
 		m_stepLastFrame = false;
 	}
 

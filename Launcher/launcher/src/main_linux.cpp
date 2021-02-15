@@ -1,4 +1,5 @@
 #include <string>
+#include <stdio.h>
 #include <iostream>
 #include <cassert>
 #include <cstring>
@@ -8,6 +9,7 @@
 #include <errno.h>
 #include <unistd.h>
 #include <map>
+
 #define MAX_PATH PATH_MAX
 
 enum class ESingletonIDs;
@@ -18,7 +20,7 @@ typedef int (*Engine_t)(int argc, char** argv, GameDLL_t pGameDLL);
 #define stringize(a) #a
 #define engine_binary(a,b,c) a stringize(b) c 
 
-bool GetGameParam(char** argv, int argc, char*& gameName)
+bool GetGameParam(char** argv, int argc, char* gameName)
 {
 	if (argc <= 1) return false;
 
@@ -36,13 +38,16 @@ bool GetGameParam(char** argv, int argc, char*& gameName)
 
 extern "C" int LauncherMain(int argc, char** argv)
 {
-	char* modName = MOD_NAME;
-	char* gameName = GAME_NAME;
+	char gameName[255];
+	sprintf(gameName, "%s", GAME_NAME);
 
 	GetGameParam(argv, argc, gameName);
+	
+	char pBinaryName[255];
+	char pGameBinaryN[255];
 
-	const char* pBinaryName = engine_binary("bin/lib", modName, ".so");
-	const char* pGameBinaryN = engine_binary("assets/bin/lib", gameName, ".so");
+	sprintf(pBinaryName, "bin/lib%s.so", MOD_NAME);
+	sprintf(pGameBinaryN, "assets/bin/lib%s.so", GAME_NAME);
 	
 	void* engine = dlopen(pBinaryName, RTLD_NOW);
 	void* game = dlopen(pGameBinaryN , RTLD_NOW);

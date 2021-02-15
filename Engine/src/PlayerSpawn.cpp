@@ -1,17 +1,25 @@
 #include "PlayerSpawn.h"
 #include "Game.h"
 
+CPlayerSpawn::CPlayerSpawn()
+	: CTileObject()
+{
+	// Setup this object
+	m_overlap = false;
+	m_bCancelMovementOnOverlap = false;
+	m_collidable = false;
+}
+
 void CPlayerSpawn::Load(const CObjectParams* pParams)
 {
 	m_playerSpawnParam = const_cast<CObjectParams*>(pParams);
-	m_collidable = false;
 	
 	if (m_playerSpawnParam != 0)
 	{
 		m_playerSpawnParam->SetFactoryID("Player");
 		m_playerSpawnParam->SetTextureID("Player");
-		m_playerSpawnParam->SetHeight(27);
-		m_playerSpawnParam->SetWidth(22);
+		m_playerSpawnParam->SetHeight(32);
+		m_playerSpawnParam->SetWidth(32);
 	}
 	CTileObject::Load(pParams);
 }

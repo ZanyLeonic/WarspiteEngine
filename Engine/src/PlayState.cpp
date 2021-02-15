@@ -321,10 +321,10 @@ SCollisionData CPlayState::IsColliding(CVector2D v1)
 
 					return r;
 				}
-				else if (cObjs[j]->ShouldOverlap() && cObjs[j]->IsOverlapping())
-				{
-					cObjs[j]->OnOverlapEnd();
-				}
+				//else if (cObjs[j]->ShouldOverlap() && cObjs[j]->IsOverlapping())
+				//{
+				//	cObjs[j]->OnOverlapEnd();
+				//}
 			}
 		}
 	}
