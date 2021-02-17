@@ -101,7 +101,7 @@ void CTextureManager::CreateCheckboardPattern(CVector2D size, std::string texNam
 void CTextureManager::CreateEngineTextures(CVector2D resolution, SDL_Renderer* pRenderer)
 {
 	SDL_Texture* pTexture = SDL_CreateTexture(pRenderer, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_TARGET, (int)resolution.GetX(), (int)resolution.GetY());
-	SDL_SetTextureBlendMode(pTexture, SDL_BLENDMODE_NONE);
+	SDL_SetTextureBlendMode(pTexture, SDL_BLENDMODE_BLEND);
 
 	SDL_SetRenderTarget(pRenderer, pTexture);
 

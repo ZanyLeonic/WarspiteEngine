@@ -114,7 +114,7 @@ bool CBaseGame::Init(const char* title, int xpos, int ypos, int width, int heigh
 			{ ESingletonIDs::TEXTUREMANAGER,    (void(*))CTextureManager::Instance()}
 		};
 
-		CTextureManager::Instance()->CreateEngineTextures(CVector2D(width, height), m_pRenderer);
+		CTextureManager::Instance()->CreateEngineTextures(CVector2D((float)width, (float)height), m_pRenderer);
 		m_fadeObject = new CFadeObject();
 
 		CTextureManager::Instance()->CreateCheckboardPattern(CVector2D(1920, 1080), "_test", m_pRenderer);

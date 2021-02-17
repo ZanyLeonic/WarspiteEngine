@@ -6,8 +6,8 @@
 CFadeObject::CFadeObject()
 {
 	m_textureID = "_fade";
-	m_width = CBaseGame::Instance()->GetViewportSize().GetX();
-	m_height = CBaseGame::Instance()->GetViewportSize().GetY();
+	m_width = (int)CBaseGame::Instance()->GetViewportSize().GetX();
+	m_height = (int)CBaseGame::Instance()->GetViewportSize().GetY();
 	m_position = CVector2D(0, 0);
 
 	m_bCancelMovementOnOverlap = false;
@@ -15,24 +15,27 @@ CFadeObject::CFadeObject()
 	m_collidable = false;
 
 	m_pFadeTexture = CTextureManager::Instance()->m_textureMap[m_textureID];
-	SDL_SetTextureBlendMode(m_pFadeTexture->GetTexture(), SDL_BLENDMODE_BLEND);
+}
+
+void CFadeObject::Draw()
+{
+	CTextureManager::Instance()->Draw(m_pFadeTexture, 0, 0, CBaseGame::Instance()->GetRenderer());
 }
 
 bool CFadeObject::OnThink()
 {
-	SDL_SetTextureAlphaMod(m_pFadeTexture->GetTexture(), m_fCurrentTime);
+	SDL_SetTextureAlphaMod(m_pFadeTexture->GetTexture(), (Uint8)m_fCurrentOpacity);
 
 	if (m_bFading)
 	{
-		m_fCurrentTime = CWarspiteUtil::FLerp(m_fStartOpacity, m_fTargetOpacity, (m_fFadeTimeLeft / 100));
-		
-		if (m_fCurrentTime != m_fTargetOpacity)
+		if (m_fCurrentOpacity + (m_fFadeSpeed * (int)m_eDirection) > 255)
 		{
-			m_fFadeTimeLeft += 0.1f;
+			m_fCurrentOpacity = 255;
+			m_bFading = false;
 		}
 		else
 		{
-			m_bFading = false;
+			m_fCurrentOpacity += m_fFadeSpeed;
 		}
 	}
 	return true;
@@ -40,20 +43,16 @@ bool CFadeObject::OnThink()
 
 void CFadeObject::FadeIn()
 {
-	m_fStartOpacity = 0.f;
-	m_fTargetOpacity = 255.f;
-	m_fCurrentTime = 0.f;
-	m_fFadeTimeLeft = 0.f;
+	if (m_bFading) return;
 
+	m_eDirection = EPlaybackDirection::FORWARD;
 	m_bFading = true;
 }
 
 void CFadeObject::FadeOut()
 {
-	m_fStartOpacity = 255.f;
-	m_fTargetOpacity = 0.f;
-	m_fCurrentTime = 0.f;
-	m_fFadeTimeLeft = 0.f;
+	if (m_bFading) return;
 
+	m_eDirection = EPlaybackDirection::BACKWARD;
 	m_bFading = true;
 }

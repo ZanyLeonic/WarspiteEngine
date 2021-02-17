@@ -4,32 +4,33 @@
 
 #include "WarspiteObject.h"
 #include "CTexture.h"
+#include "EngineTypes.h"
 
 class CFadeObject :
     public CWarspiteObject
 {
 public:
     CFadeObject();
+
+    void Draw() override;
     bool OnThink() override;
 
     void FadeIn();
     void FadeOut();
 
-    void SetStartOpacity(float start) { m_fStartOpacity = start; }
-    float GetStartOpacity() const { return m_fStartOpacity; }
+    float GetCurrentFadeSpeed() const { return m_fFadeSpeed; }
+    void SetFadeSpeed(float speed) { m_fFadeSpeed = speed; }
 
-    void SetTargetOpacity(float tar) { m_fTargetOpacity = tar; }
-    float GetTargetOpacity() const { return m_fTargetOpacity; }
-
-    float GetCurrentFadeTime() const { return m_fCurrentTime; }
+    float GetCurrentOpacity() const { return m_fCurrentOpacity; }
+    bool IsFading() const { return m_bFading; }
 
 private:
     CTexture* m_pFadeTexture = nullptr;
 
-    float m_fStartOpacity = 0.f;
-    float m_fTargetOpacity = 1.f;
-    float m_fCurrentTime = 0.f;
-    float m_fFadeTimeLeft = 0.f;
+    float m_fCurrentOpacity = 0.f;
+    float m_fFadeSpeed = 1.f;
+
+    EPlaybackDirection m_eDirection = EPlaybackDirection::NONE;
 
     bool m_bFading = false;
 };

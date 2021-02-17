@@ -61,6 +61,13 @@ enum class EDirection
 	WEST = 4
 };
 
+enum class EPlaybackDirection
+{
+	NONE = 0,
+	FORWARD = 1,
+	BACKWARD = -1
+};
+
 static CVector2D GetForwardVector(EDirection dir)
 {
 	switch(dir)

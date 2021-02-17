@@ -15,6 +15,7 @@ set(WarspiteEngine_Src
         src/CTexture.cpp
         src/ConfigParser.cpp
         src/DoorLink.cpp
+        src/FadeObject.cpp
         src/FPSCounter.cpp
         src/Enemy.cpp
         src/EngineFileSystem.cpp
@@ -61,6 +62,7 @@ set(WarspiteEngine_Header
         src/CTexture.h
         src/ConfigParser.h
         src/DoorLink.h
+        src/FadeObject.h
         src/FPSCounter.h
         src/Enemy.h
         src/EngineFileSystem.h
