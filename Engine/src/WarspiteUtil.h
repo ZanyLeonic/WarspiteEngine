@@ -25,6 +25,8 @@ public:
 	static bool GetParam(char** argv, int argc, const char* param, char* returnval);
 
 	static std::string GetExecutingDirectory();
+
+	static float FLerp(float f1, float f2, float t);
 };
 
 class NotImplemented : public std::logic_error

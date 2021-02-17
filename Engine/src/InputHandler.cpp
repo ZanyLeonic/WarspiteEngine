@@ -578,7 +578,7 @@ void CInputHandler::onJoystickButtonDown(SDL_Event& event)
 
 	if (m_joyDownCallbacks.size() != 0)
 	{
-		for (int i = 0; i < m_joyDownCallbacks.size(); i++)
+		for (size_t i = 0; i < m_joyDownCallbacks.size(); i++)
 		{
 			m_joyDownCallbacks[i](event);
 		}

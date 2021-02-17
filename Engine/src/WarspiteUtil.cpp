@@ -159,3 +159,8 @@ std::string CWarspiteUtil::GetExecutingDirectory()
 #endif
 	return RemoveFileNameFromPath(std::string(pBuf));
 }
+
+float CWarspiteUtil::FLerp(float f1, float f2, float t)
+{
+	return (1 - t) * f1 + t * f2;
+}

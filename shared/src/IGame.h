@@ -24,6 +24,9 @@ public:
     virtual void Destroy() = 0;
     virtual void Quit() = 0;
 
+    virtual void FadeIn() = 0;
+    virtual void FadeOut() = 0;
+
     virtual bool IsRunning() = 0;
 
     virtual SDL_Renderer* const GetRenderer() = 0;

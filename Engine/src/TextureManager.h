@@ -10,7 +10,7 @@ class CTextureManager :
 	public ITextureManager
 {
 	static CTextureManager* s_pInstance;
-	CTextureManager() {}
+	CTextureManager() {};
 
 public:
 	static CTextureManager* Instance()
@@ -27,6 +27,9 @@ public:
 	void Add(CTexture* nText, std::string id);
 
 	void CreateCheckboardPattern(CVector2D size, std::string texName, SDL_Renderer* pRenderer);
+	void CreateEngineTextures(CVector2D resolution, SDL_Renderer* pRenderer);
+
+	void SaveTextureToDisk(std::string fileName, CTexture* texture, SDL_Renderer* pRenderer);
 
 	// draw
 	void Draw(std::string id, int x, int y, int width, int height,

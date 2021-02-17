@@ -10,6 +10,7 @@
 #include "ScriptWrappers.h"
 #include "spdlog/spdlog.h"
 #include "FPSCounter.h"
+#include "FadeObject.h"
 #include "IGame.h"
 
 CBaseGame* CBaseGame::s_pInstance = 0;
@@ -113,6 +114,16 @@ bool CBaseGame::Init(const char* title, int xpos, int ypos, int width, int heigh
 			{ ESingletonIDs::TEXTUREMANAGER,    (void(*))CTextureManager::Instance()}
 		};
 
+		CTextureManager::Instance()->CreateEngineTextures(CVector2D(width, height), m_pRenderer);
+		m_fadeObject = new CFadeObject();
+
+		CTextureManager::Instance()->CreateCheckboardPattern(CVector2D(1920, 1080), "_test", m_pRenderer);
+
+		CTextureManager::Instance()->SaveTextureToDisk("assets/screenshots/cringe.png", CTextureManager::Instance()->m_textureMap["_fade"], m_pRenderer);
+		CTextureManager::Instance()->SaveTextureToDisk("assets/screenshots/black.png", CTextureManager::Instance()->m_textureMap["_test"], m_pRenderer);
+		SDL_SetRenderDrawColor(m_pRenderer,
+			255, 255, 255, 255);
+
 		// Run the GameDLL's init
 		pGame = pGameDLL(m_argc, m_argv, &m_singletonPtrs);
 
@@ -194,9 +205,11 @@ void CBaseGame::Draw()
 	
 	// Call the current GameState functionality via the GameStateManager.
 	m_pGameStateManager->Draw();
-	m_fpsCounter->Draw();
-	
 	if (m_player != 0) m_player->Draw();
+
+	m_fadeObject->Draw();
+
+	m_fpsCounter->Draw();
 
 	SDL_RenderPresent(m_pRenderer); // draw to the screen
 }
@@ -206,6 +219,7 @@ void CBaseGame::OnThink()
 	// FPS counter stuff
 	FPS_Calc();
 	m_fpsCounter->SetFPSValue(m_FPS);
+	m_fadeObject->OnThink();
 
 	// Call the current GameState functionality via the GameStateManager.
 	m_pGameStateManager->OnThink();
@@ -242,4 +256,14 @@ void CBaseGame::Destroy()
 void CBaseGame::Quit()
 {
 	m_bRunning = false;
+}
+
+void CBaseGame::FadeIn()
+{
+	if (m_fadeObject) m_fadeObject->FadeIn();
+}
+
+void CBaseGame::FadeOut()
+{
+	if (m_fadeObject) m_fadeObject->FadeOut();
 }

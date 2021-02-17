@@ -17,6 +17,7 @@ public:
 	virtual void Add(CTexture* nText, std::string id) = 0;
 
 	virtual void CreateCheckboardPattern(CVector2D size, std::string texName, SDL_Renderer* pRenderer) = 0;
+	virtual void CreateEngineTextures(CVector2D resolution, SDL_Renderer* pRenderer) = 0;
 
 	// draw
 	virtual void Draw(std::string id, int x, int y, int width, int height,

@@ -40,7 +40,9 @@ void CPlayer::Load(const CObjectParams* pParams)
 
 bool CPlayer::OnThink()
 {
-	HandleInput();
+	if(!m_bDisablePlayerInput)
+		HandleInput();
+
 	m_currentFrame = 1;
 
 	if (moving)
@@ -144,14 +146,33 @@ void CPlayer::MoveForward(float axis)
 {
 	if (axis == 0.f) return;
 	CVector2D curPos = m_position;
-	IGameObject* lastObj = m_slastCollision.m_otherObject;
 	
 	m_currentRow = (axis > 0) ? 1 : 4;
+	m_ePlayerDirection = (axis > 0) ? EDirection::SOUTH : EDirection::NORTH;
 
 	// Analog movement coming never.
 	curPos.SetY(curPos.GetY() + (m_moveStep * axis));
 
-	bool result = WillCollide(&curPos);
+	HandleMovement(&curPos);
+}
+
+void CPlayer::MoveRight(float axis)
+{
+	if (axis == 0.f) return;
+	CVector2D curPos = m_position;
+	
+	m_currentRow = (axis > 0) ? 3 : 2;
+	m_ePlayerDirection = (axis > 0) ? EDirection::EAST : EDirection::WEST;
+
+	curPos.SetX(curPos.GetX() + (m_moveStep * axis));
+
+	HandleMovement(&curPos);
+}
+
+void CPlayer::HandleMovement(CVector2D* pNext)
+{
+	IGameObject* lastObj = m_slastCollision.m_otherObject;
+	bool result = WillCollide(pNext);
 
 	if (!result && m_slastCollision.m_result == ECollisionResult::OVERLAP)
 	{
@@ -170,7 +191,7 @@ void CPlayer::MoveForward(float axis)
 	{
 		moving = true;
 		lastPosition = m_position;
-		nextPosition = curPos;
+		nextPosition = *pNext;
 		m_timeLeft = 0;
 		m_stepLastFrame = true;
 
@@ -180,51 +201,7 @@ void CPlayer::MoveForward(float axis)
 	}
 	else
 	{
-		spdlog::info("Cannot move {} - collided!", ((axis > 0) ? "down" : "up"));
-	}
-}
-
-void CPlayer::MoveRight(float axis)
-{
-	if (axis == 0.f) return;
-	CVector2D curPos = m_position;
-	IGameObject* lastObj = m_slastCollision.m_otherObject;
-	
-	m_currentRow = (axis > 0) ? 3 : 2;
-
-	curPos.SetX(curPos.GetX() + (m_moveStep * axis));
-
-	bool result = WillCollide(&curPos);
-
-	if (!result && m_slastCollision.m_result == ECollisionResult::OVERLAP)
-	{
-		if (m_slastCollision.m_otherObject)
-			if (!m_slastCollision.m_otherObject->IsOverlapping()
-				&& m_slastCollision.m_otherObject->ShouldOverlap())
-			{
-				m_slastCollision.m_otherObject->OnOverlapStart();
-			}
-
-		if (lastObj)
-			if (lastObj->IsOverlapping() && lastObj->ShouldOverlap())
-				lastObj->OnOverlapEnd();
-	}
-	else if(!result)
-	{
-		moving = true;
-		lastPosition = m_position;
-		nextPosition = curPos;
-		m_timeLeft = 0;
-		m_stepLastFrame = true;
-
-
-		if (lastObj)
-			if (lastObj->IsOverlapping() && lastObj->ShouldOverlap())
-				lastObj->OnOverlapEnd();
-	}
-	else
-	{
-		spdlog::info("Cannot move {} - collided!", ((axis > 0) ? "right" : "left"));
+		spdlog::info("Cannot move {} - collided!", GetDirectionName(m_ePlayerDirection));
 	}
 }
 

@@ -98,6 +98,43 @@ void CTextureManager::CreateCheckboardPattern(CVector2D size, std::string texNam
 	SDL_RenderPresent(pRenderer);
 }
 
+void CTextureManager::CreateEngineTextures(CVector2D resolution, SDL_Renderer* pRenderer)
+{
+	SDL_Texture* pTexture = SDL_CreateTexture(pRenderer, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_TARGET, (int)resolution.GetX(), (int)resolution.GetY());
+	SDL_SetTextureBlendMode(pTexture, SDL_BLENDMODE_NONE);
+
+	SDL_SetRenderTarget(pRenderer, pTexture);
+
+	SDL_SetRenderDrawColor(pRenderer, 0x00, 0x00, 0x00, 0xFF);
+	SDL_RenderClear(pRenderer);
+
+	SDL_Rect r = { 0, 0, resolution.GetX(), resolution.GetY() };
+
+	SDL_RenderFillRect(pRenderer, &r);
+
+	m_textureMap["_fade"] = new CTexture(pTexture);
+
+	SDL_SetRenderTarget(pRenderer, NULL);
+	SDL_RenderPresent(pRenderer);
+}
+
+void CTextureManager::SaveTextureToDisk(std::string fileName, CTexture* texture, SDL_Renderer* pRenderer)
+{
+	SDL_Texture* target = SDL_GetRenderTarget(pRenderer);
+	
+	SDL_SetRenderTarget(pRenderer, texture->GetTexture());
+
+	int width, height;
+	SDL_QueryTexture(texture->GetTexture(), NULL, NULL, &width, &height);
+
+	SDL_Surface* surface = SDL_CreateRGBSurface(0, width, height, 32, 0, 0, 0, 0);
+
+	SDL_RenderReadPixels(pRenderer, NULL, surface->format->format, surface->pixels, surface->pitch);
+	IMG_SavePNG(surface, fileName.c_str());
+	SDL_FreeSurface(surface);
+	SDL_SetRenderTarget(pRenderer, target);
+}
+
 void CTextureManager::Draw(std::string id, int x, int y, int width, int height,
 	SDL_Renderer* pRenderer, double angle,
 	CVector2D* center, EWarRendererFlip flip)

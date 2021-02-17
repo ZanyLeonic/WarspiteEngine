@@ -52,6 +52,49 @@ enum class ECollisionResult
 	OVERLAP = 2
 };
 
+enum class EDirection
+{
+	NONE = 0,
+	NORTH = 1,
+	EAST = 2,
+	SOUTH = 3,
+	WEST = 4
+};
+
+static CVector2D GetForwardVector(EDirection dir)
+{
+	switch(dir)
+	{
+	case EDirection::NORTH:
+		return CVector2D(0, -1);
+	case EDirection::EAST:
+		return CVector2D(1, 0);
+	case EDirection::SOUTH:
+		return CVector2D(0, 1);
+	case EDirection::WEST:
+		return CVector2D(-1, 0);
+	default:
+		return CVector2D();
+	}
+}
+
+static std::string GetDirectionName(EDirection dir)
+{
+	switch (dir)
+	{
+	case EDirection::NORTH:
+		return "North";
+	case EDirection::EAST:
+		return "East";
+	case EDirection::SOUTH:
+		return "South";
+	case EDirection::WEST:
+		return "West";
+	default:
+		return "Unknown";
+	}
+}
+
 struct SCollisionData
 {
 	IGameObject* m_otherObject = 0;

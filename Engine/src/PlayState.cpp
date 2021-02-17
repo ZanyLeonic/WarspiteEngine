@@ -147,6 +147,20 @@ bool CPlayState::OnPlay()
 		return;
 	});
 
+	CInputHandler::Instance()->AddActionKeyDown(SDL_SCANCODE_P, [this](SDL_Scancode e) {
+		CBaseGame::Instance()->FadeIn();
+		});
+	CInputHandler::Instance()->AddActionKeyUp(SDL_SCANCODE_P, [this](SDL_Scancode e) {
+		return;
+		});
+
+	CInputHandler::Instance()->AddActionKeyDown(SDL_SCANCODE_L, [this](SDL_Scancode e) {
+		CBaseGame::Instance()->FadeOut();
+		});
+	CInputHandler::Instance()->AddActionKeyUp(SDL_SCANCODE_L, [this](SDL_Scancode e) {
+		return;
+		});
+
 	// Try test state
 	CInputHandler::Instance()->AddActionKeyDown(SDL_SCANCODE_B, [this](SDL_Scancode e) {
 		if (CBaseGame::Instance()->GetStateManager()->GetCurrentStateID() != SID_TEST)
@@ -229,6 +243,8 @@ bool CPlayState::OnEnd()
 	CInputHandler::Instance()->RemoveActionKeyDown(SDL_SCANCODE_8);
 	CInputHandler::Instance()->RemoveActionKeyDown(SDL_SCANCODE_9);
 	CInputHandler::Instance()->RemoveActionKeyDown(SDL_SCANCODE_B);
+	CInputHandler::Instance()->RemoveActionKeyDown(SDL_SCANCODE_P);
+	CInputHandler::Instance()->RemoveActionKeyDown(SDL_SCANCODE_L);
 
 	CInputHandler::Instance()->RemoveActionKeyUp(SDL_SCANCODE_ESCAPE);
 	CInputHandler::Instance()->RemoveActionKeyUp(SDL_SCANCODE_0);
@@ -242,6 +258,8 @@ bool CPlayState::OnEnd()
 	CInputHandler::Instance()->RemoveActionKeyUp(SDL_SCANCODE_8);
 	CInputHandler::Instance()->RemoveActionKeyUp(SDL_SCANCODE_9);
 	CInputHandler::Instance()->RemoveActionKeyUp(SDL_SCANCODE_B);
+	CInputHandler::Instance()->RemoveActionKeyUp(SDL_SCANCODE_P);
+	CInputHandler::Instance()->RemoveActionKeyUp(SDL_SCANCODE_L);
 
 	// Execute the OnPlay method on all the GameObjects in all Object Layers
 	if (CBaseGame::Instance()->GetLoadedLevel() != 0)
@@ -274,9 +292,8 @@ SCollisionData CPlayState::IsColliding(CVector2D v1)
 				{
 					r.m_result = ECollisionResult::OVERLAP;
 				}
-
 				// Check if the GameObject is in the way and isn't us + collision flag
-				if (sObjs[k]->ShouldCollide())
+				else if (sObjs[k]->ShouldCollide())
 				{
 					r.m_result = ECollisionResult::COLLIDED;
 				}
@@ -313,18 +330,14 @@ SCollisionData CPlayState::IsColliding(CVector2D v1)
 					{
 						r.m_result = ECollisionResult::OVERLAP;
 					}
-
-					if (cObjs[j]->ShouldCollide())
+					// Check if the GameObject is in the way and isn't us + collision flag
+					else if (cObjs[j]->ShouldCollide())
 					{
 						r.m_result = ECollisionResult::COLLIDED;
 					}
 
 					return r;
 				}
-				//else if (cObjs[j]->ShouldOverlap() && cObjs[j]->IsOverlapping())
-				//{
-				//	cObjs[j]->OnOverlapEnd();
-				//}
 			}
 		}
 	}

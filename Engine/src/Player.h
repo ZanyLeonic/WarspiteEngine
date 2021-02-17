@@ -4,6 +4,7 @@
 
 #include "WarspiteObject.h"
 #include "InputHandler.h"
+#include "EngineTypes.h"
 
 class CPlayer : public CWarspiteObject
 {
@@ -19,11 +20,16 @@ public:
 
 	void SetNextLocation(CVector2D nextLocation);
 
+	void DisablePlayerInput(bool newState) { m_bDisablePlayerInput = newState; }
+	bool IsPlayerInputDisabled() const { return m_bDisablePlayerInput; }
+
 private:
 	void HandleInput();
 
 	void MoveForward(float axis);
 	void MoveRight(float axis);
+
+	void HandleMovement(CVector2D* pNext);
 	
 	bool WillCollide(CVector2D* pNext);
 
@@ -38,6 +44,7 @@ private:
 	bool moveRight = false;
 
 	bool m_stepLastFrame = false;
+	bool m_bDisablePlayerInput = false;
 
 	float m_timeLeft = 100;
 	const int m_moveStep = 32;
@@ -46,6 +53,7 @@ private:
 
 	CVector2D m_CamOffset;
 	SCollisionData m_slastCollision;
+	EDirection m_ePlayerDirection = EDirection::NONE;
 };
 
 REG_OBJ_TO_REF( Player, CPlayer ) ;

@@ -19,6 +19,7 @@
 #define FRAME_SAMPLES 10
 
 class CFPSCounter;
+class CFadeObject;
 struct SDL_Rect;
 class IWGame;
 
@@ -49,6 +50,9 @@ public:
 	void Destroy() override;
 	void Quit() override;
 
+	void FadeIn() override;
+	void FadeOut() override;
+	
 	// a function to access the private running variable
 	virtual bool IsRunning() { return m_bRunning; }
 
@@ -94,6 +98,8 @@ private:
 	PGamePtr m_gamePtr;
 
 	CFPSCounter* m_fpsCounter;
+	CFadeObject* m_fadeObject;
+
 	IWGame* pGame = nullptr;
 
 	// FPS calculations
