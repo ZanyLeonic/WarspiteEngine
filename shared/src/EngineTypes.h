@@ -9,9 +9,13 @@
 #include <SDL2/SDL_events.h>
 #include "Vector2D.h"
 
+#define PLAYER_WIDTH 32
+#define PLAYER_HEIGHT 32
+
 struct SInputObject;
 struct SGameObject;
 struct SLevelObject;
+
 class IGame;
 class IWGame;
 class IGameObject;
@@ -67,6 +71,7 @@ enum class EPlaybackDirection
 	FORWARD = 1,
 	BACKWARD = -1
 };
+typedef std::function<void(EPlaybackDirection)> HFadeComplete;
 
 static CVector2D GetForwardVector(EDirection dir)
 {

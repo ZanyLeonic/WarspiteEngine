@@ -9,6 +9,7 @@ struct SDL_Window;
 
 class CGameStateManager;
 class CGarbageCollector;
+class CFadeObject;
 class CVector2D;
 class IGameObject;
 class CLevel;
@@ -33,6 +34,8 @@ public:
     virtual SDL_Window* const GetWindow() = 0;
     virtual CGameStateManager* const GetStateManager() = 0;
     virtual CGarbageCollector* const GetGarbageCollector() = 0;
+
+    virtual CFadeObject* const GetFadeObject() = 0;
 
     virtual CVector2D const GetViewportSize() = 0;
 

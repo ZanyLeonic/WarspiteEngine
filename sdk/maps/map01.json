@@ -287,6 +287,11 @@
                  "name":"door01",
                  "properties":[
                         {
+                         "name":"doorWorldTexture",
+                         "type":"string",
+                         "value":"door"
+                        }, 
+                        {
                          "name":"targetDoorID",
                          "type":"string",
                          "value":"door02"
@@ -304,6 +309,11 @@
                  "id":27,
                  "name":"door02",
                  "properties":[
+                        {
+                         "name":"doorWorldTexture",
+                         "type":"string",
+                         "value":"door"
+                        }, 
                         {
                          "name":"targetDoorID",
                          "type":"string",
@@ -335,6 +345,11 @@
          "name":"TestObject",
          "type":"file",
          "value":"..\/textures\/dev\/Black_22x27.bmp"
+        }, 
+        {
+         "name":"door",
+         "type":"file",
+         "value":"..\/textures\/door.png"
         }],
  "renderorder":"right-down",
  "tiledversion":"1.4.3",

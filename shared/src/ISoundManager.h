@@ -3,6 +3,7 @@
 #define __ISOUNDMGR_H_
 
 #include <AL/al.h>
+#include <vorbis/vorbisfile.h>
 #include <iostream>
 #include <fstream>
 #include <vector>

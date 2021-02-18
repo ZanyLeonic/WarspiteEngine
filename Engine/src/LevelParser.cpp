@@ -106,17 +106,18 @@ MapProperties CLevelParser::GetMapProp(const std::string prop)
 {
 	static const std::map<std::string, MapProperties> propStrings
 	{
-		{"runScript",		MapProperties::PROP_SCRIPT},
-		{"textureID",		MapProperties::PROP_TEXTUREID},
-		{"textureWidth",	MapProperties::PROP_TEXWIDTH},
-		{"textureHeight",	MapProperties::PROP_TEXHEIGHT},
-		{"numFrames",		MapProperties::PROP_NUMFRAMES},
-		{"animSpeed",		MapProperties::PROP_ANIMSPEED},
-		{"onClickCallback", MapProperties::PROP_ONCLICKCALL},
-		{"onEnterCallback", MapProperties::PROP_ONENTERCALL},
-		{"onLeaveCallback", MapProperties::PROP_ONLEAVECALL},
-		{"soundPath",		MapProperties::PROP_SOUNDPATH},
-		{"targetDoorID",    MapProperties::PROP_DOORTARGET}
+		{"runScript",		 MapProperties::PROP_SCRIPT},
+		{"textureID",		 MapProperties::PROP_TEXTUREID},
+		{"textureWidth",	 MapProperties::PROP_TEXWIDTH},
+		{"textureHeight",	 MapProperties::PROP_TEXHEIGHT},
+		{"numFrames",		 MapProperties::PROP_NUMFRAMES},
+		{"animSpeed",		 MapProperties::PROP_ANIMSPEED},
+		{"onClickCallback",  MapProperties::PROP_ONCLICKCALL},
+		{"onEnterCallback",  MapProperties::PROP_ONENTERCALL},
+		{"onLeaveCallback",  MapProperties::PROP_ONLEAVECALL},
+		{"soundPath",		 MapProperties::PROP_SOUNDPATH},
+		{"targetDoorID",	 MapProperties::PROP_DOORTARGET},
+		{"doorWorldTexture", MapProperties::PROP_DOORWORLDTEXTURE}
 	};
 
 	auto itr = propStrings.find(prop);
@@ -421,6 +422,9 @@ void CLevelParser::parseObjectLayer(const rapidjson::Value* pObjectVal, std::vec
 					break;
 				case MapProperties::PROP_DOORTARGET:
 					pOP->SetDoorTargetID(d[j]["value"].GetString());
+					break;
+				case MapProperties::PROP_DOORWORLDTEXTURE:
+					pOP->SetDoorWorldTexture(d[j]["value"].GetString());
 					break;
 				default:
 					// Future proofing incase new properties get added for newer engine version.

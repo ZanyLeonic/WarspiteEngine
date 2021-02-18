@@ -4,6 +4,9 @@
 
 #include <memory>
 #include "TileObject.h"
+#include "ISoundManager.h"
+
+class CPlayer;
 
 class CDoorLink :
     public CTileObject
@@ -11,18 +14,39 @@ class CDoorLink :
 public:
     CDoorLink();
 
-    void Load(const CObjectParams* pParams);
-    void OnPlay();
+    void Load(const CObjectParams* pParams) override;
 
-    void OnOverlapStart();
-    void OnOverlapEnd();
+    void OnPlay() override;
+    void Destroy() override;
+
+    bool OnThink() override;
+    void Draw() override;
+
+    void OnOverlapStart() override;
+    void OnOverlapEnd() override;
 
     void SetTravelledTo(bool travelled) { m_bTravelledTo = travelled; }
+
+    void PlayDoorAnimation(EPlaybackDirection direction);
 private:
-    std::string m_targetDoorID;
-    std::shared_ptr<CDoorLink> m_targetDoor;
+    std::string m_sTargetDoorID;
+    std::string m_sWorldTextureID;
+    std::shared_ptr<CDoorLink> m_pTargetDoor;
+
+    int m_iAnimationFrame = 0;
+    bool m_bDoDoorAnimation = false;
+    EPlaybackDirection m_eAnimationPlayback = EPlaybackDirection::NONE;
+
+    EDirection m_eExitDirection = EDirection::NONE;
+
+    SWaveFile m_prWaveFile;
+    void fadeCallback(EPlaybackDirection direction);
+    void movementEnd(CPlayer* pPlayer);
+
+    void playDoorAnimation(EPlaybackDirection direction);
 
     bool m_bTravelledTo = false;
+    bool m_bTravellingFrom = false; // Flag whether we are travelling from this door
 };
 
 REG_OBJ_TO_REF(DoorLink, CDoorLink);

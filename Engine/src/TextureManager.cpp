@@ -108,7 +108,7 @@ void CTextureManager::CreateEngineTextures(CVector2D resolution, SDL_Renderer* p
 	SDL_SetRenderDrawColor(pRenderer, 0x00, 0x00, 0x00, 0xFF);
 	SDL_RenderClear(pRenderer);
 
-	SDL_Rect r = { 0, 0, resolution.GetX(), resolution.GetY() };
+	SDL_Rect r = { 0, 0, (int)resolution.GetX(), (int)resolution.GetY() };
 
 	SDL_RenderFillRect(pRenderer, &r);
 

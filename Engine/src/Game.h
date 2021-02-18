@@ -19,7 +19,6 @@
 #define FRAME_SAMPLES 10
 
 class CFPSCounter;
-class CFadeObject;
 struct SDL_Rect;
 class IWGame;
 
@@ -61,10 +60,12 @@ public:
 	CGameStateManager* const GetStateManager() { return m_pGameStateManager; }
 	CGarbageCollector* const GetGarbageCollector() { return m_pGarbageCollector; }
 
+	CFadeObject* const GetFadeObject() { return m_pFadeObject; }
+
 	CVector2D const GetViewportSize() { return m_viewportSize; }
 
-	void SetPlayer(std::shared_ptr<IGameObject> pNO) { m_player = pNO; }
-	std::shared_ptr<IGameObject> const GetPlayer() { return m_player; }
+	void SetPlayer(std::shared_ptr<IGameObject> pNO) { m_pPlayer = pNO; }
+	std::shared_ptr<IGameObject> const GetPlayer() { return m_pPlayer; }
 
 	void SetLoadedLevel(CLevel* level) { m_pLevel = level; }
 	CLevel* GetLoadedLevel() { return m_pLevel; }
@@ -72,7 +73,7 @@ public:
 	int const GetArgc() { return m_argc; }
 	char** const GetArgv() { return m_argv; }
 
-	IWGame* const GetGameDLLClass() { return pGame; }
+	IWGame* const GetGameDLLClass() { return m_pGame; }
 
 	bool const StartedWithMapParam() { return m_bStartedWithMapParam; }
 	std::string const GetMapParamName() { return m_sMapName; }
@@ -91,22 +92,22 @@ private:
 	SDL_Rect m_sourceRectangle = {}; // the first rectangle
 	SDL_Rect m_destinationRectangle = {}; // another rectangle
 
-	std::shared_ptr<IGameObject> m_player = nullptr;
+	std::shared_ptr<IGameObject> m_pPlayer = nullptr;
 	CLevel* m_pLevel = nullptr;
 	
 	CVector2D m_viewportSize;
 	PGamePtr m_gamePtr;
 
-	CFPSCounter* m_fpsCounter;
-	CFadeObject* m_fadeObject;
+	CFPSCounter* m_pFPSCounter;
+	CFadeObject* m_pFadeObject;
 
-	IWGame* pGame = nullptr;
+	IWGame* m_pGame = nullptr;
 
 	// FPS calculations
 	Uint32 m_frametimes[FRAME_SAMPLES];
 	Uint32 m_lastFrametime;
 	Uint32 m_frameCount;
-	float m_FPS;
+	float m_fFPS;
 
 	int m_argc; 
 	char** m_argv;

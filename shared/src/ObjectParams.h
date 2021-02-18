@@ -51,6 +51,7 @@ public:
 	void SetScript(std::string s) { m_script = s; }
 
 	void SetDoorTargetID(std::string s) { m_doorTargetID = s; }
+	void SetDoorWorldTexture(std::string s) { m_doorWorldTexture = s; }
 
 	// Getters
 	float GetX() const { return m_x; }
@@ -78,6 +79,7 @@ public:
 	std::string GetScript() const { return m_script; }
 
 	std::string GetDoorTargetID() const { return m_doorTargetID; }
+	std::string GetDoorWorldTexture() const { return m_doorWorldTexture; }
 
 private:
 	// Metadata + Map Logic
@@ -88,6 +90,7 @@ private:
 	std::string m_soundPath = "";
 
 	std::string m_doorTargetID = "";
+	std::string m_doorWorldTexture = "";
 
 	int m_gid = -1;
 	

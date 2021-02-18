@@ -6,8 +6,13 @@
 #include "InputHandler.h"
 #include "EngineTypes.h"
 
+class CPlayer;
+
+typedef std::function<void(CPlayer*)> HPlayerCallback;
+
 class CPlayer : public CWarspiteObject
 {
+
 public:
 	CPlayer();
 
@@ -18,10 +23,17 @@ public:
 	bool OnThink();
 	void Draw();
 
-	void SetNextLocation(CVector2D nextLocation);
+	void SetNextLocation(CVector2D nextLocation, float pos, bool callCallbacks=false);
+	void SetDirection(EDirection direction) { m_ePlayerDirection = direction; }
 
 	void DisablePlayerInput(bool newState) { m_bDisablePlayerInput = newState; }
 	bool IsPlayerInputDisabled() const { return m_bDisablePlayerInput; }
+
+	void AddMovementStartCallback(std::string id, HPlayerCallback call);
+	void RemoveMovementStartCallback(std::string id);
+
+	void AddMovementEndCallback(std::string id, HPlayerCallback call);
+	void RemoveMovementEndCallback(std::string id);
 
 private:
 	void HandleInput();
@@ -35,26 +47,35 @@ private:
 
 	void DecideFrame();
 
-	CVector2D lastPosition;
-	CVector2D nextPosition;
+	int GetRowFromDirection();
 
-	bool moving = false;
+	void callStartCallbacks();
+	void callEndCallbacks();
 
-	bool moveUp = false;
-	bool moveRight = false;
+	CVector2D m_vLastPosition;
+	CVector2D m_vNextPosition;
 
-	bool m_stepLastFrame = false;
+	bool m_bMoving = false;
+
+	bool m_bMoveUp = false;
+	bool m_bMoveRight = false;
+
+	bool m_bStepLastFrame = false;
 	bool m_bDisablePlayerInput = false;
 
-	float m_timeLeft = 100;
-	const int m_moveStep = 32;
+	float m_fTimeLeft = 100;
+	const int m_iMoveStep = 32;
 
-	int m_frameOffset = 0;
+	int m_iFrameOffset = 0;
 
-	CVector2D m_CamOffset;
-	SCollisionData m_slastCollision;
+	std::map<std::string, HPlayerCallback> m_vOnMoveStart;
+	std::map<std::string, HPlayerCallback> m_vOnMoveEnd;
+
+	CVector2D m_vCamOffset;
+	SCollisionData m_sLastCollision;
 	EDirection m_ePlayerDirection = EDirection::NONE;
 };
+
 
 REG_OBJ_TO_REF( Player, CPlayer ) ;
 #endif /* defined(__Player__) */

@@ -1,5 +1,11 @@
 [
     {
+        "color": "#ff00bcda",
+        "name": "AudioSource",
+        "properties": [
+        ]
+    },
+    {
         "color": "#ffff0000",
         "name": "Bound",
         "properties": [
@@ -15,12 +21,28 @@
         "name": "DoorLink",
         "properties": [
             {
+                "name": "doorWorldTexture",
+                "type": "string",
+                "value": ""
+            },
+            {
                 "name": "locked",
                 "type": "bool",
                 "value": false
             },
             {
                 "name": "targetDoorID",
+                "type": "string",
+                "value": ""
+            }
+        ]
+    },
+    {
+        "color": "#ffd792ff",
+        "name": "LogicAuto",
+        "properties": [
+            {
+                "name": "runScript",
                 "type": "string",
                 "value": ""
             }

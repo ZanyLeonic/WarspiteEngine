@@ -33,10 +33,10 @@ bool CBaseGame::Init(const char* title, int xpos, int ypos, int width, int heigh
 	// Set all frame times to 0ms.
 	memset(m_frametimes, 0, sizeof(m_frametimes));
 	m_frameCount = 0;
-	m_FPS = 0;
+	m_fFPS = 0;
 	m_lastFrametime = SDL_GetTicks();
 
-	m_fpsCounter = new CFPSCounter();
+	m_pFPSCounter = new CFPSCounter();
 
 	CInputHandler::Instance()->InitialiseJoysticks();
 
@@ -114,18 +114,15 @@ bool CBaseGame::Init(const char* title, int xpos, int ypos, int width, int heigh
 			{ ESingletonIDs::TEXTUREMANAGER,    (void(*))CTextureManager::Instance()}
 		};
 
+		// Create the FadeObject and ready it
 		CTextureManager::Instance()->CreateEngineTextures(CVector2D((float)width, (float)height), m_pRenderer);
-		m_fadeObject = new CFadeObject();
+		m_pFadeObject = new CFadeObject();
 
-		CTextureManager::Instance()->CreateCheckboardPattern(CVector2D(1920, 1080), "_test", m_pRenderer);
-
-		CTextureManager::Instance()->SaveTextureToDisk("assets/screenshots/cringe.png", CTextureManager::Instance()->m_textureMap["_fade"], m_pRenderer);
-		CTextureManager::Instance()->SaveTextureToDisk("assets/screenshots/black.png", CTextureManager::Instance()->m_textureMap["_test"], m_pRenderer);
 		SDL_SetRenderDrawColor(m_pRenderer,
 			255, 255, 255, 255);
 
 		// Run the GameDLL's init
-		pGame = pGameDLL(m_argc, m_argv, &m_singletonPtrs);
+		m_pGame = pGameDLL(m_argc, m_argv, &m_singletonPtrs);
 
 		// Try and get the map specified in the command line
 		char mapName[100];
@@ -141,7 +138,7 @@ bool CBaseGame::Init(const char* title, int xpos, int ypos, int width, int heigh
 			m_bStartedWithMapParam = false;
 		}
 
-		if (pGame != nullptr) return true;
+		if (m_pGame != nullptr) return true;
 	}
 	return false;
 }
@@ -183,15 +180,15 @@ void CBaseGame::FPS_Calc()
 	}
 
 	// add up all the values and divide to get the average frame time.
-	m_FPS = 0;
+	m_fFPS = 0;
 	for (i = 0; i < count; i++) {
-		m_FPS += m_frametimes[i];
+		m_fFPS += m_frametimes[i];
 	}
 
-	m_FPS /= count;
+	m_fFPS /= count;
 
 	// now to make it an actual frames per second value...
-	m_FPS = 1000.f / m_FPS;
+	m_fFPS = 1000.f / m_fFPS;
 }
 
 int CBaseGame::LoadGameDLL()
@@ -205,11 +202,11 @@ void CBaseGame::Draw()
 	
 	// Call the current GameState functionality via the GameStateManager.
 	m_pGameStateManager->Draw();
-	if (m_player != 0) m_player->Draw();
+	if (m_pPlayer != 0) m_pPlayer->Draw();
 
-	m_fadeObject->Draw();
+	m_pFadeObject->Draw();
 
-	m_fpsCounter->Draw();
+	m_pFPSCounter->Draw();
 
 	SDL_RenderPresent(m_pRenderer); // draw to the screen
 }
@@ -218,14 +215,14 @@ void CBaseGame::OnThink()
 {
 	// FPS counter stuff
 	FPS_Calc();
-	m_fpsCounter->SetFPSValue(m_FPS);
-	m_fadeObject->OnThink();
+	m_pFPSCounter->SetFPSValue(m_fFPS);
+	m_pFadeObject->OnThink();
 
 	// Call the current GameState functionality via the GameStateManager.
 	m_pGameStateManager->OnThink();
 	m_pGarbageCollector->OnThink();
 
-	if (m_player != 0) m_player->OnThink();
+	if (m_pPlayer != 0) m_pPlayer->OnThink();
 	
 	CCamera::Instance()->OnThink();
 }
@@ -260,10 +257,10 @@ void CBaseGame::Quit()
 
 void CBaseGame::FadeIn()
 {
-	if (m_fadeObject) m_fadeObject->FadeIn();
+	if (m_pFadeObject) m_pFadeObject->FadeIn();
 }
 
 void CBaseGame::FadeOut()
 {
-	if (m_fadeObject) m_fadeObject->FadeOut();
+	if (m_pFadeObject) m_pFadeObject->FadeOut();
 }

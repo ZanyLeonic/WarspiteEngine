@@ -14,7 +14,7 @@ void CTileObject::Load(const CObjectParams* pParams)
 
 void CTileObject::Draw()
 {
-	if ((bDrawObject || CBaseGame::Instance()->ShowDebugTiles())
+	if ((bDrawObject && CBaseGame::Instance()->ShowDebugTiles())
 		&& m_gid != -1)
 	{
 		CVector2D cPos = CCamera::Instance()->GetPositionT();

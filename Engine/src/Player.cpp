@@ -11,9 +11,6 @@
 #include <algorithm>
 #include <spdlog/spdlog.h>
 
-#define PLAYER_WIDTH 32
-#define PLAYER_HEIGHT 32
-
 CPlayer::CPlayer()
 	: CWarspiteObject()
 {
@@ -40,17 +37,17 @@ void CPlayer::Load(const CObjectParams* pParams)
 
 bool CPlayer::OnThink()
 {
-	if(!m_bDisablePlayerInput)
-		HandleInput();
+	HandleInput();
 
 	m_currentFrame = 1;
+	m_currentRow = GetRowFromDirection();
 
-	if (moving)
+	if (m_bMoving)
 	{
-		m_position = VectorMath::Lerp(lastPosition, nextPosition, (m_timeLeft / 100));
+		m_position = VectorMath::Lerp(m_vLastPosition, m_vNextPosition, (m_fTimeLeft / 100));
 		if (CSoundManager::Instance()->IsInitialised())
 		{
-			alCall(alListener3f, AL_POSITION, m_position.GetX(), m_position.GetY(), 0.f);
+			// alCall(alListener3f, AL_POSITION, m_position.GetX(), m_position.GetY(), 0.f);
 		}
 
 		CCamera::Instance()->SetTarget(&m_position);
@@ -58,6 +55,7 @@ bool CPlayer::OnThink()
 	}
 
 	CWarspiteObject::OnThink();
+
 	return true;
 }
 
@@ -83,20 +81,44 @@ void CPlayer::Draw()
 	}
 }
 
-void CPlayer::SetNextLocation(CVector2D nextLocation)
+void CPlayer::SetNextLocation(CVector2D nextLocation, float pos, bool callCallbacks)
 {
-	moving = true;
-	lastPosition = m_position;
-	nextPosition = nextLocation;
-	m_timeLeft = 0;
-	m_stepLastFrame = true;
+	m_bMoving = true;
+	m_vLastPosition = m_position;
+	m_vNextPosition = nextLocation;
+	m_fTimeLeft = pos;
+	m_bStepLastFrame = true;
+
+	if (m_sLastCollision.m_otherObject && callCallbacks)
+		if (m_sLastCollision.m_otherObject->IsOverlapping() && m_sLastCollision.m_otherObject->ShouldOverlap())
+			m_sLastCollision.m_otherObject->OnOverlapEnd();
+}
+
+void CPlayer::AddMovementStartCallback(std::string id, HPlayerCallback call)
+{
+	m_vOnMoveStart[id] = call;
+}
+
+void CPlayer::RemoveMovementStartCallback(std::string id)
+{
+	m_vOnMoveStart.erase(id);
+}
+
+void CPlayer::AddMovementEndCallback(std::string id, HPlayerCallback call)
+{
+	m_vOnMoveEnd[id] = call;
+}
+
+void CPlayer::RemoveMovementEndCallback(std::string id)
+{
+	m_vOnMoveEnd.erase(id);
 }
 
 void CPlayer::HandleInput()
 {
-	if (m_timeLeft >= 100)
+	if (m_fTimeLeft >= 100)
 	{
-		if (CInputHandler::Instance()->JoysticksInitialised())
+		if (CInputHandler::Instance()->JoysticksInitialised() && !m_bDisablePlayerInput)
 		{
 			CVector2D tMove;
 
@@ -124,21 +146,22 @@ void CPlayer::HandleInput()
 			MoveForward(tMove.GetY() + CInputHandler::Instance()->GetAxisValue("MoveForward"));
 			MoveRight(tMove.GetX() + CInputHandler::Instance()->GetAxisValue("MoveRight"));
 		}
-		else
+		else if (!m_bDisablePlayerInput)
 		{
 			// Can this code be improved? (I hope so.)	
 			MoveForward(CInputHandler::Instance()->GetAxisValue("MoveForward"));
 			MoveRight(CInputHandler::Instance()->GetAxisValue("MoveRight"));
 		}
 
-		if (m_timeLeft >= 100)
+		if (m_fTimeLeft >= 100 && m_bMoving)
 		{
-			moving = false;
+			m_bMoving = false;
+			callEndCallbacks();
 		}
 	}
 	else
 	{
-		m_timeLeft += 5;
+		m_fTimeLeft += 5;
 	}
 }
 
@@ -151,7 +174,7 @@ void CPlayer::MoveForward(float axis)
 	m_ePlayerDirection = (axis > 0) ? EDirection::SOUTH : EDirection::NORTH;
 
 	// Analog movement coming never.
-	curPos.SetY(curPos.GetY() + (m_moveStep * axis));
+	curPos.SetY(curPos.GetY() + (m_iMoveStep * axis));
 
 	HandleMovement(&curPos);
 }
@@ -164,23 +187,25 @@ void CPlayer::MoveRight(float axis)
 	m_currentRow = (axis > 0) ? 3 : 2;
 	m_ePlayerDirection = (axis > 0) ? EDirection::EAST : EDirection::WEST;
 
-	curPos.SetX(curPos.GetX() + (m_moveStep * axis));
+	curPos.SetX(curPos.GetX() + (m_iMoveStep * axis));
 
 	HandleMovement(&curPos);
 }
 
 void CPlayer::HandleMovement(CVector2D* pNext)
 {
-	IGameObject* lastObj = m_slastCollision.m_otherObject;
+	IGameObject* lastObj = m_sLastCollision.m_otherObject;
 	bool result = WillCollide(pNext);
 
-	if (!result && m_slastCollision.m_result == ECollisionResult::OVERLAP)
+	if (!result && m_sLastCollision.m_result == ECollisionResult::OVERLAP)
 	{
-		if (m_slastCollision.m_otherObject)
-			if (!m_slastCollision.m_otherObject->IsOverlapping()
-				&& m_slastCollision.m_otherObject->ShouldOverlap())
+		callStartCallbacks();
+
+		if (m_sLastCollision.m_otherObject)
+			if (!m_sLastCollision.m_otherObject->IsOverlapping()
+				&& m_sLastCollision.m_otherObject->ShouldOverlap())
 			{
-				m_slastCollision.m_otherObject->OnOverlapStart();
+				m_sLastCollision.m_otherObject->OnOverlapStart();
 			}
 
 		if (lastObj)
@@ -189,11 +214,13 @@ void CPlayer::HandleMovement(CVector2D* pNext)
 	}
 	else if (!result)
 	{
-		moving = true;
-		lastPosition = m_position;
-		nextPosition = *pNext;
-		m_timeLeft = 0;
-		m_stepLastFrame = true;
+		callStartCallbacks();
+
+		m_bMoving = true;
+		m_vLastPosition = m_position;
+		m_vNextPosition = *pNext;
+		m_fTimeLeft = 0;
+		m_bStepLastFrame = true;
 
 		if (lastObj)
 			if (lastObj->IsOverlapping() && lastObj->ShouldOverlap())
@@ -208,7 +235,7 @@ void CPlayer::HandleMovement(CVector2D* pNext)
 bool CPlayer::WillCollide(CVector2D* pNext)
 {
 	SCollisionData r = CBaseGame::Instance()->GetStateManager()->IsColliding(*pNext);
-	m_slastCollision = r;
+	m_sLastCollision = r;
 
 	// Also do a check if we are going off the level
 	bool ps
@@ -238,11 +265,48 @@ void CPlayer::DecideFrame()
 {
 	int nFrame = (SDL_GetTicks() / 100) % 3;
 
-	if (m_stepLastFrame)
+	if (m_bStepLastFrame)
 	{
 		nFrame = 1;
-		m_stepLastFrame = false;
+		m_bStepLastFrame = false;
 	}
 
 	m_currentFrame = nFrame;
+}
+
+int CPlayer::GetRowFromDirection()
+{
+	switch(m_ePlayerDirection)
+	{
+	case EDirection::NORTH:
+		return 4;
+	case EDirection::EAST:
+		return 3;
+	case EDirection::SOUTH:
+		return 1;
+	case EDirection::WEST:
+		return 2;
+	default:
+		return 1;
+	}
+}
+
+void CPlayer::callStartCallbacks()
+{
+	std::map<std::string, HPlayerCallback>::iterator it = m_vOnMoveStart.begin();
+
+	for (std::pair<std::string, HPlayerCallback> e : m_vOnMoveStart) {
+		spdlog::debug("[{}] Calling registered callback ({})", m_objectName, e.first);
+		e.second(this);
+	}
+}
+
+void CPlayer::callEndCallbacks()
+{
+	std::map<std::string, HPlayerCallback>::iterator it = m_vOnMoveEnd.begin();
+
+	for (std::pair<std::string, HPlayerCallback> e : m_vOnMoveEnd) {
+		spdlog::debug("[{}] Calling registered callback ({})", m_objectName, e.first);
+		e.second(this);
+	}
 }
