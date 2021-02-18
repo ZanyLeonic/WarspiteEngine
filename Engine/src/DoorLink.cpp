@@ -21,7 +21,7 @@ void CDoorLink::Load(const CObjectParams* pParams)
 {
 	CTileObject::Load(pParams);
 
-	CBaseGame::Instance()->GetFadeObject()->AddCallback(m_objectName, std::bind(&CDoorLink::fadeCallback, this, std::placeholders::_1));
+	CBaseGame::Instance()->GetFadeObject()->AddCallback(m_objectName, std::bind(&CDoorLink::fadeCallback, this, std::placeholders::_1, std::placeholders::_2));
 
 	m_sTargetDoorID = pParams->GetDoorTargetID();
 	m_sWorldTextureID = pParams->GetDoorWorldTexture();
@@ -96,6 +96,7 @@ void CDoorLink::OnOverlapStart()
 	{
 		pPlayer->DisablePlayerInput(true);
 		m_bTravellingFrom = true;
+		m_bMadePlayerMove = false;
 		CSoundManager::Instance()->PlaySound(&m_prWaveFile);
 		PlayDoorAnimation(EPlaybackDirection::FORWARD);
 	}
@@ -130,14 +131,14 @@ void CDoorLink::PlayDoorAnimation(EPlaybackDirection direction)
 	}
 }
 
-void CDoorLink::fadeCallback(EPlaybackDirection direction)
+void CDoorLink::fadeCallback(EPlaybackDirection direction, bool fadeFinished)
 {
 	std::shared_ptr<CPlayer> pPlayer = std::dynamic_pointer_cast<CPlayer>(CBaseGame::Instance()->GetPlayer());
 
 	if (!pPlayer) return; // How?
 
 	// Going into the door
-	if (m_bTravellingFrom && direction == EPlaybackDirection::FORWARD)
+	if (m_bTravellingFrom && fadeFinished && direction == EPlaybackDirection::FORWARD)
 	{
 		CVector2D vTarget = m_pTargetDoor->GetPosition();
 
@@ -149,13 +150,16 @@ void CDoorLink::fadeCallback(EPlaybackDirection direction)
 		m_pTargetDoor->PlayDoorAnimation(EPlaybackDirection::BACKWARD);
 	}
 	// Coming out of the door
-	else if (m_bTravelledTo && direction == EPlaybackDirection::BACKWARD)
+	else if (m_bTravelledTo && !fadeFinished && !m_bMadePlayerMove 
+		&& direction == EPlaybackDirection::BACKWARD)
 	{
 		CVector2D vTarget = GetPosition();
 
+		pPlayer->SetNextLocation(vTarget + (GetForwardVector(m_eExitDirection) * 32), 95, true);
 		pPlayer->SetDirection(m_eExitDirection);
-		pPlayer->SetNextLocation(vTarget + (GetForwardVector(m_eExitDirection) * 32), 75, true);
 		pPlayer->DisablePlayerInput(false);
+
+		m_bMadePlayerMove = true;
 	}
 }
 

@@ -35,6 +35,8 @@ public:
 	void AddMovementEndCallback(std::string id, HPlayerCallback call);
 	void RemoveMovementEndCallback(std::string id);
 
+	bool IsMoving() const { return m_bMoving; }
+
 private:
 	void HandleInput();
 

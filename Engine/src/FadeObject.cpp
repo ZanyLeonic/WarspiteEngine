@@ -42,11 +42,13 @@ bool CFadeObject::OnThink()
 			break;
 		}
 
+		callCallbacks(false);
+
 		if (fCond)
 		{
 			m_fCurrentOpacity = m_fTargetOpacity;
 			m_bFading = false;
-			callCallbacks();
+			callCallbacks(true);
 		}
 		else
 		{
@@ -84,12 +86,12 @@ void CFadeObject::RemoveCallback(std::string id)
 	m_callbacks.erase(id);
 }
 
-void CFadeObject::callCallbacks()
+void CFadeObject::callCallbacks(bool fadeCompleted)
 {
 	std::map<std::string, HFadeComplete>::iterator it = m_callbacks.begin();
 
 	for (std::pair<std::string, HFadeComplete> e : m_callbacks) {
 		spdlog::debug("[{}] Calling registered callback ({})", m_objectName, e.first);
-		e.second(m_eDirection);
+		e.second(m_eDirection, fadeCompleted);
 	}
 }

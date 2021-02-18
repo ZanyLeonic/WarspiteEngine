@@ -32,7 +32,7 @@ public:
     void RemoveCallback(std::string id);
 
 private:
-    void callCallbacks();
+    void callCallbacks(bool fadeCompleted);
 
     CTexture* m_pFadeTexture = nullptr;
 

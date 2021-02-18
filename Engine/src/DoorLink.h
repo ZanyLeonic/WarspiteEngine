@@ -40,13 +40,14 @@ private:
     EDirection m_eExitDirection = EDirection::NONE;
 
     SWaveFile m_prWaveFile;
-    void fadeCallback(EPlaybackDirection direction);
+    void fadeCallback(EPlaybackDirection direction, bool fadeFinished);
     void movementEnd(CPlayer* pPlayer);
 
     void playDoorAnimation(EPlaybackDirection direction);
 
     bool m_bTravelledTo = false;
     bool m_bTravellingFrom = false; // Flag whether we are travelling from this door
+    bool m_bMadePlayerMove = false;
 };
 
 REG_OBJ_TO_REF(DoorLink, CDoorLink);

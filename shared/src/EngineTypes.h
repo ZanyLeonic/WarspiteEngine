@@ -71,7 +71,7 @@ enum class EPlaybackDirection
 	FORWARD = 1,
 	BACKWARD = -1
 };
-typedef std::function<void(EPlaybackDirection)> HFadeComplete;
+typedef std::function<void(EPlaybackDirection, bool)> HFadeComplete;
 
 static CVector2D GetForwardVector(EDirection dir)
 {
