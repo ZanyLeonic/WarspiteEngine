@@ -115,7 +115,7 @@ private:
 	bool m_bRunning = false;
 	bool m_bStartedWithMapParam = false;
 
-	bool m_bShowDebugTiles = false; // Whether we should show bound or player start tiles on levels
+	bool m_bShowDebugTiles = true; // Whether we should show bound or player start tiles on levels
 
 	std::string m_sMapName = "";
 };
