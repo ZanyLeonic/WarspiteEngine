@@ -1,8 +1,12 @@
 #include "SoundManager.h"
 #include <spdlog/spdlog.h>
+#include <SDL2\SDL_timer.h>
 
 // TODO: Clean up and refine this class - it is a mess.
 CSoundManager* CSoundManager::s_pInstance = 0;
+
+const int FPS = 62;
+const int DELAY_TIME = 1000 / FPS;
 
 int UpdateStream(SStreamingAudioData& audioData)
 {
@@ -95,6 +99,7 @@ int UpdateStream(SStreamingAudioData& audioData)
 int audioStreamUpdate(void* data)
 {
 	auto* as = reinterpret_cast<SStreamingAudioData*>(data);
+	Uint32 frameStart, frameTime;
 
 	if (as->StreamCreated)
 		as->StreamCreated(as);
@@ -103,10 +108,19 @@ int audioStreamUpdate(void* data)
 
 	while (as->Finished != true)
 	{
+		frameStart = SDL_GetTicks();
+
 		if (as->UpdateCallback)
 			as->UpdateCallback(as);
 
 		UpdateStream(*as);
+
+		frameTime = SDL_GetTicks() - frameStart;
+
+		if (frameTime < DELAY_TIME)
+		{
+			SDL_Delay((int)(DELAY_TIME - frameTime));
+		}
 	}
 
 	alCall(alSourceStop, as->Source);
@@ -220,6 +234,8 @@ long int tellOggCallback(void* fileHandle)
 
 int createStreamOnThread(void* pdata)
 {
+	SDL_SetThreadPriority(SDL_THREAD_PRIORITY_LOW);
+
 	auto audioData = reinterpret_cast<SStreamingAudioData*>(pdata);
 
 	// Open the audio file in a filestream
@@ -547,6 +563,9 @@ bool CSoundManager::Load(const std::string& fileName, SWaveFile& file)
 
 int playWav(void* data)
 {
+	SDL_SetThreadPriority(SDL_THREAD_PRIORITY_LOW);
+	Uint32 frameStart, frameTime;
+
 	SWaveFile* file = reinterpret_cast<SWaveFile*>(data);
 
 	// play the source
@@ -556,7 +575,16 @@ int playWav(void* data)
 
 	while (state == AL_PLAYING)
 	{
+		frameStart = SDL_GetTicks();
+
 		alGetSourcei(file->Source, AL_SOURCE_STATE, &state);
+
+		frameTime = SDL_GetTicks() - frameStart;
+
+		if (frameTime < DELAY_TIME)
+		{
+			SDL_Delay((int)(DELAY_TIME - frameTime));
+		}
 	}
 
 	return 0;

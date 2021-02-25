@@ -26,16 +26,16 @@ CScriptManager::CScriptManager()
 #ifdef _WIN32
 			std::ofstream pathFile;
 			std::filesystem::path pPath = CWarspiteUtil::GetExecutingDirectory();
+			pPath.append("bin");
+			pPath.append(PythonPTHName);
 
-			pPath.append("bin", PythonPTHName);
-
-			spdlog::info("Creating path file at {}", pPath.string());
+			spdlog::info("Executing object: {}", pPath.string());
 
 			pathFile.open(pPath);
-			pathFile << CWarspiteUtil::GetExecutingDirectory() << "platform\\Lib"				 << std::endl;
-			pathFile << CWarspiteUtil::GetExecutingDirectory() << "platform\\DLLs"				 << std::endl;
+			pathFile << CWarspiteUtil::GetExecutingDirectory() << "platform\\Lib" << std::endl;
+			pathFile << CWarspiteUtil::GetExecutingDirectory() << "platform\\DLLs" << std::endl;
 			pathFile << CWarspiteUtil::GetExecutingDirectory() << "platform\\Lib\\site-packages" << std::endl;
-			pathFile << CWarspiteUtil::GetExecutingDirectory() << "assets\\scripts"				 << std::endl;
+			pathFile << CWarspiteUtil::GetExecutingDirectory() << "assets\\scripts" << std::endl;
 			pathFile.close();
 
 			Py_SetProgramName(Py_DecodeLocale(MOD_NAME, 0));
@@ -44,8 +44,8 @@ CScriptManager::CScriptManager()
 #ifdef _WIN32
 			std::filesystem::remove(pPath);
 #endif
-			main_module    = py::module::import("__main__");
-			engine_module  = py::module::import("engine");
+			main_module = py::module::import("__main__");
+			engine_module = py::module::import("engine");
 			main_namespace = main_module.attr("__dict__");
 
 			// Show that the ScriptManager is ready
