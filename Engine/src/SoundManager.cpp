@@ -1,6 +1,6 @@
 #include "SoundManager.h"
 #include <spdlog/spdlog.h>
-#include <SDL2\SDL_timer.h>
+#include <SDL2/SDL_timer.h>
 
 // TODO: Clean up and refine this class - it is a mess.
 CSoundManager* CSoundManager::s_pInstance = 0;
