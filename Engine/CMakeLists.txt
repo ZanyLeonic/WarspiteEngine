@@ -21,6 +21,7 @@ set(WarspiteEngine_Src
         src/EngineFileSystem.cpp
         src/FontManager.cpp
         src/TextObject.cpp
+        src/Trigger.cpp
         src/Game.cpp
         src/GameObjectDictionary.cpp
         ../shared/src/GameStateBase.cpp
@@ -69,6 +70,7 @@ set(WarspiteEngine_Header
         ../shared/src/EngineTypes.h
         src/FontManager.h
         src/TextObject.h
+        src/Trigger.h
         src/Game.h
         ../shared/src/GameObject.h
         src/GameObjectDictionary.h

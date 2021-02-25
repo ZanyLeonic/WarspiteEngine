@@ -26,15 +26,16 @@ CScriptManager::CScriptManager()
 #ifdef _WIN32
 			std::ofstream pathFile;
 			std::filesystem::path pPath = CWarspiteUtil::GetExecutingDirectory();
-			pPath.append("bin");
-			pPath.append(PythonPTHName);
 
-			spdlog::info("Executing object: {}", pPath.string());
+			pPath.append("bin", PythonPTHName);
+
+			spdlog::info("Creating path file at {}", pPath.string());
 
 			pathFile.open(pPath);
-			pathFile << CWarspiteUtil::GetExecutingDirectory() << "platform\\Lib" << std::endl;
-			pathFile << CWarspiteUtil::GetExecutingDirectory() << "platform\\DLLs" << std::endl;
+			pathFile << CWarspiteUtil::GetExecutingDirectory() << "platform\\Lib"				 << std::endl;
+			pathFile << CWarspiteUtil::GetExecutingDirectory() << "platform\\DLLs"				 << std::endl;
 			pathFile << CWarspiteUtil::GetExecutingDirectory() << "platform\\Lib\\site-packages" << std::endl;
+			pathFile << CWarspiteUtil::GetExecutingDirectory() << "assets\\scripts"				 << std::endl;
 			pathFile.close();
 
 			Py_SetProgramName(Py_DecodeLocale(MOD_NAME, 0));

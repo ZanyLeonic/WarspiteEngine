@@ -1,7 +1,8 @@
 #pragma once
-#include <string>
 #ifndef __ObjectParams__
 #define __ObjectParams__
+#include <string>
+#include <map>
 
 struct STileset;
 
@@ -73,6 +74,9 @@ public:
 	int GetOnEnterID() const { return m_OnEnter; }
 	int GetOnLeaveID() const { return m_OnLeave; }
 
+	template <class T>
+	T GetCustomProperty(std::string id) { return (T)m_mCustomProperty[id]; }
+
 	std::string GetSoundPath() const { return m_soundPath; }
 
 	std::string GetTextureID() const { return m_textureID; }
@@ -91,6 +95,8 @@ private:
 
 	std::string m_doorTargetID = "";
 	std::string m_doorWorldTexture = "";
+	
+	std::map<std::string, std::string> m_mCustomProperty;
 
 	int m_gid = -1;
 	
