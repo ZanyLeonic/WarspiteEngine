@@ -54,6 +54,9 @@ public:
 	void SetDoorTargetID(std::string s) { m_doorTargetID = s; }
 	void SetDoorWorldTexture(std::string s) { m_doorWorldTexture = s; }
 
+	void SetStartOverlap(std::string s) { m_startOverlapFunc = s; }
+	void SetEndOverlap(std::string s) { m_endOverlapFunc = s; }
+
 	// Getters
 	float GetX() const { return m_x; }
 	float GetY() const { return m_y; }
@@ -85,6 +88,10 @@ public:
 	std::string GetDoorTargetID() const { return m_doorTargetID; }
 	std::string GetDoorWorldTexture() const { return m_doorWorldTexture; }
 
+	std::string GetStartOverlap() const { return m_startOverlapFunc; }
+	std::string GetEndOverlap() const { return m_endOverlapFunc; }
+
+	// Turn this into a dictionary
 private:
 	// Metadata + Map Logic
 	std::string m_script = "";
@@ -95,7 +102,9 @@ private:
 
 	std::string m_doorTargetID = "";
 	std::string m_doorWorldTexture = "";
-	
+	std::string m_startOverlapFunc = "";
+	std::string m_endOverlapFunc = "";
+
 	std::map<std::string, std::string> m_mCustomProperty;
 
 	int m_gid = -1;

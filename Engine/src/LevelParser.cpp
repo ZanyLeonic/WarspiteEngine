@@ -117,7 +117,9 @@ MapProperties CLevelParser::GetMapProp(const std::string prop)
 		{"onLeaveCallback",  MapProperties::PROP_ONLEAVECALL},
 		{"soundPath",		 MapProperties::PROP_SOUNDPATH},
 		{"targetDoorID",	 MapProperties::PROP_DOORTARGET},
-		{"doorWorldTexture", MapProperties::PROP_DOORWORLDTEXTURE}
+		{"doorWorldTexture", MapProperties::PROP_DOORWORLDTEXTURE},
+		{"startOverlapFunc", MapProperties::PROP_STARTOVERLAP},
+		{"endOverlapFunc",	 MapProperties::PROP_ENDOVERLAP}
 	};
 
 	auto itr = propStrings.find(prop);
@@ -425,6 +427,12 @@ void CLevelParser::parseObjectLayer(const rapidjson::Value* pObjectVal, std::vec
 					break;
 				case MapProperties::PROP_DOORWORLDTEXTURE:
 					pOP->SetDoorWorldTexture(d[j]["value"].GetString());
+					break;
+				case MapProperties::PROP_STARTOVERLAP:
+					pOP->SetStartOverlap(d[j]["value"].GetString());
+					break;
+				case MapProperties::PROP_ENDOVERLAP:
+					pOP->SetEndOverlap(d[j]["value"].GetString());
 					break;
 				default:
 					// Future proofing incase new properties get added for newer engine version.

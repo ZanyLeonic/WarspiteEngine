@@ -9,6 +9,8 @@
 #include "EngineTypes.h"
 #include <SDL_pixels.h>
 #include "FontManager.h"
+#include "EngineTypes.h"
+#include "CallbackHandler.h"
 
 // The current APIs we are exposing
 class CWarspiteObject;
@@ -164,6 +166,16 @@ struct SWarTexture : SBaseWrapper<CTexture>
 	void SetCenter(SDL_Point* pNewPoint);
 };
 
+struct SCallbackHandler : SBaseWrapper<CCallbackHandler<HGenericCallback>>
+{
+	SCallbackHandler(CCallbackHandler<HGenericCallback>* pClass) : SBaseWrapper<CCallbackHandler<HGenericCallback>>(pClass) {}
+
+	bool AddCallback(std::string pName, HGenericCallback pCallback);
+	bool RemoveCallback(std::string pName);
+
+	HGenericCallback GetCallback(std::string pName);
+};
+
 struct SWarState : SBaseWrapper<CGameStateBase>
 {
 	SWarState(CGameStateBase* pClass) : SBaseWrapper<CGameStateBase>(pClass) {}
@@ -229,6 +241,7 @@ struct SGameObject : SBaseWrapper<CBaseGame>
 	SGameObject(CBaseGame* pClass) : SBaseWrapper<CBaseGame>(pClass) {}
 
 	std::string GetCurrentStateID() const;
+	std::unique_ptr<SCallbackHandler> GetCallbackHandler() const;
 	bool ChangeState(std::string stateID) const;
 	SCollisionData IsColliding(CVector2D v1) const;
 	std::unique_ptr<SWarObject> GetPlayer() const;

@@ -15,6 +15,7 @@ set(WarspiteGame_Src
     src/TestState.cpp
     src/StateRegisterBuffer.cpp
     src/ObjectRegisterBuffer.cpp
+    ../shared/src/CallbackHandler.cpp
     ../shared/src/GameStateBase.cpp
 	../shared/src/UIBase.cpp
     ../shared/src/WarspiteObject.cpp
@@ -25,6 +26,7 @@ set(WarspiteGame_Header
     src/TestState.h
     src/StateRegisterBuffer.h
     src/ObjectRegisterBuffer.h
+    ../shared/src/CallbackHandler.h
     ../shared/src/GameStateBase.h
 	../shared/src/UIBase.h
     ../shared/src/WarspiteObject.h

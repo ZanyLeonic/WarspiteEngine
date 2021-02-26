@@ -105,19 +105,19 @@
         "name": "Trigger",
         "properties": [
             {
+                "name": "endOverlapFunc",
+                "type": "string",
+                "value": "default"
+            },
+            {
                 "name": "fireOnce",
                 "type": "bool",
                 "value": false
             },
             {
-                "name": "overlapEndEvent",
-                "type": "int",
-                "value": 0
-            },
-            {
-                "name": "overlapStartEvent",
-                "type": "int",
-                "value": 0
+                "name": "startOverlapFunc",
+                "type": "string",
+                "value": "default"
             }
         ]
     }

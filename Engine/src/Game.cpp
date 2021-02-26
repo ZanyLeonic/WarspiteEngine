@@ -39,6 +39,7 @@ bool CBaseGame::Init(const char* title, int xpos, int ypos, int width, int heigh
 	m_lastFrametime = SDL_GetTicks();
 
 	m_pFPSCounter = new CFPSCounter();
+	m_pCallbackHandler = new CCallbackHandler<HGenericCallback>();
 
 	CInputHandler::Instance()->InitialiseJoysticks();
 

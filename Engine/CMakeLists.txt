@@ -12,6 +12,7 @@ set(WarspiteEngine_Src
         src/AnimatedGraphic.cpp
         src/Button.cpp
         src/Camera.cpp
+        ../shared/src/CallbackHandler.cpp
         src/CTexture.cpp
         src/ConfigParser.cpp
         src/DoorLink.cpp
@@ -60,6 +61,7 @@ set(WarspiteEngine_Header
         src/AnimatedGraphic.h
         src/Button.h
         src/Camera.h
+        ../shared/src/CallbackHandler.h
         src/CTexture.h
         src/ConfigParser.h
         src/DoorLink.h

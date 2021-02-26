@@ -82,7 +82,7 @@ PYBIND11_MODULE(engine, m) {
 		.def("should_be_ticking", &SWarState::ShouldBeTicking, "Returns whether the state should be ticking or not")
 		.def("should_be_drawing", &SWarState::ShouldBeDrawing, "Returns whether the state should be drawing or not");
 
-	py::class_<SLevelObject>(m, "LevelObject", "A container that allows interaction with the currently loaded level. (Do not call this - use engine.level)")
+	py::class_<SLevelObject>(m, "LevelObject", "A container that allows interaction with the currently loaded level. (Do not call this directly - use engine.level)")
 		.def(py::init<CLevel*>())
 		.def("get_name", &SLevelObject::GetName, "Returns the name of the map currently loaded. (Extension removed.)")
 		.def("get_level_size", &SLevelObject::GetLevelSize, "Returns a Vector2D of the map's dimensions")
@@ -94,7 +94,7 @@ PYBIND11_MODULE(engine, m) {
 			}
 	);
 
-	py::class_<SCameraObject>(m, "CameraObject", "A container that allows interaction with the camera in use. (Do not call this - use engine.camera)")
+	py::class_<SCameraObject>(m, "CameraObject", "A container that allows interaction with the camera in use. (Do not call this directly - use engine.camera)")
 		.def(py::init<CCamera*>())
 		.def("get_position", &SCameraObject::GetPosition, "Returns a Vector2D of the current position of the Camera")
 		.def("get_position_with_offset", &SCameraObject::GetOffsetedPosition, "Returns a Vector2D of the current position of the Camera offset by the viewport")
@@ -111,7 +111,7 @@ PYBIND11_MODULE(engine, m) {
 			}
 	);
 
-	py::class_<SInputObject>(m, "InputObject", "A container that allows interaction input handler. (Do not call this - use engine.inputh)")
+	py::class_<SInputObject>(m, "InputObject", "A container that allows interaction input handler. (Do not call this directly - use engine.inputh)")
 		.def(py::init<CInputHandler*>())
 		.def("get_button_state", &SInputObject::GetButtonState, "Returns the button state of the specified controller and button")
 		.def("get_mouse_button_state", &SInputObject::GetMouseButtonState, "Returns the state of the specified mouse button")
@@ -127,13 +127,20 @@ PYBIND11_MODULE(engine, m) {
 		.def("remove_axis", &SInputObject::RemoveAxis, "Removes the specified virutal axis")
 		.def("remove_all_axis", &SInputObject::RemoveAllAxis, "Removes all currently defined virtual axes in the Engine.");
 
-	py::class_<SGameObject>(m, "GameObject", "A container that allows interaction with more misc aspects of the Engine's APIs. (Do not call this - use engine.game)")
+	py::class_<SGameObject>(m, "GameObject", "A container that allows interaction with more misc aspects of the Engine's APIs. (Do not call this directly - use engine.game)")
 		.def(py::init<CBaseGame*>())
 		.def("get_current_state_id", &SGameObject::GetCurrentStateID, "Returns the id of the state that is currently loaded")
 		.def("is_colliding", &SGameObject::IsColliding, "Returns if the specified Vector2D will collide with any other GameObject.")
 		.def("change_state", &SGameObject::ChangeState, "Changes the current state to the specified state")
 		.def("get_player", &SGameObject::GetPlayer, "Returns the currently registered player object")
-		.def("load_texture", &SGameObject::LoadTexture, "Loads the specified texture into the manager with the specified ID");
+		.def("load_texture", &SGameObject::LoadTexture, "Loads the specified texture into the manager with the specified ID")
+		.def("get_callback_handler", &SGameObject::GetCallbackHandler, "Returns the callback handler");
+
+	py::class_<SCallbackHandler>(m, "CallbackHandler", "A way to register callbacks to be used by objects in the Engine.")
+		.def(py::init<CCallbackHandler<HGenericCallback>*>())
+		.def("add_callback", &SCallbackHandler::AddCallback, "Registers the callback under the specified identifier.")
+		.def("remove_callback", &SCallbackHandler::RemoveCallback, "Removes the callback from the specified identifier.")
+		.def("get_callback", &SCallbackHandler::GetCallback, "Retrieves the callback from the specified identifier.");
 
 	py::class_<SFontObject> fo(m, "FontObject", "A container that allows interaction with the Font Manger of the Engine.");
 		fo.def(py::init<CFontManager*>())
@@ -536,6 +543,12 @@ std::string SGameObject::GetCurrentStateID() const
 	return m_inst->GetStateManager()->GetCurrentStateID();
 }
 
+std::unique_ptr<SCallbackHandler> SGameObject::GetCallbackHandler() const
+{
+	if (!IsValid()) return nullptr;
+	return std::unique_ptr<SCallbackHandler>(new SCallbackHandler(m_inst->GetCallbackHandler()));
+}
+
 bool SGameObject::ChangeState(std::string stateID) const
 {
 	if (!IsValid()) return false;
@@ -551,6 +564,7 @@ SCollisionData SGameObject::IsColliding(CVector2D v1) const
 
 std::unique_ptr<SWarObject> SGameObject::GetPlayer() const
 {
+	if (!IsValid()) return nullptr;
 	if (m_inst->GetPlayer() == nullptr) return nullptr;
 
 	return std::unique_ptr<SWarObject>(new SWarObject(dynamic_cast<CWarspiteObject*>(m_inst->GetPlayer().get())));
@@ -656,4 +670,22 @@ void SWarTexture::SetCenter(SDL_Point* pNewPoint)
 {
 	if (!IsValid()) return;
 	return m_inst->SetCenter(pNewPoint);
+}
+
+bool SCallbackHandler::AddCallback(std::string pName, HGenericCallback pCallback)
+{
+	if (!IsValid()) return false;
+	return m_inst->AddCallback(pName, pCallback);
+}
+
+bool SCallbackHandler::RemoveCallback(std::string pName)
+{
+	if (!IsValid()) return false;
+	return m_inst->RemoveCallback(pName);
+}
+
+HGenericCallback SCallbackHandler::GetCallback(std::string pName)
+{
+	if (!IsValid()) return HGenericCallback();
+	return m_inst->GetCallback(pName);
 }

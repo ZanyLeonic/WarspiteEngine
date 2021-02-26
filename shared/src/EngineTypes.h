@@ -23,6 +23,7 @@ class IGameObject;
 typedef std::function<void(SDL_Scancode)> HKeyCallback;
 typedef std::function<void(SDL_Event)> HInputCallback;
 typedef std::function<bool()> HButtonCallback;
+typedef std::function<void()> HGenericCallback;
 
 typedef std::shared_ptr<SGameObject>  PGamePtr;
 typedef std::shared_ptr<SInputObject> PInputPtr;

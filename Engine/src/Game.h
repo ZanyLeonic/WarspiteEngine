@@ -5,8 +5,6 @@
 #include "IGame.h"
 
 #include <SDL2/SDL.h>
-#include <SDL2/SDL_thread.h>
-#include <spdlog/spdlog.h>
 #include <memory>
 #include <vector>
 
@@ -59,6 +57,7 @@ public:
 	SDL_Window* const GetWindow() { return m_pWindow; }
 	CGameStateManager* const GetStateManager() { return m_pGameStateManager; }
 	CGarbageCollector* const GetGarbageCollector() { return m_pGarbageCollector; }
+	CCallbackHandler<HGenericCallback>* const GetCallbackHandler() { return m_pCallbackHandler; }
 
 	CFadeObject* const GetFadeObject() { return m_pFadeObject; }
 
@@ -82,6 +81,7 @@ public:
 	void SetDebugTilesVisibility(bool nVal) { m_bShowDebugTiles = nVal; }
 
 private:
+	CCallbackHandler<HGenericCallback>* m_pCallbackHandler;
 	CGameStateManager* m_pGameStateManager;
 	CGarbageCollector* m_pGarbageCollector;
 

@@ -4,6 +4,8 @@
 #include "TextureManager.h"
 #include "Game.h"
 
+#include <fmt/format.h>
+
 CFPSCounter::CFPSCounter()
 {
 	m_textureID = "__engineFPS";

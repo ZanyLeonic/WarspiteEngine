@@ -50,8 +50,18 @@ CScriptManager::CScriptManager()
 
 			// Show that the ScriptManager is ready
 			SGameScript* test = SGameScript::source("internal_autoexec", "import sys\nprint(\"Using Python Runtime %s.%s.%s\" % (sys.version_info.major, sys.version_info.minor, sys.version_info.micro))\nprint(\"Script Manager is ready!\")\nprint(\"Prefix: %s Path: %s\" % (sys.prefix, sys.path))\n");
-
 			Run(test);
+
+			std::filesystem::path scriptPath = CWarspiteUtil::GetExecutingDirectory();
+			scriptPath.append("assets");
+			scriptPath.append("scripts");
+			scriptPath.append("sys_callbacks.py");
+
+			if (CWarspiteUtil::FileExists(scriptPath.string()))
+			{
+				SGameScript* callbackScript = SGameScript::file("internal_callbacks", scriptPath.string());
+				Run(callbackScript);
+			}
 		}
 		catch (pybind11::error_already_set const& e)
 		{

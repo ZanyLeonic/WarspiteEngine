@@ -13,7 +13,6 @@
 #include <limits.h>
 #include <sys/param.h>
 #endif
-
 #include "Level.h"
 #include "ObjectLayer.h"
 
@@ -158,6 +157,15 @@ std::string CWarspiteUtil::GetExecutingDirectory()
 		pBuf[bytes] = '\0';
 #endif
 	return RemoveFileNameFromPath(std::string(pBuf));
+}
+
+bool CWarspiteUtil::FileExists(std::string pPath)
+{
+	std::ifstream ifile;
+	ifile.open(pPath);
+
+	if (ifile) return true;
+	return false;
 }
 
 float CWarspiteUtil::FLerp(float f1, float f2, float t)

@@ -7,6 +7,7 @@
 #include "StateParser.h"
 
 #include <fmt/format.h>
+#include <spdlog/spdlog.h>
 
 CInputState::CInputState()
 {

@@ -26,6 +26,8 @@ public:
 
 	static std::string GetExecutingDirectory();
 
+	static bool FileExists(std::string pPath);
+
 	static float FLerp(float f1, float f2, float t);
 };
 

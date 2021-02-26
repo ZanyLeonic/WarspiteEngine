@@ -2,6 +2,7 @@
 #include "TextureManager.h"
 #include "Game.h"
 #include "WarspiteUtil.h"
+#include <spdlog/spdlog.h>
 
 CFadeObject::CFadeObject()
 {

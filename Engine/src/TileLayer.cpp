@@ -2,6 +2,7 @@
 #include "Camera.h"
 #include "TileLayer.h"
 #include <iostream>
+#include <spdlog/spdlog.h>
 
 void CTileLayer::OnPlay()
 {
