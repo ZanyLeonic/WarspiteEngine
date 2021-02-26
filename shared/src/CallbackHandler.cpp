@@ -1,15 +1,15 @@
 #include "CallbackHandler.h"
 #include <spdlog/spdlog.h>
 
-template<class T>
-CCallbackHandler<T>::CCallbackHandler()
+CCallbackHandler::CCallbackHandler()
 {
 	// Supply the default callback
-	m_callbacks = { "default" : defaultCall };
+	m_callbacks = {
+		{ "default", defaultCall }
+	};
 }
 
-template<class T>
-bool CCallbackHandler<T>::AddCallback(std::string pName, T pCallback)
+bool CCallbackHandler::AddCallback(std::string pName, T pCallback)
 {
 	if (!pName || !pCallback) return false;
 
@@ -18,8 +18,7 @@ bool CCallbackHandler<T>::AddCallback(std::string pName, T pCallback)
 	return true;
 }
 
-template<class T>
-bool CCallbackHandler<T>::RemoveCallback(std::string pName)
+bool CCallbackHandler::RemoveCallback(std::string pName)
 {
 	if (m_callbacks.find(pName) != m_callbacks.end())
 	{
