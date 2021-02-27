@@ -109,7 +109,7 @@ MapProperties CLevelParser::GetMapProp(const std::string prop)
 		{"runScript",		 MapProperties::PROP_SCRIPT},
 		{"textureID",		 MapProperties::PROP_TEXTUREID},
 		{"textureWidth",	 MapProperties::PROP_TEXWIDTH},
-		{"textureWidth",	 MapProperties::PROP_TEXHEIGHT},
+		{"textureHeight",	 MapProperties::PROP_TEXHEIGHT},
 		{"numFrames",		 MapProperties::PROP_NUMFRAMES},
 		{"animSpeed",		 MapProperties::PROP_ANIMSPEED},
 		{"onClickCallback",  MapProperties::PROP_ONCLICKCALL},

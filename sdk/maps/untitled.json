@@ -5,7 +5,7 @@
          "target": "."
       }
    },
-   "textureHeight": 256,
+   "height": 256,
    "infinite": false,
    "layers": [
       {
@@ -65547,13 +65547,13 @@
             2,
             2
          ],
-         "textureHeight": 256,
+         "height": 256,
          "id": 1,
          "name": "Tile Layer 1",
          "opacity": 1,
          "type": "tilelayer",
          "visible": true,
-         "textureWidth": 256,
+         "width": 256,
          "x": 0,
          "y": 0
       }
@@ -65567,11 +65567,11 @@
    "tilesets": [
       {
          "firstgid": 1,
-         "source": "C:/Users/Kurisu/AppData/Roaming/Warspite/sdk/tilesets/procedural.json"
+         "source": "../tilesets/procedural.json"
       }
    ],
    "tilewidth": 32,
    "type": "map",
    "version": 1.4,
-   "textureWidth": 256
+   "width": 256
 }

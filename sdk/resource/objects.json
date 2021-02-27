@@ -65,7 +65,7 @@
             {
                 "name": "textureHeight",
                 "type": "int",
-                "value": 27
+                "value": 32
             },
             {
                 "name": "textureID",
@@ -75,7 +75,7 @@
             {
                 "name": "textureWidth",
                 "type": "int",
-                "value": 22
+                "value": 32
             }
         ]
     },
@@ -86,7 +86,7 @@
             {
                 "name": "textureHeight",
                 "type": "int",
-                "value": 27
+                "value": 32
             },
             {
                 "name": "textureID",
@@ -96,7 +96,7 @@
             {
                 "name": "textureWidth",
                 "type": "int",
-                "value": 22
+                "value": 32
             }
         ]
     },

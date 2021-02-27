@@ -7,20 +7,20 @@
          "target":"."
         }
     },
- "textureHeight":30,
+ "height":30,
  "infinite":false,
  "layers":[
         {
          "compression":"zlib",
          "data":"eJztlTcKA0EMAPecc87x\/7\/0FFcdEgjWWMJIMMXCsKgZ1JRSetCHAQyLPI2TN4IxTGAKs2DeHBawhBWs23cXybP+V+NtYAs72MMhmPdS6M4RTnCGC1yV\/77t3eAOD3jCu90vSjPaflGa0fbzaEHytP2iNKPt59GC5Fn7zfshj9dd+Jf74XUXrJ40Xi1kM7\/xshm7ly3UedlCnRepBetkM3VeNlPnRWrmA3TAIrs=",
          "encoding":"base64",
-         "textureHeight":30,
+         "height":30,
          "id":2,
          "name":"Tile Layer 1",
          "opacity":1,
          "type":"tilelayer",
          "visible":true,
-         "textureWidth":40,
+         "width":40,
          "x":0,
          "y":0
         }, 
@@ -176,5 +176,5 @@
  "tilewidth":32,
  "type":"map",
  "version":1.4,
- "textureWidth":40
+ "width":40
 }
