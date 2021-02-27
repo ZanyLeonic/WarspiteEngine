@@ -9,7 +9,7 @@ class CAnimatedGraphic : public CWarspiteObject
 public:
 	CAnimatedGraphic() {};
 
-	virtual void Load(const CObjectParams* pParams);
+	virtual void Load(CObjectParams* pParams);
 	virtual bool OnThink();
 
 protected:

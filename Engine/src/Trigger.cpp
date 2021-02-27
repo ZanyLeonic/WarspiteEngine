@@ -12,12 +12,12 @@ CTrigger::CTrigger()
 	m_overlap = true;
 }
 
-void CTrigger::Load(const CObjectParams* pParams)
+void CTrigger::Load(CObjectParams* pParams)
 {
 	CTileObject::Load(pParams);
 
-	m_sStartOverlap = pParams->GetStartOverlap() != "" ? pParams->GetStartOverlap() : "default";
-	m_sEndOverlap = pParams->GetEndOverlap() != "" ? pParams->GetEndOverlap() : "default";
+	m_sStartOverlap = pParams->GetProperty<std::string>("startOverlapFunc") != "" ? pParams->GetProperty<std::string>("startOverlapFunc") : "default";
+	m_sEndOverlap = pParams->GetProperty<std::string>("endOverlapFunc") != "" ? pParams->GetProperty<std::string>("endOverlapFunc") : "default";
 
 	m_hOverlapStartCallback = CBaseGame::Instance()->GetCallbackHandler()->GetCallback(m_sStartOverlap);
 	m_hOverlapEndCallback = CBaseGame::Instance()->GetCallbackHandler()->GetCallback(m_sEndOverlap);

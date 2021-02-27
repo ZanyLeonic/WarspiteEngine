@@ -116,4 +116,23 @@ struct SCollisionData
 };
 
 typedef IWGame* (*GameDLL_t)(int argc, char** argv, std::map<ESingletonIDs, void(*)>* pPtrs);
+
+enum class MapProperties
+{
+	PROP_INVALID,
+	PROP_SCRIPT,
+	PROP_TEXTUREID,
+	PROP_TEXWIDTH,
+	PROP_TEXHEIGHT,
+	PROP_NUMFRAMES,
+	PROP_ANIMSPEED,
+	PROP_ONCLICKCALL,
+	PROP_ONENTERCALL,
+	PROP_ONLEAVECALL,
+	PROP_SOUNDPATH,
+	PROP_DOORTARGET,
+	PROP_DOORWORLDTEXTURE,
+	PROP_STARTOVERLAP,
+	PROP_ENDOVERLAP
+};
 #endif // #ifndef __ENGINETYPES_H__

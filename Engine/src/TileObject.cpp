@@ -4,7 +4,7 @@
 #include "Level.h"
 #include "Camera.h"
 
-void CTileObject::Load(const CObjectParams* pParams)
+void CTileObject::Load(CObjectParams* pParams)
 {
 	CMapObject::Load(pParams);
 

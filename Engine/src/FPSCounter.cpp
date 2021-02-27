@@ -19,7 +19,7 @@ CFPSCounter::~CFPSCounter()
 	CFontManager::Instance()->RemoveFont("Roboto", "Regular", 16);
 }
 
-void CFPSCounter::Load(const CObjectParams* pParams)
+void CFPSCounter::Load(CObjectParams* pParams)
 {
 	// Do nothing.
 }

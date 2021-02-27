@@ -11,7 +11,7 @@ class CTrigger :
 public:
     CTrigger();
 
-    void Load(const CObjectParams* pParams) override;
+    void Load(CObjectParams* pParams) override;
 
     void OnPlay() override;
     void Destroy() override;

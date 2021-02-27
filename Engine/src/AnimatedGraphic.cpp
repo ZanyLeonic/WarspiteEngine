@@ -1,7 +1,7 @@
 #include "AnimatedGraphic.h"
 #include <SDL.h>
 
-void CAnimatedGraphic::Load(const CObjectParams* pParams)
+void CAnimatedGraphic::Load(CObjectParams* pParams)
 {
 	CWarspiteObject::Load(pParams);
 

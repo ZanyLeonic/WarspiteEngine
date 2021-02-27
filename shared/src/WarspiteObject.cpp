@@ -8,6 +8,7 @@
 #endif
 
 #include <spdlog/spdlog.h>
+#include <string>
 #include "WarspiteObject.h"
 
 CWarspiteObject::CWarspiteObject() 
@@ -20,7 +21,7 @@ CWarspiteObject::CWarspiteObject()
 #endif
 }
 
-void CWarspiteObject::Load(const CObjectParams* pParams)
+void CWarspiteObject::Load(CObjectParams* pParams)
 {
 	m_objectName = pParams->GetName();
 	m_factoryID = pParams->GetFactoryID();
@@ -29,13 +30,13 @@ void CWarspiteObject::Load(const CObjectParams* pParams)
 	m_velocity = CVector2D(0, 0);
 	m_acceleration = CVector2D(0, 0);
 
-	m_width = pParams->GetWidth();
-	m_height = pParams->GetHeight();
-	m_textureID = pParams->GetTextureID();
+	m_width = pParams->GetProperty<int>("textureWidth");
+	m_height = pParams->GetProperty<int>("textureHeight");
+	m_textureID = pParams->GetProperty<std::string>("textureID");
 
 	m_currentRow = 1;
 	m_currentFrame = 0;
-	m_numFrames = pParams->GetNumberOfFrames();
+	m_numFrames = pParams->GetProperty<int>("numFrames");
 }
 
 void CWarspiteObject::OnOverlapStart()

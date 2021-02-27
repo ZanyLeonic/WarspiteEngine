@@ -10,16 +10,14 @@ CPlayerSpawn::CPlayerSpawn()
 	m_collidable = false;
 }
 
-void CPlayerSpawn::Load(const CObjectParams* pParams)
-{
-	m_playerSpawnParam = const_cast<CObjectParams*>(pParams);
-	
-	if (m_playerSpawnParam != 0)
+void CPlayerSpawn::Load(CObjectParams* pParams)
+{	
+	if (pParams != 0)
 	{
-		m_playerSpawnParam->SetFactoryID("Player");
-		m_playerSpawnParam->SetTextureID("Player");
-		m_playerSpawnParam->SetHeight(32);
-		m_playerSpawnParam->SetWidth(32);
+		pParams->SetFactoryID("Player");
+		pParams->SetProperty("textureID", "Player");
+		pParams->SetProperty("textureHeight", 32);
+		pParams->SetProperty("textureWidth", 32);
 	}
 	CTileObject::Load(pParams);
 }

@@ -17,7 +17,7 @@ CDoorLink::CDoorLink()
 	m_overlap = true;
 }
 
-void CDoorLink::Load(const CObjectParams* pParams)
+void CDoorLink::Load(CObjectParams* pParams)
 {
 	CTileObject::Load(pParams);
 

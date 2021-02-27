@@ -16,10 +16,10 @@ void CLogicAuto::OnPlay()
 	CScriptManager::Instance()->RunFromRef(m_scriptName);
 }
 
-void CLogicAuto::Load(const CObjectParams* pParams)
+void CLogicAuto::Load(CObjectParams* pParams)
 {
 	CTileObject::Load(pParams);
 
 	m_position = CVector2D(pParams->GetX(), pParams->GetY());
-	m_scriptName = pParams->GetScript();
+	m_scriptName = pParams->();
 }

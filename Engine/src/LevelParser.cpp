@@ -263,7 +263,7 @@ void CLevelParser::parseFiles(const rapidjson::Value* pFileRoot)
 	
 	// Load the texture via the TextureManager with the info inside the object.
 	CTextureManager::Instance()->Load(CEngineFileSystem::ResolvePath(o["value"].GetString(), CEngineFileSystem::EPathType::TEXTURE),
-                                      o["name"].GetString(),CBaseGame::Instance()->GetRenderer());
+									  o["name"].GetString(),CBaseGame::Instance()->GetRenderer());
 	spdlog::debug("Loaded image \"{}\"", CEngineFileSystem::ResolvePath(o["value"].GetString(),
 		CEngineFileSystem::EPathType::TEXTURE));
 }
@@ -380,63 +380,38 @@ void CLevelParser::parseObjectLayer(const rapidjson::Value* pObjectVal, std::vec
 			for (SizeType j = 0; j < d.Size(); j++)
 			{
 				std::string propName = d[j]["name"].GetString();
+				MapProperties tagName = GetMapProp(propName);
+				const Value& prop = d[j]["value"];
 
-				if (d[j]["value"].IsString())
+				if (prop.IsString())
 				{
 					spdlog::debug("Name: \"{}\" Value: \"{}\"", propName, d[j]["value"].GetString());
 				}
-				else
+				else if (prop.IsInt())
 				{
 					spdlog::debug("Name: \"{}\" Value: \"{}\"", propName, d[j]["value"].GetInt());
 				}
 
-				switch (GetMapProp(propName))
+				switch (prop.GetType())
 				{
-				case MapProperties::PROP_SCRIPT:
-					pOP->SetScript(d[j]["value"].GetString());
+				case kNumberType:
+					if (prop.IsInt64())
+						pOP->SetProperty(propName, prop.GetInt64());
+					else if(prop.IsUint64())
+						pOP->SetProperty(propName, prop.GetUint64());
+					else
+						pOP->SetProperty(propName, prop.GetDouble());
 					break;
-				case MapProperties::PROP_TEXTUREID:
-					pOP->SetTextureID(d[j]["value"].GetString());
+				case kStringType:
+					pOP->SetProperty(propName, prop.GetString());
 					break;
-				case MapProperties::PROP_TEXWIDTH:
-					pOP->SetWidth(d[j]["value"].GetInt());
-					break;
-				case MapProperties::PROP_TEXHEIGHT:
-					pOP->SetHeight(d[j]["value"].GetInt());
-					break;
-				case MapProperties::PROP_NUMFRAMES:
-					pOP->SetNumFrames(d[j]["value"].GetInt());
-					break;
-				case MapProperties::PROP_ANIMSPEED:
-					pOP->SetAnimSpeed(d[j]["value"].GetInt());
-					break;
-				case MapProperties::PROP_ONCLICKCALL:
-					pOP->SetOnClick(d[j]["value"].GetInt());
-					break;
-				case MapProperties::PROP_ONENTERCALL:
-					pOP->SetOnEnter(d[j]["value"].GetInt());
-					break;
-				case MapProperties::PROP_ONLEAVECALL:
-					pOP->SetOnLeave(d[j]["value"].GetInt());
-					break;	
-				case MapProperties::PROP_SOUNDPATH:
-					pOP->SetSoundPath(d[j]["value"].GetString());
-					break;
-				case MapProperties::PROP_DOORTARGET:
-					pOP->SetDoorTargetID(d[j]["value"].GetString());
-					break;
-				case MapProperties::PROP_DOORWORLDTEXTURE:
-					pOP->SetDoorWorldTexture(d[j]["value"].GetString());
-					break;
-				case MapProperties::PROP_STARTOVERLAP:
-					pOP->SetStartOverlap(d[j]["value"].GetString());
-					break;
-				case MapProperties::PROP_ENDOVERLAP:
-					pOP->SetEndOverlap(d[j]["value"].GetString());
+				case kFalseType:
+				case kTrueType:
+					pOP->SetProperty(propName, prop.GetBool());
 					break;
 				default:
 					// Future proofing incase new properties get added for newer engine version.
-					spdlog::warn("Warning: Unrecognised property \"{}\"!", propName);
+					spdlog::warn("Warning: Unrecognised type for property \"{}\"!", propName);
 					break;
 				}
 			}

@@ -3,6 +3,7 @@
 #ifndef __CWarspiteObject__
 #define __CWarspiteObject__
 
+#include "EngineTypes.h"
 #include "GameObject.h"
 #include "GameObjectDictionary.h"
 #include "ITextureManager.h"
@@ -22,7 +23,7 @@ public:
 	bool OnThink() override;
 	void Destroy() override;
 
-	void Load(const CObjectParams* pParams) override;
+	void Load(CObjectParams* pParams) override;
 
 	CVector2D GetPosition() override { return m_position; }
 	void SetPosition(CVector2D& nPos) override { m_position = nPos; }

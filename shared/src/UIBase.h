@@ -12,7 +12,7 @@ protected:
 public:
 	CUIBase();
 
-	virtual void Load(const CObjectParams* pParams);
+	virtual void Load(CObjectParams* pParams);
 
 	virtual void Draw();
 	virtual bool OnThink();

@@ -12,7 +12,7 @@ public:
 	CFPSCounter();
 	~CFPSCounter();
 
-	void Load(const CObjectParams* pParams) override;
+	void Load(CObjectParams* pParams) override;
 	void Draw() override;
 
 	void SetFPSValue(float fps);

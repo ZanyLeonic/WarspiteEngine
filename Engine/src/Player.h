@@ -18,7 +18,7 @@ public:
 
 	void OnPlay();
 
-	void Load(const CObjectParams* pParams);
+	void Load(CObjectParams* pParams);
 
 	bool OnThink();
 	void Draw();

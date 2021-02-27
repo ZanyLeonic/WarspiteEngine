@@ -10,7 +10,7 @@ public:
 	CLogicAuto();
 
 	void OnPlay() override;
-	void Load(const CObjectParams* pParams) override;
+	void Load(CObjectParams* pParams) override;
 	
 private:
 	std::string m_scriptName = "";

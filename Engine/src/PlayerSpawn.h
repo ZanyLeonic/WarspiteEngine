@@ -8,7 +8,7 @@ class CPlayerSpawn :
 {
 public:
     CPlayerSpawn();
-    void Load(const CObjectParams* pParams) override;
+    void Load(CObjectParams* pParams) override;
 
     void OnPlay() override;
 private:

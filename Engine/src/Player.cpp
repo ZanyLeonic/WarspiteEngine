@@ -30,7 +30,7 @@ void CPlayer::OnPlay()
 	CInputHandler::Instance()->SetAxisValue("MoveRight", SDL_SCANCODE_D, 1.f);
 }
 
-void CPlayer::Load(const CObjectParams* pParams)
+void CPlayer::Load(CObjectParams* pParams)
 {
 	CWarspiteObject::Load(pParams);
 }

@@ -15,7 +15,7 @@ CAudioSource::~CAudioSource()
 	Destroy();
 }
 
-void CAudioSource::Load(const CObjectParams* pParams)
+void CAudioSource::Load(CObjectParams* pParams)
 {
 	CWarspiteObject::Load(pParams);
 

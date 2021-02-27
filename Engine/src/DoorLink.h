@@ -14,7 +14,7 @@ class CDoorLink :
 public:
     CDoorLink();
 
-    void Load(const CObjectParams* pParams) override;
+    void Load(CObjectParams* pParams) override;
 
     void OnPlay() override;
     void Destroy() override;

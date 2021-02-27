@@ -3,28 +3,10 @@
 #ifndef __LEVELPARSER_H__
 #define __LEVELPARSER_H__
 
+#include "EngineTypes.h"
 #include <rapidjson/document.h>
 #include <vector>
 #include <string>
-
-enum class MapProperties
-{
-	PROP_INVALID,
-	PROP_SCRIPT,
-	PROP_TEXTUREID,
-	PROP_TEXWIDTH,
-	PROP_TEXHEIGHT,
-	PROP_NUMFRAMES,
-	PROP_ANIMSPEED,
-	PROP_ONCLICKCALL,
-	PROP_ONENTERCALL,
-	PROP_ONLEAVECALL,
-	PROP_SOUNDPATH,
-	PROP_DOORTARGET,
-	PROP_DOORWORLDTEXTURE,
-	PROP_STARTOVERLAP,
-	PROP_ENDOVERLAP
-};
 
 class CLevel;
 struct STileset;

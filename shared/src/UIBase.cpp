@@ -11,7 +11,7 @@ CUIBase::CUIBase() :
 	if (m_OnLeave == 0) m_OnLeave = std::bind(&CUIBase::onLeave, this);
 }
 
-void CUIBase::Load(const CObjectParams* pParams)
+void CUIBase::Load(CObjectParams* pParams)
 {
 	CWarspiteObject::Load(pParams);
 

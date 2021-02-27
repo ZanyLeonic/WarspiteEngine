@@ -10,7 +10,7 @@ class CTileObject :
     public CMapObject
 {
 public:
-    virtual void Load(const CObjectParams* pParams);
+    virtual void Load(CObjectParams* pParams);
     virtual void Draw();
 
 private:
