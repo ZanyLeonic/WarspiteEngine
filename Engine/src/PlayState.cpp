@@ -161,6 +161,14 @@ bool CPlayState::OnPlay()
 		return;
 		});
 
+	CInputHandler::Instance()->AddActionKeyDown(SDL_SCANCODE_M, [this](SDL_Scancode e) {
+		HGenericCallback callback = CBaseGame::Instance()->GetCallbackHandler()->GetCallback("pyTest");
+		callback();
+		});
+	CInputHandler::Instance()->AddActionKeyUp(SDL_SCANCODE_M, [this](SDL_Scancode e) {
+		return;
+		});
+
 	// Try test state
 	CInputHandler::Instance()->AddActionKeyDown(SDL_SCANCODE_B, [this](SDL_Scancode e) {
 		if (CBaseGame::Instance()->GetStateManager()->GetCurrentStateID() != SID_TEST)

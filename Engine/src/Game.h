@@ -39,6 +39,7 @@ private:
 	// Calculate current FPS
 	void FPS_Calc();
 	int LoadGameDLL();
+	void RunCallbackScript();
 
 public:
 	void Draw() override;

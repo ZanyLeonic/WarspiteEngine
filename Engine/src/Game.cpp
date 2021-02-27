@@ -12,6 +12,7 @@
 #include "FPSCounter.h"
 #include "FadeObject.h"
 #include "IGame.h"
+#include <filesystem>
 
 CBaseGame* CBaseGame::s_pInstance = 0;
 
@@ -77,6 +78,7 @@ bool CBaseGame::Init(const char* title, int xpos, int ypos, int width, int heigh
 				{
 					m_gamePtr = std::make_shared<SGameObject>(SGameObject(this));
 					CScriptManager::Instance()->GetEngineModule().attr(GAMEOBJECT_NAME) = m_gamePtr;
+					RunCallbackScript();
 				}
 
 				m_pGameStateManager = new CGameStateManager();
@@ -197,6 +199,20 @@ void CBaseGame::FPS_Calc()
 int CBaseGame::LoadGameDLL()
 {
 	return 0;
+}
+
+void CBaseGame::RunCallbackScript()
+{
+	std::filesystem::path scriptPath = CWarspiteUtil::GetExecutingDirectory();
+	scriptPath.append("assets");
+	scriptPath.append("scripts");
+	scriptPath.append("sys_callbacks.py");
+
+	if (CWarspiteUtil::FileExists(scriptPath.string()))
+	{
+		SGameScript* callbackScript = SGameScript::file("internal_callbacks", scriptPath.string());
+		CScriptManager::Instance()->Run(callbackScript);
+	}
 }
 
 void CBaseGame::Draw()
