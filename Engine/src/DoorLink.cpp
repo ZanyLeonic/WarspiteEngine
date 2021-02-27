@@ -23,8 +23,8 @@ void CDoorLink::Load(CObjectParams* pParams)
 
 	CBaseGame::Instance()->GetFadeObject()->AddCallback(m_objectName, std::bind(&CDoorLink::fadeCallback, this, std::placeholders::_1, std::placeholders::_2));
 
-	m_sTargetDoorID = pParams->GetDoorTargetID();
-	m_sWorldTextureID = pParams->GetDoorWorldTexture();
+	m_sTargetDoorID = pParams->GetProperty<std::string>("targetDoorID");
+	m_sWorldTextureID = pParams->GetProperty<std::string>("doorWorldTexture");
 
 	m_width = 32;
 	m_height = 32;

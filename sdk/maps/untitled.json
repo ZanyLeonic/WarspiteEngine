@@ -5,7 +5,7 @@
          "target": "."
       }
    },
-   "height": 256,
+   "textureHeight": 256,
    "infinite": false,
    "layers": [
       {
@@ -65547,13 +65547,13 @@
             2,
             2
          ],
-         "height": 256,
+         "textureHeight": 256,
          "id": 1,
          "name": "Tile Layer 1",
          "opacity": 1,
          "type": "tilelayer",
          "visible": true,
-         "width": 256,
+         "textureWidth": 256,
          "x": 0,
          "y": 0
       }
@@ -65573,5 +65573,5 @@
    "tilewidth": 32,
    "type": "map",
    "version": 1.4,
-   "width": 256
+   "textureWidth": 256
 }

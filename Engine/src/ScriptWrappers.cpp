@@ -151,9 +151,22 @@ PYBIND11_MODULE(engine, m) {
 
 	py::class_<CObjectParams>(m, "ObjectParams", "A container used to initialise objects")
 		.def(py::init<float, float>(), "Used for certain objects that just need to be spawned")
-		.def(py::init<float, float, const char*>(), "Used for objects that use scripts")
-		.def(py::init<float, float, int, int, std::string, int, int, int, int, int, std::string, std::string, std::string>()
-			, "Used for most object initialisation");
+		.def("set_x", &CObjectParams::SetX, "Set X where the object will be spawned")
+		.def("set_y", &CObjectParams::SetY, "Set Y where the object will be spawned")
+		.def("set_name", &CObjectParams::SetName, "Set the name the object will be spawned with")
+		.def("set_factID", &CObjectParams::SetFactoryID, "Set the type of object spawned")
+		.def("set_tileID", &CObjectParams::SetTileID, "Sets the tile ID the object spawned will use (for Tile based objects)")
+		.def("set_tileset", &CObjectParams::SetTileset, "Sets the tileset the object spawned will use (for Tile based objects)")
+		.def("set_property", &CObjectParams::SetProperty, "Sets properties for the object to use")
+		.def("get_x", &CObjectParams::GetX, "Gets the stored X coordinate")
+		.def("get_y", &CObjectParams::GetY, "Gets the stored Y coordinate")
+		.def("get_name", &CObjectParams::GetName, "Gets the stored object name")
+		.def("get_factID", &CObjectParams::GetFactoryID, "Gets the stored object type")
+		.def("get_tileID", &CObjectParams::GetTileID, "Gets the stored tile ID")
+		.def("get_property_s", &CObjectParams::GetProperty<std::string>, "Gets string type properties.")
+		.def("get_property_i", &CObjectParams::GetProperty<int>, "Gets integer type properties.")
+		.def("get_property_f", &CObjectParams::GetProperty<float>, "Gets float type properties.")
+		.def("get_property_b", &CObjectParams::GetProperty<bool>, "Gets boolean type properties.");
 
 	py::class_<CWarspiteUtil>(m, "util", "Commonly used methods that get reused throughout the codebase")
 		.def("get_file_ext", CWarspiteUtil::GetFileExtenstion, "Returns the file extension from the provided path")

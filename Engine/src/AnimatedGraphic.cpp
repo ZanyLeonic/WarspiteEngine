@@ -5,7 +5,7 @@ void CAnimatedGraphic::Load(CObjectParams* pParams)
 {
 	CWarspiteObject::Load(pParams);
 
-	m_animSpeed = pParams->GetAnimSpeed();
+	m_animSpeed = pParams->GetProperty<int>("animSpeed");
 }
 
 bool CAnimatedGraphic::OnThink()

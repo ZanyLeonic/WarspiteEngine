@@ -92,7 +92,7 @@ void CFadeObject::callCallbacks(bool fadeCompleted)
 	std::map<std::string, HFadeComplete>::iterator it = m_callbacks.begin();
 
 	for (std::pair<std::string, HFadeComplete> e : m_callbacks) {
-		spdlog::debug("[{}] Calling registered callback ({})", m_objectName, e.first);
+		// spdlog::debug("[{}] Calling registered callback ({})", m_objectName, e.first);
 		e.second(m_eDirection, fadeCompleted);
 	}
 }

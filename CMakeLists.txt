@@ -42,6 +42,7 @@ set (GAME_NAME "WarspiteGame")
 # Window sizes and stuff
 add_compile_definitions(DEF_WIDTH=640)
 add_compile_definitions(DEF_HEIGHT=480)
+add_compile_definitions(DEF_FPS=62)
 
 # So things like the launcher know what the library is going to be called
 add_compile_definitions(MOD_NAME="${MOD_NAME}")

@@ -19,18 +19,18 @@ void CAudioSource::Load(CObjectParams* pParams)
 {
 	CWarspiteObject::Load(pParams);
 
-	std::string ext = CWarspiteUtil::GetFileExtenstion(pParams->GetSoundPath());
+	std::string ext = CWarspiteUtil::GetFileExtenstion(pParams->GetProperty<std::string>("soundPath"));
 
 	if (ext == ".wav")
 	{
 		m_soundType = ESoundType::SOUND_SFX;
-		CSoundManager::Instance()->Load(CEngineFileSystem::ResolvePath(pParams->GetSoundPath(), 
+		CSoundManager::Instance()->Load(CEngineFileSystem::ResolvePath(pParams->GetProperty<std::string>("soundPath"),
 			CEngineFileSystem::EPathType::SOUND), *m_waveFile);
 	}
 	else if (ext == ".ogg")
 	{
 		m_soundType = ESoundType::SOUND_MUSIC;
-		CSoundManager::Instance()->CreateStreamFromFile(CEngineFileSystem::ResolvePath(pParams->GetSoundPath(), 
+		CSoundManager::Instance()->CreateStreamFromFile(CEngineFileSystem::ResolvePath(pParams->GetProperty<std::string>("soundPath"),
 			CEngineFileSystem::EPathType::SOUND), *m_streamData);
 	}
 	else

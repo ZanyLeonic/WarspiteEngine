@@ -21,5 +21,5 @@ void CLogicAuto::Load(CObjectParams* pParams)
 	CTileObject::Load(pParams);
 
 	m_position = CVector2D(pParams->GetX(), pParams->GetY());
-	m_scriptName = pParams->();
+	m_scriptName = pParams->GetProperty<std::string>("runScript");
 }

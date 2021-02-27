@@ -15,9 +15,9 @@ void CUIBase::Load(CObjectParams* pParams)
 {
 	CWarspiteObject::Load(pParams);
 
-	m_onClickID = pParams->GetOnClickID();
-	m_onEnterID = pParams->GetOnEnterID();
-	m_onLeaveID = pParams->GetOnLeaveID();
+	m_onClickID = pParams->GetProperty<int>("onClickCallback");
+	m_onEnterID = pParams->GetProperty<int>("onEnterCallback");
+	m_onLeaveID = pParams->GetProperty<int>("onLeaveCallback");
 }
 
 void CUIBase::Draw()

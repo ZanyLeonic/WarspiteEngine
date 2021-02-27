@@ -27,10 +27,10 @@ CLevel* CLevelParser::ParseLevel(const char* levelFile)
 		std::string sL = levelFile;
 		CLevel* pLevel = new CLevel(sL);
 
-		assert(tLevel["height"].IsInt() && tLevel["width"].IsInt() && tLevel["tilewidth"].IsInt());
+		assert(tLevel["textureHeight"].IsInt() && tLevel["textureWidth"].IsInt() && tLevel["tilewidth"].IsInt());
 
-		pLevel->m_height = tLevel["height"].GetInt();
-		pLevel->m_width = tLevel["width"].GetInt();
+		pLevel->m_height = tLevel["textureHeight"].GetInt();
+		pLevel->m_width = tLevel["textureWidth"].GetInt();
 		pLevel->m_tileSize = tLevel["tilewidth"].GetInt();
 
 		spdlog::debug("*** Level information start ***");
@@ -109,7 +109,7 @@ MapProperties CLevelParser::GetMapProp(const std::string prop)
 		{"runScript",		 MapProperties::PROP_SCRIPT},
 		{"textureID",		 MapProperties::PROP_TEXTUREID},
 		{"textureWidth",	 MapProperties::PROP_TEXWIDTH},
-		{"textureHeight",	 MapProperties::PROP_TEXHEIGHT},
+		{"textureWidth",	 MapProperties::PROP_TEXHEIGHT},
 		{"numFrames",		 MapProperties::PROP_NUMFRAMES},
 		{"animSpeed",		 MapProperties::PROP_ANIMSPEED},
 		{"onClickCallback",  MapProperties::PROP_ONCLICKCALL},
@@ -403,7 +403,7 @@ void CLevelParser::parseObjectLayer(const rapidjson::Value* pObjectVal, std::vec
 						pOP->SetProperty(propName, prop.GetDouble());
 					break;
 				case kStringType:
-					pOP->SetProperty(propName, prop.GetString());
+					pOP->SetProperty(propName, std::string(prop.GetString()));
 					break;
 				case kFalseType:
 				case kTrueType:

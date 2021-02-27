@@ -16,12 +16,13 @@ CBaseGame* g_game = 0;
 
 typedef IWGame* (*GameDLL_t)(int argc, char** argv, std::map<ESingletonIDs, void(*)>* pPtrs);
 
-const int FPS = 62;
-const int DELAY_TIME = 1000 / FPS;
+int FPS = 62;
+int DELAY_TIME = 1000 / FPS;
 
 const char* WIDTH_PARAM = "-w";
 const char* HEIGHT_PARAM = "-h";
 const char* FULLSCREEN_PARAM = "-f";
+const char* FPS_PARAM = "-fps";
 
 bool FlagExists(char** argv, int argc, const char* flag)
 {
@@ -35,7 +36,7 @@ bool FlagExists(char** argv, int argc, const char* flag)
 	return false;
 }
 
-bool GetParam(char** argv, int argc, const char* param, char* returnval)
+bool GetParam(char** argv, int argc, const char* param, char** returnval)
 {
 	if (argc <= 1) return false;
 
@@ -43,13 +44,22 @@ bool GetParam(char** argv, int argc, const char* param, char* returnval)
 	{
 		if (strcmp(argv[i], param) == 0 && (i + 1) < argc)
 		{
-			returnval = argv[i + 1];
+			*returnval = argv[i + 1];
 			return true;
 		}
 	}
 
 	return false;
 }
+
+void SetFPS(int newFPS)
+{
+	if (newFPS < 0) return;
+
+	FPS = newFPS;
+	DELAY_TIME = 1000 / FPS;
+}
+
 
 #ifdef _WIN32
 extern "C" __declspec(dllexport) int __cdecl Engine(int argc, char** argv, GameDLL_t pGameDLL)
@@ -138,11 +148,13 @@ extern "C" int Engine(int argc, char** argv, GameDLL_t pGameDLL)
 	int desiredWidth = DEF_WIDTH;
 	int desiredHeight = DEF_HEIGHT;
 	bool desiredFullscreen = FlagExists(argv, argc, FULLSCREEN_PARAM);
+	int desiredFPS = DEF_FPS;
 
-	char widthParam[100];
-	char heightParam[100];
+	char* widthParam;
+	char* heightParam;
+	char* fpsParam;
 
-	if (GetParam(argv, argc, WIDTH_PARAM, widthParam))
+	if (GetParam(argv, argc, WIDTH_PARAM, &widthParam))
 	{
 		desiredWidth = atoi(widthParam);
 
@@ -155,7 +167,7 @@ extern "C" int Engine(int argc, char** argv, GameDLL_t pGameDLL)
 		}
 	}
 
-	if (GetParam(argv, argc, HEIGHT_PARAM, heightParam))
+	if (GetParam(argv, argc, HEIGHT_PARAM, &heightParam))
 	{
 		desiredHeight = atoi(heightParam);
 
@@ -166,6 +178,21 @@ extern "C" int Engine(int argc, char** argv, GameDLL_t pGameDLL)
 			spdlog::warn("Got \"{}\", Lowest supported value \"{}\"", desiredHeight, DEF_HEIGHT);
 			desiredHeight = DEF_HEIGHT;
 		}
+	}
+
+	if (GetParam(argv, argc, FPS_PARAM, &fpsParam))
+	{
+		desiredFPS = atoi(fpsParam);
+
+		if (desiredFPS == 0
+			|| desiredFPS < 0)
+		{
+			spdlog::warn("Specified FPS parameter is too low or invalid.");
+			spdlog::warn("Got \"{}\", Lowest supported value \"{}\"", desiredFPS, 0);
+			desiredFPS = DEF_FPS;
+		}
+
+		SetFPS(desiredFPS);
 	}
 
 	if (CBaseGame::Instance()->Init(title, 100, 100, desiredWidth, desiredHeight, desiredFullscreen, argc, argv, pGameDLL))
@@ -182,7 +209,7 @@ extern "C" int Engine(int argc, char** argv, GameDLL_t pGameDLL)
 
 			frameTime = SDL_GetTicks() - frameStart;
 
-			if (frameTime < DELAY_TIME)
+			if (frameTime < Uint32(DELAY_TIME))
 			{
 				SDL_Delay((int)(DELAY_TIME - frameTime));
 			}

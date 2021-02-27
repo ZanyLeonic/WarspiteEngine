@@ -14,14 +14,14 @@ CTextObject::~CTextObject()
 	CFontManager::Instance()->RemoveFont("Roboto", "Regular", 32);
 }
 
-void CTextObject::Load(const CObjectParams* pParams)
+void CTextObject::Load(CObjectParams* pParams)
 {
 	CWarspiteObject::Load(pParams);
 
 	// I would make this better, but I am short on time at this moment, so this will do.
 	if (CBaseGame::Instance()->GetStateManager()->GetCurrentStateID() == SID_MM)
 	{
-		CFontManager::Instance()->RenderText("Warspite Engine", "Roboto-Regular-32", m_textureID, CFontManager::EFontRenderType::SHADED, { 0, 0, 0}, { 255, 255, 255});
+		CFontManager::Instance()->RenderText("Warspite Engine", "Roboto-Regular-32", m_textureID, CFontManager::EFontRenderType::SHADED, { 0, 0, 0 }, { 255, 255, 255});
 	}
 	else if (CBaseGame::Instance()->GetStateManager()->GetCurrentStateID() == SID_INPUT)
 	{

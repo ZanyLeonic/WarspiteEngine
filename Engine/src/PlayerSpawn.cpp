@@ -12,10 +12,12 @@ CPlayerSpawn::CPlayerSpawn()
 
 void CPlayerSpawn::Load(CObjectParams* pParams)
 {	
-	if (pParams != 0)
+	m_playerSpawnParam = pParams;
+
+	if (m_playerSpawnParam != 0)
 	{
 		pParams->SetFactoryID("Player");
-		pParams->SetProperty("textureID", "Player");
+		pParams->SetProperty("textureID", std::string("Player"));
 		pParams->SetProperty("textureHeight", 32);
 		pParams->SetProperty("textureWidth", 32);
 	}

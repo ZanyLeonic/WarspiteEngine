@@ -5,6 +5,7 @@
 #include <string>
 #include <map>
 #include <any>
+#include <spdlog/spdlog.h>
 
 struct STileset;
 
@@ -25,7 +26,7 @@ public:
 	void SetTileID(int gid) { m_gid = gid; }
 	void SetTileset(STileset* tileset) { m_tileset = tileset; }
 
-	void SetProperty(MapProperties id, std::any data) { m_mProperties[id] = data; }
+	void SetProperty(std::string id, std::any data) { m_mProperties[id] = data; }
 
 	// Getters
 	float GetX() const { return m_x; }
@@ -38,13 +39,16 @@ public:
 	STileset* GetTileset() const { return m_tileset; }
 
 	template<typename T>
-	T GetProperty(MapProperties id) {
+	T GetProperty(std::string id) {
 		try
 		{
 			return std::any_cast<T>(m_mProperties[id]);
 		}
 		catch (const std::bad_any_cast& e)
 		{
+			spdlog::error("Error casting property \"{}\" to \"{}\"!", id, typeid(T).name());
+			spdlog::error("Exception details:");
+			spdlog::error(e.what());
 			m_eLastError = e;
 			return T();
 		}
@@ -57,22 +61,22 @@ private:
 	std::string m_objName = "";
 	std::string m_factoryID = "";
 
-	std::map<MapProperties, std::any> m_mProperties
+	std::map <std::string, std::any> m_mProperties
 	{
-		{MapProperties::PROP_SCRIPT,		   ""},
-		{MapProperties::PROP_TEXTUREID,		   ""},
-		{MapProperties::PROP_TEXWIDTH,		   32},
-		{MapProperties::PROP_TEXHEIGHT,		   32},
-		{MapProperties::PROP_NUMFRAMES,		    1},
-		{MapProperties::PROP_ANIMSPEED,		    1},
-		{MapProperties::PROP_ONCLICKCALL,      ""},
-		{MapProperties::PROP_ONENTERCALL,      ""},
-		{MapProperties::PROP_ONLEAVECALL,      ""},
-		{MapProperties::PROP_SOUNDPATH,		   ""},
-		{MapProperties::PROP_DOORTARGET,	   ""},
-		{MapProperties::PROP_DOORWORLDTEXTURE, ""},
-		{MapProperties::PROP_STARTOVERLAP,     ""},
-		{MapProperties::PROP_ENDOVERLAP,	   ""}
+		{"runScript",			std::string("")},
+		{"textureID",			std::string("")},
+		{"textureWidth",					 32},
+		{"textureHeight",					 32},
+		{"numFrames",						  1},
+		{"animSpeed",						  1},
+		{"onClickCallback",					  0},
+		{"onEnterCallback",					  0},
+		{"onLeaveCallback",		              0},
+		{"soundPath",			std::string("")},
+		{"targetDoorID",		std::string("")},
+		{"doorWorldTexture",	std::string("")},
+		{"startOverlapFunc",	std::string("")},
+		{"endOverlapFunc",		std::string("")}
 	};
 
 	int m_gid = -1;

@@ -11,7 +11,7 @@ public:
 	CTextObject();
 	~CTextObject();
 
-	void Load(const CObjectParams* pParams) override;
+	void Load(CObjectParams* pParams) override;
 };
 REG_OBJ_TO_REF(TextObject, CTextObject);
 #endif // #ifndef __FONTOBJECT_H__
