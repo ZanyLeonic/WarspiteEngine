@@ -5,6 +5,7 @@
 #include <map>
 #include <string>
 #include <functional>
+#include <spdlog/spdlog.h>
 
 // Provide a std::function to create an instance of the class
 template<typename T>
