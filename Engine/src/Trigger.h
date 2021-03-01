@@ -30,6 +30,8 @@ private:
     std::string m_sEndOverlap;
 
     bool m_bFireOnce;
+    bool m_bFiredStart;
+    bool m_bFiredEnd;
 };
 
 REG_OBJ_TO_REF(Trigger, CTrigger);

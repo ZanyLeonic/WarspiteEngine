@@ -413,6 +413,7 @@ MigrationBackup/
 *.tiled-session
 
 out/
+build.old/**
 Engine/logs/**
 /Launcher/main/ws
 /rel-test/Launcher/main

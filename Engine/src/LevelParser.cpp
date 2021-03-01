@@ -27,10 +27,10 @@ CLevel* CLevelParser::ParseLevel(const char* levelFile)
 		std::string sL = levelFile;
 		CLevel* pLevel = new CLevel(sL);
 
-		assert(tLevel["textureHeight"].IsInt() && tLevel["textureWidth"].IsInt() && tLevel["tilewidth"].IsInt());
+		assert(tLevel["height"].IsInt() && tLevel["width"].IsInt() && tLevel["tilewidth"].IsInt());
 
-		pLevel->m_height = tLevel["textureHeight"].GetInt();
-		pLevel->m_width = tLevel["textureWidth"].GetInt();
+		pLevel->m_height = tLevel["height"].GetInt();
+		pLevel->m_width = tLevel["width"].GetInt();
 		pLevel->m_tileSize = tLevel["tilewidth"].GetInt();
 
 		spdlog::debug("*** Level information start ***");

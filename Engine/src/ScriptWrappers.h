@@ -246,6 +246,7 @@ struct SGameObject : SBaseWrapper<CBaseGame>
 	SCollisionData IsColliding(CVector2D v1) const;
 	std::unique_ptr<SWarObject> GetPlayer() const;
 	bool LoadTexture(std::string texPath, std::string texID) const;
+	void LogMessage(std::string log);
 };
 
 struct SFontObject : SBaseWrapper<CFontManager>

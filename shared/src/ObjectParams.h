@@ -54,6 +54,12 @@ public:
 		}
 	}
 
+	bool PropertyExists(std::string id)
+	{
+		// Check if a entry exists
+		return m_mProperties.count(id) > 0;
+	};
+
 	std::exception GetLastError() const { return m_eLastError; }
 
 private:

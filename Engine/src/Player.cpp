@@ -18,6 +18,8 @@ CPlayer::CPlayer()
 
 void CPlayer::OnPlay()
 {
+	// CCamera::Instance()->SetTarget(&m_position);
+
 	// Input binding
 	CInputHandler::Instance()->SetAxisValue("MoveForward", SDL_SCANCODE_UP, -1.f);
 	CInputHandler::Instance()->SetAxisValue("MoveForward", SDL_SCANCODE_DOWN, 1.f);
@@ -39,6 +41,8 @@ bool CPlayer::OnThink()
 {
 	HandleInput();
 
+	CCamera::Instance()->SetTarget(&m_position);
+
 	m_currentFrame = 1;
 	m_currentRow = GetRowFromDirection();
 
@@ -47,13 +51,17 @@ bool CPlayer::OnThink()
 		m_position = VectorMath::Lerp(m_vLastPosition, m_vNextPosition, (m_fTimeLeft / 100));
 		if (CSoundManager::Instance()->IsInitialised())
 		{
-			// alCall(alListener3f, AL_POSITION, m_position.GetX(), m_position.GetY(), 0.f);
+			alCall(alListener3f, AL_POSITION, m_position.GetX(), m_position.GetY(), 0.f);
 		}
 
-		CCamera::Instance()->SetTarget(&m_position);
+		
 		DecideFrame();
 	}
 
+	//std::cout << '\r'
+	//	<< "X: " << m_position.GetX()
+	//	<< "  Y: " << m_position.GetY()
+	//	<< "            ";
 	CWarspiteObject::OnThink();
 
 	return true;
@@ -211,6 +219,12 @@ void CPlayer::HandleMovement(CVector2D* pNext)
 		if (lastObj)
 			if (lastObj->IsOverlapping() && lastObj->ShouldOverlap())
 				lastObj->OnOverlapEnd();
+
+		m_bMoving = true;
+		m_vLastPosition = m_position;
+		m_vNextPosition = *pNext;
+		m_fTimeLeft = 0;
+		m_bStepLastFrame = true;
 	}
 	else if (!result)
 	{

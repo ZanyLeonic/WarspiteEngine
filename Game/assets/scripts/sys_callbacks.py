@@ -1,11 +1,12 @@
 import engine
 
-def test():
-    print("This is from a Python script!")
+def start_callback():
+    engine.game.log("Start callback triggered")
+    
+def end_callback():
+    engine.game.log("End callback triggered")
 
 cb = engine.game.get_callback_handler()
 
-cb.add_callback("pyTest", test)
-
-if (cb.get_callback("pyTest")):
-    print("Registered callback!")
+cb.add_callback("TestStartTrigger", start_callback)
+cb.add_callback("TestEndTrigger", end_callback)

@@ -4,6 +4,7 @@
 #include <pybind11/functional.h>
 #include <spdlog/spdlog.h>
 #include <SDL2/SDL_scancode.h>
+#include <stdarg.h>
 
 #include "Camera.h"
 #include "InputHandler.h"
@@ -134,7 +135,8 @@ PYBIND11_MODULE(engine, m) {
 		.def("change_state", &SGameObject::ChangeState, "Changes the current state to the specified state")
 		.def("get_player", &SGameObject::GetPlayer, "Returns the currently registered player object")
 		.def("load_texture", &SGameObject::LoadTexture, "Loads the specified texture into the manager with the specified ID")
-		.def("get_callback_handler", &SGameObject::GetCallbackHandler, "Returns the callback handler");
+		.def("get_callback_handler", &SGameObject::GetCallbackHandler, "Returns the callback handler")
+		.def("log", &SGameObject::LogMessage, "Logs the specified message");
 
 	py::class_<SCallbackHandler>(m, "CallbackHandler", "A way to register callbacks to be used by objects in the Engine.")
 		.def(py::init<CCallbackHandler<HGenericCallback>*>())
@@ -587,6 +589,11 @@ bool SGameObject::LoadTexture(std::string texPath, std::string texID) const
 {
 	if (!IsValid()) return false;
 	return CTextureManager::Instance()->Load(texPath, texID, m_inst->GetRenderer());
+}
+
+void SGameObject::LogMessage(std::string log)
+{
+	spdlog::info(log);
 }
 
 bool SFontObject::LoadFont(std::string path, std::string type, int size)

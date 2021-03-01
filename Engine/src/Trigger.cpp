@@ -5,19 +5,23 @@
 #include <memory>
 
 CTrigger::CTrigger()
+	: CTileObject()
 {
 	m_bFireOnce = false; // for now
-	m_bCancelMovementOnOverlap = true;
+	m_bCancelMovementOnOverlap = false;
 	m_collidable = false;
 	m_overlap = true;
+	m_bFiredStart = false;
+	m_bFiredEnd = false;
 }
 
 void CTrigger::Load(CObjectParams* pParams)
 {
 	CTileObject::Load(pParams);
 
-	m_sStartOverlap = pParams->GetProperty<std::string>("startOverlapFunc") != "" ? pParams->GetProperty<std::string>("startOverlapFunc") : "default";
-	m_sEndOverlap = pParams->GetProperty<std::string>("endOverlapFunc") != "" ? pParams->GetProperty<std::string>("endOverlapFunc") : "default";
+	m_sStartOverlap = pParams->PropertyExists("startOverlapFunc") ? pParams->GetProperty<std::string>("startOverlapFunc") : "default";
+	m_bFireOnce = pParams->PropertyExists("fireOnce") ? pParams->GetProperty<bool>("fireOnce") : false;
+	m_sEndOverlap = pParams->PropertyExists("endOverlapFunc") ? pParams->GetProperty<std::string>("endOverlapFunc") : "default";
 
 	m_hOverlapStartCallback = CBaseGame::Instance()->GetCallbackHandler()->GetCallback(m_sStartOverlap);
 	m_hOverlapEndCallback = CBaseGame::Instance()->GetCallbackHandler()->GetCallback(m_sEndOverlap);
@@ -46,20 +50,22 @@ void CTrigger::Destroy()
 
 bool CTrigger::OnThink()
 {
-	return false;
+	return CTileObject::OnThink();
 }
 
 void CTrigger::Draw()
 {
+	CTileObject::Draw();
 }
 
 void CTrigger::OnOverlapStart()
 {
 	std::shared_ptr<CPlayer> pPlayer = std::dynamic_pointer_cast<CPlayer>(CBaseGame::Instance()->GetPlayer());
 
-	if (pPlayer && m_hOverlapStartCallback)
+	if (pPlayer && m_hOverlapStartCallback && !m_bFiredStart)
 	{
 		m_hOverlapStartCallback();
+		if (m_bFireOnce) m_bFiredStart = true;
 	}
 }
 
@@ -67,8 +73,9 @@ void CTrigger::OnOverlapEnd()
 {
 	std::shared_ptr<CPlayer> pPlayer = std::dynamic_pointer_cast<CPlayer>(CBaseGame::Instance()->GetPlayer());
 
-	if (pPlayer && m_hOverlapEndCallback)
+	if (pPlayer && m_hOverlapEndCallback && !m_bFiredEnd)
 	{
 		m_hOverlapEndCallback();
+		if (m_bFireOnce) m_bFiredEnd = true;
 	}
 }
