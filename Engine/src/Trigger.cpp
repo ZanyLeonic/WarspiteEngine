@@ -60,6 +60,8 @@ void CTrigger::Draw()
 
 void CTrigger::OnOverlapStart()
 {
+	CTileObject::OnOverlapStart();
+
 	std::shared_ptr<CPlayer> pPlayer = std::dynamic_pointer_cast<CPlayer>(CBaseGame::Instance()->GetPlayer());
 
 	if (pPlayer && m_hOverlapStartCallback && !m_bFiredStart)
@@ -71,6 +73,8 @@ void CTrigger::OnOverlapStart()
 
 void CTrigger::OnOverlapEnd()
 {
+	CTileObject::OnOverlapEnd();
+
 	std::shared_ptr<CPlayer> pPlayer = std::dynamic_pointer_cast<CPlayer>(CBaseGame::Instance()->GetPlayer());
 
 	if (pPlayer && m_hOverlapEndCallback && !m_bFiredEnd)
