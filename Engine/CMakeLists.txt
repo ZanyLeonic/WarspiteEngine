@@ -31,6 +31,7 @@ set(WarspiteEngine_Src
 		src/GarbageCollector.cpp
         src/InputHandler.cpp
         src/InputState.cpp
+        src/InteractableObject.cpp
         src/Level.cpp
         src/LevelParser.cpp
         src/LogicAuto.cpp
@@ -83,6 +84,7 @@ set(WarspiteEngine_Header
 		src/GarbageCollector.h
         src/InputHandler.h
         src/InputState.h
+        src/InteractableObject.h
         ../shared/src/Layer.h
         src/Level.h
         src/LevelParser.h
