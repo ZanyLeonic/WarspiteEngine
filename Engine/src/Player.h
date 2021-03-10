@@ -39,6 +39,7 @@ public:
 
 private:
 	void HandleInput();
+	void InteractAction(SDL_Scancode key);
 
 	void MoveForward(float axis);
 	void MoveRight(float axis);
@@ -75,9 +76,7 @@ private:
 
 	CVector2D m_vCamOffset;
 	SCollisionData m_sLastCollision;
-	EDirection m_ePlayerDirection = EDirection::NONE;
 };
-
 
 REG_OBJ_TO_REF( Player, CPlayer ) ;
 #endif /* defined(__Player__) */

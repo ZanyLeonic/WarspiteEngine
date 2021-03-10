@@ -30,6 +30,9 @@ public:
 	virtual void OnOverlapStart() = 0;
 	virtual void OnOverlapEnd() = 0;
 
+	virtual EDirection GetObjectDirection() = 0;
+	virtual bool CollidesOnChannel(ECollisionChannel pChannel) = 0;
+
 	IGameObject() {} 
 	virtual ~IGameObject() {}
 };

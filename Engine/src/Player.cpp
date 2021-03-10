@@ -9,6 +9,7 @@
 #include "SoundManager.h"
 #include <iostream>
 #include <algorithm>
+#include <functional>
 #include <spdlog/spdlog.h>
 
 CPlayer::CPlayer()
@@ -19,6 +20,7 @@ CPlayer::CPlayer()
 void CPlayer::OnPlay()
 {
 	// CCamera::Instance()->SetTarget(&m_position);
+	CInputHandler::Instance()->AddActionKeyDown(SDL_SCANCODE_E, std::bind(&CPlayer::InteractAction, this, std::placeholders::_1));
 
 	// Input binding
 	CInputHandler::Instance()->SetAxisValue("MoveForward", SDL_SCANCODE_UP, -1.f);
@@ -41,27 +43,22 @@ bool CPlayer::OnThink()
 {
 	HandleInput();
 
-	CCamera::Instance()->SetTarget(&m_position);
-
-	m_currentFrame = 1;
-	m_currentRow = GetRowFromDirection();
+	m_iCurrentFrame = 1;
+	m_iCurrentRow = GetRowFromDirection();
 
 	if (m_bMoving)
 	{
-		m_position = VectorMath::Lerp(m_vLastPosition, m_vNextPosition, (m_fTimeLeft / 100));
+		m_vPosition = VectorMath::Lerp(m_vLastPosition, m_vNextPosition, (m_fTimeLeft / 100));
+		CCamera::Instance()->SetTarget(&m_vPosition);
 		if (CSoundManager::Instance()->IsInitialised())
 		{
-			alCall(alListener3f, AL_POSITION, m_position.GetX(), m_position.GetY(), 0.f);
+			// alCall(alListener3f, AL_POSITION, m_position.GetX(), m_position.GetY(), 0.f);
 		}
 
 		
 		DecideFrame();
 	}
 
-	//std::cout << '\r'
-	//	<< "X: " << m_position.GetX()
-	//	<< "  Y: " << m_position.GetY()
-	//	<< "            ";
 	CWarspiteObject::OnThink();
 
 	return true;
@@ -73,18 +70,18 @@ void CPlayer::Draw()
 	CVector2D cPos = CCamera::Instance()->GetPositionT();
 
 	// Flip the sprite automatically if the velocity is negative.
-	if (m_velocity.GetX() > 0)
+	if (m_vVelocity.GetX() > 0)
 	{
-		CTextureManager::Instance()->DrawFrame(m_textureID,
-			int(m_position.GetX() - cPos.GetX()), int(m_position.GetY() - cPos.GetY()),
-			m_width, m_height, m_currentRow, m_currentFrame,
+		CTextureManager::Instance()->DrawFrame(m_sTextureID,
+			m_vPosition.GetX() - cPos.GetX(), m_vPosition.GetY() - cPos.GetY(),
+			m_iWidth, m_iHeight, m_iCurrentRow, m_iCurrentFrame,
 			CBaseGame::Instance()->GetRenderer(), SDL_FLIP_HORIZONTAL);
 	}
 	else
 	{
-		CTextureManager::Instance()->DrawFrame(m_textureID,
-			int(m_position.GetX() - cPos.GetX()), int(m_position.GetY() - cPos.GetY()),
-			m_width, m_height, m_currentRow, m_currentFrame,
+		CTextureManager::Instance()->DrawFrame(m_sTextureID,
+			m_vPosition.GetX() - cPos.GetX(), m_vPosition.GetY() - cPos.GetY(),
+			m_iWidth, m_iHeight, m_iCurrentRow, m_iCurrentFrame,
 			CBaseGame::Instance()->GetRenderer());
 	}
 }
@@ -92,7 +89,7 @@ void CPlayer::Draw()
 void CPlayer::SetNextLocation(CVector2D nextLocation, float pos, bool callCallbacks)
 {
 	m_bMoving = true;
-	m_vLastPosition = m_position;
+	m_vLastPosition = m_vPosition;
 	m_vNextPosition = nextLocation;
 	m_fTimeLeft = pos;
 	m_bStepLastFrame = true;
@@ -173,13 +170,43 @@ void CPlayer::HandleInput()
 	}
 }
 
+void CPlayer::InteractAction(SDL_Scancode key)
+{
+	CVector2D curPos = m_vPosition;
+	int axis = 0;
+
+	switch (m_eObjectDirection)
+	{
+	case EDirection::SOUTH:
+		axis = 1;
+		curPos.SetY(curPos.GetY() + (m_iMoveStep * axis));
+		break;
+	case EDirection::NORTH:
+		axis = -1;
+		curPos.SetY(curPos.GetY() + (m_iMoveStep * axis));
+		break;
+	case EDirection::EAST:
+		axis = 1;
+		curPos.SetX(curPos.GetX() + (m_iMoveStep * axis));
+		break;
+	case EDirection::WEST:
+		axis = -1;
+		curPos.SetX(curPos.GetX() + (m_iMoveStep * axis));
+		break;
+	}
+
+	SCollisionData r = CBaseGame::Instance()->GetStateManager()->IsColliding(curPos);
+
+	r.m_otherObject->
+}
+
 void CPlayer::MoveForward(float axis)
 {
 	if (axis == 0.f) return;
-	CVector2D curPos = m_position;
+	CVector2D curPos = m_vPosition;
 	
-	m_currentRow = (axis > 0) ? 1 : 4;
-	m_ePlayerDirection = (axis > 0) ? EDirection::SOUTH : EDirection::NORTH;
+	m_iCurrentRow = (axis > 0) ? 1 : 4;
+	m_eObjectDirection = (axis > 0) ? EDirection::SOUTH : EDirection::NORTH;
 
 	// Analog movement coming never.
 	curPos.SetY(curPos.GetY() + (m_iMoveStep * axis));
@@ -190,10 +217,10 @@ void CPlayer::MoveForward(float axis)
 void CPlayer::MoveRight(float axis)
 {
 	if (axis == 0.f) return;
-	CVector2D curPos = m_position;
+	CVector2D curPos = m_vPosition;
 	
-	m_currentRow = (axis > 0) ? 3 : 2;
-	m_ePlayerDirection = (axis > 0) ? EDirection::EAST : EDirection::WEST;
+	m_iCurrentRow = (axis > 0) ? 3 : 2;
+	m_eObjectDirection = (axis > 0) ? EDirection::EAST : EDirection::WEST;
 
 	curPos.SetX(curPos.GetX() + (m_iMoveStep * axis));
 
@@ -221,7 +248,7 @@ void CPlayer::HandleMovement(CVector2D* pNext)
 				lastObj->OnOverlapEnd();
 
 		m_bMoving = true;
-		m_vLastPosition = m_position;
+		m_vLastPosition = m_vPosition;
 		m_vNextPosition = *pNext;
 		m_fTimeLeft = 0;
 		m_bStepLastFrame = true;
@@ -231,7 +258,7 @@ void CPlayer::HandleMovement(CVector2D* pNext)
 		callStartCallbacks();
 
 		m_bMoving = true;
-		m_vLastPosition = m_position;
+		m_vLastPosition = m_vPosition;
 		m_vNextPosition = *pNext;
 		m_fTimeLeft = 0;
 		m_bStepLastFrame = true;
@@ -242,7 +269,7 @@ void CPlayer::HandleMovement(CVector2D* pNext)
 	}
 	else
 	{
-		spdlog::info("Cannot move {} - collided!", GetDirectionName(m_ePlayerDirection));
+		spdlog::info("Cannot move {} - collided!", GetDirectionName(m_eObjectDirection));
 	}
 }
 
@@ -285,12 +312,12 @@ void CPlayer::DecideFrame()
 		m_bStepLastFrame = false;
 	}
 
-	m_currentFrame = nFrame;
+	m_iCurrentFrame = nFrame;
 }
 
 int CPlayer::GetRowFromDirection()
 {
-	switch(m_ePlayerDirection)
+	switch(m_eObjectDirection)
 	{
 	case EDirection::NORTH:
 		return 4;
@@ -310,7 +337,7 @@ void CPlayer::callStartCallbacks()
 	std::map<std::string, HPlayerCallback>::iterator it = m_vOnMoveStart.begin();
 
 	for (std::pair<std::string, HPlayerCallback> e : m_vOnMoveStart) {
-		spdlog::debug("[{}] Calling registered callback ({})", m_objectName, e.first);
+		spdlog::debug("[{}] Calling registered callback ({})", m_sObjectName, e.first);
 		e.second(this);
 	}
 }
@@ -320,7 +347,7 @@ void CPlayer::callEndCallbacks()
 	std::map<std::string, HPlayerCallback>::iterator it = m_vOnMoveEnd.begin();
 
 	for (std::pair<std::string, HPlayerCallback> e : m_vOnMoveEnd) {
-		spdlog::debug("[{}] Calling registered callback ({})", m_objectName, e.first);
+		spdlog::debug("[{}] Calling registered callback ({})", m_sObjectName, e.first);
 		e.second(this);
 	}
 }

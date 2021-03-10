@@ -25,64 +25,76 @@ public:
 
 	void Load(CObjectParams* pParams) override;
 
-	CVector2D GetPosition() override { return m_position; }
-	void SetPosition(CVector2D& nPos) override { m_position = nPos; }
+	CVector2D GetPosition() override { return m_vPosition; }
+	void SetPosition(CVector2D& nPos) override { m_vPosition = nPos; }
 
-	virtual CVector2D GetVelocity() { return m_velocity; }
-	virtual void SetVelocity(CVector2D nV) { m_velocity = nV; }
-	virtual void AddVelocity(CVector2D aV) { m_velocity += aV; }
+	virtual CVector2D GetVelocity() { return m_vVelocity; }
+	virtual void SetVelocity(CVector2D nV) { m_vVelocity = nV; }
+	virtual void AddVelocity(CVector2D aV) { m_vVelocity += aV; }
 
-	virtual CVector2D GetAcceleration() { return m_acceleration; }
-	virtual void SetAcceleration(CVector2D nA) { m_acceleration = nA; }
-	virtual void AddAcceleration(CVector2D nA) { m_acceleration += nA; }
+	virtual CVector2D GetAcceleration() { return m_vAcceleration; }
+	virtual void SetAcceleration(CVector2D nA) { m_vAcceleration = nA; }
+	virtual void AddAcceleration(CVector2D nA) { m_vAcceleration += nA; }
 
-	virtual CVector2D GetSize() { return CVector2D((float)m_width, (float)m_height); }
+	virtual CVector2D GetSize() { return CVector2D((float)m_iWidth, (float)m_iHeight); }
 
-	virtual int GetCurrentAnimRow() { return m_currentRow; }
-	virtual void SetAnimRow(int nR) { m_currentRow = nR; }
+	virtual int GetCurrentAnimRow() { return m_iCurrentRow; }
+	virtual void SetAnimRow(int nR) { m_iCurrentRow = nR; }
 	
-	virtual int GetCurrentAnimFrame() { return m_currentFrame; }
-	virtual void SetAnimFrame(int aF) { m_currentFrame = aF; }
+	virtual int GetCurrentAnimFrame() { return m_iCurrentFrame; }
+	virtual void SetAnimFrame(int aF) { m_iCurrentFrame = aF; }
 	
-	virtual int GetTotalAnimFrames() { return m_numFrames; }
+	virtual int GetTotalAnimFrames() { return m_iNumFrames; }
 
-	const char* GetName() override { return m_objectName.c_str(); }
-	virtual std::string GetTextureID() { return m_textureID; }
-	virtual std::string GetFactoryID() { return m_factoryID; }
+	const char* GetName() override { return m_sObjectName.c_str(); }
+	virtual std::string GetTextureID() { return m_sTextureID; }
+	virtual std::string GetFactoryID() { return m_sFactoryID; }
 
-	bool ShouldCollide() override { return m_collidable; }
-	void SetCollision(bool nC) { m_collidable = nC; }
+	bool ShouldCollide() override { return m_bCollides; }
+	void SetCollision(bool nC) { m_bCollides = nC; }
 
-	bool ShouldOverlap() override { return m_overlap; }
-	void SetOverlap(bool nO) { m_overlap = nO; }
+	bool ShouldOverlap() override { return m_bOverlap; }
+	void SetOverlap(bool nO) { m_bOverlap = nO; }
 
-	bool IsOverlapping() override { return m_isOverlapping; }
+	bool IsOverlapping() override { return m_bIsOverlapping; }
 	bool CancelMovementOnOverlap() override { return m_bCancelMovementOnOverlap; }
 
 	void OnOverlapStart();
 	void OnOverlapEnd();
+
+
+	void SetObjectDirection(EDirection pDir) { m_eObjectDirection = pDir; }
+	EDirection GetObjectDirection() { return m_eObjectDirection; };
+
+	void SetCollisionOnChannel(ECollisionChannel pChannel, bool pState);
+	bool CollidesOnChannel(ECollisionChannel pChannel);
 	
 protected:
-	CVector2D m_position;
-	CVector2D m_velocity;
-	CVector2D m_acceleration;
+	CVector2D m_vPosition;
+	CVector2D m_vVelocity;
+	CVector2D m_vAcceleration;
 	
-	int m_width;
-	int m_height;
+	int m_iWidth;
+	int m_iHeight;
 
-	int m_currentRow;
-	int m_currentFrame;
-	int m_numFrames;
+	int m_iCurrentRow;
+	int m_iCurrentFrame;
+	int m_iNumFrames;
 
-	std::string m_objectName = "";
-	std::string m_factoryID = "";
-	std::string m_textureID = "";
+	std::string m_sObjectName = "";
+	std::string m_sFactoryID = "";
+	std::string m_sTextureID = "";
 
-	bool m_collidable = false;
-	bool m_overlap = false;
+	bool m_bCollides = false;
+	bool m_bOverlap = false;
 
-	bool m_isOverlapping = false;
+	bool m_bIsOverlapping = false;
 	bool m_bCancelMovementOnOverlap = false;
+
+	EDirection m_eObjectDirection = EDirection::NONE;
+
+	std::vector<int, bool> m_aCollisionChannels;
+
 #ifdef _GAME_
 	IGame* pGame = nullptr;
 	ITextureManager* pTex = nullptr;

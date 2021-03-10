@@ -12,45 +12,64 @@
 #include "WarspiteObject.h"
 
 CWarspiteObject::CWarspiteObject() 
-	: IGameObject(), m_height(0), m_width(0), 
-	m_numFrames(1), m_currentFrame(0), m_currentRow(0)
+	: IGameObject(), m_iHeight(0), m_iWidth(0), 
+	m_iNumFrames(1), m_iCurrentFrame(0), m_iCurrentRow(0)
 {
 #ifdef _GAME_
 	pTex = (ITextureManager*)CGame::Instance()->GetPointers()[ESingletonIDs::TEXTUREMANAGER];
 	pGame = (IGame*)CGame::Instance()->GetPointers()[ESingletonIDs::GAME];
 #endif
+
+	for (int i = 0; i < 9; i++)
+	{
+		m_aCollisionChannels.push_back(false);
+	}
 }
 
 void CWarspiteObject::Load(CObjectParams* pParams)
 {
-	m_objectName = pParams->GetName();
-	m_factoryID = pParams->GetFactoryID();
+	m_sObjectName = pParams->GetName();
+	m_sFactoryID = pParams->GetFactoryID();
 	
-	m_position = CVector2D(pParams->GetX(), pParams->GetY());
-	m_velocity = CVector2D(0, 0);
-	m_acceleration = CVector2D(0, 0);
+	m_vPosition = CVector2D(pParams->GetX(), pParams->GetY());
+	m_vVelocity = CVector2D(0, 0);
+	m_vAcceleration = CVector2D(0, 0);
 
-	m_width = pParams->GetProperty<int>("textureWidth");
-	m_height = pParams->GetProperty<int>("textureHeight");
-	m_textureID = pParams->GetProperty<std::string>("textureID");
+	m_iWidth = pParams->GetProperty<int>("textureWidth");
+	m_iHeight = pParams->GetProperty<int>("textureHeight");
+	m_sTextureID = pParams->GetProperty<std::string>("textureID");
 
-	m_currentRow = 1;
-	m_currentFrame = 0;
-	m_numFrames = pParams->GetProperty<int>("numFrames");
+	m_iCurrentRow = 1;
+	m_iCurrentFrame = 0;
+	m_iNumFrames = pParams->GetProperty<int>("numFrames");
 }
 
 void CWarspiteObject::OnOverlapStart()
 {
-	m_isOverlapping = true;
+	m_bIsOverlapping = true;
 
-	spdlog::debug("[{}] Overlapping start!", m_objectName);
+	spdlog::debug("[{}] Overlapping start!", m_sObjectName);
 }
 
 void CWarspiteObject::OnOverlapEnd()
 {
-	m_isOverlapping = false;
+	m_bIsOverlapping = false;
 
-	spdlog::debug("[{}] Overlapping end!", m_objectName);
+	spdlog::debug("[{}] Overlapping end!", m_sObjectName);
+}
+
+void CWarspiteObject::SetCollisionOnChannel(ECollisionChannel pChannel, bool pState)
+{
+	if (pChannel == ECollisionChannel::NONE) return;
+
+	m_aCollisionChannels[int(pChannel) - 1] = pState;
+}
+
+bool CWarspiteObject::CollidesOnChannel(ECollisionChannel pChannel)
+{
+	if (pChannel == ECollisionChannel::NONE) return false;
+
+	return m_aCollisionChannels[int(pChannel) - 1];
 }
 
 void CWarspiteObject::OnPlay()
@@ -60,18 +79,18 @@ void CWarspiteObject::OnPlay()
 void CWarspiteObject::Draw()
 {
 #ifdef _ENGINE_
-	if (m_velocity.GetX() > 0)
+	if (m_vVelocity.GetX() > 0)
 	{
-		CTextureManager::Instance()->DrawFrame(m_textureID, (int)m_position.GetX(),
-			(int)m_position.GetY(), m_width, m_height, 
-			m_currentRow, m_currentFrame, CBaseGame::Instance()->GetRenderer(), 
+		CTextureManager::Instance()->DrawFrame(m_sTextureID, (int)m_vPosition.GetX(),
+			(int)m_vPosition.GetY(), m_iWidth, m_iHeight,
+			m_iCurrentRow, m_iCurrentFrame, CBaseGame::Instance()->GetRenderer(),
 			SDL_FLIP_HORIZONTAL);
 	}
 	else
 	{
-		CTextureManager::Instance()->DrawFrame(m_textureID, (int)m_position.GetX(),
-			(int)m_position.GetY(), m_width, m_height,
-			m_currentRow, m_currentFrame, CBaseGame::Instance()->GetRenderer());
+		CTextureManager::Instance()->DrawFrame(m_sTextureID, (int)m_vPosition.GetX(),
+			(int)m_vPosition.GetY(), m_iWidth, m_iHeight,
+			m_iCurrentRow, m_iCurrentFrame, CBaseGame::Instance()->GetRenderer());
 	}
 #elif _GAME_
 	if (m_velocity.GetX() > 0)
@@ -92,8 +111,8 @@ void CWarspiteObject::Draw()
 
 bool CWarspiteObject::OnThink()
 {
-	m_velocity += m_acceleration;  
-	m_position += m_velocity;
+	m_vVelocity += m_vAcceleration;  
+	m_vPosition += m_vVelocity;
 
 	return true;
 }

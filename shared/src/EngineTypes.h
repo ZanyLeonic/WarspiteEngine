@@ -57,6 +57,20 @@ enum class ECollisionResult
 	OVERLAP = 2
 };
 
+enum class ECollisionChannel
+{
+	NONE = 0,
+	CHANNEL_1 = 1, // 
+	CHANNEL_2 = 2,
+	CHANNEL_3 = 3,
+	CHANNEL_4 = 4,
+	CHANNEL_5 = 5,
+	CHANNEL_6 = 6,
+	CHANNEL_7 = 7,
+	CHANNEL_8 = 8,
+	CHANNEL_9 = 9,
+};
+
 enum class EDirection
 {
 	NONE = 0,

@@ -103,6 +103,7 @@ bool CBaseGame::Init(const char* title, int xpos, int ypos, int width, int heigh
 
 		spdlog::info("Initalisation success");
 		m_bRunning = true; // everything inited successfully, start the main loop
+		SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, 0);
 
 		// Allow the GameDLL to access the pointers of our Singletons
 		// It is a nasty implementation, but I am not entirely sure how to do otherwise.
