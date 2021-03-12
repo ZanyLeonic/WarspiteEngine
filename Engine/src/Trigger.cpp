@@ -9,8 +9,8 @@ CTrigger::CTrigger()
 {
 	m_bFireOnce = false; // for now
 	m_bCancelMovementOnOverlap = false;
-	m_collidable = false;
-	m_overlap = true;
+	m_bCollides = false;
+	m_bOverlap = true;
 	m_bFiredStart = false;
 	m_bFiredEnd = false;
 }
@@ -34,13 +34,13 @@ void CTrigger::OnPlay()
 	if (!m_hOverlapStartCallback)
 	{
 		spdlog::warn("[{}] Trigger at ({}, {}) spawned with no valid start overlap associated callback!", 
-			m_objectName, m_position.GetX(), m_position.GetY());
+			GetName(), m_vPosition.GetX(), m_vPosition.GetY());
 	}
 
 	if (!m_hOverlapEndCallback)
 	{
 		spdlog::warn("[{}] Trigger at ({}, {}) spawned with no valid end overlap associated callback!",
-			m_objectName, m_position.GetX(), m_position.GetY());
+			GetName(), m_vPosition.GetX(), m_vPosition.GetY());
 	}
 }
 

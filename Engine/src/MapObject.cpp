@@ -6,7 +6,7 @@
 CMapObject::CMapObject()
 	: CWarspiteObject()
 {
-	m_collidable = true;
+	m_bCollides = true;
 }
 
 void CMapObject::Draw()
@@ -17,18 +17,18 @@ void CMapObject::Draw()
 		CVector2D cPos = CCamera::Instance()->GetPositionT();
 
 		// Flip the sprite automatically if the velocity is negative.
-		if (m_velocity.GetX() > 0)
+		if (m_vVelocity.GetX() > 0)
 		{
-			CTextureManager::Instance()->DrawFrame(m_textureID,
-				int(m_position.GetX() - cPos.GetX()), int(m_position.GetY() - cPos.GetY()),
-				m_width, m_height, m_currentRow, m_currentFrame,
+			CTextureManager::Instance()->DrawFrame(m_sTextureID,
+				int(m_vPosition.GetX() - cPos.GetX()), int(m_vPosition.GetY() - cPos.GetY()),
+				m_iWidth, m_iHeight, m_iCurrentRow, m_iCurrentFrame,
 				CBaseGame::Instance()->GetRenderer(), SDL_FLIP_HORIZONTAL);
 		}
 		else
 		{
-			CTextureManager::Instance()->DrawFrame(m_textureID,
-				int(m_position.GetX() - cPos.GetX()), int(m_position.GetY() - cPos.GetY()),
-				m_width, m_height, m_currentRow, m_currentFrame,
+			CTextureManager::Instance()->DrawFrame(m_sTextureID,
+				int(m_vPosition.GetX() - cPos.GetX()), int(m_vPosition.GetY() - cPos.GetY()),
+				m_iWidth, m_iHeight, m_iCurrentRow, m_iCurrentFrame,
 				CBaseGame::Instance()->GetRenderer());
 		}
 	}

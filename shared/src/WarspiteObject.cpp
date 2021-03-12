@@ -22,7 +22,10 @@ CWarspiteObject::CWarspiteObject()
 
 	for (int i = 0; i < 9; i++)
 	{
-		m_aCollisionChannels.push_back(false);
+		if (i == 0)
+			m_aCollisionChannels.push_back(true);
+		else
+			m_aCollisionChannels.push_back(false);
 	}
 }
 
@@ -72,6 +75,13 @@ bool CWarspiteObject::CollidesOnChannel(ECollisionChannel pChannel)
 	return m_aCollisionChannels[int(pChannel) - 1];
 }
 
+bool CWarspiteObject::InteractAction(IGameObject* pOther)
+{
+	spdlog::info("[{}] Interaction triggered by \"{}\"", GetName(), pOther->GetName());
+
+	return true;
+}
+
 void CWarspiteObject::OnPlay()
 {
 }
@@ -93,18 +103,18 @@ void CWarspiteObject::Draw()
 			m_iCurrentRow, m_iCurrentFrame, CBaseGame::Instance()->GetRenderer());
 	}
 #elif _GAME_
-	if (m_velocity.GetX() > 0)
+	if (m_vVelocity.GetX() > 0)
 	{
-		pTex->DrawFrame(m_textureID, (int)m_position.GetX(),
-			(int)m_position.GetY(), m_width, m_height,
-			m_currentRow, m_currentFrame, pGame->GetRenderer(),
+		pTex->DrawFrame(m_sTextureID, (int)m_vPosition.GetX(),
+			(int)m_vPosition.GetY(), m_iWidth, m_iHeight,
+			m_iCurrentRow, m_iCurrentFrame, pGame->GetRenderer(),
 			0.0, nullptr, EWarRendererFlip::FLIP_HORIZONTAL);
 	}
 	else
 	{
-		pTex->DrawFrame(m_textureID, (int)m_position.GetX(),
-			(int)m_position.GetY(), m_width, m_height,
-			m_currentRow, m_currentFrame, pGame->GetRenderer());
+		pTex->DrawFrame(m_sTextureID, (int)m_vPosition.GetX(),
+			(int)m_vPosition.GetY(), m_iWidth, m_iHeight,
+			m_iCurrentRow, m_iCurrentFrame, pGame->GetRenderer());
 	}
 #endif
 }

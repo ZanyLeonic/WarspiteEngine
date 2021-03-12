@@ -15,11 +15,13 @@
 CPlayer::CPlayer()
 	: CWarspiteObject()
 {
+	pUseSound = new SWaveFile();
+	pDenyUseSound = new SWaveFile();
 }
 
 void CPlayer::OnPlay()
 {
-	// CCamera::Instance()->SetTarget(&m_position);
+	// CCamera::Instance()->SetTarget(&m_vPosition);
 	CInputHandler::Instance()->AddActionKeyDown(SDL_SCANCODE_E, std::bind(&CPlayer::InteractAction, this, std::placeholders::_1));
 
 	// Input binding
@@ -32,6 +34,9 @@ void CPlayer::OnPlay()
 	CInputHandler::Instance()->SetAxisValue("MoveForward", SDL_SCANCODE_S, 1.f);
 	CInputHandler::Instance()->SetAxisValue("MoveRight", SDL_SCANCODE_A, -1.f);
 	CInputHandler::Instance()->SetAxisValue("MoveRight", SDL_SCANCODE_D, 1.f);
+
+	CSoundManager::Instance()->Load(CEngineFileSystem::ResolvePath("use.wav", CEngineFileSystem::EPathType::SOUND), *pUseSound);
+	CSoundManager::Instance()->Load(CEngineFileSystem::ResolvePath("denyuse.wav", CEngineFileSystem::EPathType::SOUND), *pDenyUseSound);
 }
 
 void CPlayer::Load(CObjectParams* pParams)
@@ -52,7 +57,7 @@ bool CPlayer::OnThink()
 		CCamera::Instance()->SetTarget(&m_vPosition);
 		if (CSoundManager::Instance()->IsInitialised())
 		{
-			// alCall(alListener3f, AL_POSITION, m_position.GetX(), m_position.GetY(), 0.f);
+			// alCall(alListener3f, AL_POSITION, m_vPosition.GetX(), m_vPosition.GetY(), 0.f);
 		}
 
 		
@@ -73,14 +78,14 @@ void CPlayer::Draw()
 	if (m_vVelocity.GetX() > 0)
 	{
 		CTextureManager::Instance()->DrawFrame(m_sTextureID,
-			m_vPosition.GetX() - cPos.GetX(), m_vPosition.GetY() - cPos.GetY(),
+			int(m_vPosition.GetX() - cPos.GetX()), int(m_vPosition.GetY() - cPos.GetY()),
 			m_iWidth, m_iHeight, m_iCurrentRow, m_iCurrentFrame,
 			CBaseGame::Instance()->GetRenderer(), SDL_FLIP_HORIZONTAL);
 	}
 	else
 	{
 		CTextureManager::Instance()->DrawFrame(m_sTextureID,
-			m_vPosition.GetX() - cPos.GetX(), m_vPosition.GetY() - cPos.GetY(),
+			int(m_vPosition.GetX() - cPos.GetX()), int(m_vPosition.GetY() - cPos.GetY()),
 			m_iWidth, m_iHeight, m_iCurrentRow, m_iCurrentFrame,
 			CBaseGame::Instance()->GetRenderer());
 	}
@@ -195,9 +200,25 @@ void CPlayer::InteractAction(SDL_Scancode key)
 		break;
 	}
 
-	SCollisionData r = CBaseGame::Instance()->GetStateManager()->IsColliding(curPos);
+	if (UseObject(&curPos))
+	{
+		CSoundManager::Instance()->PlaySound(pUseSound);
+	}
+	else
+	{
+		CSoundManager::Instance()->PlaySound(pDenyUseSound);
+	}
+}
 
-	r.m_otherObject->
+bool CPlayer::UseObject(CVector2D* pNext)
+{
+	SCollisionData r = CBaseGame::Instance()->GetStateManager()->IsColliding(*pNext);
+
+	if (m_bMoving) return false;
+	if (r.m_result != ECollisionResult::COLLIDED) return false;
+	if (!r.m_otherObject->CollidesOnChannel(ECollisionChannel::CHANNEL_1)) return false;
+
+	return r.m_otherObject->InteractAction(this);
 }
 
 void CPlayer::MoveForward(float axis)

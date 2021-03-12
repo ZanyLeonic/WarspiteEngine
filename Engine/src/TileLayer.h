@@ -47,8 +47,8 @@ private:
 	int m_tileSize;
 	
 	CVector2D m_lastCamPos;
-	CVector2D m_position;
-	CVector2D m_velocity;
+	CVector2D m_vPosition;
+	CVector2D m_vVelocity;
 
 	std::vector<STileset> mi_tilesets = std::vector<STileset>();
 	std::vector<STileset>& m_tilesets = mi_tilesets;

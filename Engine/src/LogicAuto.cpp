@@ -3,7 +3,7 @@
 
 CLogicAuto::CLogicAuto()
 {
-	m_collidable = false;
+	m_bCollides = false;
 }
 
 void CLogicAuto::OnPlay()
@@ -20,6 +20,6 @@ void CLogicAuto::Load(CObjectParams* pParams)
 {
 	CTileObject::Load(pParams);
 
-	m_position = CVector2D(pParams->GetX(), pParams->GetY());
+	m_vPosition = CVector2D(pParams->GetX(), pParams->GetY());
 	m_scriptName = pParams->GetProperty<std::string>("runScript");
 }

@@ -8,9 +8,9 @@ CEnemy::CEnemy()
 
 bool CEnemy::OnThink()
 {
-	m_position.SetX(m_position.GetX() + 1);  
-	m_position.SetY(m_position.GetY() + 1);
-	m_currentFrame = int(((SDL_GetTicks() / 100) % 8));
+	m_vPosition.SetX(m_vPosition.GetX() + 1);  
+	m_vPosition.SetY(m_vPosition.GetY() + 1);
+	m_iCurrentFrame = int(((SDL_GetTicks() / 100) % 8));
 
 	return true;
 }

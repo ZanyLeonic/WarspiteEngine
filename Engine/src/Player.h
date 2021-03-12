@@ -7,6 +7,7 @@
 #include "EngineTypes.h"
 
 class CPlayer;
+struct SWaveFile;
 
 typedef std::function<void(CPlayer*)> HPlayerCallback;
 
@@ -23,8 +24,7 @@ public:
 	bool OnThink();
 	void Draw();
 
-	void SetNextLocation(CVector2D nextLocation, float pos, bool callCallbacks=false);
-	void SetDirection(EDirection direction) { m_ePlayerDirection = direction; }
+	void SetNextLocation(CVector2D nextLocation, float pos, bool callCallbacks = false);
 
 	void DisablePlayerInput(bool newState) { m_bDisablePlayerInput = newState; }
 	bool IsPlayerInputDisabled() const { return m_bDisablePlayerInput; }
@@ -39,7 +39,9 @@ public:
 
 private:
 	void HandleInput();
+
 	void InteractAction(SDL_Scancode key);
+	bool UseObject(CVector2D* pNext);
 
 	void MoveForward(float axis);
 	void MoveRight(float axis);
@@ -76,6 +78,9 @@ private:
 
 	CVector2D m_vCamOffset;
 	SCollisionData m_sLastCollision;
+
+	SWaveFile* pUseSound = 0;
+	SWaveFile* pDenyUseSound = 0;
 };
 
 REG_OBJ_TO_REF( Player, CPlayer ) ;

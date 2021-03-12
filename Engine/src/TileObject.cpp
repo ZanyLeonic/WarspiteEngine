@@ -20,7 +20,7 @@ void CTileObject::Draw()
 		CVector2D cPos = CCamera::Instance()->GetPositionT();
 
 		CTextureManager::Instance()->DrawTile(m_tileset->Name, m_tileset->Margin, m_tileset->Spacing,
-			int(m_position.GetX() - cPos.GetX()), int(m_position.GetY() - cPos.GetY()), 
+			int(m_vPosition.GetX() - cPos.GetX()), int(m_vPosition.GetY() - cPos.GetY()), 
 			m_tileset->TileWidth, m_tileset->TileHeight, // X, Y, width and height
 			(m_gid - (m_tileset->FirstGID)) / m_tileset->NumColumns, (m_gid - (m_tileset->FirstGID)) % m_tileset->NumColumns, // Row and frame
 			CBaseGame::Instance()->GetRenderer());

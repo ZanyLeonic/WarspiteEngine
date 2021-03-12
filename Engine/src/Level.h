@@ -82,7 +82,7 @@ private:
 	std::string m_path;
 
 	int m_tileSize;
-	int m_width;
-	int m_height;
+	int m_iWidth;
+	int m_iHeight;
 };
 #endif

@@ -10,7 +10,7 @@ void CAnimatedGraphic::Load(CObjectParams* pParams)
 
 bool CAnimatedGraphic::OnThink()
 {
-	m_currentFrame = int(((SDL_GetTicks() / (1000 / m_animSpeed)) % m_numFrames));
+	m_iCurrentFrame = int(((SDL_GetTicks() / (1000 / m_animSpeed)) % m_iNumFrames));
 	CWarspiteObject::OnThink();
 	
 	return true;

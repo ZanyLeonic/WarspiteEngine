@@ -8,14 +8,14 @@
 
 CFPSCounter::CFPSCounter()
 {
-	m_textureID = "__engineFPS";
+	m_sTextureID = "__engineFPS";
 	CFontManager::Instance()->LoadFont(CEngineFileSystem::ResolvePath("Roboto.json", CEngineFileSystem::EPathType::FONTS), "Regular", 16);
 }
 
 CFPSCounter::~CFPSCounter()
 {
-	if (CTextureManager::Instance()->m_textureMap[m_textureID] != nullptr)
-		SDL_DestroyTexture(CTextureManager::Instance()->m_textureMap[m_textureID]->GetTexture());
+	if (CTextureManager::Instance()->m_textureMap[m_sTextureID] != nullptr)
+		SDL_DestroyTexture(CTextureManager::Instance()->m_textureMap[m_sTextureID]->GetTexture());
 	CFontManager::Instance()->RemoveFont("Roboto", "Regular", 16);
 }
 
@@ -28,17 +28,17 @@ void CFPSCounter::Draw()
 {
 	if (m_fps != m_lfps)
 	{
-		if (CTextureManager::Instance()->m_textureMap[m_textureID] != nullptr)
-			SDL_DestroyTexture(CTextureManager::Instance()->m_textureMap[m_textureID]->GetTexture());
+		if (CTextureManager::Instance()->m_textureMap[m_sTextureID] != nullptr)
+			SDL_DestroyTexture(CTextureManager::Instance()->m_textureMap[m_sTextureID]->GetTexture());
 
-		CFontManager::Instance()->RenderText(fmt::format(FMT_STRING("FPS: {}"), (int)m_fps), "Roboto-Regular-16", m_textureID, CFontManager::EFontRenderType::SOLID, { 255, 255, 0 });
+		CFontManager::Instance()->RenderText(fmt::format(FMT_STRING("FPS: {}"), (int)m_fps), "Roboto-Regular-16", m_sTextureID, CFontManager::EFontRenderType::SOLID, { 255, 255, 0 });
 		
-		m_width = CTextureManager::Instance()->m_textureMap[m_textureID]->GetWidth();
-		m_height = CTextureManager::Instance()->m_textureMap[m_textureID]->GetHeight();
+		m_iWidth = CTextureManager::Instance()->m_textureMap[m_sTextureID]->GetWidth();
+		m_iHeight = CTextureManager::Instance()->m_textureMap[m_sTextureID]->GetHeight();
 		m_lfps = m_fps;
 	}
 
-	CTextureManager::Instance()->Draw(m_textureID, 0, 0, m_width, m_height, CBaseGame::Instance()->GetRenderer());
+	CTextureManager::Instance()->Draw(m_sTextureID, 0, 0, m_iWidth, m_iHeight, CBaseGame::Instance()->GetRenderer());
 }
 
 void CFPSCounter::SetFPSValue(float fps)

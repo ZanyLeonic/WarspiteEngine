@@ -25,11 +25,11 @@ public:
 	void OnThink();
 
 	void SetTarget(CVector2D* target) { m_pTarget = target; }
-	void SetPosition(const CVector2D& position) { m_position = position; }
+	void SetPosition(const CVector2D& position) { m_vPosition = position; }
 	void SetLevelSize(const CVector2D& sz) { m_levelSize = sz; }
 	
 	CVector2D GetLevelSize() const { return m_levelSize; }
-	CVector2D GetPosition() const { return m_position; }
+	CVector2D GetPosition() const { return m_vPosition; }
 	CVector2D GetPositionT() const;
 	CVector2D* GetTarget() const { return m_pTarget; }
 
@@ -39,7 +39,7 @@ private:
 
 	CVector2D* m_pTarget = 0;
 	
-	CVector2D m_position;
+	CVector2D m_vPosition;
 	CVector2D m_levelSize;
 	PCameraPtr m_cameraPtr;
 	

@@ -14,7 +14,7 @@ void CTileLayer::Destroy()
 
 void CTileLayer::OnThink()
 {
-	m_position += m_velocity;
+	m_vPosition += m_vVelocity;
 }
 
 void CTileLayer::Draw()

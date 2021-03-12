@@ -3,7 +3,7 @@
 CUIBase::CUIBase() :
 	CWarspiteObject()
 {
-	m_collidable = false;
+	m_bCollides = false;
 
 	// Initial callbacks
 	if (m_OnClick == 0) m_OnClick = std::bind(&CUIBase::onClick, this);

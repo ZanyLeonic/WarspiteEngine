@@ -6,18 +6,18 @@
 
 CFadeObject::CFadeObject()
 {
-	m_textureID = "_fade";
-	m_objectName = "FadeObject";
+	m_sTextureID = "_fade";
+	m_sObjectName = "FadeObject";
 
-	m_width = (int)CBaseGame::Instance()->GetViewportSize().GetX();
-	m_height = (int)CBaseGame::Instance()->GetViewportSize().GetY();
-	m_position = CVector2D(0, 0);
+	m_iWidth = (int)CBaseGame::Instance()->GetViewportSize().GetX();
+	m_iHeight = (int)CBaseGame::Instance()->GetViewportSize().GetY();
+	m_vPosition = CVector2D(0, 0);
 
 	m_bCancelMovementOnOverlap = false;
-	m_overlap = false;
-	m_collidable = false;
+	m_bOverlap = false;
+	m_bCollides = false;
 
-	m_pFadeTexture = CTextureManager::Instance()->m_textureMap[m_textureID];
+	m_pFadeTexture = CTextureManager::Instance()->m_textureMap[m_sTextureID];
 }
 
 void CFadeObject::Draw()

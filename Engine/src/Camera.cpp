@@ -46,5 +46,5 @@ CVector2D CCamera::GetPositionT() const
 	}
 
 	// No target? return the last stored position.
-	return m_position;
+	return m_vPosition;
 }

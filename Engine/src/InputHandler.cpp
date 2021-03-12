@@ -14,7 +14,7 @@ CInputHandler::CInputHandler()
 		m_mouseButtonStates.push_back(false);
 	}
 
-	// Expose the current camera to the Python API
+	// Expose the input interface to the Python API
 	if (CScriptManager::Instance()->GetEngineModule().attr(INPUTOBJECT_NAME).is_none())
 	{
 		m_inputPtr = std::make_shared<SInputObject>(SInputObject(this));
@@ -169,7 +169,9 @@ void CInputHandler::AddActionKeyDown(SDL_Scancode key, HKeyCallback callBack)
 	{
 		m_keyReleased[key] = true;
 	}
+
 	m_actionKeyDownCallbacks[key] = callBack;
+	m_actionKeyUpCallbacks[key] = sBlankCallback;
 }
 
 void CInputHandler::AddActionKeyUp(SDL_Scancode key, HKeyCallback callBack)
@@ -178,7 +180,9 @@ void CInputHandler::AddActionKeyUp(SDL_Scancode key, HKeyCallback callBack)
 	{
 		m_keyReleased[key] = true;
 	}
+
 	m_actionKeyUpCallbacks[key] = callBack;
+	m_actionKeyDownCallbacks[key] = sBlankCallback;
 }
 
 void CInputHandler::RemoveActionKeyDown(SDL_Scancode key)

@@ -62,12 +62,13 @@ public:
 	void OnOverlapStart();
 	void OnOverlapEnd();
 
-
 	void SetObjectDirection(EDirection pDir) { m_eObjectDirection = pDir; }
 	EDirection GetObjectDirection() { return m_eObjectDirection; };
 
 	void SetCollisionOnChannel(ECollisionChannel pChannel, bool pState);
 	bool CollidesOnChannel(ECollisionChannel pChannel);
+
+	bool InteractAction(IGameObject* pOther);
 	
 protected:
 	CVector2D m_vPosition;
@@ -93,7 +94,7 @@ protected:
 
 	EDirection m_eObjectDirection = EDirection::NONE;
 
-	std::vector<int, bool> m_aCollisionChannels;
+	std::vector<bool> m_aCollisionChannels;
 
 #ifdef _GAME_
 	IGame* pGame = nullptr;

@@ -30,8 +30,8 @@ public:
 	SDL_Texture* GetTexture() const { return m_texture; }
 
 	//Gets image dimensions
-	int GetWidth() const { return m_width; }
-	int GetHeight() const { return m_height; }
+	int GetWidth() const { return m_iWidth; }
+	int GetHeight() const { return m_iHeight; }
 
 	double GetAngle() const { return m_angle; }
 	SDL_Point* GetCenter() const { return m_center; }
@@ -42,8 +42,8 @@ private:
 	SDL_Texture* m_texture;
 	SDL_Point* m_center;
 
-	int m_width = 0;
-	int m_height = 0;
+	int m_iWidth = 0;
+	int m_iHeight = 0;
 
 	double m_angle = 0.f;
 };

@@ -101,6 +101,8 @@ private:
 	void onJoystickButtonDown(SDL_Event& event);
 	void onJoystickButtonUp(SDL_Event& event);
 
+	static void sBlankCallback(SDL_Scancode e) {};
+
 	std::vector<SDL_Joystick*> m_joysticks;
 	bool m_bJoysticksInitialised;
 

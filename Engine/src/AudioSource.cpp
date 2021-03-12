@@ -86,7 +86,7 @@ void CAudioSource::Pause()
 	switch (m_soundType)
 	{
 	case ESoundType::SOUND_SFX:
-		spdlog::warn("[{}] Pausing is not supported for sound effects", m_objectName);
+		spdlog::warn("[{}] Pausing is not supported for sound effects", GetName());
 		break;
 	case ESoundType::SOUND_MUSIC:
 		if (m_streamData)

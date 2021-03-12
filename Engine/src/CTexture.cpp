@@ -10,7 +10,7 @@ CTexture::CTexture(SDL_Texture* nTex, double angle, SDL_Point* center)
 	m_angle = angle;
 	m_center = center;
 	if (m_texture != nullptr)
-		SDL_QueryTexture(m_texture, NULL, NULL, &m_width, &m_height);
+		SDL_QueryTexture(m_texture, NULL, NULL, &m_iWidth, &m_iHeight);
 }
 
 CTexture::~CTexture()
@@ -33,7 +33,7 @@ bool CTexture::Load(std::string path)
 		SDL_CreateTextureFromSurface(CBaseGame::Instance()->GetRenderer(), pTempSurface);
 
 	SDL_FreeSurface(pTempSurface);
-	SDL_QueryTexture(pTexture, NULL, NULL, &m_width, &m_height);
+	SDL_QueryTexture(pTexture, NULL, NULL, &m_iWidth, &m_iHeight);
 
 	// we have loaded the texture ok, add it to the map!
 	if (pTexture != 0)
@@ -52,8 +52,8 @@ void CTexture::Free()
 	{
 		SDL_DestroyTexture(m_texture);
 		m_texture = nullptr;
-		m_width = 0;
-		m_height = 0;
+		m_iWidth = 0;
+		m_iHeight = 0;
 	}
 }
 

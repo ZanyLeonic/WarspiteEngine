@@ -28,6 +28,8 @@ public:
     void SetTravelledTo(bool travelled) { m_bTravelledTo = travelled; }
 
     void PlayDoorAnimation(EPlaybackDirection direction);
+
+    bool InteractAction(IGameObject* pOther);
 private:
     std::string m_sTargetDoorID;
     std::string m_sWorldTextureID;

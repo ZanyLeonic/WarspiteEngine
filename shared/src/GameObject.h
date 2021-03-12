@@ -33,6 +33,8 @@ public:
 	virtual EDirection GetObjectDirection() = 0;
 	virtual bool CollidesOnChannel(ECollisionChannel pChannel) = 0;
 
+	virtual bool InteractAction(IGameObject* pOther) = 0;
+
 	IGameObject() {} 
 	virtual ~IGameObject() {}
 };

@@ -5,7 +5,7 @@
 CButton::CButton() :
 	CUIBase()
 {
-	m_currentFrame = NO_HOVER; // Frame 0
+	m_iCurrentFrame = NO_HOVER; // Frame 0
 	m_initalPos = *CInputHandler::Instance()->GetMousePosition();
 }
 
@@ -19,15 +19,15 @@ bool CButton::OnThink()
 	if (m_initalPos == *pMousePos) return false;
 
 	// Is it within the boundaries of the CButton?
-	if (pMousePos->GetX() < (m_position.GetX() + m_width)
-		&& pMousePos->GetX() > m_position.GetX()
-		&& pMousePos->GetY() < (m_position.GetY() + m_height)
-		&& pMousePos->GetY() > m_position.GetY())
+	if (pMousePos->GetX() < (m_vPosition.GetX() + m_iWidth)
+		&& pMousePos->GetX() > m_vPosition.GetX()
+		&& pMousePos->GetY() < (m_vPosition.GetY() + m_iHeight)
+		&& pMousePos->GetY() > m_vPosition.GetY())
 	{
 		// Have they pressed down on the CButton while within the boundaries?
 		if (CInputHandler::Instance()->GetMouseButtonState(LEFT) && m_bReleased)
 		{
-			m_currentFrame = PRESSED;
+			m_iCurrentFrame = PRESSED;
 			if (!m_OnClick()) // call the callback noooow!
 			{
 				return false;
@@ -37,14 +37,14 @@ bool CButton::OnThink()
 		else if (!CInputHandler::Instance()->GetMouseButtonState(LEFT))
 		{
 			m_bReleased = true;
-			m_currentFrame = HOVER;
+			m_iCurrentFrame = HOVER;
 			m_OnEnter();
 		}
 	}
-	else if (m_currentFrame != NO_HOVER)
+	else if (m_iCurrentFrame != NO_HOVER)
 	{
 		// reset yourself
-		m_currentFrame = NO_HOVER;
+		m_iCurrentFrame = NO_HOVER;
 		m_OnLeave();
 	}
 

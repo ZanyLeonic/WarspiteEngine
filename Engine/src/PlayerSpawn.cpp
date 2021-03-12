@@ -5,9 +5,9 @@ CPlayerSpawn::CPlayerSpawn()
 	: CTileObject()
 {
 	// Setup this object
-	m_overlap = false;
+	m_bOverlap = false;
 	m_bCancelMovementOnOverlap = false;
-	m_collidable = false;
+	m_bCollides = false;
 }
 
 void CPlayerSpawn::Load(CObjectParams* pParams)
