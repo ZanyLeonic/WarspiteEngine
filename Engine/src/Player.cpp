@@ -60,7 +60,6 @@ bool CPlayer::OnThink()
 			// alCall(alListener3f, AL_POSITION, m_vPosition.GetX(), m_vPosition.GetY(), 0.f);
 		}
 
-		
 		DecideFrame();
 	}
 

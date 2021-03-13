@@ -6,6 +6,17 @@
         ]
     },
     {
+        "color": "#ffa0a0a4",
+        "name": "BaseNPC",
+        "properties": [
+            {
+                "name": "worldTexture",
+                "type": "string",
+                "value": ""
+            }
+        ]
+    },
+    {
         "color": "#ffff0000",
         "name": "Bound",
         "properties": [
@@ -21,17 +32,17 @@
         "name": "DoorLink",
         "properties": [
             {
-                "name": "doorWorldTexture",
-                "type": "string",
-                "value": ""
-            },
-            {
                 "name": "locked",
                 "type": "bool",
                 "value": false
             },
             {
                 "name": "targetDoorID",
+                "type": "string",
+                "value": ""
+            },
+            {
+                "name": "worldTexture",
                 "type": "string",
                 "value": ""
             }

@@ -29,7 +29,7 @@ public:
 
     void PlayDoorAnimation(EPlaybackDirection direction);
 
-    bool InteractAction(IGameObject* pOther);
+    bool InteractAction(IGameObject* pOther) override;
 private:
     std::string m_sTargetDoorID;
     std::string m_sWorldTextureID;

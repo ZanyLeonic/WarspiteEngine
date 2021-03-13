@@ -287,14 +287,14 @@
                  "name":"door01",
                  "properties":[
                         {
-                         "name":"doorWorldTexture",
-                         "type":"string",
-                         "value":"door"
-                        }, 
-                        {
                          "name":"targetDoorID",
                          "type":"string",
                          "value":"door02"
+                        }, 
+                        {
+                         "name":"worldTexture",
+                         "type":"string",
+                         "value":"door"
                         }],
                  "rotation":0,
                  "type":"",
@@ -310,14 +310,14 @@
                  "name":"door02",
                  "properties":[
                         {
-                         "name":"doorWorldTexture",
-                         "type":"string",
-                         "value":"door"
-                        }, 
-                        {
                          "name":"targetDoorID",
                          "type":"string",
                          "value":"door01"
+                        }, 
+                        {
+                         "name":"worldTexture",
+                         "type":"string",
+                         "value":"door"
                         }],
                  "rotation":0,
                  "type":"",
@@ -348,6 +348,24 @@
                  "width":32,
                  "x":384,
                  "y":128
+                }, 
+                {
+                 "gid":31,
+                 "height":32,
+                 "id":30,
+                 "name":"TestNPC",
+                 "properties":[
+                        {
+                         "name":"worldTexture",
+                         "type":"string",
+                         "value":"Player"
+                        }],
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":32,
+                 "x":224,
+                 "y":160
                 }],
          "opacity":0.5,
          "type":"objectgroup",
@@ -356,7 +374,7 @@
          "y":0
         }],
  "nextlayerid":6,
- "nextobjectid":30,
+ "nextobjectid":31,
  "orientation":"orthogonal",
  "properties":[
         {

@@ -25,6 +25,10 @@
         {
          "id":3,
          "type":"Bound"
+        }, 
+        {
+         "id":5,
+         "type":"BaseNPC"
         }],
  "tilewidth":32,
  "type":"tileset",

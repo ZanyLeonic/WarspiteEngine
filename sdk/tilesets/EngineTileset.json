@@ -1,4 +1,12 @@
 { "columns":4,
+ "editorsettings":
+    {
+     "export":
+        {
+         "format":"",
+         "target":"."
+        }
+    },
  "image":"..\/textures\/dev\/EngineTileset.png",
  "imageheight":128,
  "imagewidth":128,
@@ -24,6 +32,10 @@
         {
          "id":3,
          "type":"Bound"
+        }, 
+        {
+         "id":5,
+         "type":"BaseNPC"
         }],
  "tilewidth":32,
  "type":"tileset",

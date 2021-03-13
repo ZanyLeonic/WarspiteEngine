@@ -105,6 +105,18 @@ static CVector2D GetForwardVector(EDirection dir)
 	}
 }
 
+static EDirection GetDirectionFromVector(CVector2D pVec)
+{
+	float x = pVec.GetX();
+	float y = pVec.GetY();
+
+	if (x == 0 && y == -1) return EDirection::NORTH;
+	else if (x == 1 && y == 0) return EDirection::EAST;
+	else if (x == 0 && y == 1) return EDirection::SOUTH;
+	else if (x == -1 && y == 0) return EDirection::WEST;
+	else return EDirection::NONE;
+}
+
 static std::string GetDirectionName(EDirection dir)
 {
 	switch (dir)

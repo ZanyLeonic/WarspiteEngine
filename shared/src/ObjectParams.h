@@ -80,7 +80,7 @@ private:
 		{"onLeaveCallback",		              0},
 		{"soundPath",			std::string("")},
 		{"targetDoorID",		std::string("")},
-		{"doorWorldTexture",	std::string("")},
+		{"worldTexture",		std::string("")},
 		{"startOverlapFunc",	std::string("")},
 		{"endOverlapFunc",		std::string("")}
 	};

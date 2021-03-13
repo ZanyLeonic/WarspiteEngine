@@ -11,6 +11,7 @@ set(WarspiteEngine_Src
         src/AudioSource.cpp
         src/AnimatedGraphic.cpp
         src/Button.cpp
+        src/BaseNPC.cpp
         src/Camera.cpp
         ../shared/src/CallbackHandler.cpp
         src/CTexture.cpp
@@ -31,7 +32,6 @@ set(WarspiteEngine_Src
 		src/GarbageCollector.cpp
         src/InputHandler.cpp
         src/InputState.cpp
-        src/InteractableObject.cpp
         src/Level.cpp
         src/LevelParser.cpp
         src/LogicAuto.cpp
@@ -61,6 +61,7 @@ set(WarspiteEngine_Header
         src/AudioSource.h
         src/AnimatedGraphic.h
         src/Button.h
+        src/BaseNPC.h
         src/Camera.h
         ../shared/src/CallbackHandler.h
         src/CTexture.h
@@ -84,7 +85,6 @@ set(WarspiteEngine_Header
 		src/GarbageCollector.h
         src/InputHandler.h
         src/InputState.h
-        src/InteractableObject.h
         ../shared/src/Layer.h
         src/Level.h
         src/LevelParser.h
