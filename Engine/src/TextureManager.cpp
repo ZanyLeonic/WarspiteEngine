@@ -101,7 +101,10 @@ void CTextureManager::CreateCheckboardPattern(CVector2D size, std::string texNam
 void CTextureManager::CreateEngineTextures(CVector2D resolution, SDL_Renderer* pRenderer)
 {
 	SDL_Texture* pTexture = SDL_CreateTexture(pRenderer, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_TARGET, (int)resolution.GetX(), (int)resolution.GetY());
+	SDL_Texture* pTexture1 = SDL_CreateTexture(pRenderer, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_TARGET, (int)resolution.GetX(), (int)resolution.GetY());
+	
 	SDL_SetTextureBlendMode(pTexture, SDL_BLENDMODE_BLEND);
+	SDL_SetTextureBlendMode(pTexture1, SDL_BLENDMODE_BLEND);
 
 	SDL_SetRenderTarget(pRenderer, pTexture);
 
@@ -112,7 +115,15 @@ void CTextureManager::CreateEngineTextures(CVector2D resolution, SDL_Renderer* p
 
 	SDL_RenderFillRect(pRenderer, &r);
 
+	SDL_SetRenderTarget(pRenderer, pTexture1);
+
+	SDL_SetRenderDrawColor(pRenderer, 0x00, 0x00, 0x00, 0x80);
+	SDL_RenderClear(pRenderer);
+
+	SDL_RenderFillRect(pRenderer, &r);
+
 	m_textureMap["_fade"] = new CTexture(pTexture);
+	m_textureMap["_diagBG"] = new CTexture(pTexture1);
 
 	SDL_SetRenderTarget(pRenderer, NULL);
 	SDL_RenderPresent(pRenderer);

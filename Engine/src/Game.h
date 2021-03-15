@@ -60,9 +60,9 @@ public:
 	CGarbageCollector* const GetGarbageCollector() { return m_pGarbageCollector; }
 	CCallbackHandler<HGenericCallback>* const GetCallbackHandler() { return m_pCallbackHandler; }
 
-	CFadeObject* const GetFadeObject() { return m_pFadeObject; }
+	CFadeObject* GetFadeObject() { return m_pFadeObject; }
 
-	CVector2D const GetViewportSize() { return m_viewportSize; }
+	CVector2D GetViewportSize() { return m_viewportSize; }
 
 	void SetPlayer(std::shared_ptr<IGameObject> pNO) { m_pPlayer = pNO; }
 	std::shared_ptr<IGameObject> const GetPlayer() { return m_pPlayer; }

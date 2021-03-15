@@ -11,7 +11,7 @@
 
 CInputState::CInputState()
 {
-	CFontManager::Instance()->LoadFont(CEngineFileSystem::ResolvePath("Roboto.json", CEngineFileSystem::EPathType::FONTS), "Light", 28);
+	CFontManager::Instance()->LoadFont(CEngineFileSystem::ResolvePath("Roboto", CEngineFileSystem::EPathType::FONTS), "Light", 28);
 }
 
 bool CInputState::OnPlay()

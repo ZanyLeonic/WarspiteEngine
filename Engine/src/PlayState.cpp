@@ -6,6 +6,7 @@
 #include "StateParser.h"
 #include "LevelParser.h"
 #include "ObjectLayer.h"
+#include "DialogueWindow.h"
 #include <spdlog/spdlog.h>
 
 #include "PlayState.h"
@@ -42,11 +43,7 @@ bool CPlayState::OnPlay()
 		{
 			CBaseGame::Instance()->GetStateManager()->PushState(CGameStateDictionary::Instance()->Create(SID_PAUSE));
 		}
-		});
-
-	CInputHandler::Instance()->AddActionKeyUp(SDL_SCANCODE_ESCAPE, [this](SDL_Scancode e) {
-		return;
-		});
+	});
 
 	// This callback code is disgusting - but it works so I don't care.
 	testStream.PlayCallback = s_PlayCallback;
@@ -61,62 +58,38 @@ bool CPlayState::OnPlay()
 	CInputHandler::Instance()->AddActionKeyDown(SDL_SCANCODE_0, [this](SDL_Scancode e) {
 		CSoundManager::Instance()->Load(CEngineFileSystem::ResolvePath("mycode.wav", CEngineFileSystem::EPathType::SOUND), testFile);
 	});
-	CInputHandler::Instance()->AddActionKeyUp(SDL_SCANCODE_0, [this](SDL_Scancode e) {
-		return;
-	});
 
 	// Load
 	CInputHandler::Instance()->AddActionKeyDown(SDL_SCANCODE_1, [this](SDL_Scancode e) {
 		CSoundManager::Instance()->CreateStreamFromFile(CEngineFileSystem::ResolvePath("teststream.ogg", CEngineFileSystem::EPathType::SOUND), testStream);
 		CSoundManager::Instance()->CreateStreamFromFile(CEngineFileSystem::ResolvePath("teststream2.ogg", CEngineFileSystem::EPathType::SOUND), testStream2);
 	});
-	CInputHandler::Instance()->AddActionKeyUp(SDL_SCANCODE_1, [this](SDL_Scancode e) {
-		return;
-	});
 
 	// Stream 1
 	CInputHandler::Instance()->AddActionKeyDown(SDL_SCANCODE_2, [this](SDL_Scancode e) {
 		CSoundManager::Instance()->PlayStream(&testStream);
 	});
-	CInputHandler::Instance()->AddActionKeyUp(SDL_SCANCODE_2, [this](SDL_Scancode e) {
-		return;
-	});
 
 	CInputHandler::Instance()->AddActionKeyDown(SDL_SCANCODE_3, [this](SDL_Scancode e) {
 		CSoundManager::Instance()->PauseStream(&testStream);
-	});
-	CInputHandler::Instance()->AddActionKeyUp(SDL_SCANCODE_3, [this](SDL_Scancode e) {
-		return;
 	});
 
 	// Stream 2
 	CInputHandler::Instance()->AddActionKeyDown(SDL_SCANCODE_4, [this](SDL_Scancode e) {
 		CSoundManager::Instance()->PlayStream(&testStream2);
 	});
-	CInputHandler::Instance()->AddActionKeyUp(SDL_SCANCODE_4, [this](SDL_Scancode e) {
-		return;
-	});
 
 	// Play
 	CInputHandler::Instance()->AddActionKeyDown(SDL_SCANCODE_5, [this](SDL_Scancode e) {
 		CSoundManager::Instance()->PauseStream(&testStream2);
 	});
-	CInputHandler::Instance()->AddActionKeyUp(SDL_SCANCODE_5, [this](SDL_Scancode e) {
-		return;
-	});
 
 	CInputHandler::Instance()->AddActionKeyDown(SDL_SCANCODE_6, [this](SDL_Scancode e) {
 		CSoundManager::Instance()->StopStream(&testStream);
 	});
-	CInputHandler::Instance()->AddActionKeyUp(SDL_SCANCODE_6, [this](SDL_Scancode e) {
-		return;
-	});
 
 	CInputHandler::Instance()->AddActionKeyDown(SDL_SCANCODE_7, [this](SDL_Scancode e) {
 		CSoundManager::Instance()->StopStream(&testStream2);
-	});
-	CInputHandler::Instance()->AddActionKeyUp(SDL_SCANCODE_7, [this](SDL_Scancode e) {
-		return;
 	});
 
 	CInputHandler::Instance()->AddActionKeyDown(SDL_SCANCODE_8, [this](SDL_Scancode e) {
@@ -127,38 +100,31 @@ bool CPlayState::OnPlay()
 		}
 	});
 
-	CInputHandler::Instance()->AddActionKeyUp(SDL_SCANCODE_8, [this](SDL_Scancode e) {
-		return;
-	});
-
 	// Play Wave
 	CInputHandler::Instance()->AddActionKeyDown(SDL_SCANCODE_9, [this](SDL_Scancode e) {
 		CSoundManager::Instance()->PlaySound(&testFile);
 	});
-	CInputHandler::Instance()->AddActionKeyUp(SDL_SCANCODE_9, [this](SDL_Scancode e) {
-		return;
-	});
 
 	CInputHandler::Instance()->AddActionKeyDown(SDL_SCANCODE_P, [this](SDL_Scancode e) {
 		CBaseGame::Instance()->FadeIn();
-		});
-	CInputHandler::Instance()->AddActionKeyUp(SDL_SCANCODE_P, [this](SDL_Scancode e) {
-		return;
-		});
+	});
 
 	CInputHandler::Instance()->AddActionKeyDown(SDL_SCANCODE_L, [this](SDL_Scancode e) {
 		CBaseGame::Instance()->FadeOut();
-		});
-	CInputHandler::Instance()->AddActionKeyUp(SDL_SCANCODE_L, [this](SDL_Scancode e) {
-		return;
-		});
+	});
 
 	CInputHandler::Instance()->AddActionKeyDown(SDL_SCANCODE_M, [this](SDL_Scancode e) {
 		HGenericCallback callback = CBaseGame::Instance()->GetCallbackHandler()->GetCallback("pyTest");
 		callback();
-		});
-	CInputHandler::Instance()->AddActionKeyUp(SDL_SCANCODE_M, [this](SDL_Scancode e) {
-		return;
+	});
+
+	CInputHandler::Instance()->AddActionKeyDown(SDL_SCANCODE_Z, [this](SDL_Scancode e) {
+		std::unique_ptr<IGameObject> pDialogueWindow = std::make_unique<CDialogueWindow>();
+		CObjectParams* pParams = new CObjectParams(0, 0);
+
+		pDialogueWindow->Load(pParams);
+
+		m_GameObjects.push_back(std::move(pDialogueWindow));
 		});
 
 	// Try test state
@@ -172,10 +138,7 @@ bool CPlayState::OnPlay()
 		{
 			CBaseGame::Instance()->GetStateManager()->PopState();
 		}
-		});
-	CInputHandler::Instance()->AddActionKeyUp(SDL_SCANCODE_B, [this](SDL_Scancode e) {
-		return;
-		});
+	});
 
 	if (CBaseGame::Instance()->GetLoadedLevel())
 	{

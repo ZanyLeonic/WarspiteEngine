@@ -17,6 +17,8 @@ public:
 	virtual void Load(CObjectParams* pParams) = 0;
 
 	virtual CVector2D GetPosition() = 0;
+	virtual CVector2D GetViewportPosition() = 0;
+
 	virtual void SetPosition(CVector2D& nPos) = 0;
 
 	virtual const char* GetName() = 0;

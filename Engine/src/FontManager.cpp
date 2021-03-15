@@ -22,8 +22,10 @@ CFontManager::CFontManager()
 	}
 }
 
-bool CFontManager::LoadFont(std::string path, std::string type, int size)
+bool CFontManager::LoadFont(std::string path, std::string type, int size, bool extProvided)
 {
+	if (!extProvided) path += ".json";
+
 	rapidjson::Document fFile;
 
 	if(CEngineFileSystem::ReadJSON(path, &fFile))

@@ -133,59 +133,54 @@ void CStateParser::ParseObjects(const rapidjson::Value* pStateRoot, std::vector<
 
 		CObjectParams* pOP = new CObjectParams(b["x"].GetFloat(), b["y"].GetFloat());
 		// Retrieve the relevant information from the object declaration...
-		// Required
-		if (b.HasMember("textureWidth"))
-			pOP->SetProperty("textureWidth", b["textureWidth"].GetInt());
-		else
+		// fill in any additional information (if provided.)
+		if (b.HasMember("properties"))
 		{
-			spdlog::warn("No width declared for object type \"{}\"", b["type"].GetString());
-			pOP->SetProperty("textureWidth", 0);
+			// iterate
+			const Value::ConstArray& d = b["properties"].GetArray();
+
+			spdlog::debug("Number of properties defined: {}", d.Size());
+			spdlog::debug("*** Property loading start ***");
+
+			for (SizeType j = 0; j < d.Size(); j++)
+			{
+				std::string propName = d[j]["name"].GetString();
+				const Value& prop = d[j]["value"];
+
+				if (prop.IsString())
+				{
+					spdlog::debug("Name: \"{}\" Value: \"{}\"", propName, d[j]["value"].GetString());
+				}
+				else if (prop.IsInt())
+				{
+					spdlog::debug("Name: \"{}\" Value: \"{}\"", propName, d[j]["value"].GetInt());
+				}
+
+				switch (prop.GetType())
+				{
+				case kNumberType:
+					if (prop.IsInt64())
+						pOP->SetProperty(propName, int(prop.GetInt64()));
+					else if (prop.IsUint64())
+						pOP->SetProperty(propName, prop.GetUint64());
+					else
+						pOP->SetProperty(propName, prop.GetDouble());
+					break;
+				case kStringType:
+					pOP->SetProperty(propName, std::string(prop.GetString()));
+					break;
+				case kFalseType:
+				case kTrueType:
+					pOP->SetProperty(propName, prop.GetBool());
+					break;
+				default:
+					// Future proofing incase new properties get added for newer engine version.
+					spdlog::warn("Warning: Unrecognised type for property \"{}\"!", propName);
+					break;
+				}
+			}
+			spdlog::debug("*** Property loading end ***");
 		}
-		
-		if (b.HasMember("textureHeight"))
-			pOP->SetProperty("textureHeight", b["textureHeight"].GetInt());
-		else
-		{
-			spdlog::warn("No height declared for object type \"{}\"", b["type"].GetString());
-			pOP->SetProperty("textureHeight", 0);
-		}
-
-		if (b.HasMember("textureID"))
-			pOP->SetProperty("textureID", std::string(b["textureID"].GetString()));
-		else
-		{
-			spdlog::warn("No textureID declared for object type \"{}\"", b["type"].GetString());
-			pOP->SetProperty("textureID", "");
-		}
-
-		pOP->SetName(b.HasMember("name") ? b["name"].GetString() : "");
-		pOP->SetFactoryID(b["type"].GetString());
-
-		spdlog::debug("Name: {}", pOP->GetName());
-		spdlog::debug("FactoryID: {}", pOP->GetFactoryID());
-		spdlog::debug("TextureID: {}", pOP->GetProperty<std::string>("textureID"));
-		spdlog::debug("Object Dimensions: {}x{}", pOP->GetProperty<int>("textureWidth"), pOP->GetProperty<int>("textureHeight"));
-
-		// Optional
-		pOP->SetProperty("numFrames", b.HasMember("numFrames") ? b["numFrames"].GetInt() : 1);
-		pOP->SetProperty("animSpeed", b.HasMember("animSpeed") ? b["animSpeed"].GetInt() : 1);
-
-		pOP->SetProperty("onClickCallback", b.HasMember("onClickCallback") ? b["onClickCallback"].GetInt() : 0);
-		pOP->SetProperty("onEnterCallback", b.HasMember("onEnterCallback") ? b["onEnterCallback"].GetInt() : 0);
-		pOP->SetProperty("onLeaveCallback", b.HasMember("onLeaveCallback") ? b["onLeaveCallback"].GetInt() : 0);
-
-		pOP->SetProperty("runScript", b.HasMember("runScript") ? std::string(b["runScript"].GetString()) : "");
-		pOP->SetProperty("soundPath", b.HasMember("soundPath") ? std::string(b["soundPath"].GetString()) : "");
-
-		spdlog::debug("Number of Frames: {}", pOP->GetProperty<int>("numFrames"));
-		spdlog::debug("Animation Speed: {}", pOP->GetProperty<int>("animSpeed"));
-		
-		spdlog::debug("OnClickID: {}", pOP->GetProperty<int>("onClickCallback"));
-		spdlog::debug("OnEnterID: {}", pOP->GetProperty<int>("onEnterCallback"));
-		spdlog::debug("OnLeaveID: {}", pOP->GetProperty<int>("onLeaveCallback"));
-
-		spdlog::debug("Associated Script: {}", pOP->GetProperty<std::string>("runScript"));
-		spdlog::debug("Assocaited Sound: {}", pOP->GetProperty<std::string>("soundPath"));
 
 		// Provide the extracting info to the object.
 		pGameObject->Load(pOP);

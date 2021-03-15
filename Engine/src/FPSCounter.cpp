@@ -9,7 +9,7 @@
 CFPSCounter::CFPSCounter()
 {
 	m_sTextureID = "__engineFPS";
-	CFontManager::Instance()->LoadFont(CEngineFileSystem::ResolvePath("Roboto.json", CEngineFileSystem::EPathType::FONTS), "Regular", 16);
+	CFontManager::Instance()->LoadFont(CEngineFileSystem::ResolvePath("Roboto", CEngineFileSystem::EPathType::FONTS), "Regular", 16);
 }
 
 CFPSCounter::~CFPSCounter()

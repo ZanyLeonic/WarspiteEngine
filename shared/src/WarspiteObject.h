@@ -26,6 +26,8 @@ public:
 	void Load(CObjectParams* pParams) override;
 
 	CVector2D GetPosition() override { return m_vPosition; }
+	CVector2D GetViewportPosition() override;
+
 	void SetPosition(CVector2D& nPos) override { m_vPosition = nPos; }
 
 	virtual CVector2D GetVelocity() { return m_vVelocity; }

@@ -17,7 +17,7 @@ public:
 	
 	virtual CVector2D GetLevelSize() const = 0;
 	virtual CVector2D GetPosition() const = 0;
-	virtual CVector2D GetPositionT() const = 0;
+	virtual CVector2D GetPositionT() = 0;
 	virtual CVector2D* GetTarget() const = 0;
 };
 #endif

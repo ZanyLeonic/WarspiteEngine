@@ -1,10 +1,12 @@
 #ifdef _ENGINE_
 #include "TextureManager.h"
 #include "Game.h"
+#include "Camera.h"
 #elif _GAME_
 #include "ITextureManager.h"
 #include "WGame.h"
 #include "IGame.h"
+#include "ICamera.h"
 #endif
 
 #include <spdlog/spdlog.h>
@@ -45,6 +47,23 @@ void CWarspiteObject::Load(CObjectParams* pParams)
 	m_iCurrentRow = 1;
 	m_iCurrentFrame = 0;
 	m_iNumFrames = pParams->GetProperty<int>("numFrames");
+}
+
+CVector2D CWarspiteObject::GetViewportPosition()
+{
+	// Return the position of the object on the screen
+	CVector2D vNewPos = m_vPosition;
+#ifdef _ENGINE_
+	CVector2D vCamPos = CCamera::Instance()->GetPositionT();
+#elif _GAME_
+	ICamera* pCamera = (ICamera*)CGame::Instance()->GetPointers()[ESingletonIDs::CAMERA];
+	CVector2D vCamPos = pCamera->GetPositionT();
+#endif
+
+	vNewPos.SetX(vNewPos.GetX() - vCamPos.GetX());
+	vNewPos.SetY(vNewPos.GetY() - vCamPos.GetY());
+
+	return vNewPos;
 }
 
 void CWarspiteObject::OnOverlapStart()

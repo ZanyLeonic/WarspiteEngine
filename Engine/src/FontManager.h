@@ -32,7 +32,7 @@ public:
 		BLENDED_WRAPPED = 4
 	};
 
-	bool LoadFont(std::string path, std::string type, int size);
+	bool LoadFont(std::string path, std::string type, int size, bool extProvided = false);
 	bool RemoveFont(std::string name, std::string type, int size);
 
 	bool RenderText(std::string text, std::string fontID, std::string textureID, 

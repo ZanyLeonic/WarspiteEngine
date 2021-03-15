@@ -26,22 +26,24 @@ public:
 
 	void SetTarget(CVector2D* target) { m_pTarget = target; }
 	void SetPosition(const CVector2D& position) { m_vPosition = position; }
-	void SetLevelSize(const CVector2D& sz) { m_levelSize = sz; }
+	void SetLevelSize(const CVector2D& sz) { m_vLevelSize = sz; }
 	
-	CVector2D GetLevelSize() const { return m_levelSize; }
+	CVector2D GetLevelSize() const { return m_vLevelSize; }
 	CVector2D GetPosition() const { return m_vPosition; }
-	CVector2D GetPositionT() const;
+	CVector2D GetPositionT();
 	CVector2D* GetTarget() const { return m_pTarget; }
 
 private:
 	CCamera();
-	~CCamera();
+	~CCamera() {};
 
 	CVector2D* m_pTarget = 0;
 	
 	CVector2D m_vPosition;
-	CVector2D m_levelSize;
-	PCameraPtr m_cameraPtr;
+	CVector2D m_vLevelSize;
+	CVector2D m_vLastSafeTarget;
+
+	PCameraPtr m_pCameraPtr;
 	
 	static CCamera* s_pCamera;
 };

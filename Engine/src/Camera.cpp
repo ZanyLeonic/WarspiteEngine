@@ -10,8 +10,8 @@ CCamera::CCamera()
 	// Expose the current camera to the Python API
 	if(CScriptManager::Instance()->GetEngineModule().attr(CAMERAOBJECT_NAME).is_none())
 	{
-		m_cameraPtr = std::make_shared<SCameraObject>(SCameraObject(this));
-		CScriptManager::Instance()->GetEngineModule().attr(CAMERAOBJECT_NAME) = m_cameraPtr;
+		m_pCameraPtr = std::make_shared<SCameraObject>(SCameraObject(this));
+		CScriptManager::Instance()->GetEngineModule().attr(CAMERAOBJECT_NAME) = m_pCameraPtr;
 	}
 }
 
@@ -19,7 +19,7 @@ void CCamera::OnThink()
 {
 }
 
-CVector2D CCamera::GetPositionT() const
+CVector2D CCamera::GetPositionT() 
 {
 	if (m_pTarget != 0)
 	{
@@ -39,6 +39,18 @@ CVector2D CCamera::GetPositionT() const
 		if (pos.GetY() < 0)
 		{
 			pos.SetY(0);
+		}
+
+		float fScaleF = vsz.GetX() / m_vLevelSize.GetX();
+
+		if (pos.GetX() * 2 >= m_vLevelSize.GetX())
+		{
+			pos.SetX(fScaleF * m_vLevelSize.GetX());
+		}
+
+		if (pos.GetY() * 2 > m_vLevelSize.GetY())
+		{
+			pos.SetY(fScaleF * m_vLevelSize.GetY());
 		}
 
 		// Return the new offsetted position

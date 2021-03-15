@@ -37,9 +37,9 @@ public:
     virtual CGarbageCollector* const GetGarbageCollector() = 0;
     virtual CCallbackHandler<HGenericCallback>* const GetCallbackHandler() = 0;
 
-    virtual CFadeObject* const GetFadeObject() = 0;
+    virtual CFadeObject* GetFadeObject() = 0;
 
-    virtual CVector2D const GetViewportSize() = 0;
+    virtual CVector2D GetViewportSize() = 0;
 
     virtual void SetPlayer(std::shared_ptr<IGameObject> pNO) = 0;
     virtual std::shared_ptr<IGameObject> const GetPlayer() = 0;

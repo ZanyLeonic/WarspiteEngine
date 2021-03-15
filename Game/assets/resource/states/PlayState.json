@@ -1,7 +1,7 @@
 {
   "states": [
 	{
-      "id": "PlayState",
+    "id": "PlayState",
 	  "scripts": [
 	  ],
       "textures": [

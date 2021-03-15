@@ -90,6 +90,9 @@ private:
 	float m_x = 0;
 	float m_y = 0;
 
+	float m_width = 0;
+	float m_height = 0;
+
 	STileset* m_tileset = 0;
 	std::exception m_eLastError = {};
 };

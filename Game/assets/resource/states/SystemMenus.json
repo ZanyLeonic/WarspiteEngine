@@ -21,66 +21,144 @@
         {
           "name": "TestText",
           "type": "TextObject",
-          "textureID": "TitleText",
-          "script": "",
-          "soundPath": "",
+          "properties" : [
+            {
+              "name" : "textureID",
+              "type" : "string",
+              "value": "TitleText"
+            },
+            {
+              "name" : "text",
+              "type" : "string",
+              "value": "Warspite Engine"
+            },
+            {
+              "name" : "font",
+              "type" : "string",
+              "value": "Roboto"
+            },
+            {
+              "name" : "variant",
+              "type" : "string",
+              "value": "Regular"
+            },
+            {
+              "name" : "fontSize",
+              "type" : "int",
+              "value": 32
+            },
+            {
+              "name" : "textureHeight",
+              "type" : "int",
+              "value": 10
+            },
+            {
+              "name" : "textureWidth",
+              "type" : "int",
+              "value": 10
+            }
+          ],
           "x": 10,
-          "y": 10,
-          "textureWidth": 10,
-          "textureHeight": 10,
-          "numFrames": 1,
-          "animSpeed": 1,
-          "onClickCallback": 0,
-          "onEnterCallback": 0,
-          "onLeaveCallback": 0
+          "y": 10
         },
         {
           "name": "PlayBtn",
           "type": "Button",
-          "textureID": "PlayButton",
-          "script": "",
-          "soundPath": "",
+          "properties" : [
+            {
+              "name" : "textureID",
+              "type" : "string",
+              "value": "PlayButton"
+            },
+            {
+              "name" : "numFrames",
+              "type" : "int",
+              "value": 3
+            },
+            {
+              "name" : "onClickCallback",
+              "type" : "int",
+              "value": 1
+            },
+            {
+              "name" : "textureHeight",
+              "type" : "int",
+              "value": 32
+            },
+            {
+              "name" : "textureWidth",
+              "type" : "int",
+              "value": 100
+            }
+          ],
           "x": 100,
-          "y": 100,
-          "textureWidth": 100,
-          "textureHeight": 32,
-          "numFrames": 3,
-          "animSpeed": 1,
-          "onClickCallback": 1,
-          "onEnterCallback": 0,
-          "onLeaveCallback": 0
+          "y": 100
         },
         {
           "name": "InputBtn",
           "type": "Button",
-          "textureID": "InputButton",
-          "script": "",
-          "soundPath": "",
+          "properties" : [
+            {
+              "name" : "textureID",
+              "type" : "string",
+              "value": "InputButton"
+            },
+            {
+              "name" : "numFrames",
+              "type" : "int",
+              "value": 3
+            },
+            {
+              "name" : "onClickCallback",
+              "type" : "int",
+              "value": 3
+            },
+            {
+              "name" : "textureHeight",
+              "type" : "int",
+              "value": 32
+            },
+            {
+              "name" : "textureWidth",
+              "type" : "int",
+              "value": 100
+            }
+          ],
           "x": 100,
-          "y": 200,
-          "textureWidth": 100,
-          "textureHeight": 32,
-          "numFrames": 3,
-          "animSpeed": 1,
-          "onClickCallback": 3,
-          "onEnterCallback": 0,
-          "onLeaveCallback": 0
+          "y": 200
         },
         {
           "name": "ExitBtn",
           "type": "Button",
-          "textureID": "ExitButton",
-          "script": "",
-          "soundPath": "",
+          "properties" : [
+            {
+              "name" : "textureID",
+              "type" : "string",
+              "value": "ExitButton"
+            },
+            {
+              "name" : "numFrames",
+              "type" : "int",
+              "value": 3
+            },
+            {
+              "name" : "onClickCallback",
+              "type" : "int",
+              "value": 2
+            },
+            {
+              "name" : "textureHeight",
+              "type" : "int",
+              "value": 32
+            },
+            {
+              "name" : "textureWidth",
+              "type" : "int",
+              "value": 100
+            }
+          ],
           "x": 100,
-          "y": 300,
-          "textureWidth": 100,
-          "textureHeight": 32,
-          "numFrames": 3,
-          "animSpeed": 1,
-          "onClickCallback": 2,
-          "onEnterCallback": 0,
-          "onLeaveCallback": 0
+          "y": 300
         }
       ]
     },
@@ -101,34 +179,68 @@
         {
           "name": "ResumeBtn",
           "type": "Button",
-          "textureID": "ResumeButton",
-          "script": "",
-          "soundPath": "",
+          "properties" : [
+            {
+              "name" : "textureID",
+              "type" : "string",
+              "value": "ResumeButton"
+            },
+            {
+              "name" : "numFrames",
+              "type" : "int",
+              "value": 3
+            },
+            {
+              "name" : "onClickCallback",
+              "type" : "int",
+              "value": 1
+            },
+            {
+              "name" : "textureHeight",
+              "type" : "int",
+              "value": 32
+            },
+            {
+              "name" : "textureWidth",
+              "type" : "int",
+              "value": 100
+            }
+          ],
           "x": 100,
-          "y": 100,
-          "textureWidth": 100,
-          "textureHeight": 32,
-          "numFrames": 3,
-          "animSpeed": 1,
-          "onClickCallback": 1,
-          "onEnterCallback": 0,
-          "onLeaveCallback": 0
+          "y": 100
         },
         {
           "name": "ExitBtn",
           "type": "Button",
-          "textureID": "ExitButton",
-          "script": "",
-          "soundPath": "",
+          "properties" : [
+            {
+              "name" : "textureID",
+              "type" : "string",
+              "value": "ExitButton"
+            },
+            {
+              "name" : "numFrames",
+              "type" : "int",
+              "value": 3
+            },
+            {
+              "name" : "onClickCallback",
+              "type" : "int",
+              "value": 2
+            },
+            {
+              "name" : "textureHeight",
+              "type" : "int",
+              "value": 32
+            },
+            {
+              "name" : "textureWidth",
+              "type" : "int",
+              "value": 100
+            }
+          ],
           "x": 100,
-          "y": 300,
-          "textureWidth": 100,
-          "textureHeight": 32,
-          "numFrames": 3,
-          "animSpeed": 1,
-          "onClickCallback": 2,
-          "onEnterCallback": 0,
-          "onLeaveCallback": 0
+          "y": 300
         }
       ]
     },
@@ -145,34 +257,78 @@
         {
           "name": "TitleText",
           "type": "TextObject",
-          "textureID": "TitleText",
-          "script": "",
-          "soundPath": "",
+          "properties" : [
+            {
+              "name" : "textureID",
+              "type" : "string",
+              "value": "TitleText"
+            },
+            {
+              "name" : "text",
+              "type" : "string",
+              "value": "Input Test"
+            },
+            {
+              "name" : "font",
+              "type" : "string",
+              "value": "Roboto"
+            },
+            {
+              "name" : "variant",
+              "type" : "string",
+              "value": "Regular"
+            },
+            {
+              "name" : "fontSize",
+              "type" : "int",
+              "value": 32
+            },
+            {
+              "name" : "textureHeight",
+              "type" : "int",
+              "value": 10
+            },
+            {
+              "name" : "textureWidth",
+              "type" : "int",
+              "value": 10
+            }
+          ],
           "x": 5,
-          "y": 10,
-          "textureWidth": 10,
-          "textureHeight": 10,
-          "numFrames": 1,
-          "animSpeed": 1,
-          "onClickCallback": 0,
-          "onEnterCallback": 0,
-          "onLeaveCallback": 0
+          "y": 10
         },
         {
           "name": "ExitBtn",
           "type": "Button",
-          "textureID": "ExitButton",
-          "script": "",
-          "soundPath": "",
+          "properties" : [
+            {
+              "name" : "textureID",
+              "type" : "string",
+              "value": "ExitButton"
+            },
+            {
+              "name" : "numFrames",
+              "type" : "int",
+              "value": 3
+            },
+            {
+              "name" : "onClickCallback",
+              "type" : "int",
+              "value": 1
+            },
+            {
+              "name" : "textureHeight",
+              "type" : "int",
+              "value": 32
+            },
+            {
+              "name" : "textureWidth",
+              "type" : "int",
+              "value": 100
+            }
+          ],
           "x": 530,
-          "y": 5,
-          "textureWidth": 100,
-          "textureHeight": 32,
-          "numFrames": 3,
-          "animSpeed": 1,
-          "onClickCallback": 1,
-          "onEnterCallback": 0,
-          "onLeaveCallback": 0
+          "y": 5
         }
       ]
     }
