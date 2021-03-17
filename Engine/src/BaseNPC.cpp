@@ -3,6 +3,7 @@
 #include "Camera.h"
 #include "Game.h"
 #include <spdlog/spdlog.h>
+#include <DialogueWindow.h>
 
 CBaseNPC::CBaseNPC()
 {
@@ -37,6 +38,8 @@ bool CBaseNPC::OnThink()
 {
 	m_iCurrentRow = GetRowFromDirection();
 
+	if (pDialogueWindow != 0) pDialogueWindow->OnThink();
+
 	return true;
 }
 
@@ -52,16 +55,25 @@ void CBaseNPC::Draw()
 			CBaseGame::Instance()->GetRenderer());
 	}
 
+	if (pDialogueWindow != 0) pDialogueWindow->Draw();
+
 	CTileObject::Draw();
 }
 
 bool CBaseNPC::InteractAction(IGameObject* pOther)
 {
+	// Example action
 	CVector2D newPos = pOther->GetPosition() - GetPosition();
 
 	newPos /= 32;
 
 	m_eObjectDirection = GetDirectionFromVector(newPos);
+
+	// Test code
+	pDialogueWindow = std::make_unique<CDialogueWindow>();
+	CObjectParams* pParams = new CObjectParams(0, 0);
+
+	pDialogueWindow->Load(pParams);
 
 	return true;
 }

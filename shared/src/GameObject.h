@@ -26,6 +26,8 @@ public:
 	virtual bool ShouldCollide() = 0;
 	virtual bool ShouldOverlap() = 0;
 
+	virtual bool ShouldDraw() = 0;
+
 	virtual bool IsOverlapping() = 0;
 	virtual bool CancelMovementOnOverlap() = 0;
 

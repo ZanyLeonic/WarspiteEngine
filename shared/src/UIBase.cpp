@@ -4,6 +4,7 @@ CUIBase::CUIBase() :
 	CWarspiteObject()
 {
 	m_bCollides = false;
+	m_bDrawObject = true;
 
 	// Initial callbacks
 	if (m_OnClick == 0) m_OnClick = std::bind(&CUIBase::onClick, this);

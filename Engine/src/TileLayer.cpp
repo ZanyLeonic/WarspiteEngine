@@ -20,7 +20,7 @@ void CTileLayer::OnThink()
 void CTileLayer::Draw()
 {
 	CVector2D cCamPos = CCamera::Instance()->GetPositionT();
-	CVector2D vPortSz = CBaseGame::Instance()->GetViewportSize();
+	CVector2D* vPortSz = CBaseGame::Instance()->GetViewportSize();
 
 	for (int i = 0; i < m_numRows; i++)
 	{
@@ -34,12 +34,12 @@ void CTileLayer::Draw()
 			}
 
 			// Don't render tiles that cannot be seen by the camera
-			if (((j * m_tileSize)) - cCamPos.GetX() < -m_tileSize || ((j * m_tileSize)) - cCamPos.GetX() > vPortSz.GetX())
+			if (((j * m_tileSize)) - cCamPos.GetX() < -m_tileSize || ((j * m_tileSize)) - cCamPos.GetX() > vPortSz->GetX())
 			{
 				continue;
 			}
 
-			if (((i * m_tileSize)) - cCamPos.GetY() < -m_tileSize || ((i * m_tileSize)) - cCamPos.GetY() > vPortSz.GetY())
+			if (((i * m_tileSize)) - cCamPos.GetY() < -m_tileSize || ((i * m_tileSize)) - cCamPos.GetY() > vPortSz->GetY())
 			{
 				continue;
 			}

@@ -16,10 +16,15 @@ public:
 	virtual bool OnThink();
 	virtual void Destroy();
 private:
-	CVector2D* pScreenSize = 0;
-	CVector2D* pPlayerLocation = 0;
+	void AdvanceText();
+	void RenderText();
 
-	std::shared_ptr<IGameObject> pPlayer;
+	void AdvanceBind(SDL_Event e);
+
+	CVector2D* m_pScreenSize = 0;
+	CVector2D* m_pPlayerLocation = 0;
+
+	std::shared_ptr<IGameObject> m_pPlayer;
 
 	std::string m_sDialogueFile = "test.json";
 	std::string m_sFontID = "_DiagTest";
@@ -32,11 +37,22 @@ private:
 
 	bool m_bFinishedTyping = false;
 	bool m_bStartedTyping = false;
+	bool m_bReachedEnd = false;
 
-	std::string m_sText;
+	std::vector<std::string> m_sText;
 	std::string m_sTypedText;
 
+	int m_iCurrentTextIndex = 0;
 	int m_iCurrentCharacter = 0;
+
+	HInputCallback m_hAdvanceText = 0;
+
+	CTexture* m_pAdvanceTextIcon = 0;
+
+	CVector2D m_vAdvLoc;
+	CVector2D m_vAdvLocCenter;
+
+	double m_dAdvLocRot = 0.f;
 };
 
 #endif

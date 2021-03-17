@@ -21,6 +21,7 @@ public:
     bool InteractAction(IGameObject* pOther) override;
 private:
     std::string m_sWorldTextureID;
+    std::unique_ptr<IGameObject> pDialogueWindow = 0;
 
     int GetRowFromDirection();
 };

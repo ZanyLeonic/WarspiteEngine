@@ -62,7 +62,7 @@ public:
 
 	CFadeObject* GetFadeObject() { return m_pFadeObject; }
 
-	CVector2D GetViewportSize() { return m_viewportSize; }
+	CVector2D* GetViewportSize() { return &m_viewportSize; }
 
 	void SetPlayer(std::shared_ptr<IGameObject> pNO) { m_pPlayer = pNO; }
 	std::shared_ptr<IGameObject> const GetPlayer() { return m_pPlayer; }

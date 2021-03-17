@@ -48,5 +48,7 @@ bool CButton::OnThink()
 		m_OnLeave();
 	}
 
+	SDL_Delay(5);
+
 	return true;
 }

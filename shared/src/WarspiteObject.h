@@ -58,6 +58,9 @@ public:
 	bool ShouldOverlap() override { return m_bOverlap; }
 	void SetOverlap(bool nO) { m_bOverlap = nO; }
 
+	bool ShouldDraw() override { return m_bDrawObject; }
+	void SetDrawState(bool nD) { m_bDrawObject = nD; }
+
 	bool IsOverlapping() override { return m_bIsOverlapping; }
 	bool CancelMovementOnOverlap() override { return m_bCancelMovementOnOverlap; }
 
@@ -90,6 +93,7 @@ protected:
 
 	bool m_bCollides = false;
 	bool m_bOverlap = false;
+	bool m_bDrawObject = true;
 
 	bool m_bIsOverlapping = false;
 	bool m_bCancelMovementOnOverlap = false;

@@ -51,8 +51,6 @@ public:
 	void RemoveActionKeyDown(SDL_Scancode key);
 	void RemoveActionKeyUp(SDL_Scancode key);
 
-	// When any keystate changes
-	// TODO: make a way for other devs to remove callbacks
 	void AddOnKeyDown(HKeyCallback callBack);
 	void AddOnKeyUp(HKeyCallback callBack);
 
@@ -61,6 +59,15 @@ public:
 
 	void AddOnMouseDown(HInputCallback callBack);
 	void AddOnMouseUp(HInputCallback callBack);
+
+	void RemoveOnKeyDown(HKeyCallback callBack);
+	void RemoveOnKeyUp(HKeyCallback callBack);
+
+	void RemoveOnJoyDown(HInputCallback callBack);
+	void RemoveOnJoyUp(HInputCallback callBack);
+
+	void RemoveOnMouseDown(HInputCallback callBack);
+	void RemoveOnMouseUp(HInputCallback callBack);
 
 	void RemoveOnCallbacks();
 

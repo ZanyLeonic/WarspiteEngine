@@ -225,6 +225,86 @@ void CInputHandler::AddOnMouseUp(HInputCallback callBack)
 	m_mouseUpCallbacks.push_back(callBack);
 }
 
+void CInputHandler::RemoveOnKeyDown(HKeyCallback callBack)
+{
+	for (size_t i = 0; i < m_keyDownCallbacks.size(); i++)
+	{
+		if (m_keyDownCallbacks[i].target<SDL_Scancode>() == callBack.target<SDL_Scancode>())
+		{
+			m_keyDownCallbacks.erase(m_keyDownCallbacks.begin() + i);
+			break;
+		}
+	}
+	
+	//m_keyDownCallbacks.erase(std::remove(m_keyDownCallbacks.begin(), m_keyDownCallbacks.end(), callBack), m_keyDownCallbacks.end());
+}
+
+void CInputHandler::RemoveOnKeyUp(HKeyCallback callBack)
+{
+	for (size_t i = 0; i < m_keyUpCallbacks.size(); i++)
+	{
+		if (m_keyUpCallbacks[i].target<SDL_Scancode>() == callBack.target<SDL_Scancode>())
+		{
+			m_keyUpCallbacks.erase(m_keyUpCallbacks.begin() + i);
+			break;
+		}
+	}
+
+	//m_keyUpCallbacks.erase(std::remove(m_keyUpCallbacks.begin(), m_keyUpCallbacks.end(), callBack), m_keyUpCallbacks.end());
+}
+
+void CInputHandler::RemoveOnJoyDown(HInputCallback callBack)
+{
+	for (size_t i = 0; i < m_joyDownCallbacks.size(); i++)
+	{
+		if (m_joyDownCallbacks[i].target<SDL_Event>() == callBack.target<SDL_Event>())
+		{
+			m_joyDownCallbacks.erase(m_joyDownCallbacks.begin() + i);
+			break;
+		}
+	}
+	// m_joyDownCallbacks.erase(std::remove(m_joyDownCallbacks.begin(), m_joyDownCallbacks.end(), callBack), m_joyDownCallbacks.end());
+}
+
+void CInputHandler::RemoveOnJoyUp(HInputCallback callBack)
+{
+	for (size_t i = 0; i < m_joyUpCallbacks.size(); i++)
+	{
+		if (m_joyUpCallbacks[i].target<SDL_Event>() == callBack.target<SDL_Event>())
+		{
+			m_joyUpCallbacks.erase(m_joyUpCallbacks.begin() + i);
+			break;
+		}
+	}
+	// m_joyUpCallbacks.erase(std::remove(m_joyUpCallbacks.begin(), m_joyUpCallbacks.end(), callBack), m_joyUpCallbacks.end());
+}
+
+void CInputHandler::RemoveOnMouseDown(HInputCallback callBack)
+{
+	for (size_t i = 0; i < m_mouseDownCallbacks.size(); i++)
+	{
+		if (m_mouseDownCallbacks[i].target<SDL_Event>() == callBack.target<SDL_Event>())
+		{
+			m_mouseDownCallbacks.erase(m_mouseDownCallbacks.begin() + i);
+			break;
+		}
+	}
+	// m_mouseDownCallbacks.erase(std::remove(m_mouseDownCallbacks.begin(), m_mouseDownCallbacks.end(), callBack), m_mouseDownCallbacks.end());
+}
+
+void CInputHandler::RemoveOnMouseUp(HInputCallback callBack)
+{
+	for (size_t i = 0; i < m_mouseUpCallbacks.size(); i++)
+	{
+		if (m_mouseUpCallbacks[i].target<SDL_Event>() == callBack.target<SDL_Event>())
+		{
+			m_mouseUpCallbacks.erase(m_mouseUpCallbacks.begin() + i);
+			break;
+		}
+	}
+	// m_mouseUpCallbacks.erase(std::remove(m_mouseUpCallbacks.begin(), m_mouseUpCallbacks.end(), callBack), m_mouseUpCallbacks.end());
+}
+
 // An okay stop gap - for now.
 void CInputHandler::RemoveOnCallbacks()
 {

@@ -118,15 +118,6 @@ bool CPlayState::OnPlay()
 		callback();
 	});
 
-	CInputHandler::Instance()->AddActionKeyDown(SDL_SCANCODE_Z, [this](SDL_Scancode e) {
-		std::unique_ptr<IGameObject> pDialogueWindow = std::make_unique<CDialogueWindow>();
-		CObjectParams* pParams = new CObjectParams(0, 0);
-
-		pDialogueWindow->Load(pParams);
-
-		m_GameObjects.push_back(std::move(pDialogueWindow));
-		});
-
 	// Try test state
 	CInputHandler::Instance()->AddActionKeyDown(SDL_SCANCODE_B, [this](SDL_Scancode e) {
 		if (CBaseGame::Instance()->GetStateManager()->GetCurrentStateID() != SID_TEST)
@@ -159,7 +150,7 @@ bool CPlayState::OnPlay()
 	else
 	{
 		// If a failure happens when attempting to load - this will let us know something is up.
-		CTextureManager::Instance()->CreateCheckboardPattern(m_screenSize, "levelLoadFail", CBaseGame::Instance()->GetRenderer());
+		CTextureManager::Instance()->CreateCheckboardPattern(*m_screenSize, "levelLoadFail", CBaseGame::Instance()->GetRenderer());
 		SDL_SetRenderDrawColor(CBaseGame::Instance()->GetRenderer(), 255, 255, 255, 255);
 	}
 
@@ -176,7 +167,7 @@ void CPlayState::Draw()
 	}
 	else
 	{
-		CTextureManager::Instance()->Draw("levelLoadFail", 0, 0, (int)m_screenSize.GetX(), (int)m_screenSize.GetY(), CBaseGame::Instance()->GetRenderer());
+		CTextureManager::Instance()->Draw("levelLoadFail", 0, 0, (int)m_screenSize->GetX(), (int)m_screenSize->GetY(), CBaseGame::Instance()->GetRenderer());
 	}
 	// gameobjects and stuff
 	CGameStateBase::Draw();

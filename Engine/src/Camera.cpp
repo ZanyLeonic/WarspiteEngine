@@ -23,11 +23,11 @@ CVector2D CCamera::GetPositionT()
 {
 	if (m_pTarget != 0)
 	{
-		CVector2D vsz = CBaseGame::Instance()->GetViewportSize();
+		CVector2D* vsz = CBaseGame::Instance()->GetViewportSize();
 
 		// Offset the target by half of the viewport
-		CVector2D pos(((m_pTarget->GetX()) - (vsz.GetX() / 2)),
-			((m_pTarget->GetY()) - (vsz.GetY() / 2))) ;
+		CVector2D pos(((m_pTarget->GetX()) - (vsz->GetX() / 2)),
+			((m_pTarget->GetY()) - (vsz->GetY() / 2))) ;
 
 		// if the X and Y are less than 0 � that means the camera is not past half of
 		// the screen � set to 0. 
@@ -41,7 +41,7 @@ CVector2D CCamera::GetPositionT()
 			pos.SetY(0);
 		}
 
-		float fScaleF = vsz.GetX() / m_vLevelSize.GetX();
+		float fScaleF = vsz->GetX() / m_vLevelSize.GetX();
 
 		if (pos.GetX() * 2 >= m_vLevelSize.GetX())
 		{

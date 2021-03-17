@@ -39,7 +39,7 @@ public:
 
     virtual CFadeObject* GetFadeObject() = 0;
 
-    virtual CVector2D GetViewportSize() = 0;
+    virtual CVector2D* GetViewportSize() = 0;
 
     virtual void SetPlayer(std::shared_ptr<IGameObject> pNO) = 0;
     virtual std::shared_ptr<IGameObject> const GetPlayer() = 0;

@@ -23,7 +23,7 @@ public:
 
 private:
 	PLevelPtr m_levelPtr;
-	CVector2D m_screenSize;
+	CVector2D* m_screenSize;
 
 	static void s_PlayCallback(SStreamingAudioData* as);
 	static void s_PauseCallback(SStreamingAudioData* as);

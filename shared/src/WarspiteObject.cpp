@@ -107,35 +107,38 @@ void CWarspiteObject::OnPlay()
 
 void CWarspiteObject::Draw()
 {
+	if (m_bDrawObject)
+	{
 #ifdef _ENGINE_
-	if (m_vVelocity.GetX() > 0)
-	{
-		CTextureManager::Instance()->DrawFrame(m_sTextureID, (int)m_vPosition.GetX(),
-			(int)m_vPosition.GetY(), m_iWidth, m_iHeight,
-			m_iCurrentRow, m_iCurrentFrame, CBaseGame::Instance()->GetRenderer(),
-			SDL_FLIP_HORIZONTAL);
-	}
-	else
-	{
-		CTextureManager::Instance()->DrawFrame(m_sTextureID, (int)m_vPosition.GetX(),
-			(int)m_vPosition.GetY(), m_iWidth, m_iHeight,
-			m_iCurrentRow, m_iCurrentFrame, CBaseGame::Instance()->GetRenderer());
-	}
+		if (m_vVelocity.GetX() > 0)
+		{
+			CTextureManager::Instance()->DrawFrame(m_sTextureID, (int)m_vPosition.GetX(),
+				(int)m_vPosition.GetY(), m_iWidth, m_iHeight,
+				m_iCurrentRow, m_iCurrentFrame, CBaseGame::Instance()->GetRenderer(),
+				SDL_FLIP_HORIZONTAL);
+		}
+		else
+		{
+			CTextureManager::Instance()->DrawFrame(m_sTextureID, (int)m_vPosition.GetX(),
+				(int)m_vPosition.GetY(), m_iWidth, m_iHeight,
+				m_iCurrentRow, m_iCurrentFrame, CBaseGame::Instance()->GetRenderer());
+		}
 #elif _GAME_
-	if (m_vVelocity.GetX() > 0)
-	{
-		pTex->DrawFrame(m_sTextureID, (int)m_vPosition.GetX(),
-			(int)m_vPosition.GetY(), m_iWidth, m_iHeight,
-			m_iCurrentRow, m_iCurrentFrame, pGame->GetRenderer(),
-			0.0, nullptr, EWarRendererFlip::FLIP_HORIZONTAL);
-	}
-	else
-	{
-		pTex->DrawFrame(m_sTextureID, (int)m_vPosition.GetX(),
-			(int)m_vPosition.GetY(), m_iWidth, m_iHeight,
-			m_iCurrentRow, m_iCurrentFrame, pGame->GetRenderer());
-	}
+		if (m_vVelocity.GetX() > 0)
+		{
+			pTex->DrawFrame(m_sTextureID, (int)m_vPosition.GetX(),
+				(int)m_vPosition.GetY(), m_iWidth, m_iHeight,
+				m_iCurrentRow, m_iCurrentFrame, pGame->GetRenderer(),
+				0.0, nullptr, EWarRendererFlip::FLIP_HORIZONTAL);
+		}
+		else
+		{
+			pTex->DrawFrame(m_sTextureID, (int)m_vPosition.GetX(),
+				(int)m_vPosition.GetY(), m_iWidth, m_iHeight,
+				m_iCurrentRow, m_iCurrentFrame, pGame->GetRenderer());
+		}
 #endif
+	}
 }
 
 bool CWarspiteObject::OnThink()

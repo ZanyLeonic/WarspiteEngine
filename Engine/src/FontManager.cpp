@@ -83,6 +83,9 @@ bool CFontManager::RenderText(std::string text, std::string fontID, std::string 
 		return false;
 	}
 
+	// Stop SDL_TTF from freaking out if we send an empty string.
+	if (text.empty()) text = " ";
+
 	switch (rType)
 	{
 	case EFontRenderType::SOLID:
