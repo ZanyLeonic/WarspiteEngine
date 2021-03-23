@@ -16,6 +16,7 @@ void CDialogueWindow::Load(CObjectParams* pParams)
 {
     CUIBase::Load(pParams);
 
+    // Background setup
     m_pScreenSize = CBaseGame::Instance()->GetViewportSize();
     m_sTextureID = "_diagBG";
     m_iHeight = int(m_pScreenSize->GetX() * 0.25);
@@ -23,12 +24,15 @@ void CDialogueWindow::Load(CObjectParams* pParams)
     m_vPosition = CVector2D(0, m_pScreenSize->GetY() - m_iHeight);
     m_pPlayer = CBaseGame::Instance()->GetPlayer();
 
+    // Font used by typing
     CFontManager::Instance()->LoadFont(CEngineFileSystem::ResolvePath("Roboto", CEngineFileSystem::EPathType::FONTS), "Regular", m_iTextSize);
     m_bStartedTyping = true;
 
+    // Advance text bind
     m_hAdvanceText = std::bind(&CDialogueWindow::AdvanceBind, this, std::placeholders::_1);
     CInputHandler::Instance()->AddOnMouseDown(m_hAdvanceText);
 
+    // Advance text icon 
     if (CTextureManager::Instance()->Load(CEngineFileSystem::ResolvePath("advtext.png", CEngineFileSystem::EPathType::TEXTURE),
         "_diagAdv", CBaseGame::Instance()->GetRenderer(), 0xFF)) // Opacity 75%
     {

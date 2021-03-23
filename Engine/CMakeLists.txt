@@ -17,6 +17,7 @@ set(WarspiteEngine_Src
         src/CTexture.cpp
         src/ConfigParser.cpp
         src/DoorLink.cpp
+        src/DialogueParser.cpp
         src/DialogueWindow.cpp
         src/FadeObject.cpp
         src/FPSCounter.cpp
@@ -68,6 +69,7 @@ set(WarspiteEngine_Header
         src/CTexture.h
         src/ConfigParser.h
         src/DoorLink.h
+        src/DialogueParser.h
         src/DialogueWindow.h
         src/FadeObject.h
         src/FPSCounter.h

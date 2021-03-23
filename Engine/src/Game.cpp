@@ -34,7 +34,7 @@ bool CBaseGame::Init(const char* title, int xpos, int ypos, int width, int heigh
 	// Set all frame times to 0ms.
 	memset(m_frametimes, 0, sizeof(m_frametimes));
 
-	m_bShowDebugTiles = true;
+	m_bShowDebugTiles = false;
 	m_frameCount = 0;
 	m_fFPS = 0;
 	m_lastFrametime = SDL_GetTicks();
