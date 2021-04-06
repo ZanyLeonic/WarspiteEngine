@@ -6,7 +6,7 @@ from pathlib import Path
 from shutil import copyfile
 
 appName = "WarspiteEngine SDK: Map Exporter"
-appVer = "1.2.0.0"
+appVer = "1.2.1.0"
 appDesc = """Corrects paths and moves maps and their dependencies."""
 
 sImgFormats = [
@@ -159,6 +159,9 @@ def ExportMap(pWorkingDir=None, pMapFile=None, pBaseFolder=None):
                 elif propFile.suffix in ".py":
                     nPropFile = Path(workingDir, baseFolder, "scripts", propFile.name)
                     mapData["properties"][i]["value"] = str(nPropFile.relative_to(Path(workingDir, baseFolder, "scripts")))
+                elif (propFile.suffix in ".diag"): 
+                    nPropFile = Path(workingDir, baseFolder, "resource", "dialogue", propFile.name)
+                    mapData["properties"][i]["value"] = str(nPropFile.relative_to(Path(workingDir, baseFolder, "resource", "dialogue")))
                 else:
                     nPropFile=Path(workingDir, baseFolder, propFile.name)
                     mapData["properties"][i]["value"] = str(nPropFile.relative_to(Path(workingDir, baseFolder)))

@@ -3,6 +3,9 @@
 #define __BaseNPC_H__
 
 #include "TileObject.h"
+#include "DialogueTypes.h"
+
+class CDialogueWindow;
 
 class CBaseNPC :
     public CTileObject
@@ -20,8 +23,11 @@ public:
 
     bool InteractAction(IGameObject* pOther) override;
 private:
+    SDialogue* m_sLoadedDialogue;
+
     std::string m_sWorldTextureID;
-    std::unique_ptr<IGameObject> pDialogueWindow = 0;
+    std::string m_sDialogueID;
+    std::unique_ptr<CDialogueWindow> m_pDialogueWindow = 0;
 
     int GetRowFromDirection();
 };

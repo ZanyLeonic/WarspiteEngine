@@ -10,6 +10,11 @@
         "name": "BaseNPC",
         "properties": [
             {
+                "name": "dialogueID",
+                "type": "string",
+                "value": ""
+            },
+            {
                 "name": "worldTexture",
                 "type": "string",
                 "value": ""

@@ -18,6 +18,7 @@ set(WarspiteEngine_Src
         src/ConfigParser.cpp
         src/DoorLink.cpp
         src/DialogueParser.cpp
+        src/DialogueManager.cpp
         src/DialogueWindow.cpp
         src/FadeObject.cpp
         src/FPSCounter.cpp
@@ -70,6 +71,8 @@ set(WarspiteEngine_Header
         src/ConfigParser.h
         src/DoorLink.h
         src/DialogueParser.h
+        src/DialogueManager.h
+        src/DialogueTypes.h
         src/DialogueWindow.h
         src/FadeObject.h
         src/FPSCounter.h

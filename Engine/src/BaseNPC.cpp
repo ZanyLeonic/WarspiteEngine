@@ -3,7 +3,8 @@
 #include "Camera.h"
 #include "Game.h"
 #include <spdlog/spdlog.h>
-#include <DialogueWindow.h>
+#include "DialogueWindow.h"
+#include "DialogueManager.h"
 
 CBaseNPC::CBaseNPC()
 {
@@ -17,6 +18,7 @@ void CBaseNPC::Load(CObjectParams* pParams)
 	CTileObject::Load(pParams);
 
 	m_sWorldTextureID = pParams->GetProperty<std::string>("worldTexture");
+	m_sDialogueID = pParams->GetProperty<std::string>("dialogueID");
 
 	m_iWidth = 32;
 	m_iHeight = 32;
@@ -38,7 +40,7 @@ bool CBaseNPC::OnThink()
 {
 	m_iCurrentRow = GetRowFromDirection();
 
-	if (pDialogueWindow != 0) pDialogueWindow->OnThink();
+	if (m_pDialogueWindow != 0) m_pDialogueWindow->OnThink();
 
 	return true;
 }
@@ -55,7 +57,7 @@ void CBaseNPC::Draw()
 			CBaseGame::Instance()->GetRenderer());
 	}
 
-	if (pDialogueWindow != 0) pDialogueWindow->Draw();
+	if (m_pDialogueWindow != 0) m_pDialogueWindow->Draw();
 
 	CTileObject::Draw();
 }
@@ -69,11 +71,13 @@ bool CBaseNPC::InteractAction(IGameObject* pOther)
 
 	m_eObjectDirection = GetDirectionFromVector(newPos);
 
-	// Test code
-	pDialogueWindow = std::make_unique<CDialogueWindow>();
+	// Test code*
+	m_pDialogueWindow = std::make_unique<CDialogueWindow>();
+	m_pDialogueWindow->SetDialogue(CDialogueManager::Instance()->GetDialogue(m_sDialogueID));
+
 	CObjectParams* pParams = new CObjectParams(0, 0);
 
-	pDialogueWindow->Load(pParams);
+	m_pDialogueWindow->Load(pParams);
 
 	return true;
 }

@@ -7,9 +7,7 @@
 CDialogueWindow::CDialogueWindow()
     : CUIBase()
 {
-    m_sText.push_back("This is a long piece of text whew, what will it look like in the box?\nKeep it going I feel like this will soon be enough, but will it? I don't know, but I hope it   wrap correctly if there is too much text for one line.");
-    m_sText.push_back("I wanted to let you know that there will be another opportunity for you to demonstrate your Maths ability, just after the Easter holidays. I hope that giving you as much notice as possible will ensure you have the maximum time to prepare and sort out any logistics to ensure you are able to attend.");
-    m_sText.push_back("Thank you for your Tectonics plan - looks very well structured and put together. A few things I would make clear in your answer:");
+
 }
 
 void CDialogueWindow::Load(CObjectParams* pParams)
@@ -26,7 +24,6 @@ void CDialogueWindow::Load(CObjectParams* pParams)
 
     // Font used by typing
     CFontManager::Instance()->LoadFont(CEngineFileSystem::ResolvePath("Roboto", CEngineFileSystem::EPathType::FONTS), "Regular", m_iTextSize);
-    m_bStartedTyping = true;
 
     // Advance text bind
     m_hAdvanceText = std::bind(&CDialogueWindow::AdvanceBind, this, std::placeholders::_1);
@@ -44,6 +41,14 @@ void CDialogueWindow::Load(CObjectParams* pParams)
         m_vAdvLocCenter.SetX(m_pAdvanceTextIcon->GetWidth() / 2);
         m_vAdvLocCenter.SetY(m_pAdvanceTextIcon->GetHeight() / 2);
     }
+}
+
+void CDialogueWindow::SetDialogue(SDialogue* pDiag)
+{
+    m_sDialogue = pDiag;
+    m_sText = m_sDialogue->Nodes;
+
+    m_bStartedTyping = true;
 }
 
 void CDialogueWindow::Draw()
@@ -67,12 +72,14 @@ void CDialogueWindow::Draw()
 
 bool CDialogueWindow::OnThink()
 {
+    if (m_sDialogue == 0) return false;
+
     // Type writer effect
-    if (!m_bReachedEnd)
+    if (!m_bReachedEnd && m_bStartedTyping)
     {
-        if (m_sTypedText.length() != m_sText[m_iCurrentTextIndex].length())
+        if (m_sTypedText.length() != m_sText[m_iCurrentTextIndex].Text.length())
         {
-            m_sTypedText += m_sText[m_iCurrentTextIndex][m_iCurrentCharacter];
+            m_sTypedText += m_sText[m_iCurrentTextIndex].Text[m_iCurrentCharacter];
             RenderText();
             m_iCurrentCharacter++;
         }
@@ -116,13 +123,17 @@ void CDialogueWindow::Destroy()
 
 void CDialogueWindow::AdvanceText()
 {
-    if (!m_bFinishedTyping && m_bStartedTyping)
+    if (m_bFinishedTyping && m_sText[m_iCurrentTextIndex].Type == "end")
     {
-        m_sTypedText = m_sText[m_iCurrentTextIndex];
+        Destroy();
+    }
+    else if (!m_bFinishedTyping && m_bStartedTyping)
+    {
+        m_sTypedText = m_sText[m_iCurrentTextIndex].Text;
         RenderText();
         m_iCurrentCharacter = int(m_sTypedText.length() - 1);
     }
-    else if (m_bFinishedTyping && !m_bReachedEnd)
+    else if (m_bFinishedTyping)
     {
         m_iCurrentTextIndex++;
         m_iCurrentCharacter = 0;
@@ -130,10 +141,6 @@ void CDialogueWindow::AdvanceText()
         m_bFinishedTyping = false;
 
         RenderText();
-    }
-    else if (m_bFinishedTyping && m_bReachedEnd)
-    {
-        Destroy();
     }
 }
 

@@ -63,8 +63,8 @@ bool CPlayer::OnThink()
 		DecideFrame();
 	}
 
-	std::cout << "Viewport position X: " << GetViewportPosition().GetX() << " Y: " << GetViewportPosition().GetY() << "       ";
-	std::cout << "\r    ";
+	// std::cout << "Viewport position X: " << GetViewportPosition().GetX() << " Y: " << GetViewportPosition().GetY() << "       ";
+	// std::cout << "\r    ";
 
 	CWarspiteObject::OnThink();
 

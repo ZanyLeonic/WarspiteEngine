@@ -356,6 +356,11 @@
                  "name":"TestNPC",
                  "properties":[
                         {
+                         "name":"dialogueID",
+                         "type":"string",
+                         "value":"TestDialogue"
+                        }, 
+                        {
                          "name":"worldTexture",
                          "type":"string",
                          "value":"Player"
@@ -381,6 +386,11 @@
          "name":"Player",
          "type":"file",
          "value":"..\/textures\/player.png"
+        }, 
+        {
+         "name":"TestDialogue",
+         "type":"file",
+         "value":"E:\/Projects\/WarspiteGame\/sdk\/resource\/dialogue\/test.diag"
         }, 
         {
          "name":"TestObject",

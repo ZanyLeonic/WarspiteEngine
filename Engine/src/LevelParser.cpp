@@ -4,6 +4,7 @@
 #include "EngineFileSystem.h"
 #include "TextureManager.h"
 #include "ScriptManager.h"
+#include "DialogueManager.h"
 #include "GameObjectDictionary.h"
 #include "ObjectParams.h"
 #include "Game.h"
@@ -260,7 +261,16 @@ void CLevelParser::parseFiles(const rapidjson::Value* pFileRoot)
 			CEngineFileSystem::EPathType::SCRIPT));
 		return;
 	}
-	
+
+	if (CWarspiteUtil::GetFileExtenstion(o["value"].GetString()) == ".diag")
+	{
+		CDialogueManager::Instance()->Load(o["name"].GetString(), CEngineFileSystem::ResolvePath(o["value"].GetString(),
+			CEngineFileSystem::EPathType::DIALOGUE));
+		spdlog::debug("Loaded dialogue \"{}\"", CEngineFileSystem::ResolvePath(o["value"].GetString(),
+			CEngineFileSystem::EPathType::DIALOGUE));
+		return;
+	}
+
 	// Load the texture via the TextureManager with the info inside the object.
 	CTextureManager::Instance()->Load(CEngineFileSystem::ResolvePath(o["value"].GetString(), CEngineFileSystem::EPathType::TEXTURE),
 									  o["name"].GetString(),CBaseGame::Instance()->GetRenderer());

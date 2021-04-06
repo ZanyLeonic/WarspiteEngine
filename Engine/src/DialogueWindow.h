@@ -3,6 +3,7 @@
 #define __DIALOGUEWINDOW_H__
 
 #include "UIBase.h"
+#include "DialogueTypes.h"
 
 class CDialogueWindow :
     public CUIBase
@@ -11,6 +12,8 @@ public:
     CDialogueWindow();
 
 	virtual void Load(CObjectParams* pParams);
+
+	void SetDialogue(SDialogue* pDiag);
 
 	virtual void Draw();
 	virtual bool OnThink();
@@ -26,7 +29,7 @@ private:
 
 	std::shared_ptr<IGameObject> m_pPlayer;
 
-	std::string m_sDialogueFile = "test.json";
+	SDialogue* m_sDialogue = 0;
 	std::string m_sFontID = "_DiagTest";
 
 	int m_iTextPadding = 15;
@@ -39,7 +42,7 @@ private:
 	bool m_bStartedTyping = false;
 	bool m_bReachedEnd = false;
 
-	std::vector<std::string> m_sText;
+	std::vector<SDialogueNodes> m_sText;
 	std::string m_sTypedText;
 
 	int m_iCurrentTextIndex = 0;

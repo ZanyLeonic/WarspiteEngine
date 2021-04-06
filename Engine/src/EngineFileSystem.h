@@ -24,7 +24,8 @@ public:
 		TILESET,
 		STATE,
 		SOUND,
-		FONTS
+		FONTS,
+		DIALOGUE
 	};
 	
 	static std::string ResolvePath(std::string ePath, EPathType pathType = EPathType::NONE, std::string base = "");

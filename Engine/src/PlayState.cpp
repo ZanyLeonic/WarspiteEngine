@@ -5,6 +5,7 @@
 #include "Player.h"
 #include "StateParser.h"
 #include "LevelParser.h"
+#include "DialogueParser.h"
 #include "ObjectLayer.h"
 #include "DialogueWindow.h"
 #include <spdlog/spdlog.h>

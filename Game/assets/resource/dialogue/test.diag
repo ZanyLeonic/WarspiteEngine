@@ -1,0 +1,35 @@
+{
+    "id": "ExampleDialogue",
+    "startnode": 0,
+    "nodes":
+    [
+        {
+            "text": "This is a long piece of text whew, what will it look like in the box?\nKeep it going I feel like this will soon be enough, but will it? I don't know, but I hope it   wrap correctly if there is too much text for one line.",
+            "type": "speech",
+            "nextid": 1
+        },
+        {
+            "text": "I wanted to let you know that there will be another opportunity for you to demonstrate your Maths ability, just after the Easter holidays. I hope that giving you as much notice as possible will ensure you have the maximum time to prepare and sort out any logistics to ensure you are able to attend.",
+            "type": "speech",
+            "nextid": 2
+        },
+        {
+            "text": "Thank you for your Tectonics plan - looks very well structured and put together. A few things I would make clear in your answer:",
+            "type": "speech",
+            "nextid": 3
+        },
+        {
+            "text": "This is the end.",
+            "type": "end"
+        }
+    ],
+    "variables":
+    [
+        {
+            "name" : "test",
+            "type" : "string",
+            "value": "Example variable"
+        }
+    ],
+    "type": "Dialogue"
+}
