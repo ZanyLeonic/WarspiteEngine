@@ -31,5 +31,5 @@
             "value": "Example variable"
         }
     ],
-    "type": "Dialogue"
+    "type": "DialogueFile"
 }
