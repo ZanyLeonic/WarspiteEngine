@@ -13,7 +13,7 @@ public:
 
 	virtual void Load(CObjectParams* pParams);
 
-	void SetDialogue(SDialogue* pDiag);
+	void SetDialogue(SDialogue pDiag);
 
 	virtual void Draw();
 	virtual bool OnThink();
@@ -29,7 +29,7 @@ private:
 
 	std::shared_ptr<IGameObject> m_pPlayer;
 
-	SDialogue* m_sDialogue = 0;
+	SDialogue m_sDialogue = {};
 	std::string m_sFontID = "_DiagTest";
 
 	int m_iTextPadding = 15;

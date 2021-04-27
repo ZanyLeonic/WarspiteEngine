@@ -13,7 +13,7 @@ public:
 	virtual bool Remove(std::string id) = 0;
 	virtual void RemoveAll() = 0;
 	
-	virtual SDialogue* GetDialogue(std::string id) = 0;
+	virtual SDialogue GetDialogue(std::string id) = 0;
 };
 
 #endif /* defined(__DialogueManager__) */

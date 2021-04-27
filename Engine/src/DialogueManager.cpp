@@ -21,7 +21,7 @@ void CDialogueManager::Load(std::string id, std::string path)
 
     if (CDialogueParser::ParseDialogue(path, &nDiag))
     {
-        m_sMLoadedDialogue[id] = std::make_unique<SDialogue*>(std::move(&nDiag));
+        m_sMLoadedDialogue[id] = nDiag;
     }
     else
     {
@@ -34,7 +34,6 @@ bool CDialogueManager::Remove(std::string id)
     auto search = m_sMLoadedDialogue.find(id);
     if (search != m_sMLoadedDialogue.end())
     {
-        m_sMLoadedDialogue[id].release();
         m_sMLoadedDialogue.erase(search);
         return true;
     }
@@ -46,7 +45,7 @@ void CDialogueManager::RemoveAll()
     
 }
 
-SDialogue* CDialogueManager::GetDialogue(std::string id)
+SDialogue CDialogueManager::GetDialogue(std::string id)
 {
-    return *m_sMLoadedDialogue[id].get();
+    return m_sMLoadedDialogue[id];
 }

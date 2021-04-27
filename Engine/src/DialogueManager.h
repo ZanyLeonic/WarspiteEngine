@@ -22,10 +22,10 @@ public:
 	virtual bool Remove(std::string id);
 	virtual void RemoveAll();
 
-	virtual SDialogue* GetDialogue(std::string id);
+	virtual SDialogue GetDialogue(std::string id);
 
 private:
-	std::map<std::string, std::unique_ptr<SDialogue*>> m_sMLoadedDialogue;
+	std::map<std::string, SDialogue> m_sMLoadedDialogue;
 };
 
 #endif

@@ -6,9 +6,7 @@
 
 CDialogueWindow::CDialogueWindow()
     : CUIBase()
-{
-
-}
+{}
 
 void CDialogueWindow::Load(CObjectParams* pParams)
 {
@@ -43,10 +41,11 @@ void CDialogueWindow::Load(CObjectParams* pParams)
     }
 }
 
-void CDialogueWindow::SetDialogue(SDialogue* pDiag)
+void CDialogueWindow::SetDialogue(SDialogue pDiag)
 {
+    // Setup the object
     m_sDialogue = pDiag;
-    m_sText = m_sDialogue->Nodes;
+    m_sText = m_sDialogue.Nodes;
 
     m_bStartedTyping = true;
 }
@@ -55,12 +54,15 @@ void CDialogueWindow::Draw()
 {
     CUIBase::Draw();
 
+    // Only draw the object if it is visible and has started typing
     if (m_bStartedTyping && m_bDrawObject)
     {
+        // Draw the text with our padding rules and general rules
         CTextureManager::Instance()->DrawFrame(m_sFontID, m_iTextPadding + (int)m_vPosition.GetX(),
             m_iTextPadding + (int)m_vPosition.GetY(), m_iTextWidth, m_iTextHeight,
             m_iCurrentRow, m_iCurrentFrame, CBaseGame::Instance()->GetRenderer());
     
+        // Only draw the advance indicator if there is more nodes.
         if (m_bFinishedTyping && !m_bReachedEnd && m_pAdvanceTextIcon != nullptr)
         {
             CTextureManager::Instance()->DrawFrame(m_pAdvanceTextIcon, int(m_vAdvLoc.GetX()), int(m_vAdvLoc.GetY()), 1, 0, 
@@ -72,13 +74,13 @@ void CDialogueWindow::Draw()
 
 bool CDialogueWindow::OnThink()
 {
-    if (m_sDialogue == 0) return false;
-
     // Type writer effect
     if (!m_bReachedEnd && m_bStartedTyping)
     {
+        // Have we not printed all the characters from the current node yet?
         if (m_sTypedText.length() != m_sText[m_iCurrentTextIndex].Text.length())
         {
+            // Then print the next character into our typed text
             m_sTypedText += m_sText[m_iCurrentTextIndex].Text[m_iCurrentCharacter];
             RenderText();
             m_iCurrentCharacter++;
@@ -86,20 +88,25 @@ bool CDialogueWindow::OnThink()
         // Typing is completed, but there is still more text
         else
         {
-            if (m_iCurrentTextIndex + 1 > m_sText.size() - 1)
+            // If it is the last node
+            if (m_sText[m_iCurrentTextIndex].NextID == -1)
             {
-                m_bFinishedTyping = true;
+                // Toggle the flags that we have reached the end of the dialogue file
+                m_bFinishedTyping = true; 
                 m_bReachedEnd = true;
             }
             else
             {
+                // Toggle the flag that we have reached the end of this node
                 m_bFinishedTyping = true;
             }
         }
     }
 
+    // Make sure the object has loaded
     if (m_pAdvanceTextIcon != 0)
     {
+        // Rotate the object until the text has been advanced.
         if ((m_dAdvLocRot + 5.f) > 360.f)
         {
             m_dAdvLocRot = 0.f;
@@ -117,24 +124,30 @@ bool CDialogueWindow::OnThink()
 
 void CDialogueWindow::Destroy()
 {
+    // Clean up
     CInputHandler::Instance()->RemoveOnMouseDown(m_hAdvanceText);
     SetDrawState(false);
 }
 
 void CDialogueWindow::AdvanceText()
 {
-    if (m_bFinishedTyping && m_sText[m_iCurrentTextIndex].Type == "end")
+    // If we are advancing on a end node
+    if (m_bFinishedTyping && m_sText[m_iCurrentTextIndex].Type == "end" || m_bReachedEnd)
     {
-        Destroy();
+        Destroy(); // Destroy the window
     }
-    else if (!m_bFinishedTyping && m_bStartedTyping)
+    // if we are still typing when we advance the text
+    else if (!m_bFinishedTyping && m_bStartedTyping) 
     {
+        // Output all the current text into our typed text
         m_sTypedText = m_sText[m_iCurrentTextIndex].Text;
         RenderText();
         m_iCurrentCharacter = int(m_sTypedText.length() - 1);
     }
-    else if (m_bFinishedTyping)
+    // If we have finished typing (and we aren't on the last node) and text is advanced
+    else if (m_bFinishedTyping && !m_bReachedEnd)
     {
+        // Move to the next node
         m_iCurrentTextIndex++;
         m_iCurrentCharacter = 0;
         m_sTypedText = "";
@@ -146,6 +159,8 @@ void CDialogueWindow::AdvanceText()
 
 void CDialogueWindow::RenderText()
 {
+    // Render to the texture diag test
+    // TODO: Rich text/tags
     CFontManager::Instance()->RenderText(m_sTypedText, "Roboto-Regular-16", "_DiagTest", CFontManager::EFontRenderType::BLENDED_WRAPPED, { 255, 255, 255 }, { 255, 255, 255 }, m_iWidth - m_iTextPadding * 2);
 
     m_iTextWidth = CTextureManager::Instance()->m_textureMap[m_sFontID]->GetWidth();
@@ -160,7 +175,7 @@ void CDialogueWindow::AdvanceBind(SDL_Event e)
     CVector2D* pMousePos = CInputHandler::Instance()->
         GetMousePosition();
 
-    // Is it within the boundaries of the CButton?
+    // Is it within the boundaries of the dialogue window?
     if (pMousePos->GetX() < (m_vPosition.GetX() + m_iWidth)
         && pMousePos->GetX() > m_vPosition.GetX()
         && pMousePos->GetY() < (m_vPosition.GetY() + m_iHeight)
