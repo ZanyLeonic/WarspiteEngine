@@ -3,6 +3,7 @@
 #include "Game.h"
 #include "TextureManager.h"
 #include "InputHandler.h"
+#include "SDL_ttf.h"
 
 CDialogueWindow::CDialogueWindow()
     : CUIBase()
@@ -48,6 +49,8 @@ void CDialogueWindow::SetDialogue(SDialogue pDiag)
     m_sText = m_sDialogue.Nodes;
 
     m_bStartedTyping = true;
+
+    CBaseGame::Instance()->DisablePlayerMovement(true);
 }
 
 void CDialogueWindow::Draw()
@@ -127,6 +130,8 @@ void CDialogueWindow::Destroy()
     // Clean up
     CInputHandler::Instance()->RemoveOnMouseDown(m_hAdvanceText);
     SetDrawState(false);
+
+    CBaseGame::Instance()->DisablePlayerMovement(false);
 }
 
 void CDialogueWindow::AdvanceText()
@@ -143,6 +148,8 @@ void CDialogueWindow::AdvanceText()
         m_sTypedText = m_sText[m_iCurrentTextIndex].Text;
         RenderText();
         m_iCurrentCharacter = int(m_sTypedText.length() - 1);
+
+        TTF_
     }
     // If we have finished typing (and we aren't on the last node) and text is advanced
     else if (m_bFinishedTyping && !m_bReachedEnd)

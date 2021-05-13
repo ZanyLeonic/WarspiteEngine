@@ -17,6 +17,7 @@ set(WarspiteEngine_Src
         src/CTexture.cpp
         src/ConfigParser.cpp
         src/DoorLink.cpp
+        src/DialogueChoice.cpp
         src/DialogueParser.cpp
         src/DialogueManager.cpp
         src/DialogueWindow.cpp
@@ -70,6 +71,7 @@ set(WarspiteEngine_Header
         src/CTexture.h
         src/ConfigParser.h
         src/DoorLink.h
+        src/DialogueChoice.h
         src/DialogueParser.h
         src/DialogueManager.h
         src/DialogueTypes.h

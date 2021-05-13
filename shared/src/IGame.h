@@ -44,6 +44,9 @@ public:
     virtual void SetPlayer(std::shared_ptr<IGameObject> pNO) = 0;
     virtual std::shared_ptr<IGameObject> const GetPlayer() = 0;
 
+    virtual void DisablePlayerMovement(bool pState) = 0;
+    virtual bool GetPlayerMovementState() const = 0;
+
     virtual void SetLoadedLevel(CLevel* level) = 0;
     virtual CLevel* GetLoadedLevel() = 0;
 

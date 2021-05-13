@@ -7,7 +7,7 @@
 class CDialogueParser
 {
 public:
-	static bool CDialogueParser::ParseDialogue(std::string path, SDialogue* pOutDiag);
+	static bool ParseDialogue(std::string path, SDialogue* pOutDiag);
 };
 
 #endif

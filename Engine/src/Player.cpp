@@ -46,7 +46,8 @@ void CPlayer::Load(CObjectParams* pParams)
 
 bool CPlayer::OnThink()
 {
-	HandleInput();
+	if (!CBaseGame::Instance()->GetPlayerMovementState() || !m_bDisablePlayerInput)
+		HandleInput();
 
 	m_iCurrentFrame = 1;
 	m_iCurrentRow = GetRowFromDirection();

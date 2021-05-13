@@ -67,6 +67,9 @@ public:
 	void SetPlayer(std::shared_ptr<IGameObject> pNO) { m_pPlayer = pNO; }
 	std::shared_ptr<IGameObject> const GetPlayer() { return m_pPlayer; }
 
+	void DisablePlayerMovement(bool pState) { m_bDisablePlayerMovement = pState; }
+	bool GetPlayerMovementState() const { return m_bDisablePlayerMovement; }
+
 	void SetLoadedLevel(CLevel* level) { m_pLevel = level; }
 	CLevel* GetLoadedLevel() { return m_pLevel; }
 	
@@ -115,6 +118,7 @@ private:
 
 	bool m_bRunning = false;
 	bool m_bStartedWithMapParam = false;
+	bool m_bDisablePlayerMovement = false;
 
 	bool m_bShowDebugTiles = true; // Whether we should show bound or player start tiles on levels
 

@@ -17,7 +17,7 @@ public:
 		const std::vector<STileset>& tilesets)
 		: m_tileSize(tileSize)
 	{
-		m_tilesets = tilesets;
+		m_vTilesets = tilesets;
 
 		m_numColumns = mapWidth;
 		m_numRows = mapHeight;
@@ -50,8 +50,7 @@ private:
 	CVector2D m_vPosition;
 	CVector2D m_vVelocity;
 
-	std::vector<STileset> mi_tilesets = std::vector<STileset>();
-	std::vector<STileset>& m_tilesets = mi_tilesets;
+	std::vector<STileset> m_vTilesets;
 	std::vector<std::vector<int>> m_tileIDs;
 };
 

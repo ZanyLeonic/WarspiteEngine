@@ -60,18 +60,18 @@ void CTileLayer::Draw()
 
 STileset CTileLayer::GetTilesetByID(int tileID)
 {
-	for (size_t i = 0; i < m_tilesets.size(); i++)
+	for (size_t i = 0; i < m_vTilesets.size(); i++)
 	{
-		if (i + (size_t)1 <= m_tilesets.size() - 1)
+		if (i + (size_t)1 <= m_vTilesets.size() - 1)
 		{
-			if (tileID >= m_tilesets[i].FirstGID && tileID < m_tilesets[i + (size_t)1].FirstGID)
+			if (tileID >= m_vTilesets[i].FirstGID && tileID < m_vTilesets[i + (size_t)1].FirstGID)
 			{
-				return m_tilesets[i];
+				return m_vTilesets[i];
 			}
 		}
 		else
 		{
-			return m_tilesets[i];
+			return m_vTilesets[i];
 		}
 
 		spdlog::warn("Cannot find tileset for TileID ({}), returning an empty tileset", tileID);
