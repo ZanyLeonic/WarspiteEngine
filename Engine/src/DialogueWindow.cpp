@@ -148,8 +148,6 @@ void CDialogueWindow::AdvanceText()
         m_sTypedText = m_sText[m_iCurrentTextIndex].Text;
         RenderText();
         m_iCurrentCharacter = int(m_sTypedText.length() - 1);
-
-        TTF_
     }
     // If we have finished typing (and we aren't on the last node) and text is advanced
     else if (m_bFinishedTyping && !m_bReachedEnd)
