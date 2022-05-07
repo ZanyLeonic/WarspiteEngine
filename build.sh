@@ -1,3 +1,3 @@
 #!/bin/bash
 cd build
-sudo make -j4 install
+cmake --build . --config Release -j4 
